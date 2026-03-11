@@ -83,7 +83,7 @@ Production-only deploy command:
 pnpm deploy:cf:production
 ```
 
-Validate your local Cloudflare credential file:
+Validate your local Cloudflare credential file and any runtime secrets:
 
 ```bash
 pnpm secrets:check
@@ -95,9 +95,18 @@ Run the docs secrets helper:
 pnpm secrets:push
 ```
 
-For the docs site this helper validates the local `CLOUDFLARE_API_TOKEN` and
-`CLOUDFLARE_ACCOUNT_ID` values used by Wrangler. The docs worker currently does
-not require additional runtime secrets.
+These default aliases target production. Production-specific forms are also
+available:
+
+```bash
+pnpm secrets:check:production
+pnpm secrets:push:production
+```
+
+The helper validates the local `CLOUDFLARE_API_TOKEN` and
+`CLOUDFLARE_ACCOUNT_ID` values used by Wrangler, then uploads any additional
+non-empty variables in `.cloudflare-secrets.local` as Cloudflare Worker runtime
+secrets.
 
 Local Cloudflare preview build:
 
@@ -126,10 +135,10 @@ No staging environment is configured for this project.
 
 Production deployment is handled by:
 
-- `.github/workflows/deploy-cloudflare-docs.yml`
+- `.github/workflows/deploy-cloudflare.yml`
 
-The workflow runs on pushes to `main` when files under
-`payment-gateway-docs/` change, and it performs:
+The workflow runs on pushes to `main` when deploy-relevant files change, and it
+performs:
 
 1. dependency install
 2. `pnpm typecheck`
