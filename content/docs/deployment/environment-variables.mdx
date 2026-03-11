@@ -1,0 +1,160 @@
+---
+title: Environment Variables Reference
+description: Complete reference for all MPG_ configuration variables for both the Admin Backend and Main Backend.
+---
+
+# Environment Variables Reference
+
+All configuration uses the `MPG_` prefix, loaded by Viper from environment variables or a `.env` file.
+
+> [!NOTE]
+> Both backends share many variable names (database, cache, logging, OTEL, rate limiting, encryption). Where the variable name is the same, it applies identically to both services unless noted.
+
+---
+
+## Shared Variables (Both Backends)
+
+### Server
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_ENV` | string | No | `production` | Runtime environment: `dev`, `production`, `production-cloud` |
+
+### Database (MongoDB)
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_DATABASE_URI` | string | **Yes** | — | MongoDB connection string (e.g., `mongodb://user:pass@host:27017/`) |
+| `MPG_DATABASE_NAME` | string | **Yes** | — | MongoDB database name |
+| `MPG_DATABASE_MAX_POOL_SIZE` | int | No | `100` | Maximum connection pool size |
+| `MPG_DATABASE_MIN_POOL_SIZE` | int | No | `10` | Minimum connection pool size |
+| `MPG_DATABASE_MAX_CONN_IDLE_TIME` | duration | No | `30m` | Maximum time a connection can be idle |
+| `MPG_DATABASE_MAX_CONNECTING` | int | No | `10` | Maximum concurrent connection attempts |
+| `MPG_DATABASE_CONNECT_TIMEOUT` | duration | No | `10s` | Connection establishment timeout |
+
+### Cache (Redis / Garnet)
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_GARNET_URL` | string | No | — | Redis-compatible cache URL (e.g., `redis://localhost:6379`). If unset, in-memory cache is used. |
+
+### Logging
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_LOG_LEVEL` | string | No | `error` | Log level: `debug`, `info`, `warn`, `error`, `fatal`, `panic` |
+| `MPG_LOG_FORMAT` | string | No | `json` | Log format: `json` (structured) or text |
+
+### OpenTelemetry (Tracing)
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_OTEL_ENABLED` | bool | No | `false` | Enable OpenTelemetry tracing |
+| `MPG_OTEL_EXPORTER_OTLP_PROTOCOL` | string | No | — | OTLP protocol: `grpc` or `http/protobuf` |
+| `MPG_OTEL_EXPORTER_OTLP_ENDPOINT` | string | No | — | OTLP collector endpoint URL |
+| `MPG_OTEL_EXPORTER_OTLP_HEADERS` | string | No | — | OTLP authentication headers (comma-separated `key=value`) |
+| `MPG_OTEL_RESOURCE_ATTRIBUTES` | string | No | — | Resource attributes (e.g., `service.name=payment-gateway`) |
+| `MPG_OTEL_EXPORTER_OTLP_INSECURE` | bool | No | `false` | Skip TLS verification for OTLP endpoint |
+
+### Rate Limiting
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_RATE_LIMIT_ENABLED` | bool | No | `true` | Enable request rate limiting |
+| `MPG_RATE_LIMIT_WINDOW_SIZE` | duration | No | `5m` | Sliding window size |
+| `MPG_RATE_LIMIT_MAX_REQUESTS` | int | No | `500` | Maximum requests per window |
+| `MPG_RATE_LIMIT_REQUESTS_PER_MIN` | int | No | `100` | Maximum requests per minute |
+| `MPG_RATE_LIMIT_WHITELIST` | string | No | `127.0.0.1,::1` | Comma-separated IPs to exempt from rate limiting |
+
+### Encryption
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_SYSTEM_ENCRYPTION_KEY` | string | **Yes** | — | Hex-encoded symmetric key for encrypting KMS credentials. Minimum 32 bytes (64 hex characters). |
+| `MPG_SYSTEM_SEARCH_HASH_KEY` | string | **Yes** | — | Hex-encoded HMAC key for deterministic searchable encryption. Exactly 32 bytes (64 hex characters). |
+
+### Licensing
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_LICENSING_BYPASS` | bool | No | `false` | Bypass license check. Only works if `VERSION=dev`. **Never set in production.** |
+
+---
+
+## Admin Backend Variables
+
+### Server
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_ADMIN_BACKEND_HOST` | string | **Yes** | — | Bind address (e.g., `0.0.0.0`) |
+| `MPG_ADMIN_BACKEND_PORT` | int | **Yes** | — | HTTP port (e.g., `8080`) |
+| `MPG_ADMIN_BACKEND_HTTPS` | bool | No | `false` | Enable TLS termination at the backend |
+| `MPG_ADMIN_BACKEND_HTTPS_CERT` | string | No | — | Path to TLS certificate file |
+| `MPG_ADMIN_BACKEND_HTTPS_KEY` | string | No | — | Path to TLS private key file |
+| `MPG_ADMIN_BACKEND_DOMAIN` | string | **Yes** | — | Public domain of the admin backend (e.g., `admin-api.yourcompany.com`) |
+| `MPG_ADMIN_FRONTEND_DOMAIN` | string | **Yes** | — | Admin frontend domain for CORS allow-list (e.g., `admin.yourcompany.com`) |
+| `MPG_MAIN_BACKEND_DOMAIN` | string | **Yes** | — | Main backend public domain |
+| `MPG_MAIN_FRONTEND_DOMAIN` | string | **Yes** | — | Main frontend public domain |
+
+### Authentication
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_SYSTEM_REFRESH_KEY` | string | **Yes** | — | Secret key for signing JWT refresh tokens (hex-encoded, minimum 32 bytes) |
+| `MPG_COOKIE_AUTH_KEY` | string | **Yes** | — | Session cookie authentication key (hex-encoded, 64 bytes recommended) |
+| `MPG_COOKIE_ENCRYPTION_KEY` | string | **Yes** | — | Session cookie encryption key (hex-encoded, 32 bytes) |
+| `MPG_WEBAUTHN_RPDISPLAYNAME` | string | No | — | Display name shown in passkey dialogs (e.g., `My Company Admin`) |
+| `MPG_WEBAUTHN_DEBUG` | bool | No | `false` | Enable verbose WebAuthn debug logging |
+
+### External Services
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_MAIN_WORKER_SERVICE_URL` | string | No | — | Internal URL of the worker service for PDF proxy requests |
+| `MPG_LICENSING_AUTHORITY_URL` | string | No | `http://localhost:5173` | Licensing Authority API URL |
+
+---
+
+## Main Backend Variables
+
+### Server
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_MAIN_BACKEND_HOST` | string | **Yes** | — | Bind address (e.g., `0.0.0.0`) |
+| `MPG_MAIN_BACKEND_PORT` | int | **Yes** | — | HTTP port (e.g., `8081`) |
+| `MPG_MAIN_BACKEND_HTTPS` | bool | No | `false` | Enable TLS at backend |
+| `MPG_MAIN_BACKEND_HTTPS_CERT` | string | No | — | TLS certificate path |
+| `MPG_MAIN_BACKEND_HTTPS_KEY` | string | No | — | TLS private key path |
+| `MPG_MAIN_BACKEND_DOMAIN` | string | **Yes** | — | Public domain for this backend |
+| `MPG_MAIN_FRONTEND_DOMAIN` | string | **Yes** | — | Main frontend domain for CORS |
+
+### Worker (PDF Generation)
+
+| Variable | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `MPG_MAIN_WORKER_GOTENBERG_URL` | string | No | `http://localhost:3000` | URL of the Gotenberg PDF service |
+| `MPG_MAIN_WORKER_TEMP_CACHE_DIR` | string | No | `/tmp/pdf-cache` | Local directory for temporary PDF caching |
+| `MPG_MAIN_WORKER_SERVICE_URL` | string | No | — | Internal URL where the worker HTTP server is reachable (used by the main API to proxy PDF requests) |
+| `MPG_MAIN_WORKER_HOST` | string | No | `0.0.0.0` | Worker HTTP server bind address |
+| `MPG_MAIN_WORKER_PORT` | int | No | `8090` | Worker HTTP server port |
+| `MPG_MAIN_WORKER_CONCURRENCY` | int | No | `10` | Maximum concurrent PDF jobs |
+| `MPG_MAIN_WORKER_SHUTDOWN_TIMEOUT` | int | No | `10` | Graceful shutdown timeout in seconds |
+
+---
+
+## Generating Secure Keys
+
+Use `openssl` to generate cryptographically secure keys:
+
+```bash
+# 32-byte key (64 hex chars) — for SYSTEM_ENCRYPTION_KEY, SYSTEM_SEARCH_HASH_KEY, COOKIE_ENCRYPTION_KEY
+openssl rand -hex 32
+
+# 64-byte key (128 hex chars) — for COOKIE_AUTH_KEY
+openssl rand -hex 64
+```
+
+> [!IMPORTANT]
+> Generate unique keys for each environment (development, staging, production). Never reuse keys across environments. Rotate keys if they are ever exposed.

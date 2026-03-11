@@ -1,0 +1,202 @@
+---
+title: Architecture Diagrams
+description: Visual diagrams of the Payment Gateway system architecture, service relationships, and key data flows.
+---
+
+# Architecture Diagrams
+
+## System Overview
+
+```mermaid
+graph TB
+    subgraph Internet
+        Customer[Customer Browser]
+        Merchant[Merchant Backend]
+        Provider[Payment Provider\nStripe / GoCardless]
+    end
+
+    subgraph Gateway
+        Caddy[Caddy Reverse Proxy\nTLS + Custom Domains]
+        MF[Main Frontend\nCheckout UI]
+        MB[Main Backend\nPayment API]
+        Worker[PDF Worker]
+        AF[Admin Frontend\nAdmin Panel]
+        AB[Admin Backend\nManagement API]
+    end
+
+    subgraph Data
+        Mongo[(MongoDB)]
+        Redis[(Redis / Garnet)]
+        Gotenberg[Gotenberg\nPDF Service]
+    end
+
+    Customer -->|Checkout URL| Caddy
+    Merchant -->|Create Checkout API| Caddy
+    Caddy --> MF
+    Caddy --> MB
+    Caddy --> AF
+    Caddy --> AB
+
+    MB <--> Mongo
+    MB <--> Redis
+    AB <--> Mongo
+    AB <--> Redis
+
+    MB -->|Webhook events| Provider
+    Provider -->|Webhook IPN| MB
+
+    AB --> Worker
+    Worker --> Gotenberg
+    Worker --> Mongo
+```
+
+---
+
+## Request Flow — Checkout Creation
+
+```mermaid
+sequenceDiagram
+    participant M as Merchant Backend
+    participant AB as Admin Backend
+    participant DB as MongoDB
+    participant MF as Main Frontend
+    participant P as Payment Provider
+
+    M->>AB: POST /v1/checkouts/{siteId}/create
+    AB->>AB: Validate API key scope (checkout:create)
+    AB->>DB: Create checkout session record
+    AB-->>M: { checkoutUrl, checkoutId }
+
+    Note over M: Redirect customer to checkoutUrl
+
+    M->>MF: Customer opens checkout page
+    MF->>MB: GET /api/v1/checkouts/{id}
+    MB->>DB: Fetch session + branding
+    MB-->>MF: Session data + provider config
+
+    MF->>MF: Render payment form
+
+    MF->>P: Customer submits card details
+    P-->>MF: Payment token / redirect URL
+
+    MF->>MB: POST /api/v1/transactions/create
+    MB->>DB: Create transaction record (initiated)
+    MB->>P: Create payment intent
+    P-->>MB: Payment confirmation
+    MB-->>MF: { transactionId, status, redirectUrl }
+```
+
+---
+
+## Request Flow — Webhook to Transaction Update
+
+```mermaid
+sequenceDiagram
+    participant P as Payment Provider
+    participant MB as Main Backend
+    participant DB as MongoDB
+    participant W as Your Application
+
+    P->>MB: POST /hooks/stripe/{providerId}
+    MB->>MB: Verify HMAC signature
+    MB->>DB: Fetch provider + decrypt webhook secret
+    MB->>MB: Parse event type (payment_intent.succeeded)
+    MB->>DB: Update transaction status to succeeded
+    MB->>DB: Create invoice if configured
+    MB->>W: POST IPN payload to Site webhook URL
+    W-->>MB: 200 OK
+    MB-->>P: 200 OK
+```
+
+---
+
+## Encryption Key Hierarchy
+
+```mermaid
+graph TD
+    ENV["SYSTEM_ENCRYPTION_KEY\nenvironment variable"]
+
+    ENV -->|encrypts credentials for| SKMSCreds["KMS Provider Credentials\nstored encrypted in MongoDB"]
+    SKMSCreds -->|used by| SKMS["System KMS Provider\nAWS / Azure / GCP / Vault"]
+    SKMS -->|manages| SDEK["System DEK\nData Encryption Key"]
+
+    SDEK -->|encrypts| SysData["System-Level Data\nUser accounts\nOrganization settings\nSystem configuration"]
+
+    ENV -->|encrypts credentials for| OKMSCreds["Org KMS Credentials\nper-org, stored encrypted"]
+    OKMSCreds -->|used by| OKMS["Organization KMS Provider\nper-org, optional BYOK"]
+    OKMS -->|manages| ODEK["Organization DEK\nper-org"]
+
+    ODEK -->|encrypts| OrgData["Organization-Level Data\nTransaction records\nCustomer information\nPayment details"]
+```
+
+---
+
+## Multi-Tenant Data Model
+
+```mermaid
+graph TD
+    Org[Organization]
+    Site1[Site A - E-Commerce Store]
+    Site2[Site B - SaaS Product]
+    P1[Stripe Provider]
+    P2[GoCardless Provider]
+    Key1[API Key live]
+    Key2[API Key test]
+    C1[Client Jane Smith]
+    C2[Client Acme Corp]
+    Tx1[Transaction 1]
+    Tx2[Transaction 2]
+    Inv1[Invoice 2026-0001]
+
+    Org --> Site1
+    Org --> Site2
+    Org --> P1
+    Org --> P2
+    Site1 --> Key1
+    Site1 --> Key2
+    Site1 --> P1
+    Site2 --> P2
+    Org --> C1
+    Org --> C2
+    Tx1 --> Site1
+    Tx1 --> C1
+    Tx1 --> P1
+    Tx1 --> Inv1
+    Tx2 --> Site2
+    Tx2 --> C2
+```
+
+---
+
+## Transaction Lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> initiated : Customer submits checkout
+    initiated --> pending_provider : Async payment GoCardless or Wire
+    initiated --> succeeded : Instant payment Stripe card
+    initiated --> failed : Payment rejected
+    pending_provider --> succeeded : Provider webhook confirms
+    pending_provider --> failed : Provider webhook fails
+    succeeded --> refunded : Refund processed
+    refunded --> [*]
+    succeeded --> [*]
+    failed --> [*]
+```
+
+---
+
+## Invoice Lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> draft : Created manually or from transaction
+    draft --> issued : Issue action
+    draft --> [*] : Deleted
+    issued --> paid : Payment confirmed
+    issued --> void : Void action Admin only
+    paid --> refunded : Refund plus credit note
+    void --> [*]
+    paid --> [*]
+    refunded --> [*]
+```

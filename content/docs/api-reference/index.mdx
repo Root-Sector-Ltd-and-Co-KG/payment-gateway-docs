@@ -1,0 +1,117 @@
+---
+title: API Reference
+description: REST API documentation for both the Admin Backend and Main Backend.
+---
+
+# API Reference
+
+The Payment Gateway exposes two REST APIs:
+
+| API | Base URL | Purpose |
+|---|---|---|
+| **Admin API** | `https://<your-api-domain>/v1` | Management — create checkouts, manage clients, view transactions, configure settings |
+| **Main API** | `https://<your-main-api-domain>/api/v1` | Customer-facing — retrieve checkout sessions, submit transactions, portal access |
+
+All endpoints return JSON. All timestamps are ISO 8601 UTC strings.
+
+> [!NOTE]
+> Public integrations commonly use the clean `/v1` surface on the configured API domain. In reverse proxy configs and backend code you may also see the internal `/api/v1` form.
+
+---
+
+## Authentication
+
+### Admin API — API Key (Recommended for Server-to-Server)
+
+Include your Organization API Key as a Bearer token:
+
+```http
+Authorization: Bearer sk_live_keyid.secret
+```
+
+API keys have the format `sk_live_<keyId>.<secret>` (live) or `sk_test_<keyId>.<secret>` (test). The key ID and secret are dot-separated.
+
+Keys are **organization-scoped** and carry granular **scope grants** (e.g., `checkout:create`, `transaction:read`). A key without the required scope for an endpoint returns `403 Forbidden`.
+
+> [!CAUTION]
+> API keys are shown only once at creation time. Store them in a secrets manager (AWS Secrets Manager, HashiCorp Vault, etc.), never in source code.
+
+### Admin API — JWT (Dashboard Sessions)
+
+The Admin Panel uses short-lived JWTs issued after WebAuthn authentication. Pass them as:
+
+```http
+Authorization: Bearer eyJhbGci...
+```
+
+JWTs expire after a configured interval. Use `POST /v1/auth/refresh-token` to obtain a new token before expiry.
+
+### Main API — No Authentication for Public Endpoints
+
+Checkout session retrieval (`GET /api/v1/checkouts/:id`) and portal OTP flows use public endpoints. Webhook endpoints (`POST /hooks/:type/:providerId`) verify request authenticity via provider-specific signature headers (Stripe-Signature, GoCardless-Webhook-Signature).
+
+---
+
+## Rate Limiting
+
+| API | Default Limit | Window |
+|---|---|---|
+| Admin API | 500 requests | 5 minutes |
+| Main API | 500 requests | 5 minutes |
+| Per-minute cap | 100 requests | 1 minute |
+
+Rate-limited responses return `429 Too Many Requests` with a `Retry-After` header.
+
+Limits are configurable via `MPG_RATE_LIMIT_*` environment variables. Your own server IP can be whitelisted via `MPG_RATE_LIMIT_WHITELIST`.
+
+---
+
+## Error Responses
+
+All errors follow a consistent envelope:
+
+```json
+{
+  "error": "human-readable error message"
+}
+```
+
+| Status | Meaning |
+|---|---|
+| `400` | Bad request — invalid input, missing required field |
+| `401` | Unauthorized — missing or invalid auth token |
+| `403` | Forbidden — valid auth but insufficient permissions or scope |
+| `404` | Not found |
+| `409` | Conflict — e.g., duplicate resource |
+| `422` | Unprocessable — validation failed |
+| `429` | Rate limit exceeded |
+| `500` | Internal server error |
+
+---
+
+## Request IDs
+
+Every response includes an `X-Request-ID` header with a unique identifier. Include this ID when reporting issues.
+
+---
+
+## Pagination
+
+List endpoints support pagination via `page` and `limit` query parameters:
+
+```
+GET /v1/transactions?page=1&limit=50
+```
+
+Default page size varies by endpoint. Maximum is typically 100 items.
+
+---
+
+## Health Endpoints
+
+Both backends expose health check endpoints (no authentication required):
+
+```
+GET /health          # Shallow — returns 200 if process is running
+GET /internal/health # Deep — checks MongoDB and Redis connectivity
+```

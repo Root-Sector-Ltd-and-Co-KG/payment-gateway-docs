@@ -1,0 +1,36 @@
+---
+title: Payment Providers
+description: Connect and manage Stripe, GoCardless, Wise, and wire transfer providers.
+---
+
+# Payment Providers
+
+The core value of the Payment Gateway is its unified abstraction layer. You can connect multiple upstream payment processors and utilize them seamlessly through a single internal API.
+
+## Connecting a Provider
+
+Navigate to **Providers** in the sidebar to link a new processor. 
+
+Currently natively supported integrations include:
+*   **Stripe**: For credit cards, Apple Pay, Google Pay, and localized methods (iDEAL, Bancontact, etc.).
+*   **GoCardless**: Optimized for direct debit (SEPA, Bacs) and recurring bank transfers.
+*   **Wise Transfers**: For transfer-based payment flows where Wise is your payout/collection rail.
+*   **Wire Transfer**: A manual payment method for B2B customers who pay via bank wire. The gateway generates a payment request with the bank details and amount, and the operator manually reconciles the incoming wire against the open transaction.
+
+When adding a provider, you will need to supply the upstream API credentials (e.g., the Stripe Secret Key).
+
+> [!NOTE]
+> All upstream credentials you enter are instantly encrypted using the gateway's KMS (Key Management Service) before being saved to the database. They are never stored in plaintext.
+
+> [!IMPORTANT]
+> For card flows, payment instrument entry is handled through provider-hosted or provider-tokenized components. The gateway stores transaction/business metadata and provider references, but does not store raw PAN/CVC values.
+
+## Assigning Providers to Sites
+
+Merely linking a Provider to your Organization does not make it active. You must explicitly expose the Provider to specific Sites.
+
+1. Navigate to **Sites** and edit the desired Site.
+2. In the configuration panel, select which Provider(s) should be available.
+3. When creating a Checkout Session for that Site, the customer will only be offered the payment methods supported by the assigned Providers.
+
+This architecture allows you to run multiple Stripe accounts under one Organization, safely routing specific product lines to entirely different bank payouts.

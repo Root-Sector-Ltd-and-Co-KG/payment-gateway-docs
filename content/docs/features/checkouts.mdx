@@ -1,0 +1,36 @@
+---
+title: Checkouts
+description: Creating hosted payment pages or utilizing direct API integration.
+---
+
+# Checkouts
+
+A **Checkout** is a temporary session that facilitates a payment from an end customer.
+
+From the **Checkouts** tab, you can view all active and historical payment sessions across your Sites.
+
+## Creating a Checkout
+
+You have two primary ways to create a Checkout session:
+
+1. **Dashboard (Manual)**: For ad-hoc invoices or personalized payment links, you can use the **Create Checkout** interface directly in the Admin Panel. You define the line items, the currency, and the assigned Site, and the system generates a shareable URL.
+2. **API Integration**: Your trusted server-side runtime (backend service, worker, or secure edge function) can programmatically create checkout sessions by calling `https://api.yourcompany.com/v1/checkouts/{siteId}/create` on your configured API domain. Authenticate with an `sk_...` Organization API key as a Bearer token.
+
+## The Customer Experience
+
+Once a Checkout is created, it yields a unique URL (e.g., `https://pay.yourcompany.com/checkout/xyz123`).
+
+This URL is served by the **Main Frontend** (Payment Portal). When navigating to this page, the platform will:
+
+1. Load the customized branding (logo, colors) defined on the Site.
+2. Display the line items and calculate required taxes based on the buyer's billing details.
+3. Present the relevant Payment Providers (e.g., Stripe credit card inputs, GoCardless mandate forms, or Wire Transfer instructions).
+
+> [!CAUTION]
+> The checkout flow is designed for PCI-DSS SAQ A-oriented integrations. Cardholder data is handled by the payment provider UI components (for example, Stripe Elements) rather than being processed directly by your backend integration.
+
+## Success and Failure URLs
+
+When creating a Checkout programmatically, you can specify `successUrl` and `cancelUrl`.
+
+After the customer completes the flow on the hosted page, they will be redirected back to your application, optionally with the transaction ID appended to the query string to allow you to fulfill their order instantly.

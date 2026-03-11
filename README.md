@@ -1,45 +1,166 @@
-# .
+# Payment Gateway Docs
 
-This is a Next.js application generated with
-[Create Fumadocs](https://github.com/fuma-nama/fumadocs).
+This project hosts the public product documentation at:
 
-Run development server:
+- `https://docs.payment-gateway.app`
+
+It is a Next.js 16 + Fumadocs site deployed to Cloudflare Workers using
+`@opennextjs/cloudflare`.
+
+There is no separate public staging deployment for the docs site. The only
+published environment is the production site at `docs.payment-gateway.app`.
+
+## Stack
+
+- Runtime: Next.js App Router
+- Docs framework: Fumadocs
+- Cloudflare adapter: `@opennextjs/cloudflare`
+- Deploy target: Cloudflare Workers
+- Custom domain: `docs.payment-gateway.app`
+
+## Project Structure
+
+- `app/(home)`: landing page and public marketing entry
+- `app/docs`: documentation layout and routed docs pages
+- `app/api/search/route.ts`: Fumadocs search endpoint
+- `app/llms.txt/route.ts`: LLM-friendly docs index
+- `app/llms-full.txt/route.ts`: expanded LLM-friendly docs output
+- `content/docs`: MDX documentation content
+- `lib/source.ts`: Fumadocs content source wiring
+- `source.config.ts`: MDX/content collection configuration
+- `open-next.config.ts`: OpenNext Cloudflare adapter configuration
+- `wrangler.toml`: Cloudflare Worker deployment config
+
+## Development
+
+Install dependencies:
 
 ```bash
-npm run dev
-# or
-pnpm dev
-# or
-yarn dev
+pnpm install
 ```
 
-Open http://localhost:3000 with your browser to see the result.
+Set up local Cloudflare deployment credentials from the example file:
 
-## Explore
+```bash
+cp .cloudflare-secrets.example .cloudflare-secrets.local
+```
 
-In the project, you can see:
+Run the local dev server:
 
-- `lib/source.ts`: Code for content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
-- `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep.
+```bash
+pnpm dev
+```
 
-| Route                     | Description                                            |
-| ------------------------- | ------------------------------------------------------ |
-| `app/(home)`              | The route group for your landing page and other pages. |
-| `app/docs`                | The documentation layout and pages.                    |
-| `app/api/search/route.ts` | The Route Handler for search.                          |
+The site runs locally on `http://localhost:3000`.
 
-### Fumadocs MDX
+## Validation
 
-A `source.config.ts` config file has been included, you can customise different options like frontmatter schema.
+Run type generation and TypeScript checks:
 
-Read the [Introduction](https://fumadocs.dev/docs/mdx) for further details.
+```bash
+pnpm typecheck
+```
 
-## Learn More
+Build the production Next.js app locally:
 
-To learn more about Next.js and Fumadocs, take a look at the following
-resources:
+```bash
+pnpm build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Fumadocs](https://fumadocs.dev) - learn about Fumadocs
+Run the standard local validation sequence:
+
+```bash
+pnpm validate
+```
+
+## Cloudflare Deployment
+
+The docs site deploys as a Cloudflare Worker using OpenNext.
+
+Production-only deploy command:
+
+```bash
+pnpm deploy:cf:production
+```
+
+Validate your local Cloudflare credential file:
+
+```bash
+pnpm secrets:check
+```
+
+Run the docs secrets helper:
+
+```bash
+pnpm secrets:push
+```
+
+For the docs site this helper validates the local `CLOUDFLARE_API_TOKEN` and
+`CLOUDFLARE_ACCOUNT_ID` values used by Wrangler. The docs worker currently does
+not require additional runtime secrets.
+
+Local Cloudflare preview build:
+
+```bash
+pnpm preview
+```
+
+Generate Wrangler environment typings if needed:
+
+```bash
+pnpm cf-typegen
+```
+
+### Wrangler Config
+
+`wrangler.toml` is configured for:
+
+- worker name: `payment-gateway-docs`
+- main entry: `.open-next/worker.js`
+- assets binding: `.open-next/assets`
+- custom domain route: `docs.payment-gateway.app`
+
+No staging environment is configured for this project.
+
+## GitHub Actions Workflow
+
+Production deployment is handled by:
+
+- `.github/workflows/deploy-cloudflare-docs.yml`
+
+The workflow runs on pushes to `main` when files under
+`payment-gateway-docs/` change, and it performs:
+
+1. dependency install
+2. `pnpm typecheck`
+3. `pnpm build`
+4. `pnpm deploy:cf:production`
+
+The workflow runs on `ubuntu-latest`, which avoids the Windows symlink issues
+that can affect local OpenNext bundle generation.
+
+## Required GitHub Secrets
+
+The deployment workflow requires these repository secrets:
+
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+
+## Local Cloudflare Secrets File
+
+Use `.cloudflare-secrets.example` as the template for local deployment
+credentials:
+
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+
+## Notes
+
+- The docs site uses production-only routing at `docs.payment-gateway.app`.
+- Unlike `payment-gateway-app-website`, there is no staging worker or staging
+  custom domain.
+- OpenNext Cloudflare support is initialized in `next.config.mjs` so local
+  development stays aligned with the Cloudflare runtime model.
+- `pnpm build` is validated on Windows, but `opennextjs-cloudflare build` is
+  more reliable in Linux/CI or WSL because OpenNext may need symlink behavior
+  that native Windows shells can block.

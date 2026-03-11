@@ -1,0 +1,104 @@
+---
+title: Data Protection Guide
+description: Comprehensive self-hosted data-protection guidance for payment, encryption, retention, and operational controls.
+---
+
+# Data Protection Guide (Self-Hosted)
+
+This guide provides a practical data-protection baseline for self-hosted
+deployments of the Payment Gateway.
+
+It covers:
+
+- payment data boundaries (what is and is not stored),
+- encryption controls,
+- retention controls,
+- backup and recovery controls,
+- and operational responsibilities for your team.
+
+## 1) Payment Data Boundary
+
+For card-based payment flows, the gateway is designed to use provider-hosted or
+provider-tokenized collection components (for example, Stripe Elements).
+
+This means:
+
+- raw PAN and CVC values are not stored by the gateway application,
+- the gateway stores transaction/business metadata and provider references,
+- provider credentials are stored encrypted at rest.
+
+## 2) Data Categories Processed
+
+The platform processes organization and operational data such as:
+
+- user and access data,
+- organization and site configuration,
+- transaction and invoicing data,
+- client and billing profile fields,
+- notification and provider integration secrets.
+
+See [Data Processing & Encryption](./data-processing-encryption) for category and
+scope details.
+
+## 3) Encryption Controls
+
+Recommended production posture:
+
+1. Enable MongoDB TLS (`MONGO_TLS_ENABLED=true`).
+2. Configure and enable **System Encryption**.
+3. Configure and enable **Organization Encryption** for each active organization.
+4. Use a supported KMS provider (AWS KMS, Azure Key Vault, Google Cloud KMS, or HashiCorp Vault).
+5. Define key and credential rotation procedures.
+
+## 4) Retention Controls
+
+Under `Settings > Retention` (organization scope), configure:
+
+- transaction retention windows,
+- customer-data retention windows by field class (IP, addresses, email, items),
+- country retention behavior.
+
+Document rationale for each value and align with jurisdiction/accounting rules.
+
+## 5) Backup and Recovery Controls
+
+Data protection is not complete without verified recoverability:
+
+- configure scheduled MongoDB backups (`mgob` -> S3-compatible storage),
+- configure durable invoice/PDF object storage,
+- test restore procedures periodically and keep evidence.
+
+Use [Backup & Recovery (GDPR)](./backup-recovery) as your runbook.
+
+## 6) Access and Audit Controls
+
+Recommended minimum controls:
+
+- least-privilege API keys and user roles,
+- key/API credential rotation and revocation process,
+- restricted infrastructure access paths,
+- centralized logs for admin and security-relevant operations.
+
+## 7) Shared Responsibility (Self-Hosted)
+
+The application provides technical capabilities, but as the operator you are
+responsible for:
+
+- infrastructure hardening,
+- secret management,
+- retention policy decisions,
+- backup storage policy,
+- legal/process controls (DPA, ROPA, DSR workflows, etc.).
+
+> [!IMPORTANT]
+> This guide supports technical implementation for GDPR-oriented operations. It
+> is not legal advice and does not by itself guarantee full compliance.
+
+## Related Pages
+
+- [Configuration](./configuration)
+- [Data Processing & Encryption](./data-processing-encryption)
+- [Backup & Recovery (GDPR)](./backup-recovery)
+- [Shared Responsibility Matrix](./shared-responsibility-matrix)
+- [Retention Policy Playbook](./retention-policy-playbook)
+- [Evidence & Audit Checklist](./evidence-audit-checklist)

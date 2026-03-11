@@ -1,0 +1,53 @@
+---
+title: Invoicing & Tax Architecture
+description: Comprehensive guide to the invoicing lifecycle, tax engine, and EU VAT OSS compliance.
+---
+
+# Invoicing & Tax Architecture
+
+The Payment Gateway offers an enterprise-ready invoicing system capable of issuing legally compliant invoices, generating credit notes, and executing complex, multidimensional tax calculations globally.
+
+## The Invoicing Lifecycle
+
+Invoices enforce a strict immutability rule designed for accounting compliance. They transition through specific statuses:
+
+1. **`draft`**: The invoice is an editable placeholder. It can be fully modified, populated via the `InvoiceCorrectionService`, or deleted entirely without an audit trail.
+2. **`issued`**: The invoice becomes a finalized, legal entity. The legal `InvoiceNumber` is permanently assigned. From this point forward, the core contents cannot be mutated.
+3. **`void`**: If an issued invoice is severely incorrect before financial use, it can be mathematically negated by voiding it.
+4. **Payment State (Computed)**: The actual financial state of an invoice—like `open`, `partially_settled`, `settled`, or `credited`—is never persisted in a static string. It is dynamically computed by comparing the `amountPaid` integer (incremented atomically during successful transaction webhooks) against the `totalDue`.
+
+### Invoice Corrections
+
+Once an invoice reaches the `issued` state, standard mutations are blocked. However, minor corrections (e.g., typographical errors in addresses or missing metadata) can be requested via the **Invoice Correction Workflow**.
+
+These corrections require a formal Reason String, User ID, and timestamp, permanently appending an Audit Trail to the metadata of the invoice. Crucially, corrections cannot alter line items or financial amounts; altering amounts requires the issuance of a **Credit Note**.
+
+## Gapless Sequential Numbering
+
+Unlike the legacy `transaction.externalReference`, which holds the merchant-provided identifier, legal invoices require gapless, sequentially incrementing numbers per financial year.
+
+The system utilizes an isolated `invoice_sequences` MongoDB collection to securely `$inc` and format document numbers synchronously. Organizations configure their numbering patterns (e.g., `INV{YEAR}-{SEQ:5}` -> `INV2026-00001`), and these counters optionally reset at the start of each calendar year.
+
+## The Advanced Tax Engine
+
+The tax capability is far beyond standard flat rates, supporting complex B2B and B2C cross-border scenarios including reverse charge mechanisms and small-business exemptions (e.g., German *Kleinunternehmerregelung*).
+
+### Supported Global Tax Schemes
+
+- **EU VAT OSS (One-Stop-Shop)**: Manages B2C cross-border sales of digital services within the European Union.
+- **EU VAT IOSS (Import One-Stop-Shop)**: Handles low-value goods imported into the EU constraint bounds.
+- **GB (UK) VAT**: Full calculation for standard and zero-rated services depending on EORI classifications.
+- **US Sales Tax**: Destination-based calculation for states where nexus criteria is established.
+- **CA GST/HST/PST**: Dual calculation capable of applying distinct provincial (e.g., Québec QST) and national (GST) layers depending on the shipping state.
+
+### VAT Rate Versioning
+
+To survive standard government tax code alterations, VAT rules are intrinsically version-controlled.
+
+When a tax rate is updated, it is never changed in place. Instead, a new `TaxRate` record is created featuring an `EffectiveFrom` UTC timestamp. When generating an invoice, the tax engine deterministically polls the `IssueDate` against active rates, locking the exact decimal calculation onto the finalized invoice object to ensure eternal immutability.
+
+### EU VAT OSS: 10-Year Evidence Retention
+
+Operating under the Union OSS scheme mandates that merchants collect and preserve proof of the buyer's establishment. 
+
+When the transaction is categorized as an EU B2C cross-border supply of a `digital_service`, the engine automatically intercepts the API request and mandates **two non-contradictory pieces of location evidence** (e.g., comparing the Billing Address `Country` against the physical IP Address `CountryCode`). If the evidence matches, it is written immutably to the `TaxEvidence` array inside the invoice and retained automatically for 10 years, fulfilling the compliance burden.

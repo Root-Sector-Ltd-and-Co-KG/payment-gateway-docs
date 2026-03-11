@@ -1,0 +1,27 @@
+---
+title: Clients
+description: Managing the central customer database and demographic CRM info.
+---
+
+# Clients
+
+The **Clients** module serves as a lightweight CRM (Customer Relationship Management) database embedded directly into the Payment Gateway.
+
+When a customer successfully completes a Checkout, the system automatically parses their billing details, email, and tax identification number, and associates it with a Client record.
+
+## Client Profiles
+
+Navigating to a Client profile allows you to view their complete financial history across the entire Organization:
+
+*   **Lifetime Value (LTV)**: Accumulated successful transactions.
+*   **Transaction History**: A chronological ledger of all their payments.
+*   **Invoice Repository**: Quick access to download PDF/E-Invoices generated for this client. 
+
+## Demographics & VAT Validation
+
+Crucially, the Client record stores their official Billing Addresses. 
+
+If a B2B client provides a European VAT ID or a business tax number:
+1. The Admin UI will display the **Validation Status**.
+2. The Main Backend automatically proxies the ID against the VIES (VAT Information Exchange System).
+3. If validated, the system automatically applies the B2B Reverse Charge mechanism, overriding default consumer tax configurations on their future Checkouts.

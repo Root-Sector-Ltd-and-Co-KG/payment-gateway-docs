@@ -1,0 +1,18 @@
+{
+    "title": "Features & User Guide",
+    "pages": [
+        "organizations",
+        "sites",
+        "api-keys",
+        "providers",
+        "checkouts",
+        "transactions",
+        "clients",
+        "invoicing",
+        "customer-portal",
+        "recurring",
+        "settings",
+        "analytics",
+        "data-import-export"
+    ]
+}

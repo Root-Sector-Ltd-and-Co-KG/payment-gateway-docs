@@ -1,0 +1,51 @@
+---
+title: Deployment Overview
+description: Overview of the deployment methods and integration.
+---
+
+# Deployment Overview
+
+Deploying the Payment Gateway App is straightforward thanks to its containerized microservices architecture. Depending on your platform and preferences, we offer two main methods for standing up the stack, alongside options for automation.
+
+## Choose Your Platform
+
+| Platform           | Best For                                                        | Guide                                         |
+| ------------------ | --------------------------------------------------------------- | --------------------------------------------- |
+| **Podman**         | Linux servers, secure rootless deployment, systemd integration. | [Podman Deployment](./podman)                 |
+| **Docker Compose** | Any OS (Linux, Windows, macOS), traditional Docker setups.      | [Docker Compose Deployment](./docker-compose) |
+
+The deployment scripts automatically handle environment detection, service orchestration, and image pulling.
+
+## Quick Setup Journey
+
+Regardless of your chosen platform, the journey looks similar:
+
+1. **Clone the deployment repository:**
+   ```bash
+   git clone https://github.com/root-sector-ltd-and-co-kg/payment-gateway-deploy
+   cd payment-gateway-deploy
+   ```
+2. **Choose your platform directory (`podman/` or `docker-compose/`)** and run `./deploy.sh`.
+3. **Configure Domains:** The scripts will prompt you (or use `.env.secrets`) to configure necessary routing and domains.
+
+## Automation and Upgrades
+
+The deployment process plays well with automation tools like **Ansible** or **Terraform**.
+
+Furthermore, maintaining the platform is built-in:
+
+- **Unified Updater:** Easily update versions with `./scripts/update.sh --engine <docker-compose|podman> --channel stable`.
+- **Systemd Timers:** Setup automated weekly updates on Linux platforms.
+- **Backup & Recovery Runbook:** Follow a clear GDPR-oriented backup/restore flow in [Backup & Recovery (GDPR)](./backup-recovery).
+- **Data Protection Guide:** Use the end-to-end self-hosted checklist in [Data Protection Guide](./data-protection).
+- **Shared Responsibility:** Clarify operator vs platform controls in [Shared Responsibility Matrix](./shared-responsibility-matrix).
+- **Retention Decisions:** Use practical policy presets in [Retention Policy Playbook](./retention-policy-playbook).
+- **Audit Readiness:** Track control evidence with [Evidence & Audit Checklist](./evidence-audit-checklist).
+- **Data Protection Model:** Review processed data, encryption scopes, and supported KMS providers in [Data Processing & Encryption](./data-processing-encryption).
+- **Release Security Transparency:** Each released version includes Trivy-generated SBOM and vulnerability artifacts, plus repository-level license gate checks.
+
+Important: the updater reads version metadata from the checked-out
+`payment-gateway-deploy/releases/manifest.json` file. Refresh the deploy
+repository checkout before expecting a newly released version to appear.
+
+Read more in the specific deployment pages on the left.

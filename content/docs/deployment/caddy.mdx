@@ -1,0 +1,166 @@
+---
+title: Caddy Reverse Proxy
+description: Configuring the Caddy reverse proxy with MongoDB-backed storage for automatic TLS, custom domains, and routing.
+---
+
+# Caddy Reverse Proxy
+
+The `payment-gateway-reverseproxy` module ships a customized Caddy build with a **MongoDB storage plugin** that stores TLS certificates and ACME challenge data in your existing MongoDB instance — eliminating the need for a shared filesystem between Caddy instances.
+
+---
+
+## Why Caddy with MongoDB Storage
+
+Standard Caddy stores TLS certificates on the local filesystem. When running multiple Caddy instances (for HA) or containers that may be replaced, this causes certificate loss or ACME rate limit issues. The MongoDB storage backend:
+
+- Persists certificates to MongoDB (replicated, backed up automatically)
+- Allows any Caddy instance to serve any domain's certificate
+- Supports on-demand TLS for dynamically registered custom domains
+
+---
+
+## Basic Caddyfile
+
+```
+{
+  storage mongo {
+    uri              mongodb://user:pass@mongo:27017/gateway
+    database         gateway
+    collection       caddy_certificates
+    timeout          10s
+    cache_ttl        1h
+  }
+
+  on_demand_tls {
+    ask https://admin.yourcompany.com/api/v1/domains/verify
+  }
+}
+
+# Admin Panel
+admin.yourcompany.com {
+  reverse_proxy payment-gateway-admin-backend:8080
+}
+
+# Admin API
+admin-api.yourcompany.com {
+  reverse_proxy payment-gateway-admin-backend:8080
+}
+
+# Payment Frontend (checkout pages)
+pay.yourcompany.com {
+  reverse_proxy payment-gateway-main-frontend:3000
+}
+
+# Payment API
+api.yourcompany.com {
+  reverse_proxy payment-gateway-main-backend:8081
+}
+
+# Customer Portal
+portal.yourcompany.com {
+  reverse_proxy payment-gateway-main-frontend:3000
+}
+
+# Custom domains (merchants' own domains — on-demand TLS)
+:443 {
+  tls {
+    on_demand
+  }
+  reverse_proxy payment-gateway-main-frontend:3000
+}
+```
+
+---
+
+## On-Demand TLS for Custom Merchant Domains
+
+Merchants can map their own domains (e.g., `checkout.merchantshop.com`) to their payment portal. Caddy issues TLS certificates on first request using the `on_demand_tls` feature.
+
+The `ask` URL must return `200 OK` for valid domains and any other status for invalid ones. The Admin Backend's `GET /api/v1/domains/verify` endpoint serves this purpose — it is a **public, no-auth endpoint** dedicated to Caddy's on-demand TLS check. It validates that the requested hostname is registered and verified in the database before authorizing certificate issuance.
+
+> [!NOTE]
+> This is distinct from `GET /api/v1/domains/verify-cname`, which is the authenticated endpoint used by operators to manually trigger CNAME verification from the Admin Panel.
+
+### Merchant Domain Registration Flow
+
+1. Merchant adds their domain in **Admin Panel → Sites → Custom Domain**.
+2. Merchant creates a CNAME record: `checkout.merchantshop.com → pay.yourcompany.com`.
+3. Admin Panel verifies the CNAME via **Verify Domain**.
+4. On the next request to `checkout.merchantshop.com`, Caddy calls the `ask` endpoint, receives `200`, and issues a certificate via ACME (Let's Encrypt).
+
+---
+
+## TLS Certificate Management
+
+Caddy handles certificate issuance and renewal automatically via ACME (Let's Encrypt by default). No manual certificate management is required.
+
+**Requirements:**
+- The server must be reachable on ports `80` and `443` from the internet.
+- The domain must have a valid DNS A/CNAME record pointing to the server.
+- Let's Encrypt rate limits apply: 50 certificates per registered domain per week.
+
+### Using a Custom ACME Server
+
+For private deployments or staging:
+
+```
+{
+  acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+```
+
+---
+
+## Security Headers
+
+Add security headers to all responses:
+
+```
+pay.yourcompany.com {
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    X-Frame-Options "SAMEORIGIN"
+    X-Content-Type-Options "nosniff"
+    Referrer-Policy "strict-origin-when-cross-origin"
+  }
+  reverse_proxy payment-gateway-main-frontend:3000
+}
+```
+
+---
+
+## Rate Limiting at the Proxy Layer
+
+Caddy's `rate_limit` module (available in the extended build) can add a coarse rate limit before requests reach the backend:
+
+```
+api.yourcompany.com {
+  rate_limit {
+    zone api_zone {
+      key {remote_host}
+      events 100
+      window 1m
+    }
+  }
+  reverse_proxy payment-gateway-main-backend:8081
+}
+```
+
+---
+
+## Health Check Routing
+
+Restrict the internal health endpoint to your monitoring system's IP range:
+
+```
+api.yourcompany.com {
+  @internal {
+    path /internal/*
+    remote_ip 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
+  }
+  respond @internal 403
+  reverse_proxy payment-gateway-main-backend:8081
+}
+```
+
+This blocks `/internal/health` from public access while allowing it from private network ranges where your monitoring system runs.

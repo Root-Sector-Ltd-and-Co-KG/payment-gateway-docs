@@ -1,0 +1,79 @@
+---
+title: Retention Policy Playbook
+description: Practical guidance for selecting retention settings by business model and compliance posture.
+---
+
+# Retention Policy Playbook
+
+This playbook helps operators convert legal/compliance requirements into
+concrete values for `Settings > Retention`.
+
+> [!IMPORTANT]
+> Use this as implementation guidance. Final retention periods must be approved
+> by your legal/compliance function.
+
+## What You Can Configure
+
+At organization scope, you can configure:
+
+- transaction retention window (days),
+- customer-data retention windows for:
+  - IP addresses,
+  - billing address,
+  - shipping address,
+  - customer email,
+  - transaction items,
+- country-retention behavior.
+
+## Suggested Starting Profiles
+
+### 1) B2C Digital Services (EU-heavy)
+
+- Transaction data: medium-to-long retention (finance/tax records).
+- IP addresses: short retention (fraud + troubleshooting window).
+- Address fields: short-to-medium unless tax/legal obligations require longer.
+- Customer email: medium retention for billing/service history.
+
+### 2) B2B Invoicing
+
+- Transaction/invoice-linked fields: long retention aligned with accounting law.
+- IP addresses: short-to-medium retention.
+- Shipping address: optional depending on physical-goods relevance.
+- Customer email/contact: medium-to-long where contract/service support requires.
+
+### 3) Strict Data Minimization Posture
+
+- Set shortest legally permissible values by field type.
+- Use `0` for immediate deletion only where legally acceptable.
+- Keep country retention if required for tax/compliance evidence.
+
+## Decision Workflow
+
+1. Map each field class to business purpose.
+2. Map legal basis and minimum retention obligations.
+3. Choose retention values and approve internally.
+4. Configure in `Settings > Retention`.
+5. Validate deletion behavior in non-production.
+6. Re-review quarterly or on regulation change.
+
+## Common Pitfalls
+
+- Using one blanket value for all field types.
+- Setting very short windows without finance/legal confirmation.
+- Forgetting to re-check retention after entering new markets.
+- Treating backups as exempt from lifecycle policy.
+
+## Change Management Template
+
+For each policy change, record:
+
+- date and approver,
+- old value and new value,
+- reason (legal, operational, minimization, incident),
+- validation result after rollout.
+
+## Related Pages
+
+- [Data Protection Guide](./data-protection)
+- [Shared Responsibility Matrix](./shared-responsibility-matrix)
+- [Evidence & Audit Checklist](./evidence-audit-checklist)

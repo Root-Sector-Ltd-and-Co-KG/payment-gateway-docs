@@ -1,0 +1,29 @@
+---
+title: Analytics & Reporting
+description: Exporting data, understanding the dashboard, and generating tax compliance reports.
+---
+
+# Analytics & Reporting
+
+Data visibility is critical for merchants. The platform provides real-time overviews as well as robust, scheduled reporting capabilities to appease local tax authorities.
+
+## The Dashboard
+
+The default view upon logging in is the **Dashboard**. It aggregates real-time data across your active Sites.
+
+Key metrics include:
+* **Gross Volume**: Total processed transactions over the selected trailing period (e.g., 7 Days, 30 Days).
+* **Net Revenue**: Gross minus refunds and computed upstream provider fees.
+* **Failed Attempt Ratios**: Helps identify surges in fraudulent card testing or widespread bank outages.
+
+## Tax & VAT OSS Reports
+
+If your Organization is configured for B2C cross-border digital goods within the European Union, you are required to submit quarterly VAT-OSS (One Stop Shop) declarations.
+
+Navigate to **Reports > VAT OSS**.
+1. Select the relevant Fiscal Quarter.
+2. The engine will aggregate all `succeeded` transactions where the OSS rules applied.
+3. It bins the collected tax amounts per destination Member State (e.g., France: €200 collected, Germany: €500 collected).
+4. Export the data structurally to map directly to the ELSTER (or respective local authority) submission gateway.
+
+A generalized **Tax by Country** report is also available for non-OSS sales logic (such as physical goods subject to domestic VAT accounting).

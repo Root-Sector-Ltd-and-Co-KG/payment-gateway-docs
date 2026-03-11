@@ -1,0 +1,36 @@
+---
+title: Customer Portal
+description: A secure, self-service portal for end customers.
+---
+
+# Customer Portal
+
+The **Customer Portal** is a branded, self-service interface where your buyers can securely manage their billing relationship with your Site without contacting your support team.
+
+## Access & Authentication
+
+Because the portal houses sensitive financial documents, it employs strict, passwordless authentication.
+
+1. **One-Time Password (OTP)**: Customers enter the email address they used during checkout at your portal's URL (e.g., `invoices.yourdomain.com`).
+2. **Email Verification**: The system securely dispatches a time-sensitive 6-digit OTP to their inbox.
+3. **Session Issuance**: Upon entering the correct OTP, the backend exchanges it for a secure JWT (JSON Web Token), granting read-only access to their specific Organization-bound Client profile.
+
+## Portal Capabilities
+
+Once authenticated, customers are presented with a clean interface featuring your Site's branding. They can independently perform the following actions:
+
+### Document Retrieval
+Customers can view a chronological list of every `issued` invoice or credit note associated with their email. They can:
+*   Download the standard PDF document.
+*   Download the legally compliant XML E-Invoice (ZUGFeRD, Peppol, XRechnung) required for corporate accounting in the EU.
+
+### Subscription Management
+If the customer is enrolled in an active Recurring Schedule, the portal displays their active subscriptions. 
+*   They can view the next billing date and the exact amount of the upcoming charge.
+*   Crucially, they can completely **Cancel** their subscription. This instantly terminates the schedule in the gateway, preventing any future involuntary charges and ensuring compliance with modern consumer protection laws.
+
+## Security Architecture
+
+The Customer Portal is strictly isolated from the Admin or Main backend mutation paths. 
+*   **Read-Only Vectors**: The `PortalInvoiceService` handles all interactions. It strictly prevents unauthorized access to foreign Client records (preventing Insecure Direct Object Reference vulnerabilities).
+*   **OTP Reuse Prevention**: Once an OTP is consumed or expires (usually within 15 minutes), it is cryptographically invalidated to prevent replay attacks.

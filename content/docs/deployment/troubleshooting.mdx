@@ -1,0 +1,43 @@
+---
+title: Troubleshooting
+description: Quick diagnostics, finding root causes, and debugging the stack.
+---
+
+# Troubleshooting
+
+If you encounter issues during deployment or operation, the `payment-gateway-deploy` repository includes built-in diagnostic tools to help identify and resolve problems.
+
+## Quick Diagnostics (Podman)
+
+If you are deploying with Podman, use the built-in diagnostic script for easier troubleshooting:
+
+```bash
+# Check the status of all services
+./scripts/diagnose.sh
+
+# Find the root cause of failures
+./scripts/diagnose.sh --root-cause
+
+# Start services one-by-one with verification
+./scripts/diagnose.sh --startup
+
+# Enable debug mode (prevents cascade failures during complex debugging)
+./scripts/diagnose.sh --debug-on
+```
+
+## General Troubleshooting
+
+Regardless of the platform, follow these general steps if something goes wrong:
+
+1. **Check Deployment Logs**: 
+   - `cat podman/deploy.log` or `cat docker-compose/deploy.log`
+2. **View Service Logs**: 
+   - For Docker Compose: `docker-compose logs -f <service-name>`
+   - For Podman: Follow the log commands outputted by `./deploy.sh` or check the journal for specific systemd services (e.g. `journalctl --user -u podman-compose@payment-gateway -f`).
+3. **Emergency Rollback**: 
+   - Use `./rollback.sh` in the respective platform directory to revert to the previous working state.
+4. **Reset Deployment**: 
+   - Delete the secrets file `.env.secrets` from the project root.
+   - For Podman: Remove the `~/.config/payment-gateway-deploy/` directory.
+   - For Docker Compose: Remove the `.env` file from the platform directory.
+   - Re-run `./deploy.sh`.

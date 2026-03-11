@@ -1,13 +1,35 @@
 ---
-title: Hello World
-description: Your first document
+title: Payment Gateway Overview
+description: High-level overview of the Payment Gateway application stack and its capabilities.
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+# Overview
 
-## What is Next?
+Welcome to the **Payment Gateway** documentation. The Payment Gateway is a self-hosted, enterprise-grade platform for accepting online payments, managing invoices, and handling complex tax compliance — all under your own infrastructure and brand.
 
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
-</Cards>
+One of the main strategic advantages of the platform is continuity. Your payment history, invoice records, and buyer-facing billing data stay in your own system even when payment provider terms, risk decisions, or commercial models change.
+
+## Core Capabilities
+
+- **Multi-Provider Payments**: Accept cards, direct debits, and bank transfers through a unified interface (Stripe, GoCardless, Wise Transfers, and Wire Transfer).
+- **Payment Data Boundary**: Card input is handled through provider-hosted or tokenized flows; the gateway does not store raw PAN/CVC values.
+- **Persistent History and Invoicing**: Keep one payment and invoice history across provider changes, with gapless numbering, PDF invoice customisation, and support for ZUGFeRD, Peppol, and XRechnung workflows. Finalized buyer documents are downloaded through the customer portal.
+- **Multi-Tenant Organizations**: Full role-based access control for teams with a dedicated Admin Panel.
+- **Advanced Tax Engine**: Native EU VAT OSS/IOSS, UK VAT, US Sales Tax, and Canadian GST/HST with temporal rate scheduling.
+- **Customer Portal**: A branded, self-service portal for buyers to access and download invoices on your configured hosted portal domain or your own mapped portal domain, and to manage subscriptions.
+- **Flexible Deployment**: Docker Compose or rootless Podman on Linux, with automated upgrade tooling.
+- **Data Lifecycle Controls**: Organization-level retention settings plus GDPR-oriented backup and restore runbooks.
+
+## Commercial Model
+
+- **One Implementation**: Integrate once against your own gateway surface and keep providers replaceable behind it.
+- **Custom Provider Additions**: Additional payment providers can be added for **100 EUR one-time per provider**.
+- **Invoice Output Flexibility**: PDF invoice customisation and related billing adjustments are available for teams that need tailored output.
+
+## Getting Started
+
+- [Quick Start](./getting-started) — Set up your first hosted checkout flow.
+- [Features & User Guide](./features/organizations) — How to use the platform as a merchant.
+- [API Reference](./api-reference) — REST API documentation for programmatic integration.
+- [Architecture & Components](./architecture/components) — How the system fits together technically.
+- [Deployment](./deployment) — Self-hosting installation guide.

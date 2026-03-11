@@ -1,0 +1,292 @@
+---
+title: Main API
+description: Customer-facing API endpoints — checkout sessions, transactions, portal, and VAT validation.
+---
+
+# Main API
+
+**Base URL:** `https://api.yourcompany.com/api/v1`
+
+The Main Backend handles customer-facing operations: serving checkout sessions, processing transaction status, the customer portal, and incoming provider webhooks.
+
+---
+
+## Checkouts
+
+### Get Checkout Session
+
+```http
+GET /api/v1/checkouts/:id
+```
+
+Retrieves a checkout session by its public ID. Used by the Main Frontend to render the payment page.
+
+**Authentication:** None (public endpoint with CORS allowed from configured frontend domain).
+
+**Path Parameters:**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `id` | string | Public checkout session ID |
+
+**Response `200`:**
+
+```json
+{
+  "id": "abc123",
+  "currency": "EUR",
+  "status": "pending",
+  "lineItems": [
+    {
+      "name": "Professional Plan",
+      "quantity": 1,
+      "unitAmount": 4900
+    }
+  ],
+  "providers": ["stripe"],
+  "branding": {
+    "logo": "https://...",
+    "primaryColor": "#3b82f6"
+  },
+  "expiresAt": "2026-03-08T14:00:00Z"
+}
+```
+
+---
+
+## Transactions
+
+### Create Transaction
+
+```http
+POST /api/v1/transactions/create
+```
+
+Initiates a transaction for a checkout session. Called by the Main Frontend when the customer submits payment.
+
+**Authentication:** None (validated via checkout session context).
+
+**Request Body:**
+
+```json
+{
+  "checkoutId": "abc123",
+  "providerId": "stripe_provider_id",
+  "billingAddress": {
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "line1": "123 Main St",
+    "city": "Berlin",
+    "postalCode": "10115",
+    "country": "DE"
+  },
+  "vatId": "DE123456789"
+}
+```
+
+**Response `201`:**
+
+```json
+{
+  "transactionId": "txn_xyz",
+  "status": "initiated",
+  "redirectUrl": "https://stripe.com/pay/..."
+}
+```
+
+### Get Transaction Status
+
+```http
+GET /api/v1/transactions/:id/status
+```
+
+Polls transaction status. Used by the success/return page to confirm payment outcome.
+
+**Response `200`:**
+
+```json
+{
+  "id": "txn_xyz",
+  "status": "succeeded",
+  "amount": 4900,
+  "currency": "EUR"
+}
+```
+
+### Cancel Transaction
+
+```http
+POST /api/v1/transactions/:id/cancel
+```
+
+Cancels a pending transaction (before provider capture).
+
+### Mark Transaction as Pending
+
+```http
+POST /api/v1/transactions/:id/mark-pending
+```
+
+Transitions a transaction to `pending_provider` state. Used for asynchronous payment flows (GoCardless, Wire Transfer).
+
+---
+
+## VAT Validation
+
+### Validate VAT ID
+
+```http
+POST /api/v1/vat/validate
+```
+
+Validates a VAT ID via the EU VIES system. No authentication required.
+
+**Request Body:**
+
+```json
+{
+  "vatId": "DE123456789",
+  "countryCode": "DE"
+}
+```
+
+**Response `200`:**
+
+```json
+{
+  "valid": true,
+  "name": "Example GmbH",
+  "address": "Musterstraße 1, 10115 Berlin"
+}
+```
+
+### Check EU Country
+
+```http
+GET /api/v1/vat/eu-country/:code
+```
+
+Returns whether a country code is an EU member state.
+
+---
+
+## Customer Portal
+
+The portal API allows buyers to self-serve invoice and subscription management. All portal endpoints (except OTP auth) require a valid portal session token.
+
+### Request OTP
+
+```http
+POST /api/v1/portal/auth/request-otp
+```
+
+Sends a one-time password to the customer's email address.
+
+**Request Body:**
+
+```json
+{
+  "email": "jane@example.com",
+  "siteId": "site_abc"
+}
+```
+
+### Verify OTP
+
+```http
+POST /api/v1/portal/auth/verify-otp
+```
+
+Exchanges an OTP for a portal session token.
+
+**Request Body:**
+
+```json
+{
+  "email": "jane@example.com",
+  "otp": "123456",
+  "siteId": "site_abc"
+}
+```
+
+**Response `200`:**
+
+```json
+{
+  "token": "portal_session_token",
+  "expiresAt": "2026-03-08T16:00:00Z"
+}
+```
+
+All subsequent portal requests include:
+
+```http
+Authorization: Bearer portal_session_token
+```
+
+### List Documents
+
+```http
+GET /api/v1/portal/documents
+```
+
+Returns invoices and credit notes for the authenticated customer.
+
+### Download Invoice PDF
+
+```http
+GET /api/v1/portal/documents/:id/pdf
+```
+
+Returns the invoice PDF as `application/pdf`.
+
+### Download E-Invoice (XML)
+
+```http
+GET /api/v1/portal/documents/:id/einvoice
+```
+
+Returns the e-invoice XML (ZUGFeRD, Peppol, or XRechnung format depending on configuration).
+
+### List Subscriptions
+
+```http
+GET /api/v1/portal/subscriptions
+```
+
+### Cancel Subscription
+
+```http
+POST /api/v1/portal/subscriptions/:id/cancel
+```
+
+Allows a customer to cancel a recurring schedule. Sends a confirmation email.
+
+---
+
+## Billing Requests (GoCardless)
+
+### Create Billing Request
+
+```http
+POST /api/v1/billing-requests/create
+```
+
+Initiates a GoCardless billing request mandate. Called during the direct debit checkout flow.
+
+---
+
+## Webhooks (Inbound)
+
+```http
+POST /hooks/:type/:providerId
+```
+
+Receives inbound webhook events from payment providers. Not called by your code — configured in the provider dashboard.
+
+| `type` | Provider |
+|---|---|
+| `stripe` | Stripe payment events |
+| `gocardless` | GoCardless mandate and payment events |
+
+See [Webhooks & IPN](./webhooks) for event types and payload schemas.

@@ -1,0 +1,182 @@
+---
+title: Updates & Automation
+description: How to maintain and automatically update your deployment safely.
+---
+
+# Updates & Upgrades
+
+The Deployment repository (`payment-gateway-deploy`) includes a powerful set of scripts and mechanisms to keep your Payment Gateway updated, ensuring you receive the latest security patches and features.
+
+The important trust boundary is this:
+
+- Release orchestration is internal.
+- Customer upgrades are driven by explicit public release metadata first and
+  fall back to the checked-in deploy manifest when needed.
+- Customer image delivery uses `registry.payment-gateway.app`, but the updater
+  does not discover the newest version from registry tags.
+
+## Release Security Transparency
+
+Each published product release now includes auditable security artifacts:
+
+- A release-time Trivy scan runs after changed component images are published and promoted.
+- CycloneDX SBOM files are generated per repository and versioned.
+- Trivy vulnerability and misconfiguration reports are generated per repository and versioned.
+- These artifacts are committed to the internal release-orchestrator repository, then linked to the same product version used by release notes and deploy metadata.
+
+In addition, component repositories enforce branch-based license scanning with Trivy:
+
+- Trigger: push to `develop` for application repositories, push to `main` for `payment-gateway-lib-common` and `payment-gateway-lib-crypto`.
+- Command behavior: `trivy fs --scanners license --format json`.
+- Gate policy: the workflow fails on license findings with severities `UNKNOWN,HIGH,CRITICAL`.
+
+For additional shared libraries scanned by the release pipeline, the scanner prefers a matching `v<productVersion>` tag and falls back to `main` if that tag does not exist yet. This keeps release-version traceability explicit while still ensuring coverage.
+
+This gives operators and customers better traceability between what was released and what was scanned.
+
+Additional security checks in the release ecosystem:
+
+- Backend CI includes Go-native vulnerability/security checks (such as `govulncheck` and `gosec`) in dedicated security workflows.
+- Aikido Security can run as an additional organization/repository security integration for continuous code and dependency monitoring.
+
+### Security Scan Matrix
+
+| Control                               | Scope                                        | Trigger                                            | Output                                                                                                                                             | Blocking                      |
+| ------------------------------------- | -------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| Trivy vuln+misconfig + CycloneDX SBOM | release-managed repos + shared libs          | product release continuation after image promotion | `security/sbom/v<productVersion>/*.cyclonedx.json`, `security/reports/v<productVersion>/*.vuln.json`, `scan-manifest.json` in release-orchestrator | Yes                           |
+| Trivy license gate                    | each component repository                    | push (`develop` for app repos, `main` for libs)    | machine-readable JSON output in CI workflow run                                                                                                    | Yes (`UNKNOWN,HIGH,CRITICAL`) |
+| Govulncheck                           | admin/main backend                           | backend security scan workflow on push             | workflow findings                                                                                                                                  | Yes                           |
+| Gosec                                 | admin/main backend                           | backend security scan workflow on push             | workflow findings                                                                                                                                  | Yes                           |
+| Aikido Security                       | organization/repository security integration | continuous                                         | Aikido findings dashboard                                                                                                                          | Policy-driven                 |
+
+## Security Reporting Policy
+
+The public disclosure and reporting policy is published here:
+
+- `https://payment-gateway.app/security-policy`
+
+The required discovery file is also published at:
+
+- `https://payment-gateway.app/.well-known/security.txt`
+
+This follows the common best-practice pattern of keeping the machine-readable
+`security.txt` contact file and the human-readable reporting policy aligned.
+
+## Automated Updates
+
+The stack features a unified updater script that safely orchestrates system upgrades.
+
+**Key Features:**
+
+- Automatic detection of existing installations.
+- Graceful service shutdown and restart to minimize downtime.
+- Automatic backup creation _before_ updates.
+- Detailed logging of all operations.
+- Emergency rollback capability provided by `./rollback.sh`.
+- Image validation and Compatibility Checks gating updates safely.
+
+### How the Updater Finds a Version
+
+`./scripts/update.sh` does not query GitHub Releases or the customer registry
+for the latest version. Instead it prefers the public metadata endpoint:
+
+- `https://payment-gateway.app/api/releases/metadata`
+
+and falls back to the local deploy repository manifest:
+
+- `payment-gateway-deploy/releases/manifest.json`
+- `channels.<name>.latest`
+- matching release metadata under `releases[]`
+
+This is deliberate because customer pull credentials should be scoped to image
+pull only, not registry catalog browsing.
+
+### Remote-First Metadata
+
+Set the metadata host with `RELEASE_METADATA_URL`. Production should use the
+public production endpoint by default. Other environments can override that
+value explicitly when they need a different metadata host.
+
+If the public metadata endpoint is temporarily unavailable, the updater keeps
+working by falling back to the checked-in local manifest.
+
+### Running a Manual Update
+
+To manually trigger a full stack update using the unified updater:
+
+```bash
+# From the root of payment-gateway-deploy
+
+# For Docker Compose
+./scripts/update.sh --engine docker-compose --channel stable
+
+# For Podman
+./scripts/update.sh --engine podman --channel stable
+```
+
+### Scheduling Automated Upgrades
+
+You can install weekly systemd timers on Linux to handle background updates for you automatically:
+
+```bash
+# For Docker Compose
+./scripts/install-update-timer.sh --engine docker-compose
+
+# For Podman
+./scripts/install-update-timer.sh --engine podman
+```
+
+## Component Updates
+
+Sometimes you only need to update a single microservice (e.g., `admin-backend` or `payment-gateway-main-worker`) without a full redeployment. The system supports targeted service updates:
+
+```bash
+# Update a single component (works on both platforms)
+./deploy.sh --update-component admin-backend --version 3.1.1
+```
+
+**Common Components:**
+`payment-gateway-admin-backend`, `payment-gateway-admin-frontend`, `payment-gateway-main-backend`, `payment-gateway-main-frontend`, `payment-gateway-reverseproxy`, `payment-gateway-main-worker`, `mongo`, `garnet`, `mgob`, `mongo-express`, `gotenberg`
+
+## Container Registries & Auto-Renew
+
+For production, the Payment Gateway requires access to `registry.payment-gateway.app`. You configure this access using license access credentials issued for a specific license in the license workspace:
+
+- `REGISTRY_HOST`
+- `REGISTRY_TOKEN_SERVICE_URL`
+- `REGISTRY_ACCESS_ID`
+- `REGISTRY_ACCESS_SECRET`
+- `REGISTRY_INSTALLATION_ID`
+
+When these are securely injected, the deployment and update scripts automatically request short-lived bearer tokens from `registry-auth.payment-gateway.app`, bind them to the installation identity, and configure `docker` / `podman` pulls non-interactively.
+
+The first successful token exchange also binds that license access identity to
+the deployment public IP. If the outbound public IP changes later, rotate the
+license access secret in the license workspace before the next deploy or
+update.
+
+Customers normally do not need direct permission to enumerate registry tags. The
+release channel decision comes from the deploy manifest, and the license access
+credentials are used only to fetch short-lived pull tokens for the exact
+repositories allowed by the license manager.
+
+## Recommended Public Metadata Pattern
+
+For UI surfaces such as an admin-frontend "update available" indicator, the
+recommended pattern is to publish a small public release metadata document or
+API from a stable domain such as `payment-gateway.app`.
+
+That public metadata should mirror the channel information already present in
+`releases/manifest.json`:
+
+- current latest product version per channel
+- release date
+- compatibility flag
+- release notes URL
+- exact component set with `componentVersion`, image reference, and digest
+
+The admin frontend Version Badge consumes the same public metadata and changes
+state based on channel-aware version comparison plus dependency health.
+
+This is preferable to making the internal release orchestrator repository public
+just to expose version discovery.

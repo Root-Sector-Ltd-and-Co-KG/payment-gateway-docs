@@ -1,0 +1,74 @@
+---
+title: Configuration Requirements
+description: Essential configurations, MongoDB TLS encryption, and Auth setup.
+---
+
+# Configuration
+
+Configuring the Payment Gateway correctly ensures secure and reliable operation. This guide focuses on database security and worker cache optimization.
+
+## MongoDB TLS Encryption
+
+TLS encryption is **enabled by default** in current deployment configuration and
+should remain enabled for production deployments.
+
+### Quick TLS Setup
+
+1. **Generate Certificates** (This is a one-time setup on the host):
+    ```bash
+    # Linux/macOS
+    ./scripts/generate-mongo-certs.sh
+
+    # Windows (PowerShell)
+    .\scripts\generate-mongo-certs.ps1
+    ```
+
+2. **Enable TLS in your environment:**
+    - For **Docker Compose**:
+      ```bash
+      export MONGO_TLS_ENABLED=true
+      cd docker-compose && ./deploy.sh
+      ```
+    - For **Podman**:
+      ```bash
+      echo "MONGO_TLS_ENABLED=true" >> ~/.config/payment-gateway-deploy/.env-mongo
+      cd podman && ./deploy.sh
+      ```
+
+3. **Regenerate Secrets**:
+    This step injects the TLS connection strings into your applications:
+    ```bash
+    export MONGO_TLS_ENABLED=true
+    ./scripts/generate-secrets.sh --force
+    ```
+
+*Note: For local development, you can disable TLS deliberately, but keep it enabled in production.*
+
+## Worker Configuration (PDF Generation)
+
+The `payment-gateway-main-worker` handles PDF generation using Gotenberg via HTTP. 
+
+Key environment variables for configuring the worker in `.env-main-worker` (Podman/Ansible) or your unified `.env` (Docker Compose) include:
+
+| Variable | Description | Default |
+| --- | --- | --- |
+| `MPG_MAIN_WORKER_PORT` | HTTP port serving cached PDFs | `8090` |
+| `MPG_MAIN_WORKER_CONCURRENCY` | Maximum concurrent PDF background jobs | `10` |
+| `MPG_MAIN_WORKER_GOTENBERG_URL` | Gotenberg API endpoint | `http://gotenberg:3000` |
+| `MPG_MAIN_WORKER_TEMP_CACHE_DIR` | Temp directory for PDF caching (24h cleanup). | `/tmp/pdf-cache` |
+
+*Best Practice:* Deploy configs should mount `MPG_MAIN_WORKER_TEMP_CACHE_DIR` as a `tmpfs` volume with mode `1777` for performance and automatic clearing.
+
+## Persistent Storage Configuration
+
+Out of the box, generated PDFs are stored in the temporary cache for 24 hours. For permanent storage:
+1. Navigate to **Organization Settings -> Invoicing -> PDF Storage** in the Admin panel.
+2. Configure credentials and paths for AWS S3, Azure Blob Storage, or Google Cloud Storage.
+
+## Backup and Recovery
+
+For GDPR-oriented backup policy, manual on-demand backups, and manual restore
+runbooks, see:
+
+- [Backup & Recovery (GDPR)](./backup-recovery)
+- [Data Processing & Encryption](./data-processing-encryption)

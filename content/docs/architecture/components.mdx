@@ -1,0 +1,44 @@
+---
+title: Architecture Components
+description: Breakdown of the individual components that make up the Payment Gateway application stack.
+---
+
+# Architecture & Components
+
+The Payment Gateway is composed of several independent but cooperating services. By using a microservices architecture, the system is reliable, scalable, and secure.
+
+## The Services
+
+Here is a breakdown of the core services deployed in the system:
+
+| Service | Purpose | Access |
+| --- | --- | --- |
+| **Admin Panel (Admin Frontend & Admin Backend)** | Management interface for operators. | `https://admin.yoursite.com` |
+| **Payment Portal (Main Frontend & Main Backend)** | Customer payment portal. | `https://pay.yoursite.com` |
+| **Database (MongoDB)** | The primary datastore for all transaction and configuration data. TLS encryption is supported. | Internal only |
+| **Cache (Garnet/Redis)** | Redis-compatible cache for fast data retrieval and session management. | Internal only |
+| **Worker (`payment-gateway-main-worker`)** | Background jobs processing, specifically handling PDF generation and PDF cache serving. | Internal only |
+| **Gotenberg** | A Docker-powered stateless API for converting HTML to PDF, used by the Worker. | Internal only |
+| **Reverse Proxy** | Handles TLS termination and routes traffic to the appropriate frontend/backend services. | Ports 80/443 |
+
+## PDF Generation & Storage Architecture
+
+One of the complex subsystems is the PDF generation for invoices and receipts, designed for horizontal scalability.
+
+1. The **Worker** service receives a job and uses **Gotenberg** to generate a PDF.
+2. The generated PDF is stored in a local temporary cache (defaulting to `/tmp/pdf-cache`). The worker automatically cleans up PDFs older than 24 hours.
+3. The Worker acts as an HTTP server (default port 8090) to serve these cached PDFs.
+4. The Admin and Main Backends proxy PDF requests directly to the Worker, meaning no shared volumes are necessary between them.
+5. If an organization configures cloud storage (S3, Azure, or GCS) via settings, the PDFs are eventually stored there permanently instead of being dropped after 24 hours.
+
+## Database & Caching
+
+The system relies on **MongoDB** as its primary datastore. While it operates on an internal network, enabling MongoDB TLS encryption is highly recommended for production deployments to secure the internal traffic. 
+
+For high performance, a Redis-compatible cache engine (**Garnet**) handles temporary data and session caching.
+
+## Shared Packages 
+
+Under the hood, the backend services share common Go code:
+- **`lib-common`**: Contains shared utilities, notification templates (Email, Slack, SMS), and models.
+- **`lib-crypto`**: A dedicated library for cryptographic operations and secure data handling.

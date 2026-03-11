@@ -1,0 +1,53 @@
+---
+title: Shared Responsibility Matrix
+description: Clarifies which data-protection controls are covered by the application and which must be operated by the self-hosted customer.
+---
+
+# Shared Responsibility Matrix
+
+In a self-hosted model, data protection is shared between:
+
+- the **Payment Gateway application capabilities**, and
+- your **operational implementation** as system operator.
+
+Use this matrix during onboarding, audits, and internal security reviews.
+
+## Responsibility Overview
+
+| Control Area | Application Provides | Operator Must Provide |
+| --- | --- | --- |
+| Payment data boundary | Provider-tokenized card flow patterns; no raw PAN/CVC storage by gateway services | Provider account configuration, checkout-domain security, and integration review |
+| Encryption | System and organization encryption features; KMS integrations; key lifecycle workflows | KMS account setup, key policies, credential custody, and rotation execution |
+| Data retention | Retention settings in Admin UI (`Settings > Retention`) | Legal retention decisions, approved policy values, and periodic policy review |
+| Backup/recovery | `mgob` integration model and restore runbooks | Bucket security, backup schedule/retention ownership, and tested restore drills |
+| Access control | RBAC, API key scope model, auth middleware | IAM policy for infrastructure/admins, least-privilege governance, periodic access reviews |
+| Logging/auditability | App-side logs and auditable operations in services | Central log retention, SIEM/monitoring, and incident response workflow |
+| Deployment security | Configurable TLS and secure-by-default deployment templates | Host hardening, patching, network segmentation, firewall/WAF, secret management |
+| Compliance operations | Technical control surface for GDPR-oriented implementation | DPA/ROPA, legal basis mapping, DSR workflows, policy documentation, legal review |
+
+## Minimum Operator Control Set
+
+Before production go-live, ensure you have:
+
+1. Documented owner for each control area above.
+2. Approved retention policy values per data type.
+3. Key-rotation and secret-rotation procedures.
+4. Restore drill cadence with evidence retention.
+5. Access review cadence for admins and API keys.
+6. Incident response process with escalation contacts.
+
+## Evidence to Keep
+
+Keep records for:
+
+- encryption enablement and key-rotation events,
+- retention configuration changes,
+- backup success checks and restore test outcomes,
+- administrative access grants/revocations,
+- security incidents and remediation actions.
+
+## Related Pages
+
+- [Data Protection Guide](./data-protection)
+- [Retention Policy Playbook](./retention-policy-playbook)
+- [Evidence & Audit Checklist](./evidence-audit-checklist)

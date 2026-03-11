@@ -1,0 +1,13 @@
+{
+    "title": "Architecture",
+    "pages": [
+        "components",
+        "diagrams",
+        "main-services",
+        "admin-services",
+        "encryption",
+        "invoicing-and-tax",
+        "e-invoicing",
+        "licensing"
+    ]
+}

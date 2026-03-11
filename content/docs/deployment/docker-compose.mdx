@@ -1,0 +1,47 @@
+---
+title: Docker Compose Deployment
+description: Deploying using traditional Docker Compose on any operating system.
+---
+
+# Docker Compose Deployment
+
+Docker Compose is an excellent choice for deploying the Payment Gateway on a variety of operating systems, including Linux, Windows, and macOS, for both development and production.
+
+## Prerequisites
+
+Before starting, ensure your system meets these requirements:
+
+- Docker Engine (v20.10.0+)
+- Docker Compose v2 (v2.10.x+)
+- Minimum 4GB RAM
+- Optional: Configured TLS certificates (highly recommended for production)
+
+## Quick Start
+
+1. Clone the repository and navigate to the Docker Compose folder:
+    ```bash
+    git clone https://github.com/root-sector-ltd-and-co-kg/payment-gateway-deploy
+    cd payment-gateway-deploy/docker-compose
+    ```
+
+2. Generate or customize configuration files (e.g., creating `.env` mappings for ports and database credentials). 
+See [Configuration Requirements](./configuration) for details on setting up MongoDB TLS and Registry Auth.
+For backup/recovery operations and GDPR-oriented retention guidance, see
+[Backup & Recovery (GDPR)](./backup-recovery).
+For encryption scope and processed-data overview, see
+[Data Processing & Encryption](./data-processing-encryption).
+
+3. Deploy the application:
+    ```bash
+    ./deploy.sh
+    ```
+
+## Managing Services
+
+After deployment, manage your containers using standard Docker Compose commands from inside the `docker-compose/` directory:
+
+- Check logs: `docker-compose logs -f`
+- Restart services: `docker-compose restart`
+- Stop the stack: `docker-compose down`
+
+**Note:** For component updates or full stack updates, you should use the provided unified updater or component flag via `./deploy.sh` rather than `docker-compose up -d`. This ensures proper graceful reloads and backups.

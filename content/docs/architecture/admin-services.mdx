@@ -1,0 +1,46 @@
+---
+title: Admin Services Implementation
+description: Implementation details for the Admin Backend and Admin Frontend services.
+---
+
+# Admin Services Implementation
+
+The Admin Services provide the management interface for system operators to monitor payments, manage users, configure tax settings, and operate the platform.
+
+## Admin Backend
+
+The Admin Backend is a robust Go application structured for maintainability and scalability.
+
+### Core Folder Structure
+
+The application separates concerns into logical layers:
+
+- **`handlers/`**: HTTP request handlers that interface between the client and business logic.
+- **`middleware/`**: Functions orchestrating authentication, logging, and error handling in the request lifecycle.
+- **`services/`**: Encapsulates core business logic, serving as an intermediary between handlers and database models.
+- **`models/`**: Data structures defining core entities and data layer interactions.
+- **`health/`**: Extensive endpoints for application and dependency health monitoring.
+- **`utils/`**: Shared operations, configuration management, and database connections.
+
+### Key Features & Subsystems
+
+1. **Tax Management**: The backend features comprehensive tax capabilities. Organizations can configure Seller Location, Default Tax Rates, EU OSS (One-Stop Shop), and Small Business Exemptions. Tax Rules govern how taxes apply depending on the buyer/seller country and the type of supply.
+2. **Checkout Management**: Provides the necessary endpoints to manage payment providers and issue API keys securely. It allows merchants to generate `sk_...` Organization API Keys with specific scopes (like `checkout:create`) required for programmatic transaction initiation.
+3. **Observability**: Built-in OpenTelemetry (OTEL) support allows tracing requests and metrics export via OTLP to systems like Grafana Cloud. Every request includes a unique ID, client IP, paths, status, and trace/span IDs. Rate limiting and structured JSON logging are also included out of the box.
+
+## Admin Frontend
+
+The Admin Frontend is a React-based single-page application that communicates directly with the Admin Backend API. It provides the visual dashboard for all management operations.
+
+### Key Interface Areas
+
+- **Dashboard**: Real-time transaction volume, revenue figures, and failure ratio metrics.
+- **Transactions**: Searchable ledger with filtering by status, provider, site, and date range.
+- **Invoicing**: Full invoice management including issuing, voiding, and credit note workflows.
+- **Recurring**: Schedule creation and management.
+- **Clients**: The CRM view with LTV tracking and VAT ID validation status.
+- **Settings**: Organization, tax engine, notification, data retention, and geolocation configuration.
+- **API Keys**: Key creation, scope assignment, and revocation.
+
+> [!NOTE]
+> The Admin Frontend is protected by Passkey (WebAuthn) authentication and enforces **600 requests per 10-minute** rate limiting to prevent administrative endpoint abuse.

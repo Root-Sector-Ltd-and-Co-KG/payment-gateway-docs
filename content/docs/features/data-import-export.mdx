@@ -1,0 +1,41 @@
+---
+title: Data Import & Export
+description: Safely importing and exporting CSV data from the platform.
+---
+
+# Data Import & Export
+
+As your business scales, you need reliable ways to move operational data in and
+out of the platform. The **Data Import/Export** tab provides CSV export and CSV import
+workflows for supported entities.
+
+## Exporting Financial Data (CSV)
+
+Under the **Exports** section, administrators can generate detailed, structural CSV outputs of their active Organization.
+
+Supported exports/imports include:
+
+1. **Transactions**
+2. **Clients**
+3. **Invoices**
+4. **Credit Notes**
+5. **Recurring Schedules**
+6. **Sites**
+7. **Providers**
+8. **Domains**
+
+Exports include decryptable business fields where permitted by your organization
+encryption context.
+
+> [!NOTE]
+> Exports reflect only the data belonging to the Organization currently active in the top-left dropdown. To export across multiple subsidiary organizations, you must switch scopes and perform independent exports.
+
+## Data Import
+
+The system provides import templates, validation, and asynchronous import jobs.
+
+Typical flow:
+
+1. Download entity template CSV.
+2. Upload for validation (`import/validate`).
+3. Start import job (`import`) and track status.

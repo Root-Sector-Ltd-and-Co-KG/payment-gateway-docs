@@ -1,0 +1,97 @@
+---
+title: Data Processing & Encryption
+description: What data is processed, how encryption is applied, and which KMS providers are supported.
+---
+
+# Data Processing & Encryption
+
+This page explains:
+
+- which data categories are processed by the platform,
+- how encryption is applied at system and organization scope,
+- and which Key Management Service (KMS) providers are supported in the Admin UI.
+
+## Data Categories Processed
+
+The platform processes data in multiple categories, including:
+
+| Category | Typical Examples | Encryption Scope |
+| --- | --- | --- |
+| User data | Personal profile details, authentication data, contact details | System encryption |
+| Organization data | Business details, API keys, provider and site settings | System encryption |
+| Transaction data | Customer email, IP address, site label, payment metadata | Organization encryption |
+| Client and billing data | Names, company, phone, address, VAT identifiers | Organization encryption |
+| Notification and provider secrets | SMTP credentials, webhook secrets, provider credentials | Encrypted at rest through encryption services |
+
+The exact records depend on enabled modules and your configuration.
+
+## Is Encryption Enabled by Default?
+
+- **MongoDB transport encryption (TLS):** enabled by default in deployment config.
+- **Application field-level encryption:** available through **System Encryption** and **Organization Encryption** settings, and should be explicitly configured and enabled.
+
+Both are recommended for production environments.
+
+## System vs Organization Encryption
+
+### System Encryption
+
+System encryption protects cross-platform administrative data, for example:
+
+- user data,
+- organization-level administrative settings,
+- sensitive credentials used by platform services.
+
+It is configured in Admin UI under **System > Encryption**.
+
+### Organization Encryption
+
+Organization encryption protects tenant business data, for example:
+
+- transaction-level customer fields,
+- client and billing details,
+- organization-scoped business data.
+
+Each organization has its own encryption boundary and key lifecycle, configured
+under **Settings > Encryption** within that organization scope.
+
+> [!IMPORTANT]
+> Configure **both** system and organization encryption for production. System
+> encryption alone does not replace organization-scoped protection.
+
+## Supported KMS Providers (Admin UI)
+
+The encryption configuration UI currently supports:
+
+- AWS KMS
+- Azure Key Vault
+- Google Cloud KMS
+- HashiCorp Vault
+
+For each provider, you configure provider-specific fields (such as key ID,
+region, vault address, mount, and credentials), validate connectivity, then
+generate and manage DEKs.
+
+## GDPR-Oriented Checklist
+
+To align with GDPR technical controls, ensure you have:
+
+1. TLS enabled for MongoDB and external endpoints.
+2. System encryption configured, validated, and enabled.
+3. Organization encryption configured for each active organization.
+4. Key rotation and credential rotation procedures documented.
+5. Backup and restore processes tested regularly.
+6. Data retention policies defined and enforced.
+7. Access controls and audit logging enabled for admin operations.
+
+> [!IMPORTANT]
+> This documentation supports GDPR-oriented technical implementation but is not
+> legal advice. Full compliance also requires legal and organizational controls
+> in your company.
+
+## Related Pages
+
+- [Configuration](./configuration)
+- [Data Protection Guide](./data-protection)
+- [Backup & Recovery (GDPR)](./backup-recovery)
+- [Encryption Architecture](../architecture/encryption)

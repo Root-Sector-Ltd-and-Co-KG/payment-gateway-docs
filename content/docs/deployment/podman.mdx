@@ -1,0 +1,45 @@
+---
+title: Podman Deployment
+description: Secure, rootless deployment with systemd integration for Linux servers.
+---
+
+# Podman Deployment
+
+Podman allows for running the Payment Gateway stack entirely without root privileges (rootless). Combined with systemd integration, it provides an excellent choice for robust production Linux deployments.
+
+## Prerequisites
+
+- Modern Linux Kernel (e.g., Ubuntu 22.04+, RHEL 9+)
+- Podman (v4.0.0+)
+- `podman-compose` or `docker-compose` v2
+- A dedicated non-root user (e.g., `pgw-user`) with linger enabled (`loginctl enable-linger pgw-user`)
+
+## Security Context
+
+Because the stack runs rootless, applications like MongoDB and caching run without elevated permissions, substantially reducing the attack surface.
+
+## Quick Start
+
+1. SSH into the server as your dedicated non-root user.
+2. Clone the repository and navigate to the Podman folder:
+   ```bash
+   git clone https://github.com/root-sector-ltd-and-co-kg/payment-gateway-deploy
+   cd payment-gateway-deploy/podman
+   ```
+3. Prepare the environment (see [Configuration Requirements](./configuration) for setting up MongoDB TLS and registry token-service authorization).
+4. Run the deploy script:
+   ```bash
+   ./deploy.sh
+   ```
+
+## Systemd Integration
+
+The `deploy.sh` script automatically generates systemd units for your non-root user.
+
+You can manage the stack using `systemctl --user`:
+
+- Check status: `systemctl --user status podman-compose@payment-gateway`
+- View logs: `journalctl --user -u podman-compose@payment-gateway -f`
+- Stop: `systemctl --user stop podman-compose@payment-gateway`
+
+Updates can be fully scheduled via Linux timers. For guidance on automating this, refer to the [Updates & Automation](./updates) guide.

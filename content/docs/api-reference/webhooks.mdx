@@ -1,0 +1,166 @@
+---
+title: Webhooks & IPN
+description: Inbound provider webhooks and outbound IPN configuration for real-time payment event notifications.
+---
+
+# Webhooks & IPN
+
+The Payment Gateway handles webhooks at two levels:
+
+1. **Inbound webhooks** — from payment providers (Stripe, GoCardless) to the gateway. These update transaction state automatically.
+2. **Outbound IPN (Instant Payment Notifications)** — from the gateway to your application. Notify your system when a transaction changes state.
+
+---
+
+## Inbound Provider Webhooks
+
+### Endpoint
+
+```
+POST https://api.yourcompany.com/hooks/{type}/{providerId}
+```
+
+| Parameter | Values | Description |
+|---|---|---|
+| `type` | `stripe`, `gocardless` | Provider type |
+| `providerId` | MongoDB ObjectId | The provider record ID (from Admin Panel) |
+
+Configure this URL in your provider dashboard as the webhook destination. The gateway verifies the request signature using the Webhook Secret stored on the provider record.
+
+### Stripe Events Handled
+
+| Stripe Event | Effect on Transaction |
+|---|---|
+| `payment_intent.succeeded` | → `succeeded` |
+| `payment_intent.payment_failed` | → `failed` |
+| `payment_intent.canceled` | → `cancelled` |
+| `charge.refunded` | Records refund, triggers credit note if invoice exists |
+| `charge.dispute.created` | Opens chargeback record |
+| `charge.dispute.closed` | Closes chargeback with outcome |
+
+### GoCardless Events Handled
+
+| GoCardless Event | Effect on Transaction |
+|---|---|
+| `payments.confirmed` | → `succeeded` |
+| `payments.failed` | → `failed` |
+| `payments.cancelled` | → `cancelled` |
+| `mandates.cancelled` | Marks mandate as cancelled |
+| `mandates.failed` | Marks mandate as failed |
+| `refunds.created` | Records refund |
+
+### Signature Verification
+
+**Stripe:** The gateway validates the `Stripe-Signature` header using your configured Stripe Webhook Secret (`whsec_...`).
+
+**GoCardless:** The gateway validates the `Webhook-Signature` header using your GoCardless Webhook Secret.
+
+If signature verification fails, the gateway returns `401` and logs the attempt. Do not disable webhook verification in production.
+
+---
+
+## Outbound IPN (to Your Application)
+
+Configure an IPN URL on each Site to receive real-time notifications when transactions change state.
+
+### Configuring an IPN Endpoint
+
+1. In the Admin Panel, navigate to **Sites → [your site] → IPN Settings**.
+2. Enter your endpoint URL (must be HTTPS in production).
+3. The system displays a **Webhook Secret** — store it securely for signature verification.
+
+### IPN Payload
+
+```json
+{
+  "event": "transaction.succeeded",
+  "timestamp": "2026-03-08T13:45:00Z",
+  "data": {
+    "transactionId": "txn_abc123",
+    "externalReference": "order_12345",
+    "status": "succeeded",
+    "amount": 4900,
+    "currency": "EUR",
+    "provider": "stripe",
+    "metadata": {
+      "userId": "usr_abc"
+    }
+  }
+}
+```
+
+### IPN Event Types
+
+| Event | Trigger |
+|---|---|
+| `transaction.initiated` | Checkout session submitted |
+| `transaction.pending_provider` | Awaiting async provider confirmation |
+| `transaction.succeeded` | Payment confirmed |
+| `transaction.failed` | Payment failed |
+| `transaction.cancelled` | Transaction cancelled |
+| `transaction.refunded` | Refund processed |
+| `transaction.chargeback.opened` | Dispute opened by card network |
+| `transaction.chargeback.closed` | Dispute resolved |
+
+### IPN Signature Verification
+
+Each IPN request includes an `X-Webhook-Signature` header containing an HMAC-SHA256 hex digest of the raw request body, computed with your Site's Webhook Secret.
+
+**Verification example (Go):**
+
+```go
+import (
+    "crypto/hmac"
+    "crypto/sha256"
+    "encoding/hex"
+)
+
+func verifySignature(body []byte, signature string, secret string) bool {
+    mac := hmac.New(sha256.New, []byte(secret))
+    mac.Write(body)
+    expected := hex.EncodeToString(mac.Sum(nil))
+    return hmac.Equal([]byte(expected), []byte(signature))
+}
+```
+
+**Verification example (Node.js):**
+
+```js
+const crypto = require('crypto');
+
+function verifySignature(rawBody, signature, secret) {
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(rawBody)
+    .digest('hex');
+  return crypto.timingSafeEqual(
+    Buffer.from(expected),
+    Buffer.from(signature)
+  );
+}
+```
+
+> [!CAUTION]
+> Always verify the IPN signature before trusting the payload. Failing to verify allows attackers to forge payment confirmations.
+
+### IPN Retry Behavior
+
+If your endpoint returns a non-`2xx` status, the gateway retries with exponential backoff:
+
+| Attempt | Delay |
+|---|---|
+| 1 | Immediate |
+| 2 | 30 seconds |
+| 3 | 5 minutes |
+| 4 | 1 hour |
+| 5 | 6 hours |
+
+After 5 failed attempts, the delivery is marked as failed. You can review failed IPN deliveries in the Admin Panel under **Sites → [site] → IPN Log**.
+
+### Responding to IPN
+
+Respond with `200 OK` (or any `2xx`) as quickly as possible. If your processing is slow, acknowledge the webhook immediately and process it asynchronously (queue the job, process in background).
+
+```http
+HTTP/1.1 200 OK
+```

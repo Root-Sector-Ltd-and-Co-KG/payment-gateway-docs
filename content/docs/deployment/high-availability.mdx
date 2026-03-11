@@ -1,0 +1,184 @@
+---
+title: High Availability & Scaling
+description: Running multiple backend instances, MongoDB replica sets, Redis clustering, and load balancing.
+---
+
+# High Availability & Scaling
+
+For production workloads requiring redundancy and horizontal scale, this guide covers running multiple backend instances, configuring MongoDB with replica sets, and load balancing.
+
+---
+
+## Backend Horizontal Scaling
+
+Both the Admin Backend and Main Backend are stateless — all state lives in MongoDB and Redis. You can run multiple instances behind a load balancer with no coordination required.
+
+### Docker Compose Scale
+
+```
+docker compose up --scale payment-gateway-admin-backend=3 \
+                  --scale payment-gateway-main-backend=3
+```
+
+Ensure the load balancer (Caddy or an external LB) routes traffic across all instances.
+
+### Sticky Sessions
+
+The Admin Backend uses cookie-based sessions for WebAuthn flows. Configure your load balancer with **sticky sessions** (session affinity by cookie) for the Admin Backend only — or ensure the shared Redis cache is configured so any instance can serve a given session.
+
+> [!NOTE]
+> API key authentication is stateless and works with any instance. Sticky sessions are only needed for the WebAuthn authentication flow.
+
+---
+
+## MongoDB Replica Set
+
+A single MongoDB node is a single point of failure. For production, configure a **3-node replica set**.
+
+### Minimal Replica Set (docker-compose)
+
+```yaml
+services:
+  mongo1:
+    image: mongo:7
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27017:27017"
+
+  mongo2:
+    image: mongo:7
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+
+  mongo3:
+    image: mongo:7
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+```
+
+Initialize the replica set (run once):
+
+```
+docker exec -it mongo1 mongosh --eval "
+rs.initiate({
+  _id: 'rs0',
+  members: [
+    { _id: 0, host: 'mongo1:27017' },
+    { _id: 1, host: 'mongo2:27017' },
+    { _id: 2, host: 'mongo3:27017' }
+  ]
+})
+"
+```
+
+Update your connection string:
+
+```
+MPG_DATABASE_URI=mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaSet=rs0
+```
+
+> [!IMPORTANT]
+> Transactions and change streams (used by some worker processes) require a replica set. A standalone MongoDB node will not support these features.
+
+---
+
+## Redis / Garnet High Availability
+
+For high availability of the cache (DEK caching, session data, rate limiting state):
+
+### Redis Sentinel (Automatic Failover)
+
+Use Redis Sentinel for automatic primary failover:
+
+```yaml
+services:
+  redis-primary:
+    image: redis:7-alpine
+    command: redis-server --save 60 1
+
+  redis-replica:
+    image: redis:7-alpine
+    command: redis-server --replicaof redis-primary 6379
+
+  redis-sentinel:
+    image: redis:7-alpine
+    command: redis-sentinel /etc/redis/sentinel.conf
+```
+
+Connect using a Sentinel-aware URL:
+
+```
+MPG_GARNET_URL=redis-sentinel://sentinel1:26379,sentinel2:26379/0?master=mymaster
+```
+
+### Garnet (Microsoft's Redis-Compatible Cache)
+
+The project ships with Garnet as its default Redis-compatible cache. Garnet is a drop-in replacement — the same `MPG_GARNET_URL` configuration applies.
+
+---
+
+## Load Balancer Configuration
+
+Caddy (included in the `payment-gateway-reverseproxy` module) can load balance across multiple backend instances:
+
+```
+admin.yourcompany.com {
+  reverse_proxy admin-backend-1:8080 admin-backend-2:8080 admin-backend-3:8080 {
+    lb_policy round_robin
+    health_uri /health
+    health_interval 10s
+  }
+}
+```
+
+For the Admin Backend's WebAuthn flows, add sticky sessions:
+
+```
+admin.yourcompany.com {
+  reverse_proxy admin-backend-1:8080 admin-backend-2:8080 {
+    lb_policy cookie {
+      name ADMIN_SESSION_AFFINITY
+    }
+  }
+}
+```
+
+---
+
+## Worker Process Scaling
+
+The PDF worker (`cmd/worker`) is a separate process from the main backend. Multiple worker instances can run concurrently — they pull jobs from a shared queue in MongoDB.
+
+```
+# Run 2 worker instances with 5 concurrent jobs each
+docker compose up --scale payment-gateway-main-backend-worker=2
+```
+
+Set `MPG_MAIN_WORKER_CONCURRENCY` to control per-instance parallelism.
+
+---
+
+## Connection Pool Tuning
+
+Increase MongoDB connection pool settings for high-traffic deployments:
+
+```
+MPG_DATABASE_MAX_POOL_SIZE=200
+MPG_DATABASE_MIN_POOL_SIZE=20
+MPG_DATABASE_MAX_CONNECTING=20
+```
+
+> [!NOTE]
+> Total MongoDB connections = `instances × MAX_POOL_SIZE`. Ensure your MongoDB instance (or Atlas tier) supports this limit.
+
+---
+
+## Production HA Checklist
+
+- [ ] MongoDB 3-node replica set configured
+- [ ] Redis/Garnet with Sentinel or cluster mode
+- [ ] Minimum 2 Admin Backend instances
+- [ ] Minimum 2 Main Backend instances
+- [ ] Load balancer with health checks on `/health`
+- [ ] Sticky sessions enabled for Admin Backend WebAuthn flows
+- [ ] Connection pool sizes tuned for instance count
+- [ ] OpenTelemetry connected for distributed trace correlation
+- [ ] Automated backups configured (see [Backup & Recovery](./backup-recovery))

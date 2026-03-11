@@ -1,0 +1,67 @@
+---
+title: Evidence & Audit Checklist
+description: Operational checklist for proving data-protection controls in self-hosted environments.
+---
+
+# Evidence & Audit Checklist
+
+Use this checklist to collect and retain evidence that your technical controls
+are implemented and operating effectively.
+
+## 1) Encryption Evidence
+
+- [ ] System Encryption enabled and validated.
+- [ ] Organization Encryption enabled for each active organization.
+- [ ] KMS provider configuration documented (without exposing secrets).
+- [ ] Key rotation events recorded (date, operator, result).
+- [ ] Credential rotation process documented and tested.
+
+## 2) Retention Evidence
+
+- [ ] Retention policy document approved by legal/compliance.
+- [ ] Configured values exported/snapshotted per organization.
+- [ ] Change log for retention value updates maintained.
+- [ ] Verification tests showing lifecycle behavior completed.
+
+## 3) Backup & Recovery Evidence
+
+- [ ] Backup schedule (`MGOB_CRON`) and retention (`MGOB_RETENTION`) documented.
+- [ ] Remote backup target policy documented (bucket controls, lifecycle rules).
+- [ ] Restore drill results captured (timestamp, environment, success/failure, notes).
+- [ ] Corrective actions logged when drill failures occur.
+
+## 4) Access & Key Management Evidence
+
+- [ ] User role review performed on defined cadence.
+- [ ] API key inventory maintained (owner, scope, rotation date).
+- [ ] Revocation workflow tested.
+- [ ] Administrative access approvals logged.
+
+## 5) Monitoring & Incident Evidence
+
+- [ ] Security-relevant logs centralized and retained.
+- [ ] Alerting for backup failures and key operation errors configured.
+- [ ] Incident response runbook maintained.
+- [ ] Post-incident review records retained.
+
+## 6) Documentation Hygiene
+
+- [ ] Architecture and deployment docs match current runtime behavior.
+- [ ] Data-processing inventory reviewed periodically.
+- [ ] Shared responsibility ownership map is current.
+
+## Suggested Audit Folder Structure
+
+Use a consistent structure (example):
+
+- `evidence/encryption/`
+- `evidence/retention/`
+- `evidence/backup-restore/`
+- `evidence/access-reviews/`
+- `evidence/incidents/`
+
+## Related Pages
+
+- [Data Protection Guide](./data-protection)
+- [Shared Responsibility Matrix](./shared-responsibility-matrix)
+- [Retention Policy Playbook](./retention-policy-playbook)

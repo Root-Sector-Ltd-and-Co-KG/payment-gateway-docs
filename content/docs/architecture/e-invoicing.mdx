@@ -1,0 +1,46 @@
+---
+title: E-Invoice Compliance
+description: Technical overview of e-Invoice formats, compliance rules, and PDF/A-3 generation.
+---
+
+# E-Invoice Compliance
+
+The Payment Gateway implements robust native e-invoicing pipelines capable of satisfying B2B and B2G (Business to Government) mandates globally. It generates legally compliant machine-readable XML structures embedded within PDF/A-3 archives or delivered standalone.
+
+## Core Mandates & Validation
+
+The system's invoice generation is actively verified against official EU schemas (EN16931). 
+
+The supported standards currently include:
+1. **ZUGFeRD / Factur-X**: A hybrid XML/PDF format dominant in Germany and France. 
+2. **Peppol BIS Billing 3.0**: An international standard mapped back to UBL (Universal Business Language).
+3. **XRechnung**: A strict UBL subset essential for German B2G transactions.
+
+Validation testing is performed via strict Schematron rule mapping (e.g., `FACTUR-X_EN16931.xslt`, `PEPPOL-EN16931-UBL.xslt`) using external engines like ecosio.
+
+## The ZUGFeRD / Factur-X Generation Pipeline
+
+Generating a ZUGFeRD document securely without destroying the underlying Chromium/Gotenberg PDF rendering layer is highly complex.
+
+1. **PDF Generation**: A high-fidelity base invoice PDF is rendered using Gotenberg (HTML to PDF).
+2. **CII Conversion**: The platform transforms its internal model (`portal invoice`) into the Factur-X Cross Industry Invoice (CII) schema.
+3. **Incremental PDF Update**: Rather than risking destructive full rewrites using third-party PDF libraries, the gateway safely *appends* the required artifacts using an incremental update.
+4. **Zlib XML Compression**: The raw CII XML stream (`factur-x.xml`) is explicitly compressed using `compress/zlib` and injected into the PDF stream using the `FlateDecode` filter to prevent extraction and parsing issues seen in raw deflate streams.
+5. **Metadata Assignment**: Crucial Factur-X XMP packets and `AFRelationship` (Alternative File) metadata are embedded in the PDF catalog headers.
+
+## EN16931 Rules Handling
+
+Native generation automatically enforces major business rules prescribed by EN16931 to ensure validity:
+
+- **BR-CO-25 (Missing Due Dates)**: If an invoice's total due is strictly positive but lacks payment terms or a due date, the system injects the default descriptive tag `"Payable upon receipt"`.
+- **Empty Delivery Nodes**: Extraneous XML elements, such as `ApplicableHeaderTradeDelivery`, are explicitly pruned when a transaction is purely virtual/digital.
+- **BR-FX-EN-04**: Non-down-payment invoices lack structured delivery times. The system safely falls back to recording the delivery event date as the UTC `IssueDate`.
+
+## Effective Provider Strategy
+
+As different regions require varying formats (or restrict them entirely), the API strictly resolves the correct format using a dual-layered hierarchy:
+
+1. **Organization-Level Rules**: Configures what the organization is physically capable of generating globally via `settings.invoicing.eInvoice.allowedFormats`.
+2. **Portal-Level Exposure**: Determines which of those generated formats should be visibly offered to the end-consumer via the customer portal (`settings.portal.allowedDownloadFormats`).
+
+The resulting configuration dictates whether `/portal/documents/:id/einvoice` should yield a UBL XML stream, a hybrid ZUGFeRD PDF, or simply standard static binary PDF representations.

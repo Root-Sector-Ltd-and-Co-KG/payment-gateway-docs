@@ -1,0 +1,36 @@
+---
+title: Invoicing & Credit Notes
+description: Managing the lifecycle of compliant invoices, corrections, and refunds.
+---
+
+# Invoicing & Credit Notes
+
+Invoices are the legal backbone of your transactions. The Payment Gateway automatically generates mathematically exact, legally compliant PDFs and E-Invoices (XML) for every successful captured payment.
+
+## Invoice Statuses
+
+Invoices exist in strict states to maintain accounting integrity:
+1. **`draft`**: The invoice is currently being constructed. You can edit line items, change the billing address, or delete it entirely without leaving an accounting trace.
+2. **`issued`**: Once the "Issue" button is clicked (or a transaction succeeds automatically), the invoice is locked. An official sequential `InvoiceNumber` is permanently assigned. **The line items and total amounts can never be changed again.**
+3. **`paid`**: The invoice has been fully settled by a successful payment capture. The gateway links the paid transaction to the invoice record.
+4. **`void`**: If an issued invoice is critically wrong and no payment occurred, it can be mathematically negated by voiding it. A void creates a corresponding reversal record to preserve the gapless number sequence.
+5. **`refunded`**: Issued after a Credit Note is generated for a `paid` invoice. The original invoice remains on file as a permanent accounting record; the Credit Note documents the reversal.
+
+## The Customer Portal
+
+Rather than emailing large PDF attachments that may be blocked by spam filters, the gateway hosts a secure **Customer Portal**.
+
+End-users navigate to your custom domain (e.g., `invoices.yourcompany.com`) and authenticate using a one-time secure link or their client portal password. From there, they can independently:
+* Download their invoice as a PDF.
+* Download their invoice as a machine-readable native E-Invoice (ZUGFeRD, XRechnung, Peppol) if configured.
+
+## Credit Notes (Refunds)
+
+Because `issued` invoices are strictly immutable, you cannot simply edit the total amount to reflect a refund. 
+
+Instead, you must issue a **Credit Note**. A Credit Note is a separate legal document that mathematically counters the original invoice.
+
+1. Navigate to a successful Transaction.
+2. Click **Refund**.
+3. Choose to perform a full or partial refund.
+4. The system communicates the refund request to the upstream Provider (e.g., Stripe) and synchronously generates the Credit Note PDF, sending a notification to the customer.

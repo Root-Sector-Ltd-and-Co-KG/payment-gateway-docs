@@ -1,0 +1,179 @@
+---
+title: Monitoring & Observability
+description: Configure OpenTelemetry tracing, log aggregation, and health monitoring for the Payment Gateway.
+---
+
+# Monitoring & Observability
+
+The Payment Gateway emits structured logs, distributed traces (via OpenTelemetry), and health check endpoints. This guide covers connecting these to common observability stacks.
+
+---
+
+## Health Endpoints
+
+Both backends expose two health endpoints that require no authentication:
+
+```
+GET /health          → 200 OK if process is running (shallow)
+GET /internal/health → 200 OK if MongoDB + Redis are reachable (deep)
+```
+
+Use the `/internal/health` endpoint for load balancer health checks and uptime monitors.
+
+**Example with curl:**
+
+```
+curl -sf https://admin.yourcompany.com/health && echo "OK"
+```
+
+---
+
+## Structured Logging
+
+Both backends emit JSON-structured logs via Zerolog. Set `MPG_LOG_LEVEL=info` and `MPG_LOG_FORMAT=json` in production.
+
+**Log fields:**
+
+| Field | Description |
+|---|---|
+| `level` | Log level (`info`, `warn`, `error`) |
+| `time` | ISO 8601 timestamp |
+| `requestId` | Unique request identifier |
+| `method` | HTTP method |
+| `path` | Request path |
+| `status` | HTTP status code |
+| `latency` | Request duration (ms) |
+| `error` | Error message (on error levels) |
+
+### Shipping Logs to Loki (Grafana)
+
+With Docker Compose, add the Loki logging driver:
+
+```yaml
+services:
+  payment-gateway-admin-backend:
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
+        loki-external-labels: "service=admin-backend,env=production"
+```
+
+Or use a Promtail agent that tails container log files.
+
+### Shipping Logs to Elasticsearch (ELK)
+
+Use a Filebeat container to tail Docker logs and forward to Elasticsearch:
+
+```yaml
+filebeat:
+  image: docker.elastic.co/beats/filebeat:8.x
+  volumes:
+    - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+```
+
+---
+
+## OpenTelemetry Tracing
+
+The gateway instruments all HTTP requests with OpenTelemetry traces. Enable tracing by setting:
+
+```
+MPG_OTEL_ENABLED=true
+MPG_OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+MPG_OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+```
+
+### Connecting to Grafana Tempo
+
+Add a Tempo + OTEL Collector to your Docker Compose:
+
+```yaml
+otel-collector:
+  image: otel/opentelemetry-collector-contrib:latest
+  command: ["--config=/etc/otel-collector-config.yaml"]
+  volumes:
+    - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+  ports:
+    - "4317:4317"   # OTLP gRPC
+    - "4318:4318"   # OTLP HTTP
+
+tempo:
+  image: grafana/tempo:latest
+  command: ["-config.file=/etc/tempo.yaml"]
+```
+
+`otel-collector-config.yaml`:
+
+```yaml
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+      grpc:
+        endpoint: 0.0.0.0:4317
+
+exporters:
+  otlp:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [otlp]
+```
+
+### Connecting to Jaeger
+
+```
+MPG_OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+MPG_OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+MPG_OTEL_EXPORTER_OTLP_INSECURE=true
+```
+
+### Connecting to Honeycomb / Datadog / Grafana Cloud
+
+For SaaS OTEL backends, set the endpoint URL and authentication headers:
+
+```
+MPG_OTEL_EXPORTER_OTLP_ENDPOINT=https://api.honeycomb.io
+MPG_OTEL_EXPORTER_OTLP_HEADERS=x-honeycomb-team=YOUR_API_KEY
+```
+
+---
+
+## Request Tracing
+
+Every request receives a unique `X-Request-ID` header. Log lines include this field as `requestId`. Use it to correlate logs and traces for a specific request across both backends.
+
+---
+
+## Alerting Recommendations
+
+| Condition | Suggested Alert |
+|---|---|
+| `/internal/health` returns non-200 | PagerDuty P1 |
+| `error` log rate > 10/min | PagerDuty P2 |
+| Transaction `failed` rate > 5% in 10 min | Slack warning |
+| Worker PDF job queue depth > 100 | Slack warning |
+| MongoDB connections > 80% of pool | Slack warning |
+
+Configure alerts in your observability platform (Grafana Alerting, Datadog Monitors, etc.) against these signals.
+
+---
+
+## Dashboards
+
+If using Grafana, create panels for:
+
+- **Request rate** by service and status code (from logs or OTEL metrics)
+- **P50/P95/P99 latency** by endpoint
+- **Transaction status distribution** (succeeded/failed/pending) over time
+- **PDF worker queue depth** and processing time
+- **Active DB connections** vs pool maximum
+- **Rate limit hits** (`429` response rate)

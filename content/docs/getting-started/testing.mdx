@@ -1,0 +1,105 @@
+---
+title: Testing & Sandbox Mode
+description: How to test checkout flows, webhooks, and tax scenarios without processing real payments.
+---
+
+# Testing & Sandbox Mode
+
+Use provider sandbox environments and test credentials to validate your integration without moving real money.
+
+## Stripe Test Mode
+
+Stripe's test mode uses `sk_test_...` and `pk_test_...` keys. All test transactions are isolated from live data.
+
+### Test Cards
+
+| Card Number | Scenario |
+|---|---|
+| `4242 4242 4242 4242` | Payment succeeds |
+| `4000 0000 0000 0002` | Card declined |
+| `4000 0025 0000 3155` | Requires 3D Secure authentication |
+| `4000 0000 0000 9995` | Insufficient funds |
+| `4000 0000 0000 0069` | Expired card |
+
+Use any future expiry date (e.g., `12/30`) and any 3-digit CVC.
+
+### Test Webhooks
+
+After a test payment, Stripe sends webhooks to your registered endpoint. You can also replay events manually from the Stripe Dashboard under **Developers → Webhooks → [your endpoint] → Send test webhook**.
+
+To test locally, use the [Stripe CLI](https://stripe.com/docs/stripe-cli):
+
+```bash
+stripe listen --forward-to https://api.yourcompany.com/hooks/stripe/{providerId}
+```
+
+---
+
+## GoCardless Sandbox
+
+GoCardless provides a full sandbox environment at `api-sandbox.gocardless.com`. Create a sandbox account at [sandbox.gocardless.com](https://sandbox.gocardless.com).
+
+Use your sandbox Access Token when adding the provider and set **Environment** to `sandbox`.
+
+The sandbox supports simulating mandate confirmations and payment clearing events via the GoCardless dashboard.
+
+---
+
+## Simulating Webhook Events
+
+To test your webhook handler without triggering a real payment:
+
+### Stripe (CLI)
+
+```bash
+# Simulate a succeeded payment
+stripe trigger payment_intent.succeeded
+
+# Simulate a refund
+stripe trigger charge.refunded
+```
+
+### Manual HTTP Test
+
+You can POST a test payload directly to the webhook endpoint. Note that signature verification will fail unless you generate a valid signature — use the provider CLI tools or sandbox dashboards instead.
+
+---
+
+## Testing Tax Calculations
+
+To verify tax rules are applied correctly:
+
+1. Create a checkout with a known buyer country (set billing address at checkout).
+2. The Main Frontend applies tax before rendering the payment form.
+3. After payment, the transaction record includes a full `taxBreakdown` field with rate, treatment, and legal reference.
+
+Use the Admin Panel under **Transactions → [transaction] → Tax Details** to inspect the tax decision metadata.
+
+---
+
+## Testing Recurring Schedules
+
+Recurring schedules run on an hourly worker cron. To test without waiting:
+
+1. Create a schedule with a past `nextRunAt` date.
+2. The worker will pick it up on the next hourly cycle.
+3. Or, use the Admin Panel **Recurring → [schedule] → Generate Now** button to trigger manually.
+
+---
+
+## Checking Logs
+
+When something unexpected happens during testing:
+
+```bash
+# Admin backend logs
+docker logs payment-gateway-admin-backend --tail 100 -f
+
+# Main backend logs
+docker logs payment-gateway-main-backend --tail 100 -f
+
+# Worker logs (PDF generation)
+docker logs payment-gateway-main-backend-worker --tail 50 -f
+```
+
+Set `MPG_LOG_LEVEL=debug` in your environment for verbose output during testing. Reset to `error` for production.

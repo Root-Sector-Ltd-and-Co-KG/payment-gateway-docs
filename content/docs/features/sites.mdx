@@ -1,0 +1,77 @@
+---
+title: Sites & Domains
+description: Set up discrete storefronts, manage API keys, and configure custom domains.
+---
+
+# Sites & Domains
+
+While an **Organization** represents your company, a **Site** represents a
+specific storefront, product line, geographical market, or channel.
+
+> [!NOTE]
+> **Professional** and **Business** license tiers include unlimited sites per organisation. The **Starter** tier includes up to 3 sites per organisation. There is no limit on the number of storefronts, domains, or checkout surfaces you can operate under a single organisation on Professional or Business plans.
+
+All financial activities (Transactions, Checkouts) are ultimately tied to a specific Site.
+
+## Managing Sites
+
+By creating multiple sites, you can compartmentalize operations without running
+multiple deployments.
+
+For example:
+
+- Site A: `mystreamingsite.com` (streaming subscriptions with recurring billing)
+- Site B: `webshop.example.com` (B2C webshop with card and wallet payments)
+- Site C: `anothershop.com` (B2B invoicing with wire transfer and manual reconciliation)
+
+Each site can maintain its own:
+
+- **Connected Payment Providers**: (e.g., Stripe for EU, GoCardless for UK).
+- **Notification Settings**: Dedicated webhooks or email sender profiles.
+- **Invoice Overrides**: Site-specific logos, footers, or numbering prefixes that override the Organization's default settings.
+- **Checkout/Route Context**: Site-targeted checkout sessions and endpoint usage in your backend integration.
+
+## API Keys & Authentication
+
+To interact programmatically with the Payment Gateway (for example, to create a Checkout Session from your own backend), you must generate an **Organization API Key**.
+
+1. Navigate to **Settings > API Keys** in the Admin panel.
+2. Generate a new key and assign it specific scopes (e.g., `checkout:create`).
+3. The system returns a secret token (formatted like `sk_<id>.<secret>`).
+
+Your trusted server-side runtime should use this key as a Bearer token to
+authenticate REST requests against your configured API domain:
+
+```http
+POST https://api.yourcompany.com/v1/checkouts/{siteId}/create
+Authorization: Bearer sk_<id>.<secret>
+```
+
+The API domain is typically separate from the Admin Panel domain. Operators log
+into the dashboard on a frontend host such as `admin.yourcompany.com`, while
+backend integrations call the public API host.
+
+> [!CAUTION]
+> Treat your API key like a password. Never expose it in browser/mobile client code (`HTML`, `JS`, app bundles). Use it only in trusted server-side runtimes you control (for example: backend services, server-side workers, or secure edge functions).
+
+If a key is compromised, you can instantly revoke and roll it from the Admin interface.
+
+## Dashboard and Data Import/Export Scope
+
+Dashboard widgets, transaction views, and import/export workflows run in the
+currently selected organization scope.
+
+This means:
+
+- teams can operate multiple sites in one organization from one dashboard,
+- and still keep data boundaries clear between organizations.
+
+## Custom Domains
+
+To provide a seamless, white-labeled experience for your customers during checkout and when accessing the Customer Portal, you can configure **Custom Domains**.
+
+Under **Domains**, you can map your own subdomains (e.g., `pay.yourcompany.com` or `invoices.yourcompany.com`) to the gateway.
+
+1. Ensure you have added the correct CNAME or A records to your DNS provider pointing to the Gateway's infrastructure.
+2. Add the Domain to the Admin panel.
+3. The platform will automatically provision and renew TLS certificates for your domain, ensuring a secure `https://` connection for your buyers.

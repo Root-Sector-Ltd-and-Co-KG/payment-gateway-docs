@@ -1,0 +1,29 @@
+---
+title: Recurring Schedules
+description: Automating subscription billing and repeat invoice generation.
+---
+
+# Recurring Schedules
+
+For businesses operating on subscription or retainer models, the **Recurring** module allows you to automate the generation of invoices on specific cadences.
+
+## Creating a Schedule
+
+Under the **Recurring** tab, you can set up automated invoice templates.
+
+When creating a schedule, you define:
+* **The Client**: Who the recurring invoices belong to.
+* **The Site**: Determining the branding and tax logic.
+* **Frequency**: (e.g., Monthly, Annually, or custom intervals).
+* **Line Items**: The recurring charges.
+* **Start and End Dates**: To cap the subscription duration.
+
+## Automated Execution
+
+Behind the scenes, the gateway runs an hourly worker job.
+
+If a schedule is due, the worker automatically:
+1. Generates a new `draft` invoice using the template data.
+2. Evaluates the current tax rules (in case the government rates changed since the last billing cycle).
+3. Issues the invoice.
+4. Emails the payment link to the client for fulfillment, or attempts an automatic capture if a reusable Payment Mandate (e.g., GoCardless Direct Debit or saved Stripe Card) exists for that Client.

@@ -1,0 +1,56 @@
+---
+title: Advanced Settings
+description: Configuring complex Taxes, Notifications, Geolocation tracking, and Retention rules.
+---
+
+# Advanced Settings
+
+The **Settings** abstraction allows administrators to fine-tune the behavior of their Organization. 
+
+## Notifications (Email, Slack, SMS)
+
+Under `Settings > Notifications`, you define how the platform communicates with your team and your buyers.
+
+*   **SMTP Service**: Configure your outbound mail server credentials (host, port, TLS). The gateway decrypts these credentials entirely on-the-fly when sending emails.
+*   **Slack Webhooks**: Receive real-time channel alerts for specific `payment.succeeded` or `payment.failed` event types.
+*   **Templates**: Customize the HTML/Text of emails sent to customers (e.g., the "Invoice Created" template).
+
+## Data Retention & Geolocation
+
+The platform includes organization-scoped retention controls to support your
+data minimization and lifecycle policies.
+
+### Data Retention
+
+Under `Settings > Retention`, you can configure:
+
+*   **Transaction Data Retention**:
+    * Enable or disable automatic transaction-data cleanup.
+    * Set retention period in days (minimum `30`, maximum `2555` / ~7 years in UI).
+*   **Customer Data Retention** (per field category):
+    * IP Addresses
+    * Billing Address
+    * Shipping Address
+    * Customer Email
+    * Transaction Items
+    * Optional "retain country information" toggle
+
+`0` can be used for immediate deletion on supported customer-data fields.
+
+> [!IMPORTANT]
+> Retention values should be aligned with your legal/accounting obligations.
+> Some jurisdictions require minimum retention periods for financial records.
+
+### Geolocation Rules
+
+Under geolocation settings, you can configure provider-backed geo checks and
+apply policy decisions in checkout flows (for example, restriction handling for
+specific jurisdictions).
+
+## The Tax Engine
+
+The gateway features a robust, multi-national tax capability.
+
+1.  **Tax Rates**: Define specific percentages (e.g., `Standard 20%`). Crucially, these rates feature an `EffectiveFrom` timestamp. If a government passes a law increasing tax to 21% starting next year, you can program it today; the engine handles the temporal switch exactly at midnight UTC.
+2.  **Tax Rules**: Connect a Rate to a demographic. You define rules like *"If Seller=DE and Buyer=Any EU Country, and the item is a Digital Service, apply the Buyer's local rate (OSS)"*.
+3.  **EU VAT OSS Configuration**: Specifically configure your physical presence, and the gateway will automatically mandate the collection of 2 non-contradictory pieces of location evidence (e.g., IP vs Billing Country) for 10-year safe-keeping.

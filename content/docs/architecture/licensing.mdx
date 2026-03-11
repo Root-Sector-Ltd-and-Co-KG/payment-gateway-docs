@@ -1,0 +1,51 @@
+---
+title: Licensing Engine
+description: Details on the licensing engine, license states, and operator actions.
+---
+
+# Licensing Engine
+
+The Payment Gateway uses a sophisticated licensing engine evaluated within the backend to govern functionality and access based on the health and state of your license.
+
+## How it Works
+
+The backend licensing engine evaluates signed license JWT claims and a heartbeat cadence into runtime states. These states enforce how the software operates and interacts with users:
+
+| State | Trigger | Effect |
+| --- | --- | --- |
+| `ACTIVE` | Heartbeat received within 14 days. | Full access. The system behaves normally with all features enabled. |
+| `GRACE` | Heartbeat not received for 14+ days. | Full access. Warning shown in admin panel. Updates and support paused. |
+| `SOFT_LOCK` | Heartbeat gap 31+ days. | Full access. Informational state for admin dashboard visibility. Updates and support paused. |
+| `READ_ONLY` | Heartbeat gap 45+ days, or never heartbeated. | Full access. Informational state. Updates and support paused. |
+| `BLOCKED` | Token status is `REVOKED` or `SUSPENDED` (manual action by licensing authority). | All protected endpoints return `403 Forbidden`. Only state that restricts runtime. |
+| `NOT_ACTIVATED` | No license key configured. | All protected endpoints return `403 Forbidden` until activated. |
+
+> [!NOTE]
+> Only `BLOCKED` and `NOT_ACTIVATED` restrict runtime behaviour. The `GRACE`, `SOFT_LOCK`, and `READ_ONLY` states are informational — the system continues to operate normally, but updates and support are paused until a successful heartbeat restores the license to `ACTIVE`. Suspension (`BLOCKED`) is always a manual action taken by the licensing authority; it is never triggered automatically by heartbeat gaps.
+
+## License Tiers
+
+Three commercial tiers are available:
+
+| Tier | One-time | Renewal / year | Orgs | Sites | Support |
+| --- | --- | --- | --- | --- | --- |
+| Starter | 500 EUR | 250 EUR | 1 | Up to 3 | Community |
+| Professional | 1,000 EUR | 350 EUR | 1 | Unlimited | Email (48 h) |
+| Business | 2,500 EUR | 700 EUR | 5 | Unlimited | Priority (4 h) |
+
+Additional organisations beyond the tier allowance can be added for 250 EUR per organisation per year on any tier.
+
+## Operator Actions
+
+As a system operator, managing the licensing states is critical to business continuity:
+
+1. **When in `GRACE`, `SOFT_LOCK`, or `READ_ONLY`:**
+    - These are informational states — the system continues full operation.
+    - To restore `ACTIVE` status (and resume updates/support), verify outbound connectivity to the license authority and trigger a manual heartbeat from the Admin licensing UI.
+2. **When in `BLOCKED`:**
+    - This state is applied manually by the licensing authority (e.g., due to revocation or suspension). It is the only state that restricts runtime access.
+    - You must contact the licensing authority or renew your license in the License Manager portal, then trigger a heartbeat to restore the system to the `ACTIVE` state.
+3. **When in `NOT_ACTIVATED`:**
+    - Configure your license key in the Admin Panel under **Settings > Licensing** and perform initial activation.
+4. **General Maintenance:**
+    - Always keep the host clock synchronized via NTP. Drift in system clocks can cause JWT verification to fail or falsely trigger an expiry.

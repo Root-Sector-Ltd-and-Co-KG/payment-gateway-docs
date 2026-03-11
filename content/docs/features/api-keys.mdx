@@ -1,0 +1,64 @@
+---
+title: API Keys & Auth
+description: Managing Organization and System-level API Keys.
+---
+
+# API Keys & Authentication
+
+The Payment Gateway provides a two-tier API key model for secure integrations:
+
+- **Organization API keys** for organization-scoped operations
+- **System API keys** for global administrative automation
+
+Both use Bearer authentication (`Authorization: Bearer sk_<id>.<secret>`).
+
+## Organization API Keys
+
+Organization API keys are the standard mechanism for integrating your trusted
+server-side runtimes with the gateway.
+
+1. Navigate to **Settings > API Keys** in the Admin panel.
+2. Click **Create Key** and assign it specific, least-privilege scopes.
+3. Use the generated secret token to authenticate requests meant for your Organization (e.g., creating Checkouts, refunding Transactions, or querying Clients).
+
+### Scope Model
+
+Scopes follow `resource:action`.
+
+Valid actions are:
+
+- `create`
+- `read`
+- `update`
+- `delete`
+- `execute`
+- `*`
+
+Examples:
+
+- `checkout:create`
+- `transaction:read`
+- `invoice:update`
+- `data_io:execute`
+
+## System API Keys
+
+For advanced self-hosted operations, **System API keys** allow high-level
+administrative orchestration.
+
+These keys are managed by users with global-admin permissions and transcend
+individual organizations. They are used for:
+*   Provisioning entirely new Organizations programmatically.
+*   Managing global system settings and defaults.
+*   System-wide health monitoring and auditing.
+
+> [!CAUTION]
+> Treat all API keys like passwords. Never expose them in browser/mobile client code. Store them in a secrets manager (for example, HashiCorp Vault, AWS Secrets Manager, or equivalent).
+
+## Key Lifecycle and Rotation
+
+To maintain PCI-DSS and security best practices, the gateway supports full lifecycle management for all keys:
+
+*   **Rotation**: You can generate a new secret for an existing key ID, allowing for zero-downtime credential rotation.
+*   **Revocation**: If a key is compromised (e.g., leaked in source code), you can instantly revoke it, rendering it immediately invalid across the distributed system.
+*   **Deletion**: Permanently remove keys you no longer need.
