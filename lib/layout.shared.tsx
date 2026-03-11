@@ -1,16 +1,15 @@
-import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
+import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 
-// fill this with your actual GitHub info, for example:
 export const gitConfig = {
-  user: 'fuma-nama',
-  repo: 'fumadocs',
-  branch: 'main',
+  user: "Root-Sector-Ltd-and-Co-KG",
+  repo: "payment-gateway-docs",
+  branch: "main",
 };
 
 export function baseOptions(): BaseLayoutProps {
   return {
     nav: {
-      title: 'My App',
+      title: "payment-gateway.app Docs",
     },
     githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
   };

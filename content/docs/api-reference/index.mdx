@@ -1,21 +1,24 @@
 ---
 title: API Reference
-description: REST API documentation for both the Admin Backend and Main Backend.
+description: Admin API integration guide plus reference notes for public Main Backend endpoints.
 ---
 
 # API Reference
 
-The Payment Gateway exposes two REST APIs:
+The Payment Gateway exposes two HTTP surfaces, but they do not serve the same audience:
 
-| API | Base URL | Purpose |
-|---|---|---|
-| **Admin API** | `https://<your-api-domain>/v1` | Management — create checkouts, manage clients, view transactions, configure settings |
-| **Main API** | `https://<your-main-api-domain>/api/v1` | Customer-facing — retrieve checkout sessions, submit transactions, portal access |
+| API                               | Base URL                                | Purpose                                                                                                                           |
+| --------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **Admin API**                     | `https://<your-api-domain>/v1`          | Primary integration surface for merchants and operators — create checkouts, manage clients, view transactions, configure settings |
+| **Main Backend public endpoints** | `https://<your-main-api-domain>/api/v1` | Buyer-facing and provider-facing runtime endpoints — checkout retrieval, payment submission, portal flows, provider webhooks      |
 
 All endpoints return JSON. All timestamps are ISO 8601 UTC strings.
 
 > [!NOTE]
 > Public integrations commonly use the clean `/v1` surface on the configured API domain. In reverse proxy configs and backend code you may also see the internal `/api/v1` form.
+
+> [!IMPORTANT]
+> For almost all merchant integrations, use the **Admin API** with either an **Organization API key** or, for platform-wide automation, a **System API key**. The Main Backend endpoints exist mainly to support hosted checkout pages, customer portal flows, and payment-provider callbacks.
 
 ---
 
@@ -33,6 +36,8 @@ API keys have the format `sk_live_<keyId>.<secret>` (live) or `sk_test_<keyId>.<
 
 Keys are **organization-scoped** and carry granular **scope grants** (e.g., `checkout:create`, `transaction:read`). A key without the required scope for an endpoint returns `403 Forbidden`.
 
+System API keys use the same Bearer format, but they are reserved for global administrative automation rather than day-to-day merchant integrations.
+
 > [!CAUTION]
 > API keys are shown only once at creation time. Store them in a secrets manager (AWS Secrets Manager, HashiCorp Vault, etc.), never in source code.
 
@@ -46,7 +51,7 @@ Authorization: Bearer eyJhbGci...
 
 JWTs expire after a configured interval. Use `POST /v1/auth/refresh-token` to obtain a new token before expiry.
 
-### Main API — No Authentication for Public Endpoints
+### Main Backend Public Endpoints
 
 Checkout session retrieval (`GET /api/v1/checkouts/:id`) and portal OTP flows use public endpoints. Webhook endpoints (`POST /hooks/:type/:providerId`) verify request authenticity via provider-specific signature headers (Stripe-Signature, GoCardless-Webhook-Signature).
 
@@ -54,11 +59,11 @@ Checkout session retrieval (`GET /api/v1/checkouts/:id`) and portal OTP flows us
 
 ## Rate Limiting
 
-| API | Default Limit | Window |
-|---|---|---|
-| Admin API | 500 requests | 5 minutes |
-| Main API | 500 requests | 5 minutes |
-| Per-minute cap | 100 requests | 1 minute |
+| API            | Default Limit | Window    |
+| -------------- | ------------- | --------- |
+| Admin API      | 500 requests  | 5 minutes |
+| Main API       | 500 requests  | 5 minutes |
+| Per-minute cap | 100 requests  | 1 minute  |
 
 Rate-limited responses return `429 Too Many Requests` with a `Retry-After` header.
 
@@ -76,16 +81,16 @@ All errors follow a consistent envelope:
 }
 ```
 
-| Status | Meaning |
-|---|---|
-| `400` | Bad request — invalid input, missing required field |
-| `401` | Unauthorized — missing or invalid auth token |
-| `403` | Forbidden — valid auth but insufficient permissions or scope |
-| `404` | Not found |
-| `409` | Conflict — e.g., duplicate resource |
-| `422` | Unprocessable — validation failed |
-| `429` | Rate limit exceeded |
-| `500` | Internal server error |
+| Status | Meaning                                                      |
+| ------ | ------------------------------------------------------------ |
+| `400`  | Bad request — invalid input, missing required field          |
+| `401`  | Unauthorized — missing or invalid auth token                 |
+| `403`  | Forbidden — valid auth but insufficient permissions or scope |
+| `404`  | Not found                                                    |
+| `409`  | Conflict — e.g., duplicate resource                          |
+| `422`  | Unprocessable — validation failed                            |
+| `429`  | Rate limit exceeded                                          |
+| `500`  | Internal server error                                        |
 
 ---
 

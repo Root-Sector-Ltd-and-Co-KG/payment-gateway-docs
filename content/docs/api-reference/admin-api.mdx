@@ -9,6 +9,8 @@ description: Management API — checkouts, transactions, invoices, clients, site
 
 The Admin Backend is the primary integration surface for server-side automation. Public integrations usually call it on the configured API domain. Proxy configs and backend code may also refer to the same handlers under `/api/v1`. All endpoints require an **API Key** or **JWT** in the `Authorization: Bearer` header.
 
+For merchant integrations, this is the API you should target. Use **Organization API keys** for organization-scoped automation. **System API keys** are intended for global administrative tasks such as platform provisioning or system-wide automation.
+
 **API Key format:** `sk_live_<keyId>.<secret>` or `sk_test_<keyId>.<secret>`
 
 The key ID and secret are dot-separated. Both parts are shown only once at creation time.
@@ -32,12 +34,12 @@ GET  /api/v1/auth/login/check             # Check if current JWT is valid
 
 ## Checkouts
 
-| Method | Path | Required Scope | Description |
-|---|---|---|---|
-| `POST` | `/api/v1/checkouts/:siteId/create` | `checkout:create` | Create a checkout URL for a site |
-| `GET` | `/api/v1/checkouts` | `checkout:read` | List all checkouts |
-| `GET` | `/api/v1/checkouts/:id` | `checkout:read` | Get a checkout by ID |
-| `PATCH` | `/api/v1/checkouts/:id` | `checkout:update` | Update checkout metadata |
+| Method  | Path                               | Required Scope    | Description                      |
+| ------- | ---------------------------------- | ----------------- | -------------------------------- |
+| `POST`  | `/api/v1/checkouts/:siteId/create` | `checkout:create` | Create a checkout URL for a site |
+| `GET`   | `/api/v1/checkouts`                | `checkout:read`   | List all checkouts               |
+| `GET`   | `/api/v1/checkouts/:id`            | `checkout:read`   | Get a checkout by ID             |
+| `PATCH` | `/api/v1/checkouts/:id`            | `checkout:update` | Update checkout metadata         |
 
 ### Create Checkout
 
@@ -88,15 +90,15 @@ Content-Type: application/json
 
 ## Transactions
 
-| Method | Path | Required Scope | Description |
-|---|---|---|---|
-| `GET` | `/api/v1/transactions` | `transaction:read` | List transactions (filterable) |
-| `GET` | `/api/v1/transactions/:id` | `transaction:read` | Get transaction details |
-| `GET` | `/api/v1/transactions/:id/tax` | `transaction:read` | Get full tax decision metadata |
-| `PUT` | `/api/v1/transactions/:id` | `transaction:update` | Update transaction metadata |
-| `DELETE` | `/api/v1/transactions/:id` | `transaction:delete` | Delete transaction |
-| `POST` | `/api/v1/transactions/manual` | `transaction:create` | Create a manual (off-platform) transaction |
-| `PATCH` | `/api/v1/transactions/:id/chargeback/:chargebackId` | `transaction:execute` | Update chargeback status |
+| Method   | Path                                                | Required Scope        | Description                                |
+| -------- | --------------------------------------------------- | --------------------- | ------------------------------------------ |
+| `GET`    | `/api/v1/transactions`                              | `transaction:read`    | List transactions (filterable)             |
+| `GET`    | `/api/v1/transactions/:id`                          | `transaction:read`    | Get transaction details                    |
+| `GET`    | `/api/v1/transactions/:id/tax`                      | `transaction:read`    | Get full tax decision metadata             |
+| `PUT`    | `/api/v1/transactions/:id`                          | `transaction:update`  | Update transaction metadata                |
+| `DELETE` | `/api/v1/transactions/:id`                          | `transaction:delete`  | Delete transaction                         |
+| `POST`   | `/api/v1/transactions/manual`                       | `transaction:create`  | Create a manual (off-platform) transaction |
+| `PATCH`  | `/api/v1/transactions/:id/chargeback/:chargebackId` | `transaction:execute` | Update chargeback status                   |
 
 ### List Transactions
 
@@ -106,161 +108,161 @@ GET /api/v1/transactions?status=succeeded&currency=EUR&from=2026-01-01&to=2026-0
 
 **Query Parameters:**
 
-| Parameter | Type | Description |
-|---|---|---|
-| `status` | string | Filter: `initiated`, `pending_provider`, `succeeded`, `failed`, `cancelled` |
-| `currency` | string | ISO 4217 currency code (e.g., `EUR`, `USD`, `GBP`) |
-| `from` | date | Start date (ISO 8601) |
-| `to` | date | End date (ISO 8601) |
-| `siteId` | string | Filter by site |
-| `providerId` | string | Filter by provider |
-| `clientId` | string | Filter by client |
-| `page` | int | Page number (default: 1) |
-| `limit` | int | Items per page (default: 50, max: 100) |
+| Parameter    | Type   | Description                                                                 |
+| ------------ | ------ | --------------------------------------------------------------------------- |
+| `status`     | string | Filter: `initiated`, `pending_provider`, `succeeded`, `failed`, `cancelled` |
+| `currency`   | string | ISO 4217 currency code (e.g., `EUR`, `USD`, `GBP`)                          |
+| `from`       | date   | Start date (ISO 8601)                                                       |
+| `to`         | date   | End date (ISO 8601)                                                         |
+| `siteId`     | string | Filter by site                                                              |
+| `providerId` | string | Filter by provider                                                          |
+| `clientId`   | string | Filter by client                                                            |
+| `page`       | int    | Page number (default: 1)                                                    |
+| `limit`      | int    | Items per page (default: 50, max: 100)                                      |
 
 ---
 
 ## Invoices
 
-| Method | Path | Required Scope | Description |
-|---|---|---|---|
-| `GET` | `/api/v1/invoices` | `invoice:read` | List invoices |
-| `GET` | `/api/v1/invoices/:id` | `invoice:read` | Get invoice |
-| `POST` | `/api/v1/invoices` | `invoice:create` | Create draft invoice |
-| `GET` | `/api/v1/invoices/from-transaction/:transactionId` | `invoice:create` | Create invoice from transaction |
-| `POST` | `/api/v1/invoices/:id/issue` | `invoice:execute` | Issue invoice (draft → issued) |
-| `POST` | `/api/v1/invoices/:id/void` | `invoice:execute` | Void an issued invoice (Admin role required) |
-| `POST` | `/api/v1/invoices/:id/correct` | `invoice:update` | Issue credit note (correction) |
-| `POST` | `/api/v1/invoices/:id/send-email` | `invoice:execute` | Email invoice to client |
-| `GET` | `/api/v1/invoices/:id/pdf` | `invoice:execute` | Download PDF |
-| `GET` | `/api/v1/invoices/:id/xml` | `invoice:execute` | Download XML (ZUGFeRD) |
-| `GET` | `/api/v1/invoices/:id/xml/peppol` | `invoice:execute` | Download Peppol XML |
-| `GET` | `/api/v1/invoices/:id/pdf/zugferd` | `invoice:execute` | Download ZUGFeRD PDF |
-| `POST` | `/api/v1/invoices/:id/regenerate-pdf` | `invoice:execute` | Force PDF regeneration |
-| `DELETE` | `/api/v1/invoices/:id` | `invoice:delete` | Delete draft invoice |
+| Method   | Path                                               | Required Scope    | Description                                  |
+| -------- | -------------------------------------------------- | ----------------- | -------------------------------------------- |
+| `GET`    | `/api/v1/invoices`                                 | `invoice:read`    | List invoices                                |
+| `GET`    | `/api/v1/invoices/:id`                             | `invoice:read`    | Get invoice                                  |
+| `POST`   | `/api/v1/invoices`                                 | `invoice:create`  | Create draft invoice                         |
+| `GET`    | `/api/v1/invoices/from-transaction/:transactionId` | `invoice:create`  | Create invoice from transaction              |
+| `POST`   | `/api/v1/invoices/:id/issue`                       | `invoice:execute` | Issue invoice (draft → issued)               |
+| `POST`   | `/api/v1/invoices/:id/void`                        | `invoice:execute` | Void an issued invoice (Admin role required) |
+| `POST`   | `/api/v1/invoices/:id/correct`                     | `invoice:update`  | Issue credit note (correction)               |
+| `POST`   | `/api/v1/invoices/:id/send-email`                  | `invoice:execute` | Email invoice to client                      |
+| `GET`    | `/api/v1/invoices/:id/pdf`                         | `invoice:execute` | Download PDF                                 |
+| `GET`    | `/api/v1/invoices/:id/xml`                         | `invoice:execute` | Download XML (ZUGFeRD)                       |
+| `GET`    | `/api/v1/invoices/:id/xml/peppol`                  | `invoice:execute` | Download Peppol XML                          |
+| `GET`    | `/api/v1/invoices/:id/pdf/zugferd`                 | `invoice:execute` | Download ZUGFeRD PDF                         |
+| `POST`   | `/api/v1/invoices/:id/regenerate-pdf`              | `invoice:execute` | Force PDF regeneration                       |
+| `DELETE` | `/api/v1/invoices/:id`                             | `invoice:delete`  | Delete draft invoice                         |
 
 ---
 
 ## Recurring Schedules
 
-| Method | Path | Required Scope | Description |
-|---|---|---|---|
-| `GET` | `/api/v1/invoices/recurring` | `invoice:read` | List schedules |
-| `POST` | `/api/v1/invoices/recurring` | `invoice:create` | Create schedule |
-| `POST` | `/api/v1/invoices/recurring/:id/pause` | `invoice:execute` | Pause schedule |
-| `POST` | `/api/v1/invoices/recurring/:id/resume` | `invoice:execute` | Resume schedule |
-| `POST` | `/api/v1/invoices/recurring/:id/cancel` | `invoice:execute` | Cancel schedule |
+| Method | Path                                      | Required Scope    | Description                    |
+| ------ | ----------------------------------------- | ----------------- | ------------------------------ |
+| `GET`  | `/api/v1/invoices/recurring`              | `invoice:read`    | List schedules                 |
+| `POST` | `/api/v1/invoices/recurring`              | `invoice:create`  | Create schedule                |
+| `POST` | `/api/v1/invoices/recurring/:id/pause`    | `invoice:execute` | Pause schedule                 |
+| `POST` | `/api/v1/invoices/recurring/:id/resume`   | `invoice:execute` | Resume schedule                |
+| `POST` | `/api/v1/invoices/recurring/:id/cancel`   | `invoice:execute` | Cancel schedule                |
 | `POST` | `/api/v1/invoices/recurring/:id/generate` | `invoice:execute` | Manually generate next invoice |
-| `GET` | `/api/v1/invoices/recurring/:id/upcoming` | `invoice:execute` | Preview upcoming invoices |
+| `GET`  | `/api/v1/invoices/recurring/:id/upcoming` | `invoice:execute` | Preview upcoming invoices      |
 
 ---
 
 ## Credit Notes
 
-| Method | Path | Required Scope | Description |
-|---|---|---|---|
-| `GET` | `/api/v1/credit-notes` | `credit_note:read` | List credit notes |
-| `GET` | `/api/v1/credit-notes/:id` | `credit_note:read` | Get credit note |
-| `GET` | `/api/v1/credit-notes/:id/pdf` | `credit_note:execute` | Download PDF |
+| Method | Path                                  | Required Scope        | Description       |
+| ------ | ------------------------------------- | --------------------- | ----------------- |
+| `GET`  | `/api/v1/credit-notes`                | `credit_note:read`    | List credit notes |
+| `GET`  | `/api/v1/credit-notes/:id`            | `credit_note:read`    | Get credit note   |
+| `GET`  | `/api/v1/credit-notes/:id/pdf`        | `credit_note:execute` | Download PDF      |
 | `POST` | `/api/v1/credit-notes/:id/send-email` | `credit_note:execute` | Email credit note |
 
 ---
 
 ## Clients
 
-| Method | Path | Required Scope | Description |
-|---|---|---|---|
-| `GET` | `/api/v1/clients` | `client:read` | List clients |
-| `GET` | `/api/v1/clients/search` | `client:execute` | Full-text search |
-| `GET` | `/api/v1/clients/:id` | `client:read` | Get client |
-| `POST` | `/api/v1/clients` | `client:create` | Create client |
-| `PUT` | `/api/v1/clients/:id` | `client:update` | Update client |
-| `DELETE` | `/api/v1/clients/:id` | `client:delete` | Delete client |
-| `GET` | `/api/v1/clients/:id/history` | `client:execute` | Get client audit history |
+| Method   | Path                          | Required Scope   | Description              |
+| -------- | ----------------------------- | ---------------- | ------------------------ |
+| `GET`    | `/api/v1/clients`             | `client:read`    | List clients             |
+| `GET`    | `/api/v1/clients/search`      | `client:execute` | Full-text search         |
+| `GET`    | `/api/v1/clients/:id`         | `client:read`    | Get client               |
+| `POST`   | `/api/v1/clients`             | `client:create`  | Create client            |
+| `PUT`    | `/api/v1/clients/:id`         | `client:update`  | Update client            |
+| `DELETE` | `/api/v1/clients/:id`         | `client:delete`  | Delete client            |
+| `GET`    | `/api/v1/clients/:id/history` | `client:execute` | Get client audit history |
 
 ---
 
 ## Sites
 
-| Method | Path | Required Scope | Description |
-|---|---|---|---|
-| `GET` | `/api/v1/sites` | `site:read` | List sites |
-| `GET` | `/api/v1/sites/:id` | `site:read` | Get site |
-| `POST` | `/api/v1/sites` | `site:create` | Create site |
-| `DELETE` | `/api/v1/sites/:id` | `site:delete` | Delete site |
-| `POST` | `/api/v1/sites/:id/webhook-secret/regenerate` | `site:update` | Rotate outbound webhook secret |
+| Method   | Path                                          | Required Scope | Description                    |
+| -------- | --------------------------------------------- | -------------- | ------------------------------ |
+| `GET`    | `/api/v1/sites`                               | `site:read`    | List sites                     |
+| `GET`    | `/api/v1/sites/:id`                           | `site:read`    | Get site                       |
+| `POST`   | `/api/v1/sites`                               | `site:create`  | Create site                    |
+| `DELETE` | `/api/v1/sites/:id`                           | `site:delete`  | Delete site                    |
+| `POST`   | `/api/v1/sites/:id/webhook-secret/regenerate` | `site:update`  | Rotate outbound webhook secret |
 
 ---
 
 ## Providers
 
-| Method | Path | Required Scope | Required Role | Description |
-|---|---|---|---|---|
-| `GET` | `/api/v1/providers` | `provider:read` | Viewer | List providers |
-| `GET` | `/api/v1/providers/:id` | `provider:read` | Viewer | Get provider |
-| `POST` | `/api/v1/providers` | `provider:create` | Admin | Create provider |
-| `DELETE` | `/api/v1/providers/:id` | `provider:delete` | Admin | Delete provider |
-| `POST` | `/api/v1/providers/:id/toggle` | `provider:update` | Admin | Enable/disable provider |
+| Method   | Path                           | Required Scope    | Required Role | Description             |
+| -------- | ------------------------------ | ----------------- | ------------- | ----------------------- |
+| `GET`    | `/api/v1/providers`            | `provider:read`   | Viewer        | List providers          |
+| `GET`    | `/api/v1/providers/:id`        | `provider:read`   | Viewer        | Get provider            |
+| `POST`   | `/api/v1/providers`            | `provider:create` | Admin         | Create provider         |
+| `DELETE` | `/api/v1/providers/:id`        | `provider:delete` | Admin         | Delete provider         |
+| `POST`   | `/api/v1/providers/:id/toggle` | `provider:update` | Admin         | Enable/disable provider |
 
 ---
 
 ## Domains
 
-| Method | Path | Required Scope | Required Role | Description |
-|---|---|---|---|---|
-| `GET` | `/api/v1/domains` | `domain:read` | Viewer | List domains |
-| `POST` | `/api/v1/domains` | `domain:create` | Admin | Register custom domain |
-| `DELETE` | `/api/v1/domains/:id` | `domain:delete` | Admin | Remove domain |
-| `GET` | `/api/v1/domains/verify-cname` | `domain:execute` | Editor | Verify CNAME record |
+| Method   | Path                           | Required Scope   | Required Role | Description            |
+| -------- | ------------------------------ | ---------------- | ------------- | ---------------------- |
+| `GET`    | `/api/v1/domains`              | `domain:read`    | Viewer        | List domains           |
+| `POST`   | `/api/v1/domains`              | `domain:create`  | Admin         | Register custom domain |
+| `DELETE` | `/api/v1/domains/:id`          | `domain:delete`  | Admin         | Remove domain          |
+| `GET`    | `/api/v1/domains/verify-cname` | `domain:execute` | Editor        | Verify CNAME record    |
 
 ---
 
 ## API Keys
 
-| Method | Path | Required Scope | Description |
-|---|---|---|---|
-| `GET` | `/api/v1/api-keys` | `api_key:read` | List API keys |
-| `GET` | `/api/v1/api-keys/:id` | `api_key:read` | Get API key details |
-| `POST` | `/api/v1/api-keys` | `api_key:create` | Create API key |
-| `DELETE` | `/api/v1/api-keys/:id` | `api_key:delete` | Revoke API key |
-| `POST` | `/api/v1/api-keys/:id/rotate` | `api_key:update` | Rotate API key (issues new secret) |
+| Method   | Path                          | Required Scope   | Description                        |
+| -------- | ----------------------------- | ---------------- | ---------------------------------- |
+| `GET`    | `/api/v1/api-keys`            | `api_key:read`   | List API keys                      |
+| `GET`    | `/api/v1/api-keys/:id`        | `api_key:read`   | Get API key details                |
+| `POST`   | `/api/v1/api-keys`            | `api_key:create` | Create API key                     |
+| `DELETE` | `/api/v1/api-keys/:id`        | `api_key:delete` | Revoke API key                     |
+| `POST`   | `/api/v1/api-keys/:id/rotate` | `api_key:update` | Rotate API key (issues new secret) |
 
 ---
 
 ## Tax Management
 
-| Method | Path | Required Scope | Description |
-|---|---|---|---|
-| `GET` | `/api/v1/tax-rules` | `tax_rule:read` | List tax rules |
-| `POST` | `/api/v1/tax-rules` | `tax_rule:create` | Create tax rule |
-| `PUT` | `/api/v1/tax-rules/:id` | `tax_rule:update` | Update tax rule |
-| `DELETE` | `/api/v1/tax-rules/:id` | `tax_rule:delete` | Delete tax rule |
-| `POST` | `/api/v1/tax-rules/populate-defaults` | `tax_rule:execute` | Load default EU/UK/US/CA rules |
-| `GET` | `/api/v1/tax-rates` | `tax_rate:read` | List tax rates |
-| `POST` | `/api/v1/tax-rates` | `tax_rate:create` | Create tax rate |
-| `POST` | `/api/v1/tax-rates/populate-eu` | `tax_rate:execute` | Load current EU VAT rates |
-| `POST` | `/api/v1/tax-rates/populate-special-zones` | `tax_rate:execute` | Load EU special zone rates |
+| Method   | Path                                       | Required Scope     | Description                    |
+| -------- | ------------------------------------------ | ------------------ | ------------------------------ |
+| `GET`    | `/api/v1/tax-rules`                        | `tax_rule:read`    | List tax rules                 |
+| `POST`   | `/api/v1/tax-rules`                        | `tax_rule:create`  | Create tax rule                |
+| `PUT`    | `/api/v1/tax-rules/:id`                    | `tax_rule:update`  | Update tax rule                |
+| `DELETE` | `/api/v1/tax-rules/:id`                    | `tax_rule:delete`  | Delete tax rule                |
+| `POST`   | `/api/v1/tax-rules/populate-defaults`      | `tax_rule:execute` | Load default EU/UK/US/CA rules |
+| `GET`    | `/api/v1/tax-rates`                        | `tax_rate:read`    | List tax rates                 |
+| `POST`   | `/api/v1/tax-rates`                        | `tax_rate:create`  | Create tax rate                |
+| `POST`   | `/api/v1/tax-rates/populate-eu`            | `tax_rate:execute` | Load current EU VAT rates      |
+| `POST`   | `/api/v1/tax-rates/populate-special-zones` | `tax_rate:execute` | Load EU special zone rates     |
 
 ### Tax Reports
 
-| Method | Path | Required Scope | Description |
-|---|---|---|---|
-| `GET` | `/api/v1/tax/reports/by-country` | `tax_report:read` | Tax summary grouped by country |
-| `GET` | `/api/v1/tax/reports/vat-oss` | `tax_report:read` | EU VAT OSS quarterly report |
-| `POST` | `/api/v1/tax/reports/by-country/export` | `tax_report:execute` | Export country report as CSV |
-| `POST` | `/api/v1/tax/reports/vat-oss/export` | `tax_report:execute` | Export OSS report as XML |
+| Method | Path                                        | Required Scope       | Description                               |
+| ------ | ------------------------------------------- | -------------------- | ----------------------------------------- |
+| `GET`  | `/api/v1/tax/reports/by-country`            | `tax_report:read`    | Tax summary grouped by country            |
+| `GET`  | `/api/v1/tax/reports/vat-oss`               | `tax_report:read`    | EU VAT OSS quarterly report               |
+| `POST` | `/api/v1/tax/reports/by-country/export`     | `tax_report:execute` | Export country report as CSV              |
+| `POST` | `/api/v1/tax/reports/vat-oss/export`        | `tax_report:execute` | Export OSS report as XML                  |
 | `POST` | `/api/v1/tax/reports/vat-oss/export-elster` | `tax_report:execute` | Export OSS report as Elster CSV (Germany) |
 
 ---
 
 ## Data Import / Export
 
-| Method | Path | Required Scope | Description |
-|---|---|---|---|
-| `POST` | `/api/v1/data-import-export/import` | `data_io:execute` | Import CSV data |
-| `POST` | `/api/v1/data-import-export/import/validate` | `data_io:execute` | Validate import file before committing |
-| `POST` | `/api/v1/data-import-export/export` | `data_io:execute` | Export entity data to CSV |
-| `GET` | `/api/v1/data-import-export/template/:entityType` | `data_io:read` | Download import CSV template |
+| Method | Path                                              | Required Scope    | Description                            |
+| ------ | ------------------------------------------------- | ----------------- | -------------------------------------- |
+| `POST` | `/api/v1/data-import-export/import`               | `data_io:execute` | Import CSV data                        |
+| `POST` | `/api/v1/data-import-export/import/validate`      | `data_io:execute` | Validate import file before committing |
+| `POST` | `/api/v1/data-import-export/export`               | `data_io:execute` | Export entity data to CSV              |
+| `GET`  | `/api/v1/data-import-export/template/:entityType` | `data_io:read`    | Download import CSV template           |
 
 ---
 
@@ -276,65 +278,65 @@ Returns aggregated metrics: gross volume, net revenue, transaction counts, failu
 
 ## API Key Scopes Reference
 
-| Scope | Grants |
-|---|---|
-| `checkout:read` | Read checkouts |
-| `checkout:create` | Create checkout URLs |
-| `checkout:update` | Update checkout metadata |
-| `transaction:read` | Read transactions and tax details |
-| `transaction:create` | Create manual transactions |
-| `transaction:update` | Update transaction metadata |
-| `transaction:delete` | Delete transactions |
-| `transaction:execute` | Chargeback management |
-| `invoice:read` | Read invoices and recurring schedules |
-| `invoice:create` | Create invoices and schedules |
-| `invoice:update` | Update invoice notes, correct invoices |
-| `invoice:execute` | Issue, void, email, PDF download, generate recurring |
-| `invoice:delete` | Delete draft invoices |
-| `credit_note:read` | Read credit notes |
-| `credit_note:execute` | Download PDF, send email |
-| `client:read` | Read clients |
-| `client:create` | Create clients |
-| `client:update` | Update clients |
-| `client:delete` | Delete clients |
-| `client:execute` | Search clients, view history |
-| `site:read` | Read sites |
-| `site:create` | Create sites |
-| `site:delete` | Delete sites |
-| `site:update` | Update sites, rotate webhook secret |
-| `provider:read` | Read providers |
-| `provider:create` | Create providers (Admin role also required) |
-| `provider:update` | Enable/disable providers (Admin role) |
-| `provider:delete` | Delete providers (Admin role) |
-| `domain:read` | Read domains |
-| `domain:create` | Create domains (Admin role) |
-| `domain:delete` | Delete domains (Admin role) |
-| `domain:execute` | Verify CNAME, Apple Pay files |
-| `api_key:read` | Read API keys |
-| `api_key:create` | Create API keys |
-| `api_key:update` | Rotate API keys |
-| `api_key:delete` | Revoke API keys |
-| `organization:read` | Read organization details |
-| `organization:update` | Update organization settings |
-| `organization:execute` | Access settings, encryption operations |
-| `tax_rule:read` | Read tax rules |
-| `tax_rule:create` | Create tax rules |
-| `tax_rule:update` | Update tax rules |
-| `tax_rule:delete` | Delete tax rules |
-| `tax_rule:execute` | Populate defaults |
-| `tax_rate:read` | Read tax rates |
-| `tax_rate:create` | Create tax rates |
-| `tax_rate:update` | Update tax rates |
-| `tax_rate:delete` | Delete tax rates |
-| `tax_rate:execute` | Populate EU rates |
-| `tax_report:read` | Read tax reports |
-| `tax_report:execute` | Export tax reports |
-| `data_io:read` | Read import/export templates |
-| `data_io:execute` | Import and export data |
-| `export:execute` | Generate CSV exports |
-| `vies:read` | Check EU countries |
-| `vies:execute` | Validate VAT IDs |
-| `userprofile:read` | Read own user profile |
-| `userprofile:create` | Create passkey links |
-| `userprofile:update` | Update passkey labels, notification prefs |
-| `userprofile:execute` | Manage passkeys |
+| Scope                  | Grants                                               |
+| ---------------------- | ---------------------------------------------------- |
+| `checkout:read`        | Read checkouts                                       |
+| `checkout:create`      | Create checkout URLs                                 |
+| `checkout:update`      | Update checkout metadata                             |
+| `transaction:read`     | Read transactions and tax details                    |
+| `transaction:create`   | Create manual transactions                           |
+| `transaction:update`   | Update transaction metadata                          |
+| `transaction:delete`   | Delete transactions                                  |
+| `transaction:execute`  | Chargeback management                                |
+| `invoice:read`         | Read invoices and recurring schedules                |
+| `invoice:create`       | Create invoices and schedules                        |
+| `invoice:update`       | Update invoice notes, correct invoices               |
+| `invoice:execute`      | Issue, void, email, PDF download, generate recurring |
+| `invoice:delete`       | Delete draft invoices                                |
+| `credit_note:read`     | Read credit notes                                    |
+| `credit_note:execute`  | Download PDF, send email                             |
+| `client:read`          | Read clients                                         |
+| `client:create`        | Create clients                                       |
+| `client:update`        | Update clients                                       |
+| `client:delete`        | Delete clients                                       |
+| `client:execute`       | Search clients, view history                         |
+| `site:read`            | Read sites                                           |
+| `site:create`          | Create sites                                         |
+| `site:delete`          | Delete sites                                         |
+| `site:update`          | Update sites, rotate webhook secret                  |
+| `provider:read`        | Read providers                                       |
+| `provider:create`      | Create providers (Admin role also required)          |
+| `provider:update`      | Enable/disable providers (Admin role)                |
+| `provider:delete`      | Delete providers (Admin role)                        |
+| `domain:read`          | Read domains                                         |
+| `domain:create`        | Create domains (Admin role)                          |
+| `domain:delete`        | Delete domains (Admin role)                          |
+| `domain:execute`       | Verify CNAME, Apple Pay files                        |
+| `api_key:read`         | Read API keys                                        |
+| `api_key:create`       | Create API keys                                      |
+| `api_key:update`       | Rotate API keys                                      |
+| `api_key:delete`       | Revoke API keys                                      |
+| `organization:read`    | Read organization details                            |
+| `organization:update`  | Update organization settings                         |
+| `organization:execute` | Access settings, encryption operations               |
+| `tax_rule:read`        | Read tax rules                                       |
+| `tax_rule:create`      | Create tax rules                                     |
+| `tax_rule:update`      | Update tax rules                                     |
+| `tax_rule:delete`      | Delete tax rules                                     |
+| `tax_rule:execute`     | Populate defaults                                    |
+| `tax_rate:read`        | Read tax rates                                       |
+| `tax_rate:create`      | Create tax rates                                     |
+| `tax_rate:update`      | Update tax rates                                     |
+| `tax_rate:delete`      | Delete tax rates                                     |
+| `tax_rate:execute`     | Populate EU rates                                    |
+| `tax_report:read`      | Read tax reports                                     |
+| `tax_report:execute`   | Export tax reports                                   |
+| `data_io:read`         | Read import/export templates                         |
+| `data_io:execute`      | Import and export data                               |
+| `export:execute`       | Generate CSV exports                                 |
+| `vies:read`            | Check EU countries                                   |
+| `vies:execute`         | Validate VAT IDs                                     |
+| `userprofile:read`     | Read own user profile                                |
+| `userprofile:create`   | Create passkey links                                 |
+| `userprofile:update`   | Update passkey labels, notification prefs            |
+| `userprofile:execute`  | Manage passkeys                                      |

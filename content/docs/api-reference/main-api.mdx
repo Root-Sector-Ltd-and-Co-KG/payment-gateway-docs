@@ -1,13 +1,16 @@
 ---
-title: Main API
-description: Customer-facing API endpoints — checkout sessions, transactions, portal, and VAT validation.
+title: Main Backend Public Endpoints
+description: Buyer-facing and provider-facing endpoints used by hosted checkout, portal, and webhook flows.
 ---
 
-# Main API
+# Main Backend Public Endpoints
 
 **Base URL:** `https://api.yourcompany.com/api/v1`
 
-The Main Backend handles customer-facing operations: serving checkout sessions, processing transaction status, the customer portal, and incoming provider webhooks.
+The Main Backend handles buyer-facing runtime operations: serving checkout sessions, processing transaction submissions, powering the customer portal, validating VAT IDs, and receiving incoming provider webhooks.
+
+> [!IMPORTANT]
+> This is not the primary merchant integration surface. Merchants should create and manage checkouts through the Admin API using Organization API keys or System API keys where appropriate. The endpoints below are mainly consumed by the hosted checkout UI, portal UI, and payment-provider infrastructure.
 
 ---
 
@@ -25,9 +28,9 @@ Retrieves a checkout session by its public ID. Used by the Main Frontend to rend
 
 **Path Parameters:**
 
-| Parameter | Type | Description |
-|---|---|---|
-| `id` | string | Public checkout session ID |
+| Parameter | Type   | Description                |
+| --------- | ------ | -------------------------- |
+| `id`      | string | Public checkout session ID |
 
 **Response `200`:**
 
@@ -284,9 +287,9 @@ POST /hooks/:type/:providerId
 
 Receives inbound webhook events from payment providers. Not called by your code — configured in the provider dashboard.
 
-| `type` | Provider |
-|---|---|
-| `stripe` | Stripe payment events |
+| `type`       | Provider                              |
+| ------------ | ------------------------------------- |
+| `stripe`     | Stripe payment events                 |
 | `gocardless` | GoCardless mandate and payment events |
 
 See [Webhooks & IPN](./webhooks) for event types and payload schemas.

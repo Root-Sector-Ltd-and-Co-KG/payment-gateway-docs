@@ -1,9 +1,4 @@
 {
-    "title": "API Reference",
-    "pages": [
-        "index",
-        "main-api",
-        "admin-api",
-        "webhooks"
-    ]
+  "title": "API Reference",
+  "pages": ["index", "admin-api", "webhooks"]
 }
