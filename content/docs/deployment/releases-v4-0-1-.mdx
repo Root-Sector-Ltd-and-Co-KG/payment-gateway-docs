@@ -1,0 +1,105 @@
+---
+title: Release 4.0.1
+description: Stable release notes for Payment Gateway App 4.0.1.
+---
+
+# Release 4.0.1
+
+- Channel: stable
+- Published: 2026-03-13T18:07:47Z
+- Release tag: v4.0.1
+
+## [4.0.1] - 2026-03-12
+
+### Changed Components
+
+- **admin-backend** v4.0.1
+- **admin-frontend** v4.0.1
+- **main-backend** v4.0.1
+- **main-frontend** v4.0.1
+- **reverseproxy** v4.0.1
+
+### Added
+
+- **admin-backend:** System template settings service for managing email templates.
+- **admin-backend:** Background processing and context management for various services.
+- **admin-backend:** Support for no-auth SMTP servers and base64-encoded email bodies.
+- **admin-backend:** Customer portal settings and synchronization for document templates.
+- **admin-backend:** Bulk tax recalculation job handling and related API endpoints.
+- **admin-backend:** Auto payment link expiry settings and related features.
+- **admin-backend:** API endpoint and database indexes for processing due recurring schedules.
+- **admin-backend:** On-demand TLS domain verification endpoint and CNAME validation logic.
+- **admin-backend:** XML invoice download functionality and tax rate management.
+- **admin-frontend:** Support for multilingual provider labels and descriptions with translation handling in forms.
+- **admin-frontend:** TemplateInUseModal component for handling template deletion with active invoices.
+- **admin-frontend:** FileDropZone component for CSV file uploads.
+- **admin-frontend:** Bulk tax recalculation feature with confirmation UI and result summaries.
+- **admin-frontend:** Custom Checkbox component and unified item type options across checkout and invoice components.
+- **admin-frontend:** Dashboard comparison features to analyze data against previous periods or custom date ranges.
+- **admin-frontend:** Support for Wise and Wire payment providers, including configuration modals and transaction handling.
+- **main-backend:** License middleware for API route enforcement and OTP service for portal authentication.
+- **main-backend:** Session fetching and decryption helper functions for transaction processing.
+- **main-backend:** Multi-source address management and geolocation fallback for tax calculations.
+- **main-backend:** Payment link QR code generation for invoice PDFs.
+- **main-backend:** MongoDB-based worker system for job processing and maintenance.
+- **main-frontend:** Subscription management features including list and detail views.
+- **main-frontend:** Document management portal for viewing invoices and credit notes with internationalization support.
+- **main-frontend:** Support for Wise and Wire payment methods with dedicated forms.
+- **main-frontend:** Portuguese and Chinese localization for payment-related components.
+- **reverseproxy:** Pass-through handling for `/api/*` routes to support external API consumers.
+- **reverseproxy:** Internal health check endpoints for enhanced service monitoring.
+- **reverseproxy:** Trivy license scan workflow for security compliance.
+
+### Changed
+
+- **admin-backend:** Updated invoice sequence index to be organization-level instead of site-level.
+- **admin-backend:** Refactored multiple services to replace type aliases with `commonTypes` for improved type safety.
+- **admin-backend:** Enhanced tax rule matching to consider effective dates and updated OSS logic to apply to all supply types.
+- **admin-backend:** Updated `actions/setup-go` to version 6 and `actions/checkout` to version 6 across workflows.
+- **admin-frontend:** Refactored organization selection storage from `localStorage` to `sessionStorage`.
+- **admin-frontend:** Updated transaction navigation to filter for completed transactions and those with tax.
+- **admin-frontend:** Enhanced `TransactionFilters` with quick date selection presets and `localStorage` persistence for user preferences.
+- **admin-frontend:** Improved Dockerfile for production build environments and updated dependencies including Axios and TypeScript-eslint.
+- **main-backend:** Migrated queue management from Asynq to a MongoDB-based implementation.
+- **main-backend:** Updated Go version to 1.26 and upgraded Stripe Go SDK to v84.
+- **main-backend:** Refactored invoice number allocation to ensure organization-level uniqueness.
+- **main-frontend:** Enhanced `PortalAuthContext` for improved security and token management.
+- **main-frontend:** Refined `ProviderSelector` to support localized labels and auto-selection based on session data.
+- **main-frontend:** Replaced `formatAmount` with `formatAmountCode` for consistent currency formatting.
+- **reverseproxy:** Upgraded Caddy and related plugin versions (MongoDB storage, Cloudflare) in Dockerfile.
+- **reverseproxy:** Consolidated API and webhook handling into simplified backend routes within the Caddyfile.
+
+### Fixed
+
+- **admin-backend:** Enhanced STARTTLS handling and improved error logging for SMTP connection failures.
+- **admin-backend:** Fixed tax calculation logic to correctly handle gross prices, discounts, and floating-point artifacts.
+- **admin-backend:** Ensured 404 errors are returned when deleting non-existent domains.
+- **admin-backend:** Improved error handling for migration registration and SMTP client closure.
+- **admin-backend:** Fixed path traversal vulnerabilities in file retrieval and enhanced sensitive data serialization protection.
+- **admin-frontend:** Refactored encryption settings to use refs for stable state management and improved polling logic.
+- **admin-frontend:** Fixed specific navigation and notification behavior for 401 and 403 status codes.
+- **main-backend:** Fixed invalid webhook handling to return 4xx status codes for signature/payload mismatches.
+- **main-backend:** Corrected retry delay calculation logic within the queue system.
+- **main-backend:** Updated file permissions for temporary PDF generation directories to improve security.
+- **main-frontend:** Fixed redirect URLs to use `sessionPublicId` instead of `publicId` for accurate payment processing.
+- **main-frontend:** Improved Axios timeout handling and user experience during request timeouts.
+
+### Removed
+
+- **admin-backend:** Removed `TaxProvider` interface and related logic in favor of internal tax calculation methods.
+- **admin-backend:** Removed `secretKey` and transitioned to `webhookSecret` management.
+- **main-backend:** Removed unused domain verification handler and related routes.
+- **main-backend:** Removed unused domain and IP formatting utility functions.
+- **reverseproxy:** Removed ZeroSSL certificate issuer from Caddyfile.
+- **reverseproxy:** Removed redundant image existence checks from CI/CD workflows to streamline builds.
+
+## Product Component Set
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.0.1 | staging-registry.payment-gateway.app/payment-gateway-admin-backend:4.0.1 |
+| admin-frontend | 4.0.1 | staging-registry.payment-gateway.app/payment-gateway-admin-frontend:4.0.1 |
+| main-backend | 4.0.1 | staging-registry.payment-gateway.app/payment-gateway-main-backend:4.0.1 |
+| main-frontend | 4.0.1 | staging-registry.payment-gateway.app/payment-gateway-main-frontend:4.0.1 |
+| main-worker | 4.0.1 | staging-registry.payment-gateway.app/payment-gateway-main-backend:4.0.1 |
+| reverseproxy | 4.0.1 | staging-registry.payment-gateway.app/payment-gateway-reverseproxy:4.0.1 |

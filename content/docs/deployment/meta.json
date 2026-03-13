@@ -1,22 +1,23 @@
 {
-    "title": "Deployment",
-    "pages": [
-        "index",
-        "podman",
-        "docker-compose",
-        "configuration",
-        "environment-variables",
-        "backup-recovery",
-        "data-protection",
-        "shared-responsibility-matrix",
-        "retention-policy-playbook",
-        "evidence-audit-checklist",
-        "data-processing-encryption",
-        "monitoring",
-        "high-availability",
-        "caddy",
-        "updates",
-        "licensing",
-        "troubleshooting"
-    ]
+  "title": "Deployment",
+  "pages": [
+    "backup-recovery",
+    "caddy",
+    "configuration",
+    "data-processing-encryption",
+    "data-protection",
+    "docker-compose",
+    "environment-variables",
+    "evidence-audit-checklist",
+    "high-availability",
+    "index",
+    "licensing",
+    "monitoring",
+    "podman",
+    "releases-v4-0-1-",
+    "retention-policy-playbook",
+    "shared-responsibility-matrix",
+    "troubleshooting",
+    "updates"
+  ]
 }
