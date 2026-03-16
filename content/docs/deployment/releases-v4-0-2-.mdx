@@ -1,0 +1,44 @@
+---
+title: Release 4.0.2
+description: Stable release notes for Payment Gateway App 4.0.2.
+---
+
+# Release 4.0.2
+
+- Channel: stable
+- Published: 2026-03-16T14:10:44Z
+- Release tag: v4.0.2
+
+## [4.0.2] - 2026-03-16
+
+### Changed Components
+
+- **admin-backend** v4.0.2
+- **admin-frontend** v4.0.2
+- **main-backend** v4.0.2
+- **main-frontend** v4.0.2
+
+### Added
+- **admin-backend:** Added `EnsureInstallationIdentity` method to `LicenseService` and implemented installation ID handling.
+- **admin-frontend:** Added deployment notes and clarified instructions for license activation.
+
+### Changed
+- **admin-frontend:** Refactored code structure to improve readability and maintainability.
+- **main-backend:** Updated `payment-gateway-lib-common` to v1.0.19, `payment-gateway-lib-crypto` to v1.0.22, and `gopsutil` to v4.26.2.
+- **main-backend:** Updated various dependencies in `go.mod` and `go.sum` to their latest versions.
+- **main-frontend:** Refactored code structure and removed redundant functions.
+
+### Fixed
+- **admin-backend:** Updated `payment-gateway-lib-common` to v1.0.19, `payment-gateway-lib-crypto` to v1.0.22, and `gopsutil` to v4.26.2.
+- **admin-backend:** Updated `golang.org/x/crypto` to v0.49.0, `go-webauthn/webauthn` to v0.16.1, and `gax-go` to v2.18.0.
+
+## Product Component Set
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.0.2 | staging-registry.payment-gateway.app/payment-gateway-admin-backend:4.0.2 |
+| admin-frontend | 4.0.2 | staging-registry.payment-gateway.app/payment-gateway-admin-frontend:4.0.2 |
+| main-backend | 4.0.2 | staging-registry.payment-gateway.app/payment-gateway-main-backend:4.0.2 |
+| main-frontend | 4.0.2 | staging-registry.payment-gateway.app/payment-gateway-main-frontend:4.0.2 |
+| main-worker | 4.0.2 | staging-registry.payment-gateway.app/payment-gateway-main-backend:4.0.2 |
+| reverseproxy | 4.0.1 | staging-registry.payment-gateway.app/payment-gateway-reverseproxy:4.0.1 |
