@@ -146,9 +146,8 @@ For production, the Payment Gateway requires access to `registry.payment-gateway
 - `REGISTRY_TOKEN_SERVICE_URL`
 - `REGISTRY_ACCESS_ID`
 - `REGISTRY_ACCESS_SECRET`
-- `REGISTRY_INSTALLATION_ID`
 
-When these are securely injected, the deployment and update scripts automatically request short-lived bearer tokens from `registry-auth.payment-gateway.app`, bind them to the installation identity, and configure `docker` / `podman` pulls non-interactively.
+When these are securely injected, the deployment and update scripts automatically request short-lived bearer tokens from `registry-auth.payment-gateway.app`, bind the deployment host&apos;s public IP on first use, and configure `docker` / `podman` pulls non-interactively.
 
 The first successful token exchange also binds that license access identity to
 the deployment public IP. If the outbound public IP changes later, rotate the
