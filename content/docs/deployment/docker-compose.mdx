@@ -7,6 +7,8 @@ description: Deploying using traditional Docker Compose on any operating system.
 
 Docker Compose is an excellent choice for deploying the Payment Gateway on a variety of operating systems, including Linux, Windows, and macOS, for both development and production.
 
+For the first customer deployment, start with [Self-Hosted Installation](../getting-started/installation). This page focuses on Docker Compose specific operations after you already know your required domains, registry access values, and activation flow.
+
 ## Prerequisites
 
 Before starting, ensure your system meets these requirements:
@@ -16,7 +18,7 @@ Before starting, ensure your system meets these requirements:
 - Minimum 4GB RAM
 - Optional: Configured TLS certificates (highly recommended for production)
 
-## Quick Start
+## Docker Compose Flow
 
 1. Clone the repository and navigate to the Docker Compose folder:
     ```bash
@@ -24,17 +26,21 @@ Before starting, ensure your system meets these requirements:
     cd payment-gateway-deploy/docker-compose
     ```
 
-2. Generate or customize configuration files (e.g., creating `.env` mappings for ports and database credentials). 
+2. Create and edit `.env`, add your public domains, and add the license registry access values described in [Self-Hosted Installation](../getting-started/installation).
 See [Configuration Requirements](./configuration) for details on setting up MongoDB TLS and Registry Auth.
 For backup/recovery operations and GDPR-oriented retention guidance, see
 [Backup & Recovery (GDPR)](./backup-recovery).
 For encryption scope and processed-data overview, see
 [Data Processing & Encryption](./data-processing-encryption).
 
-3. Deploy the application:
+3. Generate `.env.secrets` from the repository root if this is the first deployment.
+
+4. Deploy the application:
     ```bash
     ./deploy.sh
     ```
+
+5. Activate the license from the same deployed environment after the stack is running. The admin backend creates the installation ID automatically on first startup.
 
 ## Managing Services
 

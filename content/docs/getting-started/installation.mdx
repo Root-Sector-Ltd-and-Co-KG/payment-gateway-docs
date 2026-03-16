@@ -1,0 +1,199 @@
+---
+title: Self-Hosted Installation
+description: Customer-ready Docker Compose installation guide for the self-hosted Payment Gateway stack.
+---
+
+# Self-Hosted Installation
+
+This is the primary customer installation guide for the self-hosted Payment Gateway stack.
+
+Use this page for the first deployment on your own infrastructure. It covers the minimum production-ready workflow for Docker Compose, including domains, license registry access, first startup, license activation, and future updates.
+
+If you prefer rootless Linux deployment with systemd integration, use [Podman Deployment](../deployment/podman) after reading this page first.
+
+## What You Need Before Starting
+
+- A server or VM with a public IP address
+- Docker Engine 20.10+ and Docker Compose v2
+- At least 4 CPU cores and 8 GB RAM for a small installation
+- Control over your DNS zone so you can create the required records
+- Access to your license dashboard so you can reveal registry access credentials
+- Inbound ports `80` and `443` open to the reverse proxy
+- Outbound HTTPS access to `payment-gateway.app`, `registry.payment-gateway.app`, and `registry-auth.payment-gateway.app`
+
+## Required Domains
+
+Point these hostnames to the public IP address of the machine where you will run the stack:
+
+| Purpose                 | Variable                | Example               |
+| ----------------------- | ----------------------- | --------------------- |
+| Admin frontend          | `ADMIN_FRONTEND_DOMAIN` | `admin.example.com`   |
+| Admin API               | `ADMIN_BACKEND_DOMAIN`  | `api.example.com`     |
+| Checkout frontend       | `MAIN_FRONTEND_DOMAIN`  | `pay.example.com`     |
+| Webhook endpoint        | `MAIN_BACKEND_DOMAIN`   | `webhook.example.com` |
+| Optional database admin | `MONGO_EXPRESS_DOMAIN`  | `db.example.com`      |
+
+The default Docker Compose templates expect all of these names to resolve before the first public deployment so Caddy can request TLS certificates successfully.
+
+## Step 1: Retrieve Your License Registry Access
+
+Open the license dashboard and reveal the registry access values for the license you want to deploy.
+
+You will need these values in your deploy environment:
+
+```dotenv
+REGISTRY_HOST=registry.payment-gateway.app
+REGISTRY_TOKEN_SERVICE_URL=https://registry-auth.payment-gateway.app/token
+REGISTRY_ACCESS_ID=<license_access_id>
+REGISTRY_ACCESS_SECRET=<license_access_secret>
+RELEASE_METADATA_URL=https://payment-gateway.app/api/releases/metadata
+UPDATE_CHANNEL=stable
+```
+
+Keep these values private. The deploy and update scripts exchange them for short-lived registry bearer tokens automatically.
+
+## Step 2: Clone the Deployment Repository
+
+```bash
+git clone https://github.com/root-sector-ltd-and-co-kg/payment-gateway-deploy
+cd payment-gateway-deploy/docker-compose
+```
+
+## Step 3: Create Your Environment File
+
+On Linux or macOS:
+
+```bash
+cp templates/.env.template .env
+```
+
+On Windows PowerShell:
+
+```powershell
+Copy-Item templates/.env.template .env
+```
+
+Then edit `.env` and set at least:
+
+```dotenv
+MPG_ADMIN_FRONTEND_DOMAIN=admin.example.com
+MPG_ADMIN_BACKEND_DOMAIN=api.example.com
+MPG_MAIN_FRONTEND_DOMAIN=pay.example.com
+MPG_MAIN_BACKEND_DOMAIN=webhook.example.com
+REACT_APP_ADMIN_BACKEND_DOMAIN=api.example.com
+REACT_APP_MAIN_FRONTEND_DOMAIN=pay.example.com
+REACT_APP_MAIN_BACKEND_DOMAIN=webhook.example.com
+ADMIN_FRONTEND_DOMAIN=admin.example.com
+ADMIN_BACKEND_DOMAIN=api.example.com
+MAIN_FRONTEND_DOMAIN=pay.example.com
+MAIN_BACKEND_DOMAIN=webhook.example.com
+MONGO_EXPRESS_DOMAIN=db.example.com
+REGISTRY_HOST=registry.payment-gateway.app
+REGISTRY_TOKEN_SERVICE_URL=https://registry-auth.payment-gateway.app/token
+REGISTRY_ACCESS_ID=<license_access_id>
+REGISTRY_ACCESS_SECRET=<license_access_secret>
+RELEASE_METADATA_URL=https://payment-gateway.app/api/releases/metadata
+UPDATE_CHANNEL=stable
+```
+
+> [!NOTE]
+> `MONGO_EXPRESS_DOMAIN` is optional. If you do not want to expose Mongo Express publicly, remove that route from your reverse proxy configuration before going live.
+
+## Step 4: Generate Secrets
+
+From the repository root, generate the shared secrets file once.
+
+On Linux or macOS:
+
+```bash
+cd ..
+./scripts/generate-secrets.sh
+cd docker-compose
+```
+
+On Windows PowerShell:
+
+```powershell
+Set-Location ..
+.\scripts\generate-secrets.ps1
+Set-Location .\docker-compose
+```
+
+This creates `payment-gateway-deploy/.env.secrets`, which is read automatically by the deploy script.
+
+## Step 5: Optional MongoDB TLS Certificates
+
+MongoDB TLS is recommended for production.
+
+On Linux or macOS:
+
+```bash
+cd ..
+./scripts/generate-mongo-certs.sh
+cd docker-compose
+```
+
+On Windows PowerShell:
+
+```powershell
+Set-Location ..
+.\scripts\generate-mongo-certs.ps1
+Set-Location .\docker-compose
+```
+
+If you enable `MONGO_TLS_ENABLED=true`, regenerate secrets afterwards so the generated MongoDB connection strings include TLS settings.
+
+## Step 6: Deploy the Stack
+
+Run the deployment from the target host.
+
+```bash
+./deploy.sh
+```
+
+The first successful registry pull binds the host's public IP address to the license access grant.
+
+## Step 7: Verify the Initial Startup
+
+After deployment, verify the stack before activating the license:
+
+```bash
+docker compose ps
+docker compose logs -f payment-gateway-admin-backend
+```
+
+Confirm that these URLs load over HTTPS:
+
+- `https://admin.example.com`
+- `https://pay.example.com`
+- `https://api.example.com/healthz` if you expose a health route in front of the admin API
+
+If the stack does not start cleanly, use [Troubleshooting](../deployment/troubleshooting) before attempting activation.
+
+## Step 8: Activate the License From the Same Host
+
+Once the services are up, open the Admin frontend and navigate to `System Licensing`.
+
+The admin backend creates the installation ID automatically on first startup. Activate the license from the same deployed environment that already pulled the images so the public IP binding and license activation match.
+
+## Step 9: Run Future Updates
+
+After the first install, use the unified updater from the root of `payment-gateway-deploy`:
+
+```bash
+./scripts/update.sh --engine docker-compose --channel stable
+```
+
+The updater prefers `RELEASE_METADATA_URL=https://payment-gateway.app/api/releases/metadata` and falls back to the checked-in local manifest if the public metadata endpoint is temporarily unavailable.
+
+For the full maintenance workflow, see [Updates & Automation](../deployment/updates).
+
+## After Installation
+
+Once the stack is running and licensed:
+
+- Continue with [Quick Start](./index) to create your first checkout flow
+- Use [Provider Setup](./provider-setup) to connect Stripe, GoCardless, Wise, or wire transfer
+- Use [Testing](./testing) before moving live traffic
+- Use [Docker Compose Deployment](../deployment/docker-compose) for platform-specific operational commands
+- Use [Licensing](../deployment/licensing) for license state and runtime behavior
