@@ -8,11 +8,25 @@ initOpenNextCloudflareForDev();
 const config = {
   serverExternalPackages: ['@takumi-rs/image-response'],
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: '/docs',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/docs/:path*',
+        destination: '/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
-        source: '/docs/:path*.mdx',
-        destination: '/llms.mdx/docs/:path*',
+        source: '/:path*.mdx',
+        destination: '/llms.mdx/:path*',
       },
     ];
   },

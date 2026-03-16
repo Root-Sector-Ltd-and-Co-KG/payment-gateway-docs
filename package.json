@@ -20,11 +20,11 @@
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.17.1",
-    "@takumi-rs/image-response": "^0.71.7",
+    "@takumi-rs/image-response": "^0.73.1",
     "dotenv": "^17.3.1",
-    "fumadocs-core": "16.6.16",
-    "fumadocs-mdx": "14.2.9",
-    "fumadocs-ui": "16.6.16",
+    "fumadocs-core": "16.6.17",
+    "fumadocs-mdx": "14.2.10",
+    "fumadocs-ui": "16.6.17",
     "lucide-react": "^0.577.0",
     "next": "16.1.6",
     "react": "^19.2.4",
@@ -40,6 +40,6 @@
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3",
-    "wrangler": "^4.73.0"
+    "wrangler": "^4.74.0"
   }
 }

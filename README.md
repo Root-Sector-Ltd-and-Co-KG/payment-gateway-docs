@@ -20,8 +20,7 @@ published environment is the production site at `docs.payment-gateway.app`.
 
 ## Project Structure
 
-- `app/(home)`: landing page and public marketing entry
-- `app/docs`: documentation layout and routed docs pages
+- `app/(home)`: documentation home page and root-level routed docs pages
 - `app/api/search/route.ts`: Fumadocs search endpoint
 - `app/llms.txt/route.ts`: LLM-friendly docs index
 - `app/llms-full.txt/route.ts`: expanded LLM-friendly docs output
