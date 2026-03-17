@@ -10,8 +10,11 @@ The Deployment repository (`payment-gateway-deploy`) includes a powerful set of 
 The important trust boundary is this:
 
 - Release orchestration is internal.
-- Customer upgrades are driven by explicit public release metadata first and
-  fall back to the checked-in deploy manifest when needed.
+- Customer upgrades are driven by release metadata from
+  `RELEASE_METADATA_URL`. When registry access credentials are configured, the
+  updater authenticates to that endpoint and receives only the releases
+  entitled for that license. If the endpoint is unavailable, the updater falls
+  back to the checked-in deploy manifest.
 - Customer image delivery uses `registry.payment-gateway.app`, but the updater
   does not discover the newest version from registry tags.
 
@@ -78,7 +81,7 @@ The stack features a unified updater script that safely orchestrates system upgr
 ### How the Updater Finds a Version
 
 `./scripts/update.sh` does not query GitHub Releases or the customer registry
-for the latest version. Instead it prefers the public metadata endpoint:
+for the latest version. Instead it prefers the metadata endpoint:
 
 - `https://payment-gateway.app/api/releases/metadata`
 
@@ -91,14 +94,26 @@ and falls back to the local deploy repository manifest:
 This is deliberate because customer pull credentials should be scoped to image
 pull only, not registry catalog browsing.
 
+When `REGISTRY_ACCESS_ID` and `REGISTRY_ACCESS_SECRET` are present, the
+updater sends them as Basic Auth during preflight. The licensing authority then
+returns the latest release set still entitled for that license and support
+window. The same credentials do not grant registry catalog access.
+
 ### Remote-First Metadata
 
 Set the metadata host with `RELEASE_METADATA_URL`. Production should use the
-public production endpoint by default. Other environments can override that
+production endpoint by default. Other environments can override that
 value explicitly when they need a different metadata host.
 
-If the public metadata endpoint is temporarily unavailable, the updater keeps
-working by falling back to the checked-in local manifest.
+The endpoint has two useful modes:
+
+- unauthenticated requests return the public channel metadata used by status
+  surfaces such as version badges
+- authenticated requests return entitlement-filtered metadata for the specific
+  license access grant used by the updater
+
+If the metadata endpoint is temporarily unavailable, the updater keeps working
+by falling back to the checked-in local manifest.
 
 ### Running a Manual Update
 
@@ -149,6 +164,11 @@ For production, the Payment Gateway requires access to `registry.payment-gateway
 
 When these are securely injected, the deployment and update scripts automatically request short-lived bearer tokens from `registry-auth.payment-gateway.app`, bind the deployment host&apos;s public IP on first use, and configure `docker` / `podman` pulls non-interactively.
 
+The updater also reuses those same credentials when requesting release metadata
+so it can resolve the highest version still entitled for that license. This is
+separate from pull authorization: metadata can report the support-window
+ceiling even when fresh image pulls are no longer entitled.
+
 The first successful token exchange also binds that license access identity to
 the deployment public IP. If the outbound public IP changes later, rotate the
 license access secret in the license workspace before the next deploy or
@@ -178,4 +198,6 @@ The admin frontend Version Badge consumes the same public metadata and changes
 state based on channel-aware version comparison plus dependency health.
 
 This is preferable to making the internal release orchestrator repository public
-just to expose version discovery.
+just to expose version discovery. The updater, however, should use
+authenticated metadata whenever registry access credentials are available so
+release resolution respects the license support window.

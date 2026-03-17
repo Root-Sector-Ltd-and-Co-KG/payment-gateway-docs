@@ -51,6 +51,9 @@ UPDATE_CHANNEL=stable
 ```
 
 Keep these values private. The deploy and update scripts exchange them for short-lived registry bearer tokens automatically.
+The same registry access credentials are also reused during updates to request
+an entitlement-filtered release manifest from
+`https://payment-gateway.app/api/releases/metadata`.
 
 ## Step 2: Clone the Deployment Repository
 
@@ -186,7 +189,12 @@ After the first install, use the unified updater from the root of `payment-gatew
 ./scripts/update.sh --engine docker-compose --channel stable
 ```
 
-The updater prefers `RELEASE_METADATA_URL=https://payment-gateway.app/api/releases/metadata` and falls back to the checked-in local manifest if the public metadata endpoint is temporarily unavailable.
+The updater prefers
+`RELEASE_METADATA_URL=https://payment-gateway.app/api/releases/metadata`.
+When `REGISTRY_ACCESS_ID` and `REGISTRY_ACCESS_SECRET` are configured, the
+updater authenticates to that endpoint and receives only the releases entitled
+for that license. If the metadata endpoint is temporarily unavailable, the
+updater falls back to the checked-in local manifest.
 
 For the full maintenance workflow, see [Updates & Automation](../deployment/updates).
 
