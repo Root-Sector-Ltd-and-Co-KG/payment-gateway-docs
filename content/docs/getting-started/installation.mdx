@@ -176,6 +176,8 @@ Once the services are up, open the Admin frontend and navigate to `System Licens
 
 The admin backend creates the installation ID automatically on first startup. Activate the license from the same deployed environment that already pulled the images so the public IP binding and license activation match.
 
+After activation succeeds, the license dashboard at `payment-gateway.app` changes that license from `Unassigned` to `Assigned` and shows the installation binding.
+
 ## Step 9: Run Future Updates
 
 After the first install, use the unified updater from the root of `payment-gateway-deploy`:
