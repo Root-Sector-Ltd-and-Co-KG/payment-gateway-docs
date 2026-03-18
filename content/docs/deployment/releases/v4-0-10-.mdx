@@ -1,0 +1,49 @@
+---
+title: Release 4.0.10
+description: Stable release notes for Payment Gateway App 4.0.10.
+---
+
+# Release 4.0.10
+
+- Channel: stable
+- Published: 2026-03-18T20:18:08Z
+- Release tag: v4.0.10
+
+## [4.0.10] - 2026-03-18
+
+### Changed Components
+
+- **admin-backend** v4.0.9
+- **admin-frontend** v4.0.8
+- **main-backend** v4.0.5
+- **main-frontend** v4.0.3
+
+### Added
+- **admin-backend:** Added plan and limits functionality to bypass license settings.
+- **admin-backend:** Added `CountActiveUsersWithGlobalAdminRole` method to user service mocks.
+- **admin-frontend:** Added route access management and navigation filtering for licensed features.
+- **main-frontend:** Added status badges for subscription management to improve visual tracking.
+
+### Changed
+- **admin-backend:** Enhanced Docker image build process with version input and multi-arch support.
+- **admin-backend:** Improved error message formatting during the license activation process.
+- **admin-frontend:** Improved error handling and type safety within organization management components.
+- **admin-frontend:** Enhanced Docker workflow with improved version input handling and multi-arch support.
+- **main-backend:** Refactored gosec directive comment format for the QR code data URL function.
+- **main-backend:** Enhanced Docker workflow and licensing authority validation.
+- **main-backend:** Updated subscription handling and response structures.
+- **main-frontend:** Improved UI components for the subscription management interface.
+
+### Fixed
+- **main-backend:** Added gosec directive to suppress security warnings for the QR code data URL function.
+
+## Product Component Set
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.0.9 | staging-registry.payment-gateway.app/payment-gateway-admin-backend:4.0.9 |
+| admin-frontend | 4.0.8 | staging-registry.payment-gateway.app/payment-gateway-admin-frontend:4.0.8 |
+| main-backend | 4.0.5 | staging-registry.payment-gateway.app/payment-gateway-main-backend:4.0.5 |
+| main-frontend | 4.0.3 | staging-registry.payment-gateway.app/payment-gateway-main-frontend:4.0.3 |
+| main-worker | 4.0.5 | staging-registry.payment-gateway.app/payment-gateway-main-backend:4.0.5 |
+| reverseproxy | 4.0.1 | staging-registry.payment-gateway.app/payment-gateway-reverseproxy:4.0.1 |
