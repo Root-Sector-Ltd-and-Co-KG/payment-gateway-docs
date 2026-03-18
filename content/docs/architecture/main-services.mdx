@@ -18,7 +18,7 @@ Analogous to the Admin Backend, the Main Backend is built in Go and utilizes the
 3. **Tax Calculation Process**: Tax amounts are always extracted from the raw *gross* amount presented during checkout. The system leverages tax rules defined by the Admin Panel and determines the tax at transaction creation time (relying on the validated billing address).
 4. **VAT Validation API**: The backend exposes public endpoints for validating European VAT IDs against the official EU VIES service (`/api/v1/vat/validate`), as well as endpoints to check EU member status.
 5. **IPN Webhook Integration**: Provides endpoints to receive Instant Payment Notifications (IPNs) from upstream providers. It automatically validates signatures using the securely stored webhook secret, extracts external references, and updates transaction states safely via the Garnet queue.
-6. **Customer Portal API**: Houses a `PortalInvoiceService` that allows read-only access for end customers to download their finalized invoices and credit notes securely using access tokens.
+6. **Customer Portal API**: Houses a `PortalInvoiceService` that allows end customers to download finalized invoices and credit notes securely using access tokens, review upcoming recurring charges, and request future-cycle cancellation for visible subscriptions.
 7. **PDF Worker Proxy**: When delivering invoices to the main frontend customer portal, the Main Backend proxies requests to the isolated `payment-gateway-main-worker` over HTTP, preventing security issues associated with shared docker volumes.
 
 ### Embedded Observability

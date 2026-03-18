@@ -112,7 +112,7 @@ All configuration uses the `MPG_` prefix, loaded by Viper from environment varia
 | Variable | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `MPG_MAIN_WORKER_SERVICE_URL` | string | No | — | Internal URL of the worker service for PDF proxy requests |
-| `MPG_LICENSING_AUTHORITY_URL` | string | No | `http://localhost:5173` | Licensing Authority API URL |
+| `MPG_LICENSING_AUTHORITY_URL` | string | No | `http://localhost:5173` | Licensing Authority API URL. Development may use localhost; staging and production should point to the HTTPS licensing authority for your deployment. |
 
 ---
 

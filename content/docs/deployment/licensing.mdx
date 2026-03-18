@@ -22,7 +22,7 @@ Three commercial tiers are available:
 Additional organisations beyond the tier allowance can be added for 250 EUR per organisation per year on any tier.
 
 > [!TIP]
-> A staging/test environment is available at https://staging-dashboard.payment-gateway.app/ — use it to validate integration flows before purchase.
+> Use a non-production licensing environment to validate activation, heartbeat, and update flows before going live. In the first-party deployment that environment is exposed at https://staging-dashboard.payment-gateway.app/.
 
 ## Runtime States
 
@@ -44,4 +44,4 @@ If your system enters a non-active state, follow these procedures to recover:
 2. **NTP Drift**: Keep the host clock synchronized using NTP (Network Time Protocol). Severe clock drift will cause the JWT verification to fail prematurely or appear expired.
 3. **Manual Heartbeat**: If the state drops to `GRACE`, `SOFT_LOCK`, or `READ_ONLY`, navigate to the Admin UI and trigger a manual heartbeat to force a synchronization. This will restore the license to `ACTIVE` and resume update/support eligibility.
 4. **Runtime Block (`BLOCKED`)**: If the state becomes `BLOCKED`, confirm whether the licensing authority revoked or suspended the license, or whether the installation reported a version newer than the maximum version allowed by that license's support window. Resolve the account or version issue, downgrade if necessary, then trigger a manual heartbeat to restore the system to `ACTIVE`.
-5. **Initial Activation (`NOT_ACTIVATED`)**: Configure your license key under **Settings > Licensing** in the Admin Panel and complete the activation process. A successful activation also updates the customer dashboard at `payment-gateway.app` so the license no longer appears as `Unassigned`.
+5. **Initial Activation (`NOT_ACTIVATED`)**: Configure your license key under **Settings > Licensing** in the Admin Panel and complete the activation process. A successful activation also updates the operator-facing license workspace managed by your licensing authority. In the first-party deployment that workspace is hosted at `payment-gateway.app`.

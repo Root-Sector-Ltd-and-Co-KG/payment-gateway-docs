@@ -167,6 +167,11 @@ credentials:
 - The docs site uses production-only routing at `docs.payment-gateway.app`.
 - Unlike `payment-gateway-app-website`, there is no staging worker or staging
   custom domain.
+- The docs distinguish between the operator-facing license portal and the
+  buyer-facing customer portal. First-party domains such as
+  `payment-gateway.app` and `secure.payment-gateway.app` are examples of the
+  Root Sector deployment, not hard-coded product requirements for self-hosted
+  customers.
 - OpenNext Cloudflare support is initialized in `next.config.mjs` so local
   development stays aligned with the Cloudflare runtime model.
 - `pnpm build` is validated on Windows, but `opennextjs-cloudflare build` is

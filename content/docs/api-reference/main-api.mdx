@@ -221,6 +221,23 @@ Exchanges an OTP for a portal session token.
 }
 ```
 
+### Get Portal Session
+
+```http
+GET /api/v1/portal/session
+```
+
+Returns authenticated portal metadata for UI bootstrapping.
+
+**Response `200`:**
+
+```json
+{
+  "email": "jane@example.com",
+  "hasSubscriptions": true
+}
+```
+
 All subsequent portal requests include:
 
 ```http
@@ -257,13 +274,95 @@ Returns the e-invoice XML (ZUGFeRD, Peppol, or XRechnung format depending on con
 GET /api/v1/portal/subscriptions
 ```
 
+Returns visible recurring subscriptions for the authenticated buyer.
+
+**Response `200`:**
+
+```json
+{
+  "subscriptions": [
+    {
+      "id": "67c8e2f7d6ef0dc8a3fa2011",
+      "name": "Annual software renewal",
+      "status": "cancel_requested",
+      "cadence": "Every 1 year",
+      "currency": "EUR",
+      "nextChargeDate": null,
+      "effectiveAt": "2026-09-01T00:00:00Z",
+      "estimatedNextAmount": 0,
+      "upcomingChargesCount": 0
+    }
+  ],
+  "total": 1,
+  "page": 1,
+  "limit": 20
+}
+```
+
+### Get Subscription Upcoming Charges
+
+```http
+GET /api/v1/portal/subscriptions/:id/upcoming?count=6
+```
+
+Returns the current recurring state, the next scheduled charge if billing is still active, and upcoming charge estimates.
+
+**Response `200`:**
+
+```json
+{
+  "subscriptionId": "67c8e2f7d6ef0dc8a3fa2011",
+  "name": "Annual software renewal",
+  "status": "active",
+  "cadence": "Every 1 year",
+  "currency": "EUR",
+  "nextChargeDate": "2026-09-01T00:00:00Z",
+  "effectiveAt": null,
+  "upcoming": [
+    {
+      "id": "67c8e2f7d6ef0dc8a3fa2011-1",
+      "scheduledDate": "2026-09-01T00:00:00Z",
+      "dueDate": "2026-09-15T00:00:00Z",
+      "currency": "EUR",
+      "baseAmount": 149000,
+      "usageAmount": 0,
+      "taxEstimate": 0,
+      "estimatedTotal": 149000,
+      "proformaAvailable": true,
+      "proformaPreviewId": "next",
+      "proformaPreviewLabel": "Proforma preview"
+    }
+  ]
+}
+```
+
+### Download Subscription Proforma Preview PDF
+
+```http
+GET /api/v1/portal/subscriptions/:id/upcoming/:upcomingId/proforma/pdf
+```
+
+Downloads the optional PDF preview for the first upcoming recurring charge when proforma previews are enabled.
+
 ### Cancel Subscription
 
 ```http
 POST /api/v1/portal/subscriptions/:id/cancel
 ```
 
-Allows a customer to cancel a recurring schedule. Sends a confirmation email.
+Allows a customer to cancel a recurring schedule. The operation is idempotent and uses future-cycle semantics when the schedule still has a next run date.
+
+**Response `200`:**
+
+```json
+{
+  "subscriptionId": "67c8e2f7d6ef0dc8a3fa2011",
+  "status": "cancel_requested",
+  "alreadyCancelled": false,
+  "effectiveAt": "2026-09-01T00:00:00Z",
+  "message": "Subscription cancellation scheduled for future cycles"
+}
+```
 
 ---
 

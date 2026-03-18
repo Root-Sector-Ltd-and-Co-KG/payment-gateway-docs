@@ -15,8 +15,10 @@ The important trust boundary is this:
   updater authenticates to that endpoint and receives only the releases
   entitled for that license. If the endpoint is unavailable, the updater falls
   back to the checked-in deploy manifest.
-- Customer image delivery uses `registry.payment-gateway.app`, but the updater
-  does not discover the newest version from registry tags.
+- Customer image delivery uses the OCI registry configured for that
+  deployment. In the first-party hosted setup this is
+  `registry.payment-gateway.app`, but the updater does not discover the newest
+  version from registry tags.
 
 ## Release Security Transparency
 
@@ -54,11 +56,11 @@ Additional security checks in the release ecosystem:
 
 ## Security Reporting Policy
 
-The public disclosure and reporting policy is published here:
+The public disclosure and reporting policy should be published on the operator-facing license portal for your deployment. In the first-party production deployment it is available here:
 
 - `https://payment-gateway.app/security-policy`
 
-The required discovery file is also published at:
+The required discovery file should also be published on that same operator-facing portal. In the first-party production deployment it is available at:
 
 - `https://payment-gateway.app/.well-known/security.txt`
 
@@ -83,7 +85,7 @@ The stack features a unified updater script that safely orchestrates system upgr
 `./scripts/update.sh` does not query GitHub Releases or the customer registry
 for the latest version. Instead it prefers the metadata endpoint:
 
-- `https://payment-gateway.app/api/releases/metadata`
+- `https://payment-gateway.app/api/releases/metadata` in the first-party hosted deployment, or the metadata endpoint exposed by your own licensing authority
 
 and falls back to the local deploy repository manifest:
 
@@ -102,8 +104,8 @@ window. The same credentials do not grant registry catalog access.
 ### Remote-First Metadata
 
 Set the metadata host with `RELEASE_METADATA_URL`. Production should use the
-production endpoint by default. Other environments can override that
-value explicitly when they need a different metadata host.
+licensing authority endpoint for that deployment by default. Other environments
+can override that value explicitly when they need a different metadata host.
 
 The endpoint has two useful modes:
 
@@ -155,14 +157,14 @@ Sometimes you only need to update a single microservice (e.g., `admin-backend` o
 
 ## Container Registries & Auto-Renew
 
-For production, the Payment Gateway requires access to `registry.payment-gateway.app`. You configure this access using license access credentials issued for a specific license in the license workspace:
+For production, the Payment Gateway requires access to the OCI registry that serves your deployment. In the first-party hosted setup this is `registry.payment-gateway.app`. You configure this access using license access credentials issued for a specific license in the operator-facing license workspace:
 
 - `REGISTRY_HOST`
 - `REGISTRY_TOKEN_SERVICE_URL`
 - `REGISTRY_ACCESS_ID`
 - `REGISTRY_ACCESS_SECRET`
 
-When these are securely injected, the deployment and update scripts automatically request short-lived bearer tokens from `registry-auth.payment-gateway.app`, bind the deployment host&apos;s public IP on first use, and configure `docker` / `podman` pulls non-interactively.
+When these are securely injected, the deployment and update scripts automatically request short-lived bearer tokens from the configured registry token service. In the first-party hosted setup that token service is `registry-auth.payment-gateway.app`. The first successful exchange binds the deployment host&apos;s public IP on first use and configures `docker` / `podman` pulls non-interactively.
 
 The updater also reuses those same credentials when requesting release metadata
 so it can resolve the highest version still entitled for that license. This is
@@ -183,7 +185,8 @@ repositories allowed by the license manager.
 
 For UI surfaces such as an admin-frontend "update available" indicator, the
 recommended pattern is to publish a small public release metadata document or
-API from a stable domain such as `payment-gateway.app`.
+API from a stable operator-controlled domain. In the first-party hosted setup
+that domain is `payment-gateway.app`.
 
 That public metadata should mirror the channel information already present in
 `releases/manifest.json`:

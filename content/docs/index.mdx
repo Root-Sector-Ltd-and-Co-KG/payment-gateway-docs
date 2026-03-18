@@ -16,7 +16,14 @@ One of the main strategic advantages of the platform is continuity. Your payment
 - **Persistent History and Invoicing**: Keep one payment and invoice history across provider changes, with gapless numbering, PDF invoice customisation, and support for ZUGFeRD, Peppol, and XRechnung workflows. Finalized buyer documents are downloaded through the customer portal.
 - **Multi-Tenant Organizations**: Full role-based access control for teams with a dedicated Admin Panel.
 - **Advanced Tax Engine**: Native EU VAT OSS/IOSS, UK VAT, US Sales Tax, and Canadian GST/HST with temporal rate scheduling.
-- **Customer Portal**: A branded, self-service portal for buyers to access and download invoices on your configured hosted portal domain or your own mapped portal domain, and to manage subscriptions.
+- **Customer Portal**: A branded, self-service portal for buyers to access invoices, preview upcoming recurring charges, and manage subscription cancellation on your configured hosted portal domain or your own mapped portal domain.
+
+## Portal Roles
+
+- **Operator License Portal**: Your licensing and deployment workspace, such as `payment-gateway.app` in the first-party deployment, where operators manage licenses, registry access, and account onboarding.
+- **Customer Portal**: Your buyer-facing invoice and subscription workspace, such as `secure.payment-gateway.app` in the first-party deployment, where end customers authenticate with OTP and manage their billing relationship.
+
+Both portals are deployment-specific. Product documentation uses the first-party domains only as examples; self-hosted customers can map their own domains and branding.
 - **Flexible Deployment**: Docker Compose or rootless Podman on Linux, with automated upgrade tooling.
 - **Data Lifecycle Controls**: Organization-level retention settings plus GDPR-oriented backup and restore runbooks.
 

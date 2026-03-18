@@ -25,12 +25,22 @@ Customers can view a chronological list of every `issued` invoice or credit note
 *   Download the legally compliant XML E-Invoice (ZUGFeRD, Peppol, XRechnung) required for corporate accounting in the EU.
 
 ### Subscription Management
-If the customer is enrolled in an active Recurring Schedule, the portal displays their active subscriptions. 
-*   They can view the next billing date and the exact amount of the upcoming charge.
-*   Crucially, they can completely **Cancel** their subscription. This instantly terminates the schedule in the gateway, preventing any future involuntary charges and ensuring compliance with modern consumer protection laws.
+If the customer is enrolled in a visible Recurring Schedule, the portal displays their subscriptions alongside the current recurring state.
+*   They can view the current subscription status (`active`, `paused`, `cancel_requested`, `cancelled`, `completed`).
+*   They can review the next billing date, upcoming charge estimates, and optional proforma previews where configured.
+*   They can request cancellation for future cycles directly from the customer portal.
+
+### Cancellation Semantics
+
+Customer portal cancellation is designed to be idempotent and state-aware:
+
+* Future-cycle subscriptions move into `cancel_requested` and stop generating further billing after the effective cycle date.
+* Paused subscriptions, or subscriptions with no remaining future cycle, are cancelled immediately.
+* Repeated cancellation requests return the current state instead of creating duplicate mutations.
+* Already issued invoices remain unchanged; customer portal cancellation only affects future recurring runs.
 
 ## Security Architecture
 
-The Customer Portal is strictly isolated from the Admin or Main backend mutation paths. 
-*   **Read-Only Vectors**: The `PortalInvoiceService` handles all interactions. It strictly prevents unauthorized access to foreign Client records (preventing Insecure Direct Object Reference vulnerabilities).
+The Customer Portal is isolated from the admin control plane and only exposes narrowly scoped customer self-service mutations.
+*   **Scoped Access Vectors**: The `PortalInvoiceService` handles invoice reads, upcoming recurring previews, and customer-initiated future-cycle cancellation while preventing unauthorized access to foreign Client records (preventing Insecure Direct Object Reference vulnerabilities).
 *   **OTP Reuse Prevention**: Once an OTP is consumed or expires (usually within 15 minutes), it is cryptographically invalidated to prevent replay attacks.
