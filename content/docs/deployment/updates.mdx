@@ -7,14 +7,16 @@ description: How to maintain and automatically update your deployment safely.
 
 The Deployment repository (`payment-gateway-deploy`) includes a powerful set of scripts and mechanisms to keep your Payment Gateway updated, ensuring you receive the latest security patches and features.
 
+This page describes the customer-facing updater behavior from `payment-gateway-deploy`. Internal automation stacks may choose different image sources; for example, `payment-gateway-infra-deploy` currently defaults to origin image sources unless an environment overrides them explicitly.
+
 The important trust boundary is this:
 
 - Release orchestration is internal.
 - Customer upgrades are driven by release metadata from
   `RELEASE_METADATA_URL`. When registry access credentials are configured, the
   updater authenticates to that endpoint and receives only the releases
-  entitled for that license. If the endpoint is unavailable, the updater falls
-  back to the checked-in deploy manifest.
+  entitled for that license. If the endpoint is unavailable or invalid, the
+  updater stops instead of guessing from registry tags or stale local state.
 - Customer image delivery uses the OCI registry configured for that
   deployment. In the first-party hosted setup this is
   `registry.payment-gateway.app`, but the updater does not discover the newest
@@ -83,15 +85,9 @@ The stack features a unified updater script that safely orchestrates system upgr
 ### How the Updater Finds a Version
 
 `./scripts/update.sh` does not query GitHub Releases or the customer registry
-for the latest version. Instead it prefers the metadata endpoint:
+for the latest version. Instead it requires the metadata endpoint:
 
 - `https://payment-gateway.app/api/releases/metadata` in the first-party hosted deployment, or the metadata endpoint exposed by your own licensing authority
-
-and falls back to the local deploy repository manifest:
-
-- `payment-gateway-deploy/releases/manifest.json`
-- `channels.<name>.latest`
-- matching release metadata under `releases[]`
 
 This is deliberate because customer pull credentials should be scoped to image
 pull only, not registry catalog browsing.
@@ -114,8 +110,15 @@ The endpoint has two useful modes:
 - authenticated requests return entitlement-filtered metadata for the specific
   license access grant used by the updater
 
-If the metadata endpoint is temporarily unavailable, the updater keeps working
-by falling back to the checked-in local manifest.
+If the metadata endpoint is temporarily unavailable or invalid, the updater
+fails fast so operators do not accidentally roll forward based on stale
+metadata.
+
+Published release metadata should describe the full managed image baseline for a release, not only first-party application services. In the first-party hosted setup that baseline includes the mirrored runtime images for `mongo`, `garnet`, `mgob`, `gotenberg`, and `mongo-express` alongside the Payment Gateway application images.
+
+The metadata served from `/api/releases/metadata` is intentionally compact. It
+uses `version` at both the release and component level, and it only exposes the
+current channel-head releases rather than a full release history.
 
 ### Running a Manual Update
 
@@ -166,6 +169,8 @@ For production, the Payment Gateway requires access to the OCI registry that ser
 
 When these are securely injected, the deployment and update scripts automatically request short-lived bearer tokens from the configured registry token service. In the first-party hosted setup that token service is `registry-auth.payment-gateway.app`. The first successful exchange binds the deployment host&apos;s public IP on first use and configures `docker` / `podman` pulls non-interactively.
 
+The license access scope must cover every mirrored repository in the shipped stack, not only the first-party application images. In the first-party hosted setup that means the registry grant should cover `payment-gateway-admin-backend`, `payment-gateway-admin-frontend`, `payment-gateway-main-backend`, `payment-gateway-main-frontend`, `payment-gateway-reverseproxy`, `mongo`, `garnet`, `mgob`, `gotenberg`, and `mongo-express`.
+
 The updater also reuses those same credentials when requesting release metadata
 so it can resolve the highest version still entitled for that license. This is
 separate from pull authorization: metadata can report the support-window
@@ -191,11 +196,11 @@ that domain is `payment-gateway.app`.
 That public metadata should mirror the channel information already present in
 `releases/manifest.json`:
 
-- current latest product version per channel
+- current channel-head version per channel
 - release date
 - compatibility flag
 - release notes URL
-- exact component set with `componentVersion`, image reference, and digest
+- exact managed image baseline with `version`, image reference, and digest
 
 The admin frontend Version Badge consumes the same public metadata and changes
 state based on channel-aware version comparison plus dependency health.
