@@ -37,7 +37,7 @@ In addition, component repositories enforce branch-based license scanning with T
 - Command behavior: `trivy fs --scanners license --format json`.
 - Gate policy: the workflow fails on license findings with severities `UNKNOWN,HIGH,CRITICAL`.
 
-For additional shared libraries scanned by the release pipeline, the scanner prefers a matching `v<productVersion>` tag and falls back to `main` if that tag does not exist yet. This keeps release-version traceability explicit while still ensuring coverage.
+For additional shared libraries scanned by the release pipeline, the scanner prefers a matching `v<version>` tag and falls back to `main` if that tag does not exist yet. This keeps release-version traceability explicit while still ensuring coverage.
 
 This gives operators and customers better traceability between what was released and what was scanned.
 
@@ -48,13 +48,13 @@ Additional security checks in the release ecosystem:
 
 ### Security Scan Matrix
 
-| Control                               | Scope                                        | Trigger                                            | Output                                                                                                                                             | Blocking                      |
-| ------------------------------------- | -------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| Trivy vuln+misconfig + CycloneDX SBOM | release-managed repos + shared libs          | product release continuation after image promotion | `security/sbom/v<productVersion>/*.cyclonedx.json`, `security/reports/v<productVersion>/*.vuln.json`, `scan-manifest.json` in release-orchestrator | Yes                           |
-| Trivy license gate                    | each component repository                    | push (`develop` for app repos, `main` for libs)    | machine-readable JSON output in CI workflow run                                                                                                    | Yes (`UNKNOWN,HIGH,CRITICAL`) |
-| Govulncheck                           | admin/main backend                           | backend security scan workflow on push             | workflow findings                                                                                                                                  | Yes                           |
-| Gosec                                 | admin/main backend                           | backend security scan workflow on push             | workflow findings                                                                                                                                  | Yes                           |
-| Aikido Security                       | organization/repository security integration | continuous                                         | Aikido findings dashboard                                                                                                                          | Policy-driven                 |
+| Control                               | Scope                                        | Trigger                                            | Output                                                                                                                               | Blocking                      |
+| ------------------------------------- | -------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
+| Trivy vuln+misconfig + CycloneDX SBOM | release-managed repos + shared libs          | product release continuation after image promotion | `security/sbom/v<version>/*.cyclonedx.json`, `security/reports/v<version>/*.vuln.json`, `scan-manifest.json` in release-orchestrator | Yes                           |
+| Trivy license gate                    | each component repository                    | push (`develop` for app repos, `main` for libs)    | machine-readable JSON output in CI workflow run                                                                                      | Yes (`UNKNOWN,HIGH,CRITICAL`) |
+| Govulncheck                           | admin/main backend                           | backend security scan workflow on push             | workflow findings                                                                                                                    | Yes                           |
+| Gosec                                 | admin/main backend                           | backend security scan workflow on push             | workflow findings                                                                                                                    | Yes                           |
+| Aikido Security                       | organization/repository security integration | continuous                                         | Aikido findings dashboard                                                                                                            | Policy-driven                 |
 
 ## Security Reporting Policy
 
