@@ -15,6 +15,8 @@ For merchant integrations, this is the API you should target. Use **Organization
 
 The key ID and secret are dot-separated. Both parts are shown only once at creation time.
 
+Organization API keys are already bound to a single organization. Do **not** send `X-Organization-ID` with organization API key requests; the backend resolves the organization directly from the key. JWT/session-based dashboard requests resolve organization context from the route `:orgId` parameter when present, otherwise from the `selectedOrganization` cookie maintained by the admin frontend.
+
 > [!IMPORTANT]
 > Every endpoint enforces both **role permission** (`Viewer`, `Editor`, `Admin`) and **scope** (`resource:action`). A request fails with `403` if the API key lacks the required scope.
 
@@ -278,65 +280,73 @@ Returns aggregated metrics: gross volume, net revenue, transaction counts, failu
 
 ## API Key Scopes Reference
 
-| Scope                  | Grants                                               |
-| ---------------------- | ---------------------------------------------------- |
-| `checkout:read`        | Read checkouts                                       |
-| `checkout:create`      | Create checkout URLs                                 |
-| `checkout:update`      | Update checkout metadata                             |
-| `transaction:read`     | Read transactions and tax details                    |
-| `transaction:create`   | Create manual transactions                           |
-| `transaction:update`   | Update transaction metadata                          |
-| `transaction:delete`   | Delete transactions                                  |
-| `transaction:execute`  | Chargeback management                                |
-| `invoice:read`         | Read invoices and recurring schedules                |
-| `invoice:create`       | Create invoices and schedules                        |
-| `invoice:update`       | Update invoice notes, correct invoices               |
-| `invoice:execute`      | Issue, void, email, PDF download, generate recurring |
-| `invoice:delete`       | Delete draft invoices                                |
-| `credit_note:read`     | Read credit notes                                    |
-| `credit_note:execute`  | Download PDF, send email                             |
-| `client:read`          | Read clients                                         |
-| `client:create`        | Create clients                                       |
-| `client:update`        | Update clients                                       |
-| `client:delete`        | Delete clients                                       |
-| `client:execute`       | Search clients, view history                         |
-| `site:read`            | Read sites                                           |
-| `site:create`          | Create sites                                         |
-| `site:delete`          | Delete sites                                         |
-| `site:update`          | Update sites, rotate webhook secret                  |
-| `provider:read`        | Read providers                                       |
-| `provider:create`      | Create providers (Admin role also required)          |
-| `provider:update`      | Enable/disable providers (Admin role)                |
-| `provider:delete`      | Delete providers (Admin role)                        |
-| `domain:read`          | Read domains                                         |
-| `domain:create`        | Create domains (Admin role)                          |
-| `domain:delete`        | Delete domains (Admin role)                          |
-| `domain:execute`       | Verify CNAME, Apple Pay files                        |
-| `api_key:read`         | Read API keys                                        |
-| `api_key:create`       | Create API keys                                      |
-| `api_key:update`       | Rotate API keys                                      |
-| `api_key:delete`       | Revoke API keys                                      |
-| `organization:read`    | Read organization details                            |
-| `organization:update`  | Update organization settings                         |
-| `organization:execute` | Access settings, encryption operations               |
-| `tax_rule:read`        | Read tax rules                                       |
-| `tax_rule:create`      | Create tax rules                                     |
-| `tax_rule:update`      | Update tax rules                                     |
-| `tax_rule:delete`      | Delete tax rules                                     |
-| `tax_rule:execute`     | Populate defaults                                    |
-| `tax_rate:read`        | Read tax rates                                       |
-| `tax_rate:create`      | Create tax rates                                     |
-| `tax_rate:update`      | Update tax rates                                     |
-| `tax_rate:delete`      | Delete tax rates                                     |
-| `tax_rate:execute`     | Populate EU rates                                    |
-| `tax_report:read`      | Read tax reports                                     |
-| `tax_report:execute`   | Export tax reports                                   |
-| `data_io:read`         | Read import/export templates                         |
-| `data_io:execute`      | Import and export data                               |
-| `export:execute`       | Generate CSV exports                                 |
-| `vies:read`            | Check EU countries                                   |
-| `vies:execute`         | Validate VAT IDs                                     |
-| `userprofile:read`     | Read own user profile                                |
-| `userprofile:create`   | Create passkey links                                 |
-| `userprofile:update`   | Update passkey labels, notification prefs            |
-| `userprofile:execute`  | Manage passkeys                                      |
+| Scope                  | Grants                                                                                         |
+| ---------------------- | ---------------------------------------------------------------------------------------------- |
+| `checkout:read`        | Read checkouts                                                                                 |
+| `checkout:create`      | Create checkout URLs                                                                           |
+| `checkout:update`      | Update checkout metadata                                                                       |
+| `transaction:read`     | Read transactions and tax details                                                              |
+| `transaction:create`   | Create manual transactions                                                                     |
+| `transaction:update`   | Update transaction metadata                                                                    |
+| `transaction:delete`   | Delete transactions                                                                            |
+| `transaction:execute`  | Chargeback management                                                                          |
+| `invoice:read`         | Read invoices and recurring schedules                                                          |
+| `invoice:create`       | Create invoices and schedules                                                                  |
+| `invoice:update`       | Update invoice notes, correct invoices                                                         |
+| `invoice:execute`      | Issue, void, email, PDF download, and pause/resume/cancel/generate/preview recurring schedules |
+| `invoice:delete`       | Delete draft invoices                                                                          |
+| `credit_note:read`     | Read credit notes                                                                              |
+| `credit_note:execute`  | Download PDF, send email                                                                       |
+| `client:read`          | Read clients                                                                                   |
+| `client:create`        | Create clients                                                                                 |
+| `client:update`        | Update clients                                                                                 |
+| `client:delete`        | Delete clients                                                                                 |
+| `client:execute`       | Search clients, view history                                                                   |
+| `site:read`            | Read sites                                                                                     |
+| `site:create`          | Create sites                                                                                   |
+| `site:delete`          | Delete sites                                                                                   |
+| `site:update`          | Update sites, rotate webhook secret                                                            |
+| `provider:read`        | Read providers                                                                                 |
+| `provider:create`      | Create providers (Admin role also required)                                                    |
+| `provider:update`      | Enable/disable providers (Admin role)                                                          |
+| `provider:delete`      | Delete providers (Admin role)                                                                  |
+| `domain:read`          | Read domains                                                                                   |
+| `domain:create`        | Create domains (Admin role)                                                                    |
+| `domain:delete`        | Delete domains (Admin role)                                                                    |
+| `domain:execute`       | Verify CNAME, Apple Pay files                                                                  |
+| `api_key:read`         | Read API keys                                                                                  |
+| `api_key:create`       | Create API keys                                                                                |
+| `api_key:update`       | Rotate API keys                                                                                |
+| `api_key:delete`       | Revoke API keys                                                                                |
+| `organization:read`    | Read organization details                                                                      |
+| `organization:update`  | Update organization settings                                                                   |
+| `organization:execute` | Access settings, encryption operations                                                         |
+| `tax_rule:read`        | Read tax rules                                                                                 |
+| `tax_rule:create`      | Create tax rules                                                                               |
+| `tax_rule:update`      | Update tax rules                                                                               |
+| `tax_rule:delete`      | Delete tax rules                                                                               |
+| `tax_rule:execute`     | Populate defaults                                                                              |
+| `tax_rate:read`        | Read tax rates                                                                                 |
+| `tax_rate:create`      | Create tax rates                                                                               |
+| `tax_rate:update`      | Update tax rates                                                                               |
+| `tax_rate:delete`      | Delete tax rates                                                                               |
+| `tax_rate:execute`     | Populate EU rates                                                                              |
+| `tax_report:read`      | Read tax reports                                                                               |
+| `tax_report:execute`   | Export tax reports                                                                             |
+| `data_io:read`         | Read import/export templates                                                                   |
+| `data_io:execute`      | Import and export data                                                                         |
+| `export:execute`       | Generate CSV exports                                                                           |
+| `vies:read`            | Check EU countries                                                                             |
+| `vies:execute`         | Validate VAT IDs                                                                               |
+| `userprofile:read`     | Read own user profile                                                                          |
+| `userprofile:create`   | Create passkey links                                                                           |
+| `userprofile:update`   | Update passkey labels, notification prefs                                                      |
+| `userprofile:execute`  | Manage passkeys                                                                                |
+
+## Common least-privilege bundles
+
+- **Checkout creation**: `checkout:create`
+- **Website billing bridge auto-provisioning**: `client:read`, `client:create`, `invoice:read`, `invoice:create`
+- **Recurring schedule management**: `invoice:read`, `invoice:create`, `invoice:execute`
+
+Recurring schedules do not use a separate `recurring:*` scope family. They are governed by the `invoice:*` scope family.

@@ -41,6 +41,16 @@ Examples:
 - `invoice:update`
 - `data_io:execute`
 
+### Common least-privilege patterns
+
+- **Create checkout links**: `checkout:create`
+- **Website billing bridge auto-provisioning**: `client:read`, `client:create`, `invoice:read`, `invoice:create`
+- **Recurring schedule management**: `invoice:read`, `invoice:create`, `invoice:execute`
+
+Organization API keys are already scoped to one organization, so integrations should not send `X-Organization-ID` alongside the key. The backend resolves the organization from the key automatically. For JWT/session-based admin dashboard flows, organization context comes from the route `:orgId` parameter when present, otherwise from the `selectedOrganization` cookie maintained by the admin frontend.
+
+Recurring schedules are part of the invoice scope family. Use `invoice:*` scopes for recurring operations rather than inventing a separate `recurring:*` scope.
+
 ## System API Keys
 
 For advanced self-hosted operations, **System API keys** allow high-level
@@ -48,9 +58,10 @@ administrative orchestration.
 
 These keys are managed by users with global-admin permissions and transcend
 individual organizations. They are used for:
-*   Provisioning entirely new Organizations programmatically.
-*   Managing global system settings and defaults.
-*   System-wide health monitoring and auditing.
+
+- Provisioning entirely new Organizations programmatically.
+- Managing global system settings and defaults.
+- System-wide health monitoring and auditing.
 
 > [!CAUTION]
 > Treat all API keys like passwords. Never expose them in browser/mobile client code. Store them in a secrets manager (for example, HashiCorp Vault, AWS Secrets Manager, or equivalent).
@@ -59,6 +70,6 @@ individual organizations. They are used for:
 
 To maintain PCI-DSS and security best practices, the gateway supports full lifecycle management for all keys:
 
-*   **Rotation**: You can generate a new secret for an existing key ID, allowing for zero-downtime credential rotation.
-*   **Revocation**: If a key is compromised (e.g., leaked in source code), you can instantly revoke it, rendering it immediately invalid across the distributed system.
-*   **Deletion**: Permanently remove keys you no longer need.
+- **Rotation**: You can generate a new secret for an existing key ID, allowing for zero-downtime credential rotation.
+- **Revocation**: If a key is compromised (e.g., leaked in source code), you can instantly revoke it, rendering it immediately invalid across the distributed system.
+- **Deletion**: Permanently remove keys you no longer need.
