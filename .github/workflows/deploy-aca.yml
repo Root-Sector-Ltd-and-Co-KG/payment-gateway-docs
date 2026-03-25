@@ -79,6 +79,9 @@ jobs:
             LOCATION="${{ vars.AZURE_LOCATION }}"
 
             IMAGE="${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.sha_tag }}"
+            REGISTRY_SERVER="ghcr.io"
+            REGISTRY_USERNAME="${{ secrets.GHCR_USERNAME }}"
+            REGISTRY_PASSWORD="${{ secrets.GHCR_TOKEN }}"
 
             # Create the app if it doesn't exist yet; otherwise update.
             if az containerapp show -g "$RG" -n "$APP" > /dev/null 2>&1; then
@@ -86,6 +89,9 @@ jobs:
                 -g "$RG" \
                 -n "$APP" \
                 --image "$IMAGE" \
+                --registry-server "$REGISTRY_SERVER" \
+                --registry-username "$REGISTRY_USERNAME" \
+                --registry-password "$REGISTRY_PASSWORD" \
                 --set-env-vars PORT=${{ env.CONTAINER_PORT }} HOSTNAME=0.0.0.0 \
                 --revision-suffix "${GITHUB_SHA::7}"
             else
@@ -95,6 +101,9 @@ jobs:
                 --environment "$ENV_NAME" \
                 --location "$LOCATION" \
                 --image "$IMAGE" \
+                --registry-server "$REGISTRY_SERVER" \
+                --registry-username "$REGISTRY_USERNAME" \
+                --registry-password "$REGISTRY_PASSWORD" \
                 --ingress external \
                 --target-port ${{ env.CONTAINER_PORT }} \
                 --min-replicas 1 \

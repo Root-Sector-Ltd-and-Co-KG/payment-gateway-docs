@@ -26,8 +26,6 @@ published environment is the production site at `docs.payment-gateway.app`.
 - `content/docs`: MDX documentation content
 - `lib/source.ts`: Fumadocs content source wiring
 - `source.config.ts`: MDX/content collection configuration
-- `open-next.config.ts`: OpenNext Cloudflare adapter configuration
-- `wrangler.toml`: Cloudflare Worker deployment config
 
 ## Development
 
@@ -65,8 +63,6 @@ Run the standard local validation sequence:
 pnpm validate
 ```
 
-## Cloudflare Deployment
-
 ## Deployment (Azure Container Apps)
 
 ### One-time Azure setup (prerequisites)
@@ -83,6 +79,8 @@ Add these **GitHub Secrets**:
 - `AZURE_CLIENT_ID`
 - `AZURE_TENANT_ID`
 - `AZURE_SUBSCRIPTION_ID`
+- `GHCR_USERNAME` (e.g. `root-sector-ltd-and-co-kg`)
+- `GHCR_TOKEN` (a PAT with `read:packages` for pulling images from GHCR)
 
 Add these **GitHub Variables**:
 
@@ -104,49 +102,6 @@ docker build -t payment-gateway-docs:local .
 docker run --rm -p 3000:3000 payment-gateway-docs:local
 ```
 
-### Wrangler Config
-
-`wrangler.toml` is configured for:
-
-- worker name: `payment-gateway-docs`
-- main entry: `.open-next/worker.js`
-- assets binding: `.open-next/assets`
-- custom domain route: `docs.payment-gateway.app`
-
-No staging environment is configured for this project.
-
-## GitHub Actions Workflow
-
-Production deployment is handled by:
-
-- `.github/workflows/deploy-cloudflare.yml`
-
-The workflow runs on pushes to `main` when deploy-relevant files change, and it
-performs:
-
-1. dependency install
-2. `pnpm typecheck`
-3. `pnpm build`
-4. `pnpm deploy:cf:production`
-
-The workflow runs on `ubuntu-latest`, which avoids the Windows symlink issues
-that can affect local OpenNext bundle generation.
-
-## Required GitHub Secrets
-
-The deployment workflow requires these repository secrets:
-
-- `CLOUDFLARE_API_TOKEN`
-- `CLOUDFLARE_ACCOUNT_ID`
-
-## Local Cloudflare Secrets File
-
-Use `.cloudflare-secrets.example` as the template for local deployment
-credentials:
-
-- `CLOUDFLARE_API_TOKEN`
-- `CLOUDFLARE_ACCOUNT_ID`
-
 ## Notes
 
 - The docs site uses production-only routing at `docs.payment-gateway.app`.
@@ -157,8 +112,4 @@ credentials:
   `payment-gateway.app` and `secure.payment-gateway.app` are examples of the
   Root Sector deployment, not hard-coded product requirements for self-hosted
   customers.
-- OpenNext Cloudflare support is initialized in `next.config.mjs` so local
-  development stays aligned with the Cloudflare runtime model.
-- `pnpm build` is validated on Windows, but `opennextjs-cloudflare build` is
-  more reliable in Linux/CI or WSL because OpenNext may need symlink behavior
-  that native Windows shells can block.
+-
