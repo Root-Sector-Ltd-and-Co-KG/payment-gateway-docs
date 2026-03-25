@@ -5,9 +5,11 @@ description: Management API — checkouts, transactions, invoices, clients, site
 
 # Admin API
 
-**Base URL:** `https://api.yourcompany.com/v1`
+**Base URL (canonical on the service):** `https://<your-admin-backend-host>/api/v1` — your deployment sets the host via **`ADMIN_BACKEND_DOMAIN`**. Self-hosted examples often use `api.yourcompany.com` or `api.example.com`; hosted production uses **`https://api.payment-gateway.app`** — [Hostnames & DNS conventions](../deployment/domains).
 
-The Admin Backend is the primary integration surface for server-side automation. Public integrations usually call it on the configured API domain. Proxy configs and backend code may also refer to the same handlers under `/api/v1`. All endpoints require an **API Key** or **JWT** in the `Authorization: Bearer` header.
+**Shorter public path (default reverse proxy):** same host with `/v1/...` — **`payment-gateway-reverseproxy/Caddyfile`** rewrites `/v1/*` → `/api/v1/*` on `{$ADMIN_BACKEND_DOMAIN}` before proxying to the Admin Backend.
+
+The Admin Backend is the primary integration surface for server-side automation. All endpoints require an **API Key** or **JWT** in the `Authorization: Bearer` header.
 
 For merchant integrations, this is the API you should target. Use **Organization API keys** for organization-scoped automation. **System API keys** are intended for global administrative tasks such as platform provisioning or system-wide automation.
 
@@ -36,29 +38,33 @@ GET  /api/v1/auth/login/check             # Check if current JWT is valid
 
 ## Checkouts
 
-| Method  | Path                               | Required Scope    | Description                      |
-| ------- | ---------------------------------- | ----------------- | -------------------------------- |
-| `POST`  | `/api/v1/checkouts/:siteId/create` | `checkout:create` | Create a checkout URL for a site |
-| `GET`   | `/api/v1/checkouts`                | `checkout:read`   | List all checkouts               |
-| `GET`   | `/api/v1/checkouts/:id`            | `checkout:read`   | Get a checkout by ID             |
-| `PATCH` | `/api/v1/checkouts/:id`            | `checkout:update` | Update checkout metadata         |
+| Method  | Path                                | Required Scope    | Description                              |
+| ------- | ----------------------------------- | ----------------- | ---------------------------------------- |
+| `POST`  | `/api/v1/checkouts/{siteId}/create` | `checkout:create` | Create a checkout session for a **site** |
+| `GET`   | `/api/v1/checkouts`                 | `checkout:read`   | List all checkouts                       |
+| `GET`   | `/api/v1/checkouts/{checkoutId}`    | `checkout:read`   | Get a checkout by **checkout** ID        |
+| `PATCH` | `/api/v1/checkouts/{checkoutId}`    | `checkout:update` | Update checkout metadata                 |
+
+> [!IMPORTANT]
+> The `{siteId}` in the **create** path is your **Site** MongoDB ObjectId (from **Sites → Edit**). The `{checkoutId}` in **get** / **patch** is the **checkout document** id — not the site id.
 
 ### Create Checkout
 
 ```http
-POST /v1/checkouts/{siteId}/create
+POST /api/v1/checkouts/{siteId}/create
 Authorization: Bearer sk_live_keyid.secret
 Content-Type: application/json
 ```
 
 > [!NOTE]
-> The example above uses the public `/v1` API surface. If you are reading backend router code or reverse proxy rules, you may see the same route represented internally as `/api/v1/checkouts/:siteId/create`.
+> Path examples below use `/api/v1/...` as registered in the Admin Backend. On `{$ADMIN_BACKEND_DOMAIN}` with the default Caddyfile, the same handlers are reachable at `/v1/...`.
 
 ```json
 {
   "currency": "EUR",
   "successUrl": "https://yourapp.com/success?txId={transactionId}",
   "cancelUrl": "https://yourapp.com/cancel",
+  "ipnUrl": "https://yourapp.com/webhooks/payment-ipn",
   "externalReference": "order_12345",
   "lineItems": [
     {
@@ -78,15 +84,20 @@ Content-Type: application/json
 > [!NOTE]
 > `{transactionId}` in `successUrl`/`cancelUrl` is a literal template placeholder — the gateway substitutes the actual transaction ID at redirect time.
 
-**Response `201`:**
+Optional **`ipnUrl`** sets where the Main Backend sends [outbound IPN](./webhooks#outbound-ipn-to-your-application) for transactions created from this checkout; the **Webhook Signing Secret** on the Site is used to sign those requests.
+
+**Response `200`:**
 
 ```json
 {
-  "checkoutId": "checkout_abc",
-  "checkoutUrl": "https://pay.yourcompany.com/checkout/abc123",
-  "expiresAt": "2026-03-08T15:00:00Z"
+  "id": "507f1f77bcf86cd799439011",
+  "sessionPublicId": "abc123xyz789def456",
+  "shortCode": "aB3xK9mw2P",
+  "paymentUrl": "https://secure.payment-gateway.app/checkout/aB3xK9mw2P"
 }
 ```
+
+`paymentUrl` is always on **`MAIN_FRONTEND_DOMAIN`** (hosted: `secure.payment-gateway.app`). See [Hostnames & DNS conventions](../deployment/domains).
 
 ---
 

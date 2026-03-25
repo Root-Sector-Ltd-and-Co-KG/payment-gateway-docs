@@ -5,7 +5,7 @@ description: Buyer-facing and provider-facing endpoints used by hosted checkout,
 
 # Main Backend Public Endpoints
 
-**Base URL:** `https://api.yourcompany.com/api/v1`
+**Base URL:** `https://<your-main-backend-host>/api/v1` — your deployment sets the host via **`MAIN_BACKEND_DOMAIN`**. Self-hosted examples often use `webhook.yourcompany.com` or `webhook.example.com`; hosted production uses **`https://webhook.payment-gateway.app`** — [Hostnames & DNS conventions](../deployment/domains), [Self-Hosted Installation](../getting-started/installation).
 
 The Main Backend handles buyer-facing runtime operations: serving checkout sessions, processing transaction submissions, powering the customer portal, validating VAT IDs, and receiving incoming provider webhooks.
 
@@ -24,7 +24,9 @@ GET /api/v1/checkouts/:id
 
 Retrieves a checkout session by its public ID. Used by the Main Frontend to render the payment page.
 
-**Authentication:** None (public endpoint with CORS allowed from configured frontend domain).
+**Authentication:** No API key/JWT required. **License enforcement applies** (requests are denied when license state is `BLOCKED` or `NOT_ACTIVATED`).
+
+**Browser access (CORS):** This endpoint enforces an **Origin allow-list** derived from the Site/Organization frontend domains plus `MPG_MAIN_FRONTEND_DOMAIN`. Requests without a valid `Origin` (or `Referer`) will be rejected with `403`.
 
 **Path Parameters:**
 
@@ -67,14 +69,14 @@ POST /api/v1/transactions/create
 
 Initiates a transaction for a checkout session. Called by the Main Frontend when the customer submits payment.
 
-**Authentication:** None (validated via checkout session context).
+**Authentication:** No API key/JWT required. **License enforcement applies** (requests are denied when license state is `BLOCKED` or `NOT_ACTIVATED`).
 
 **Request Body:**
 
 ```json
 {
-  "checkoutId": "abc123",
-  "providerId": "stripe_provider_id",
+  "sessionPublicId": "sess_pub_abc123xyz",
+  "providerId": "507f1f77bcf86cd799439011",
   "billingAddress": {
     "name": "Jane Smith",
     "email": "jane@example.com",
@@ -82,18 +84,16 @@ Initiates a transaction for a checkout session. Called by the Main Frontend when
     "city": "Berlin",
     "postalCode": "10115",
     "country": "DE"
-  },
-  "vatId": "DE123456789"
+  }
 }
 ```
 
-**Response `201`:**
+**Response `200`:**
 
 ```json
 {
-  "transactionId": "txn_xyz",
-  "status": "initiated",
-  "redirectUrl": "https://stripe.com/pay/..."
+  "transactionId": "67c8e2f7d6ef0dc8a3fa2011",
+  "status": 0
 }
 ```
 
@@ -148,8 +148,7 @@ Validates a VAT ID via the EU VIES system. No authentication required.
 
 ```json
 {
-  "vatId": "DE123456789",
-  "countryCode": "DE"
+  "vatId": "DE123456789"
 }
 ```
 
@@ -158,7 +157,7 @@ Validates a VAT ID via the EU VIES system. No authentication required.
 ```json
 {
   "valid": true,
-  "name": "Example GmbH",
+  "companyName": "Example GmbH",
   "address": "Musterstraße 1, 10115 Berlin"
 }
 ```
@@ -219,6 +218,12 @@ Exchanges an OTP for a portal session token.
   "token": "portal_session_token",
   "expiresAt": "2026-03-08T16:00:00Z"
 }
+```
+
+Upon OTP verification, the backend issues a **signed portal session token** (opaque bearer token). It is **not a JWT**; treat it as an opaque credential and send it as:
+
+```http
+Authorization: Bearer <portal_session_token>
 ```
 
 ### Get Portal Session
@@ -380,11 +385,13 @@ Initiates a GoCardless billing request mandate. Called during the direct debit c
 
 ## Webhooks (Inbound)
 
+Registered on the **Main Backend HTTP root** (not under `/api/v1`):
+
 ```http
 POST /hooks/:type/:providerId
 ```
 
-Receives inbound webhook events from payment providers. Not called by your code — configured in the provider dashboard.
+Receives inbound webhook events from payment providers. Not called by your code — configure the full URL (including your Main API host) in the provider dashboard.
 
 | `type`       | Provider                              |
 | ------------ | ------------------------------------- |

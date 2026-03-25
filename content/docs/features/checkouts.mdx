@@ -14,11 +14,11 @@ From the **Checkouts** tab, you can view all active and historical payment sessi
 You have two primary ways to create a Checkout session:
 
 1. **Dashboard (Manual)**: For ad-hoc invoices or personalized payment links, you can use the **Create Checkout** interface directly in the Admin Panel. You define the line items, the currency, and the assigned Site, and the system generates a shareable URL.
-2. **API Integration**: Your trusted server-side runtime (backend service, worker, or secure edge function) can programmatically create checkout sessions by calling `https://api.yourcompany.com/v1/checkouts/{siteId}/create` on your configured API domain. Authenticate with an `sk_...` Organization API key as a Bearer token.
+2. **API Integration**: Your trusted server-side runtime (backend service, worker, or secure edge function) can programmatically create checkout sessions by calling `POST /v1/checkouts/{siteId}/create` (or `/api/v1/...`) on **`ADMIN_BACKEND_DOMAIN`** — e.g. `https://api.yourcompany.com/v1/...` self-hosted or `https://api.payment-gateway.app/v1/...` hosted. Authenticate with an `sk_...` Organization API key as a Bearer token. Do not use **Main Backend** (`MAIN_BACKEND_DOMAIN`, e.g. `webhook.*`) for this call; that host serves `/hooks/...` and checkout **runtime** only — [Hostnames & DNS conventions](../deployment/domains).
 
 ## The Customer Experience
 
-Once a Checkout is created, it yields a unique URL (e.g., `https://pay.yourcompany.com/checkout/xyz123`).
+Once a Checkout is created, it yields a unique URL on **`MAIN_FRONTEND_DOMAIN`** (e.g. `https://secure.yourcompany.com/checkout/xyz123` or hosted `https://secure.payment-gateway.app/checkout/xyz123`).
 
 This URL is served by the **Main Frontend** (Payment Portal). When navigating to this page, the platform will:
 

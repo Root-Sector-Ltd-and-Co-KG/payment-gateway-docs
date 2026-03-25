@@ -46,9 +46,19 @@ graph TB
     Provider -->|Webhook IPN| MB
 
     AB --> Worker
+    MB --> Worker
     Worker --> Gotenberg
     Worker --> Mongo
+
+    Caddy -.->|ACME / TLS storage| Mongo
+    Caddy -.->|on-demand TLS verify| AB
 ```
+
+Which service receives traffic for a given hostname and path is determined by the default **`payment-gateway-reverseproxy/Caddyfile`**. The diagram **rolls four public hostnames into one Caddy box**: merchant **create-checkout** calls go to **`ADMIN_BACKEND_DOMAIN`**, the customer **checkout UI** to **`MAIN_FRONTEND_DOMAIN`**, checkout **runtime APIs** and **provider webhooks** to **`MAIN_BACKEND_DOMAIN`**, and the **Admin Panel** to **`ADMIN_FRONTEND_DOMAIN`** (with `/api/*` on that host proxied to the Admin Backend — see the Caddyfile). **Mongo Express**, the **`:443` catch-all** for custom checkout domains, and **registry / licensing** traffic are omitted here; see [Hostnames & DNS conventions](../deployment/domains).
+
+The shipped Caddy image uses the **`storage mongodb`** block so certificate metadata is written to the same MongoDB deployment (a separate concern from application collections). For **on-demand TLS**, Caddy’s `ask` URL targets the Admin Backend **`/api/v1/domains/verify`**. **Both** backends proxy invoice PDF bytes from the **Worker** (admin downloads and customer portal flows).
+
+Hosted reference names (`api.payment-gateway.app`, `webhook.payment-gateway.app`, etc.) and self-hosted examples are summarized in [Hostnames & DNS conventions](../deployment/domains). For **which host** to use for merchant server calls vs provider webhooks, follow [Server integration checklist](../getting-started/integration-checklist).
 
 ---
 
@@ -60,17 +70,18 @@ sequenceDiagram
     participant AB as Admin Backend
     participant DB as MongoDB
     participant MF as Main Frontend
+    participant MB as Main Backend
     participant P as Payment Provider
 
-    M->>AB: POST /v1/checkouts/{siteId}/create
+    M->>AB: POST /api/v1/checkouts/{siteId}/create
     AB->>AB: Validate API key scope (checkout:create)
     AB->>DB: Create checkout session record
-    AB-->>M: { checkoutUrl, checkoutId }
+    AB-->>M: { paymentUrl, id, sessionPublicId, shortCode? }
 
-    Note over M: Redirect customer to checkoutUrl
+    Note over M: Redirect customer to paymentUrl
 
     M->>MF: Customer opens checkout page
-    MF->>MB: GET /api/v1/checkouts/{id}
+    MF->>MB: GET /api/v1/checkouts/{sessionPublicId}
     MB->>DB: Fetch session + branding
     MB-->>MF: Session data + provider config
 
@@ -86,6 +97,9 @@ sequenceDiagram
     MB-->>MF: { transactionId, status, redirectUrl }
 ```
 
+> [!NOTE]
+> **TLS** terminates at **Caddy** (not shown as a separate hop). In production, the merchant server calls **`ADMIN_BACKEND_DOMAIN`** for `POST …/checkouts/…/create`; the customer opens **`paymentUrl`** on **`MAIN_FRONTEND_DOMAIN`**; the checkout app then calls **`MAIN_BACKEND_DOMAIN`** for `GET`/`POST /api/v1/...` as above. Paths match the Main Backend router under `/api/v1`.
+
 ---
 
 ## Request Flow — Webhook to Transaction Update
@@ -98,15 +112,17 @@ sequenceDiagram
     participant W as Your Application
 
     P->>MB: POST /hooks/stripe/{providerId}
-    MB->>MB: Verify HMAC signature
-    MB->>DB: Fetch provider + decrypt webhook secret
+    MB->>MB: Verify provider signature (e.g. Stripe-Signature)
+    MB->>DB: Fetch provider + webhook secret
     MB->>MB: Parse event type (payment_intent.succeeded)
     MB->>DB: Update transaction status to succeeded
     MB->>DB: Create invoice if configured
-    MB->>W: POST IPN payload to Site webhook URL
+    MB->>W: POST signed IPN to checkout ipnUrl (if set)
     W-->>MB: 200 OK
     MB-->>P: 200 OK
 ```
+
+Provider callbacks use **`MAIN_BACKEND_DOMAIN`** with paths under **`/hooks/...`** (no `/api/v1` prefix). The outbound **IPN** to your application is optional and only runs when the checkout specifies an `ipnUrl`.
 
 ---
 
@@ -174,7 +190,7 @@ graph TD
 stateDiagram-v2
     [*] --> initiated : Customer submits checkout
     initiated --> pending_provider : Async payment GoCardless or Wire
-    initiated --> succeeded : Instant payment Stripe card
+    initiated --> succeeded : Card / wallet often immediate
     initiated --> failed : Payment rejected
     pending_provider --> succeeded : Provider webhook confirms
     pending_provider --> failed : Provider webhook fails

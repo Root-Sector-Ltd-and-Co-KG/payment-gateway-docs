@@ -1,0 +1,57 @@
+---
+title: Hostnames & DNS conventions
+description: Reference subdomains for the hosted Payment Gateway platform, mapping to Caddy and Compose variables, plus self-hosted naming patterns.
+---
+
+# Hostnames & DNS conventions
+
+Use this page as the **canonical list** of first-party hostnames and how they relate to deploy environment variables. Generic examples elsewhere (`yourcompany.com`, `example.com`) illustrate the same roles under your own DNS zone.
+
+---
+
+## Reference: `*.payment-gateway.app` (hosted stack)
+
+The hosted platform uses a fixed subdomain layout. Each hostname maps to the **`payment-gateway-reverseproxy/Caddyfile`** site block driven by the corresponding variable in Docker Compose / Podman deploy:
+
+| Hostname                                | Deploy / Caddy variable | What it serves                                                                                                                       |
+| --------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `https://dashboard.payment-gateway.app` | `ADMIN_FRONTEND_DOMAIN` | Admin Panel (WebAuthn, organizations, settings)                                                                                      |
+| `https://api.payment-gateway.app`       | `ADMIN_BACKEND_DOMAIN`  | Admin API — Organization API keys, `POST /v1/checkouts/{siteId}/create`, management REST                                             |
+| `https://secure.payment-gateway.app`    | `MAIN_FRONTEND_DOMAIN`  | Hosted checkout UI and customer portal                                                                                               |
+| `https://webhook.payment-gateway.app`   | `MAIN_BACKEND_DOMAIN`   | Main Backend — provider webhooks (`/hooks/...`), checkout runtime (`/api/v1/checkouts/...`), Apple Pay domain association, `/health` |
+
+> [!IMPORTANT]
+> **Do not** point provider webhook URLs or browser checkout runtime traffic at `api.payment-gateway.app`. Webhooks and public checkout APIs for the hosted stack belong on **`webhook.payment-gateway.app`** (`MAIN_BACKEND_DOMAIN`).
+
+**Sandbox / test** tiers often use parallel names (for example `test-api.payment-gateway.app` for the Admin API). Use the hostnames your operator gives you for that environment.
+
+**Merchant custom domains** (buyer-facing checkout on the merchant’s own DNS) are **additional** hostnames, verified in the Admin Panel and served via on-demand TLS — see [Caddy reverse proxy](./caddy).
+
+---
+
+## Self-hosted naming pattern
+
+On your own infrastructure you assign DNS under **your** zone. Typical choices mirror the hosted layout:
+
+| Role                               | Example placeholders in docs                           |
+| ---------------------------------- | ------------------------------------------------------ |
+| Admin frontend                     | `dashboard.yourcompany.com` or `admin.yourcompany.com` |
+| Admin API                          | `api.yourcompany.com`                                  |
+| Main frontend (checkout / portal)  | `secure.yourcompany.com` or `pay.yourcompany.com`      |
+| Main backend (hooks + runtime API) | `webhook.yourcompany.com`                              |
+
+Variable names and a worked `example.com` table: [Self-Hosted Installation](../getting-started/installation). Routing and `/v1` rewrites: [Caddy reverse proxy](./caddy). Integration order (webhooks → API key → checkout → IPN): [Server integration checklist](../getting-started/integration-checklist).
+
+---
+
+## Licensing, registry, and operator portal
+
+These endpoints are for **operators**, image pulls, and license activation — not for merchant Admin API or checkout traffic:
+
+| Host / URL                                  | Role                                                     |
+| ------------------------------------------- | -------------------------------------------------------- |
+| `https://payment-gateway.app`               | Operator license portal (account and license management) |
+| `https://registry.payment-gateway.app`      | Private OCI container registry                           |
+| `https://registry-auth.payment-gateway.app` | Registry token service                                   |
+
+Self-hosted stacks need **outbound HTTPS** to these services (and the license portal) to pull images and complete activation — see [Self-Hosted Installation](../getting-started/installation).

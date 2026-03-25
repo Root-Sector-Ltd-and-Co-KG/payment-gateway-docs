@@ -12,7 +12,7 @@ This guide walks through the complete journey after the stack is already install
 Before starting, ensure you have:
 
 - A running Payment Gateway deployment (start with [Self-Hosted Installation](./installation))
-- Admin Panel access at your configured admin domain (e.g., `admin.yourcompany.com`)
+- Admin Panel access at your **`ADMIN_FRONTEND_DOMAIN`** (e.g. `dashboard.yourcompany.com` or `admin.yourcompany.com`; hosted: `dashboard.payment-gateway.app` — [Hostnames & DNS conventions](../deployment/domains))
 - A payment provider account — Stripe is the easiest to start with (see [Provider Setup](./provider-setup))
 
 ## Step 1 — Log In to the Admin Panel
@@ -67,7 +67,7 @@ The simplest way to test is through the Admin Panel:
 3. Add a line item: name, quantity, and amount.
 4. Click **Generate Checkout URL**.
 
-The system returns a URL like `https://pay.yourcompany.com/checkout/abc123`. Open it in a browser to see the customer-facing payment page.
+The system returns a URL on your **main frontend** host (`MAIN_FRONTEND_DOMAIN`), e.g. `https://secure.yourcompany.com/checkout/abc123` or hosted `https://secure.payment-gateway.app/checkout/abc123` — [Hostnames & DNS conventions](../deployment/domains).
 
 ## Step 6 — Create a Checkout Session via API
 
@@ -81,6 +81,7 @@ curl -X POST https://api.yourcompany.com/v1/checkouts/{siteId}/create \
     "currency": "EUR",
     "successUrl": "https://yourapp.com/success?txId={transactionId}",
     "cancelUrl": "https://yourapp.com/cancel",
+    "ipnUrl": "https://yourapp.com/webhooks/payment-ipn",
     "lineItems": [
       {
         "name": "Professional Plan",
@@ -95,20 +96,20 @@ curl -X POST https://api.yourcompany.com/v1/checkouts/{siteId}/create \
 > Find your **Site ID** in the Admin Panel under **Sites → [your site]** — it appears in the page URL (e.g., `sites/6507f1f3...`).
 
 > [!NOTE]
-> Use your configured **API domain** for server-to-server calls. The Admin Panel usually lives on a separate frontend domain such as `admin.yourcompany.com`.
+> Use **`ADMIN_BACKEND_DOMAIN`** for this `curl` host (e.g. `api.yourcompany.com`; hosted: `api.payment-gateway.app`). The Admin Panel is on **`ADMIN_FRONTEND_DOMAIN`** (e.g. `dashboard.yourcompany.com`; hosted: `dashboard.payment-gateway.app`) — [Hostnames & DNS conventions](../deployment/domains).
 
 > [!NOTE]
 > All amounts are in the **smallest currency unit** (cents for EUR/USD, pence for GBP). `4900` = €49.00.
 
-The response includes a `checkoutUrl` field. Redirect your customer there.
+The JSON response includes **`paymentUrl`** (and `sessionPublicId`, `id`, optional `shortCode`). Redirect your customer to `paymentUrl` to open the hosted checkout.
 
 ## Step 7 — Receive the Webhook Confirmation
 
-After the customer pays, the payment provider sends a webhook to your gateway. The gateway normalizes it and records a `succeeded` transaction.
+After the customer pays, the payment provider sends a webhook to your **Main Backend**. The gateway verifies the signature, normalizes the event, and updates the transaction.
 
-To be notified in your own system, configure a **Webhook URL** on the Site (see [Sites & Domains](../features/sites)) pointing to your backend. The gateway will POST a signed payload whenever a transaction changes state.
+To be notified on **your** server, pass **`ipnUrl`** when creating the checkout (as in Step 6) and verify posts with the **Webhook Signing Secret** from **Sites → Edit Site** — see [Webhooks & IPN](../api-reference/webhooks) for headers, payload shape, and signature algorithm.
 
-See [Webhooks & IPN](../api-reference/webhooks) for event types and payload schemas.
+See the same page for **inbound** provider webhooks vs **outbound** IPN to your `ipnUrl`.
 
 ## Step 8 — View the Transaction
 
@@ -116,6 +117,7 @@ Navigate to **Transactions** in the Admin Panel. Your completed payment appears 
 
 ## What's Next
 
+- [Server integration checklist](./integration-checklist) — Ordered steps for APIs, webhooks, and IPN (skip if you only use the dashboard)
 - [Provider Setup Guides](./provider-setup) — Detailed Stripe, GoCardless, and Wise configuration
 - [Testing in Sandbox Mode](./testing) — Use test API keys and simulate payment flows
 - [API Reference](../api-reference) — Full endpoint documentation for programmatic integration

@@ -23,13 +23,14 @@ Stripe is the recommended starting point — it supports cards (Visa, Mastercard
 
 ### 2. Register the Webhook Endpoint
 
-Stripe must be told where to send payment event notifications.
+Stripe must be told where to send payment event notifications. The URL must be on your **Main Backend** host (`MAIN_BACKEND_DOMAIN` — hosted: `webhook.payment-gateway.app`) — [Hostnames & DNS conventions](../deployment/domains).
 
 1. In Stripe Dashboard, go to **Developers → Webhooks → Add endpoint**.
 2. Set the **Endpoint URL** to:
    ```
-   https://api.yourcompany.com/hooks/stripe/{providerId}
+   https://webhook.yourcompany.com/hooks/stripe/{providerId}
    ```
+   (Hosted: `https://webhook.payment-gateway.app/hooks/stripe/{providerId}`.)
    The `{providerId}` is the MongoDB ObjectId of your provider record — visible in the Admin Panel URL after you create the provider.
 3. Under **Events to listen to**, select **All events** (or at minimum: `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`, `charge.dispute.created`).
 4. Click **Add endpoint**.
@@ -65,11 +66,14 @@ GoCardless handles direct debit / bank mandates. Customers authorize recurring d
 
 ### 2. Register the Webhook Endpoint
 
+Use your **Main Backend** host (`MAIN_BACKEND_DOMAIN` — hosted: `webhook.payment-gateway.app`) — [Hostnames & DNS conventions](../deployment/domains).
+
 1. In GoCardless Dashboard, go to **Developers → Webhooks → Create Webhook**.
 2. Set the **URL** to:
    ```
-   https://api.yourcompany.com/hooks/gocardless/{providerId}
+   https://webhook.yourcompany.com/hooks/gocardless/{providerId}
    ```
+   (Hosted: `https://webhook.payment-gateway.app/hooks/gocardless/{providerId}`.)
 3. Generate and copy the **Webhook Secret**.
 
 ### 3. Add Provider in Admin Panel

@@ -35,21 +35,31 @@ Each site can maintain its own:
 
 To interact programmatically with the Payment Gateway (for example, to create a Checkout Session from your own backend), you must generate an **Organization API Key**.
 
-1. Navigate to **Settings > API Keys** in the Admin panel.
-2. Generate a new key and assign it specific scopes (e.g., `checkout:create`).
+1. Navigate to **Settings → API Keys** in the Admin panel.
+2. Generate a new key and assign it specific scopes (for example `checkout:create` for creating checkout sessions from your server or official plugins).
 3. The system returns a secret token (formatted like `sk_<id>.<secret>`).
 
 Your trusted server-side runtime should use this key as a Bearer token to
-authenticate REST requests against your configured API domain:
+authenticate REST requests against your configured **Admin API** host (not the Main Backend / payment-hooks host):
 
 ```http
 POST https://api.yourcompany.com/v1/checkouts/{siteId}/create
 Authorization: Bearer sk_<id>.<secret>
 ```
 
+The same request works with the backend’s canonical path prefix: `POST https://api.yourcompany.com/api/v1/checkouts/{siteId}/create`. The default **`payment-gateway-reverseproxy/Caddyfile`** rewrites `/v1/*` to `/api/v1/*` on `{$ADMIN_BACKEND_DOMAIN}`, so integrations can use the shorter URL (for example `https://test-api.payment-gateway.app/v1/...`).
+
+> [!NOTE]
+> Use your real **`ADMIN_BACKEND_DOMAIN`** value (often `api.*`; hosted: `api.payment-gateway.app`). Provider webhooks and checkout **runtime** use **`MAIN_BACKEND_DOMAIN`** (often `webhook.*`; hosted: `webhook.payment-gateway.app`) — [Hostnames & DNS conventions](../deployment/domains), [Self-Hosted Installation](../getting-started/installation).
+
+> [!NOTE]
+> `{siteId}` is the **Site** id (MongoDB ObjectId from **Sites → Edit**).
+
+For turnkey store integrations (WooCommerce, aMember Pro), see [E‑commerce integrations](./ecommerce-integrations).
+
 The API domain is typically separate from the Admin Panel domain. Operators log
-into the dashboard on a frontend host such as `admin.yourcompany.com`, while
-backend integrations call the public API host.
+into the dashboard on **`ADMIN_FRONTEND_DOMAIN`** (e.g. `dashboard.yourcompany.com` or `admin.yourcompany.com`; hosted: `dashboard.payment-gateway.app`), while
+backend integrations call **`ADMIN_BACKEND_DOMAIN`** (e.g. `api.yourcompany.com`; hosted: `api.payment-gateway.app`).
 
 > [!CAUTION]
 > Treat your API key like a password. Never expose it in browser/mobile client code (`HTML`, `JS`, app bundles). Use it only in trusted server-side runtimes you control (for example: backend services, server-side workers, or secure edge functions).

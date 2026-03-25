@@ -11,36 +11,41 @@ The **Customer Portal** is a branded, self-service interface where your buyers c
 
 Because the portal houses sensitive financial documents, it employs strict, passwordless authentication.
 
-1. **One-Time Password (OTP)**: Customers enter the email address they used during checkout at your portal's URL (e.g., `invoices.yourdomain.com`).
+1. **One-Time Password (OTP)**: Customers enter the email address they used during checkout at your portal URL (by default: `https://<MAIN_FRONTEND_DOMAIN>/portal`; e.g. `https://pay.yourdomain.com/portal`).
 2. **Email Verification**: The system securely dispatches a time-sensitive 6-digit OTP to their inbox.
-3. **Session Issuance**: Upon entering the correct OTP, the backend exchanges it for a secure JWT (JSON Web Token), granting read-only access to their specific Organization-bound Client profile.
+3. **Session Issuance**: Upon entering the correct OTP, the backend exchanges it for a signed portal session token (opaque bearer token), granting read-only access to their specific Organization-bound Client profile.
 
 ## Portal Capabilities
 
 Once authenticated, customers are presented with a clean interface featuring your Site's branding. They can independently perform the following actions:
 
 ### Document Retrieval
+
 Customers can view a chronological list of every `issued` invoice or credit note associated with their email. They can:
-*   Download the standard PDF document.
-*   Download the legally compliant XML E-Invoice (ZUGFeRD, Peppol, XRechnung) required for corporate accounting in the EU.
+
+- Download the standard PDF document.
+- Download the legally compliant XML E-Invoice (ZUGFeRD, Peppol, XRechnung) required for corporate accounting in the EU.
 
 ### Subscription Management
+
 If the customer is enrolled in a visible Recurring Schedule, the portal displays their subscriptions alongside the current recurring state.
-*   They can view the current subscription status (`active`, `paused`, `cancel_requested`, `cancelled`, `completed`).
-*   They can review the next billing date, upcoming charge estimates, and optional proforma previews where configured.
-*   They can request cancellation for future cycles directly from the customer portal.
+
+- They can view the current subscription status (`active`, `paused`, `cancel_requested`, `cancelled`, `completed`).
+- They can review the next billing date, upcoming charge estimates, and optional proforma previews where configured.
+- They can request cancellation for future cycles directly from the customer portal.
 
 ### Cancellation Semantics
 
 Customer portal cancellation is designed to be idempotent and state-aware:
 
-* Future-cycle subscriptions move into `cancel_requested` and stop generating further billing after the effective cycle date.
-* Paused subscriptions, or subscriptions with no remaining future cycle, are cancelled immediately.
-* Repeated cancellation requests return the current state instead of creating duplicate mutations.
-* Already issued invoices remain unchanged; customer portal cancellation only affects future recurring runs.
+- Future-cycle subscriptions move into `cancel_requested` and stop generating further billing after the effective cycle date.
+- Paused subscriptions, or subscriptions with no remaining future cycle, are cancelled immediately.
+- Repeated cancellation requests return the current state instead of creating duplicate mutations.
+- Already issued invoices remain unchanged; customer portal cancellation only affects future recurring runs.
 
 ## Security Architecture
 
 The Customer Portal is isolated from the admin control plane and only exposes narrowly scoped customer self-service mutations.
-*   **Scoped Access Vectors**: The `PortalInvoiceService` handles invoice reads, upcoming recurring previews, and customer-initiated future-cycle cancellation while preventing unauthorized access to foreign Client records (preventing Insecure Direct Object Reference vulnerabilities).
-*   **OTP Reuse Prevention**: Once an OTP is consumed or expires (usually within 15 minutes), it is cryptographically invalidated to prevent replay attacks.
+
+- **Scoped Access Vectors**: The `PortalInvoiceService` handles invoice reads, upcoming recurring previews, and customer-initiated future-cycle cancellation while preventing unauthorized access to foreign Client records (preventing Insecure Direct Object Reference vulnerabilities).
+- **OTP Reuse Prevention**: Once an OTP is consumed or expires (usually within 15 minutes), it is cryptographically invalidated to prevent replay attacks.

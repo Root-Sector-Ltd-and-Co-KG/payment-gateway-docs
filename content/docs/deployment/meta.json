@@ -3,6 +3,7 @@
   "pages": [
     "backup-recovery",
     "caddy",
+    "domains",
     "configuration",
     "data-processing-encryption",
     "data-protection",

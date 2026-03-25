@@ -1,4 +1,10 @@
 {
   "title": "Getting Started",
-  "pages": ["installation", "index", "provider-setup", "testing"]
+  "pages": [
+    "installation",
+    "index",
+    "integration-checklist",
+    "provider-setup",
+    "testing"
+  ]
 }

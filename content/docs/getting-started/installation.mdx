@@ -37,6 +37,8 @@ Point these hostnames to the public IP address of the machine where you will run
 
 The default Docker Compose templates expect all of these names to resolve before the first public deployment so Caddy can request TLS certificates successfully.
 
+Examples like `admin.example.com` / `pay.example.com` are common self-hosted choices; you may use any labels (for example `dashboard.example.com` and `secure.example.com`) as long as they match your env files consistently. The first-party **hosted** stack uses `dashboard`, `api`, `secure`, and `webhook` under `payment-gateway.app` — see [Hostnames & DNS conventions](../deployment/domains) (including **registry** hosts for image pull and licensing).
+
 ## Step 1: Retrieve Your License Registry Access
 
 Open the license dashboard and reveal the registry access values for the license you want to deploy.
@@ -100,6 +102,8 @@ REGISTRY_ACCESS_SECRET=<license_access_secret>
 RELEASE_METADATA_URL=https://payment-gateway.app/api/releases/metadata
 UPDATE_CHANNEL=stable
 ```
+
+These `REACT_APP_*` values are exposed via the frontend `/env` endpoint and used by the Admin UI to display/share the customer portal URL (`https://REACT_APP_MAIN_FRONTEND_DOMAIN/portal`) and other defaults.
 
 > [!NOTE]
 > `MONGO_EXPRESS_DOMAIN` is optional. If you do not want to expose Mongo Express publicly, remove that route from your reverse proxy configuration before going live.
@@ -205,6 +209,7 @@ For the full maintenance workflow, see [Updates & Automation](../deployment/upda
 Once the stack is running and licensed:
 
 - Continue with [Quick Start](./index) to create your first checkout flow
+- For a **custom backend** or plugin wiring (hostnames, provider webhooks on `MAIN_BACKEND_DOMAIN`, API keys, `POST` checkout, optional IPN), follow [Server integration checklist](./integration-checklist)
 - Use [Provider Setup](./provider-setup) to connect Stripe, GoCardless, Wise, or wire transfer
 - Use [Testing](./testing) before moving live traffic
 - Use [Docker Compose Deployment](../deployment/docker-compose) for platform-specific operational commands

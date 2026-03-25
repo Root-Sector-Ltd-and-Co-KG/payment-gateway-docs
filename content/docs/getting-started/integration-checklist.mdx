@@ -1,0 +1,82 @@
+---
+title: Server integration checklist
+description: Ordered checklist for programmatic checkout and webhooks — hostnames, provider setup, Admin API, and IPN verification.
+---
+
+# Server integration checklist
+
+Use this page when wiring a **custom backend** or reviewing an integration. Official plugins (WooCommerce, aMember) follow the same boundaries; see [E‑commerce integrations](../features/ecommerce-integrations).
+
+---
+
+## 1. Know your hostnames
+
+You need **four** public roles (often four DNS names). Do not send provider webhooks or checkout runtime traffic to the **Admin API** host.
+
+| Role                                      | Env variable            | Hosted example                  |
+| ----------------------------------------- | ----------------------- | ------------------------------- |
+| Admin Panel (browser UI)                  | `ADMIN_FRONTEND_DOMAIN` | `dashboard.payment-gateway.app` |
+| **Admin API** (your server → gateway)     | `ADMIN_BACKEND_DOMAIN`  | `api.payment-gateway.app`       |
+| Checkout / customer portal (browser)      | `MAIN_FRONTEND_DOMAIN`  | `secure.payment-gateway.app`    |
+| **Main Backend** (webhooks + runtime API) | `MAIN_BACKEND_DOMAIN`   | `webhook.payment-gateway.app`   |
+
+Full map, registry hosts, and self-hosted examples: [Hostnames & DNS conventions](../deployment/domains). Routing details: [Caddy reverse proxy](../deployment/caddy).
+
+---
+
+## 2. Register provider webhooks on the Main Backend
+
+Stripe, GoCardless, and similar send events to **`MAIN_BACKEND_DOMAIN`**, path **`/hooks/{type}/{providerId}`** (no `/api/v1` prefix).
+
+1. Create the provider in the Admin Panel and note the **provider id** (MongoDB ObjectId in the URL).
+2. In the provider dashboard, set the webhook URL to  
+   `https://<MAIN_BACKEND_DOMAIN>/hooks/stripe/<providerId>` (or `gocardless`, etc.).
+3. Save the **webhook signing secret** into the provider record in the Admin Panel.
+
+Step-by-step: [Provider setup](./provider-setup). Reference: [Webhooks & IPN](../api-reference/webhooks).
+
+---
+
+## 3. Create an Organization API key
+
+1. **Settings → API Keys** → create a key with at least **`checkout:create`** (and any read scopes you need).
+2. Store the secret once; use **`Authorization: Bearer sk_...`** on Admin API requests only.
+
+Never call the Admin API from untrusted browsers; keys are server-side only.
+
+---
+
+## 4. Create checkout sessions via the Admin API
+
+- **Host:** `ADMIN_BACKEND_DOMAIN` only.
+- **Path:** `POST /v1/checkouts/{siteId}/create` or `POST /api/v1/checkouts/{siteId}/create` (default Caddy rewrites `/v1` → `/api/v1` on the Admin API host).
+- **`{siteId}`** is the Site’s MongoDB ObjectId (**Sites → Edit**).
+
+Response includes **`paymentUrl`** on **`MAIN_FRONTEND_DOMAIN`** — redirect the customer there.
+
+Details and JSON body: [Admin API — Checkouts](../api-reference/admin-api#checkouts).
+
+---
+
+## 5. Optional — outbound IPN to your server
+
+If you need your own server notified on transaction status:
+
+1. Copy **Webhook Signing Secret** from **Sites → Edit Site** (`whsec_...`).
+2. Set **`ipnUrl`** when creating the checkout (HTTPS in production).
+3. Verify **`X-Signature-Timestamp`** and **`X-Signature-HMAC-SHA256`** on each POST — [Webhooks & IPN — Outbound IPN](../api-reference/webhooks#outbound-ipn-to-your-application).
+
+---
+
+## 6. Verify end-to-end
+
+- [Testing & sandbox](./testing) — test keys, Stripe CLI forwarding to `https://<MAIN_BACKEND_DOMAIN>/hooks/stripe/...`.
+- [Quick Start](./index) — full UI walkthrough including dashboard checkout creation.
+
+---
+
+## Related
+
+- [API Reference overview](../api-reference) — Admin API vs Main Backend
+- [Sites & Domains](../features/sites) — Site id, custom domains, API keys per site context
+- [Checkouts](../features/checkouts) — Dashboard vs API creation

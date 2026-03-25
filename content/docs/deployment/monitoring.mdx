@@ -15,10 +15,15 @@ Both backends expose two health endpoints that require no authentication:
 
 ```
 GET /health          → 200 OK if process is running (shallow)
-GET /internal/health → 200 OK if MongoDB + Redis are reachable (deep)
+GET /internal/health → deep health check with dependency checks
 ```
 
 Use the `/internal/health` endpoint for load balancer health checks and uptime monitors.
+
+Notes:
+
+- MongoDB is a **critical** dependency (failures make `/internal/health` non-200).
+- Cache (Redis/Garnet) is **non-critical** (failures are reported but do not necessarily fail overall health).
 
 **Example with curl:**
 
@@ -34,16 +39,16 @@ Both backends emit JSON-structured logs via Zerolog. Set `MPG_LOG_LEVEL=info` an
 
 **Log fields:**
 
-| Field | Description |
-|---|---|
-| `level` | Log level (`info`, `warn`, `error`) |
-| `time` | ISO 8601 timestamp |
-| `requestId` | Unique request identifier |
-| `method` | HTTP method |
-| `path` | Request path |
-| `status` | HTTP status code |
-| `latency` | Request duration (ms) |
-| `error` | Error message (on error levels) |
+| Field       | Description                         |
+| ----------- | ----------------------------------- |
+| `level`     | Log level (`info`, `warn`, `error`) |
+| `time`      | ISO 8601 timestamp                  |
+| `requestId` | Unique request identifier           |
+| `method`    | HTTP method                         |
+| `path`      | Request path                        |
+| `status`    | HTTP status code                    |
+| `latency`   | Request duration (ms)               |
+| `error`     | Error message (on error levels)     |
 
 ### Shipping Logs to Loki (Grafana)
 
@@ -96,8 +101,8 @@ otel-collector:
   volumes:
     - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
   ports:
-    - "4317:4317"   # OTLP gRPC
-    - "4318:4318"   # OTLP HTTP
+    - "4317:4317" # OTLP gRPC
+    - "4318:4318" # OTLP HTTP
 
 tempo:
   image: grafana/tempo:latest
@@ -155,13 +160,13 @@ Every request receives a unique `X-Request-ID` header. Log lines include this fi
 
 ## Alerting Recommendations
 
-| Condition | Suggested Alert |
-|---|---|
-| `/internal/health` returns non-200 | PagerDuty P1 |
-| `error` log rate > 10/min | PagerDuty P2 |
-| Transaction `failed` rate > 5% in 10 min | Slack warning |
-| Worker PDF job queue depth > 100 | Slack warning |
-| MongoDB connections > 80% of pool | Slack warning |
+| Condition                                | Suggested Alert |
+| ---------------------------------------- | --------------- |
+| `/internal/health` returns non-200       | PagerDuty P1    |
+| `error` log rate > 10/min                | PagerDuty P2    |
+| Transaction `failed` rate > 5% in 10 min | Slack warning   |
+| Worker PDF job queue depth > 100         | Slack warning   |
+| MongoDB connections > 80% of pool        | Slack warning   |
 
 Configure alerts in your observability platform (Grafana Alerting, Datadog Monitors, etc.) against these signals.
 

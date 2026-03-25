@@ -24,6 +24,11 @@ One of the main strategic advantages of the platform is continuity. Your payment
 - **Customer Portal**: Your buyer-facing invoice and subscription workspace, such as `secure.payment-gateway.app` in the first-party deployment, where end customers authenticate with OTP and manage their billing relationship.
 
 Both portals are deployment-specific. Product documentation uses the first-party domains only as examples; self-hosted customers can map their own domains and branding.
+
+**Application hostnames** on the hosted stack (`dashboard`, `api`, `secure`, `webhook` under `payment-gateway.app`) are summarized in [Hostnames & DNS conventions](./deployment/domains). **Registry and licensing** endpoints (`registry.payment-gateway.app`, `registry-auth.payment-gateway.app`) are covered there too.
+
+## Operations
+
 - **Flexible Deployment**: Docker Compose or rootless Podman on Linux, with automated upgrade tooling.
 - **Data Lifecycle Controls**: Organization-level retention settings plus GDPR-oriented backup and restore runbooks.
 
@@ -35,8 +40,10 @@ Both portals are deployment-specific. Product documentation uses the first-party
 
 ## Getting Started
 
+- [Hostnames & DNS conventions](./deployment/domains) — Hosted `*.payment-gateway.app` layout, env variables, registry hosts.
 - [Self-Hosted Installation](./getting-started/installation) — Install the stack with Docker Compose, required domains, license registry access, activation, and updates.
 - [Quick Start](./getting-started) — Set up your first hosted checkout flow.
+- [Server integration checklist](./getting-started/integration-checklist) — Hostnames, webhooks, Admin API, IPN.
 - [Features & User Guide](./features/organizations) — How to use the platform as a merchant.
 - [API Reference](./api-reference) — REST API documentation for programmatic integration.
 - [Architecture & Components](./architecture/components) — How the system fits together technically.

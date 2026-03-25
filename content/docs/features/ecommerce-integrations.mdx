@@ -1,0 +1,30 @@
+---
+title: E‑commerce integrations
+description: Official WooCommerce and aMember Pro plugins that connect your store to Payment Gateway App.
+---
+
+# E‑commerce integrations
+
+These extensions keep **providers, routing, and webhooks** in Payment Gateway App while your store shows a **single** payment method at checkout. Configure each plugin with your **Admin API** hostname (**`ADMIN_BACKEND_DOMAIN`** — no `https://` in the plugin field; hosted: `api.payment-gateway.app`), **Site ID**, an **API key** with the **`checkout:create`** scope (some plugin READMEs still say `checkout:write` — use the scope shown in Admin → API Keys), and the **Webhook Signing Secret** from **Sites → Edit Site** (used to verify IPN signatures). The plugin registers its own **IPN URL** on the store side; the gateway posts signed notifications to that URL when transaction status changes. See [Hostnames & DNS conventions](../deployment/domains).
+
+Full product documentation lives at [docs.payment-gateway.app](https://docs.payment-gateway.app), including API references and IPN verification details.
+
+## WooCommerce
+
+- **Repository:** [payment-gateway-plugin-woocommerce](https://github.com/Root-Sector-Ltd-and-Co-KG/payment-gateway-plugin-woocommerce) (official WooCommerce extension)
+- **Typical setup:** install the plugin ZIP, then **WooCommerce → Settings → Payments → Payment Gateway App** — set API domain (no `https://`), Site ID, API key, and Webhook Signing Secret (`whsec_…`).
+- **Inbound IPN:** the plugin registers `[your-store]/wc-api/wc_payment_gateway_app` and verifies `X-Signature-Timestamp` + `X-Signature-HMAC-SHA256` (same scheme as the core outbound IPN described in [Webhooks & IPN](../api-reference/webhooks)).
+
+## aMember Pro
+
+- **Repository:** [payment-gateway-plugin-amember](https://github.com/Root-Sector-Ltd-and-Co-KG/payment-gateway-plugin-amember) (official aMember Pro extension)
+- **Requirements:** aMember Pro 6.3+, PHP 8.2+, and a running Payment Gateway App instance.
+- **Typical setup:** upload the plugin per the README, enable it under **Configuration → Plugins**, then **Configuration → Setup/Configuration → Payment Gateway App** — same core fields as WooCommerce (API domain, Site ID, API key, Webhook Signing Secret).
+- **Inbound IPN:** `[your-amember-url]/payment/payment-gateway-app/ipn` with the same signature headers; the plugin applies replay protection on the timestamp (see the plugin README).
+
+## Related docs
+
+- [Server integration checklist](../getting-started/integration-checklist) — Same hostname and webhook rules for custom backends
+- [Sites & Domains](./sites) — Site ID and IPN URL on each site
+- [API Keys](./api-keys) — creating keys with the scopes your integration needs (official plugins use `checkout:create`)
+- [Webhooks & IPN](../api-reference/webhooks) — outbound IPN format and signature algorithm

@@ -11,27 +11,30 @@ You can monitor your real-time payment volume under the **Transactions** section
 
 ## Transaction Lifecycle
 
+The dashboard describes states in business terms (for example **initiated**, **pending provider**, **succeeded**). The Admin API, exports, and [outbound IPN](../api-reference/webhooks) payloads use **integer** `status` codes; see [Webhooks & IPN](../api-reference/webhooks) and API references for the numeric mapping.
+
 Transactions flow through several definitive states:
 
 1.  **`initiated`**: The customer has accessed the Checkout page and a payment intent has been formed with the upstream Provider, but no payment details have been finalized.
 2.  **`pending_provider`**: Often seen with asynchronous payment methods (e.g., SEPA Direct Debit or manual bank transfers). The system is awaiting final settlement confirmation via Webhook from the Provider.
 3.  **`succeeded`**: The funds have been successfully captured. The respective Invoice is automatically marked as paid.
-4.  **`failed`**: The payment attempt was rejected (e.g., insufficient funds, fraudulent card). 
+4.  **`failed`**: The payment attempt was rejected (e.g., insufficient funds, fraudulent card).
 
 ### Analyzing transaction logs
 
 By clicking on a specific Transaction, you can view the full metadata. This includes:
 
-*   **Timeline Events**: Every interaction with the payment provider, including HTTP request traces.
-*   **Tax Evidence**: For EU VAT OSS, the stored proof of customer location (e.g., matching IPs against billing addresses).
-*   **Provider Raw Data**: The unstructured JSON payload received directly from Stripe or GoCardless, useful for debugging webhook sync issues.
+- **Timeline Events**: Every interaction with the payment provider, including HTTP request traces.
+- **Tax Evidence**: For EU VAT OSS, the stored proof of customer location (e.g., matching IPs against billing addresses).
+- **Provider Raw Data**: The unstructured JSON payload received directly from Stripe or GoCardless, useful for debugging webhook sync issues.
+- **IPN Information** (when an IPN URL was set on the checkout): configured listener URL, attempt count, and last HTTP status from the Main Backend’s outbound IPN delivery.
 
 ## Operational Actions
 
 Support and Admin staff can directly manipulate active Transactions from this interface:
 
-*   **Refund**: Issues a request to the Provider to return the funds. This automatically triggers the generation of a legally compliant **Credit Note**.
-*   **Void**: Used to cancel an authorization before final capture.
+- **Refund**: Issues a request to the Provider to return the funds. This automatically triggers the generation of a legally compliant **Credit Note**.
+- **Void**: Used to cancel an authorization before final capture.
 
 > [!NOTE]
 > Refunding a transaction is an immutable action. The system will asynchronously query Garnet/Redis queues to guarantee idempotency and prevent double-spending refunds across simultaneous requests.

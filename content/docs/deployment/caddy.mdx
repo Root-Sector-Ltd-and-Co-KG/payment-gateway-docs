@@ -7,6 +7,10 @@ description: Configuring the Caddy reverse proxy with MongoDB-backed storage for
 
 The `payment-gateway-reverseproxy` module ships a customized Caddy build with a **MongoDB storage plugin** that stores TLS certificates and ACME challenge data in your existing MongoDB instance — eliminating the need for a shared filesystem between Caddy instances.
 
+**Canonical configuration:** default routing, rewrites, TLS storage, and security headers are defined only in **`payment-gateway-reverseproxy/Caddyfile`** at the root of that repository. This page summarizes that file; when in doubt, follow the Caddyfile.
+
+**Hosted reference hostnames** (`dashboard`, `api`, `secure`, `webhook` under `payment-gateway.app`) and self-hosted naming patterns are listed in [Hostnames & DNS conventions](./domains).
+
 ---
 
 ## Why Caddy with MongoDB Storage
@@ -19,56 +23,60 @@ Standard Caddy stores TLS certificates on the local filesystem. When running mul
 
 ---
 
-## Basic Caddyfile
+## Default `Caddyfile` layout
 
+Placeholders such as `{$ADMIN_BACKEND_DOMAIN}` are expanded from the environment when the container starts (see your deploy stack). **Specific server blocks must appear before the catch-all `:443` block** — the order in `payment-gateway-reverseproxy/Caddyfile` is intentional.
+
+### Global block
+
+- **`on_demand_tls.ask`:** `http://{$ADMIN_BACKEND_SERVICE}:{$ADMIN_BACKEND_SERVICE_PORT}/api/v1/domains/verify` — internal service URL is preferred so the proxy does not depend on public DNS to reach the Admin Backend.
+- **`storage mongodb`:** `{$MONGODB_URI}`, `{$MONGODB_DATABASE}`, `{$MONGODB_COLLECTION}` (and related options) persist certificates for HA and container replacement.
+- **`servers`:** `trusted_proxies` include Cloudflare CIDRs and `private_ranges`; `client_ip_headers CF-Connecting-IP X-Forwarded-For`.
+
+### Per-hostname routing (summary)
+
+| `Caddyfile` site address                                 | Proxied to                                           | Notable paths                                                                       |
+| -------------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `{$ADMIN_FRONTEND_DOMAIN}:{$ADMIN_FRONTEND_DOMAIN_PORT}` | Admin Backend for `/api/*`; otherwise Admin Frontend | Dashboard uses `/api/*` to reach the same Admin Backend as the dedicated API host.  |
+| `{$MONGO_EXPRESS_DOMAIN}:{$MONGO_EXPRESS_DOMAIN_PORT}`   | Mongo Express                                        | IP allowlist via `{$MONGO_EXPRESS_IP_WHITELIST}`.                                   |
+| `{$MAIN_FRONTEND_DOMAIN}:{$MAIN_FRONTEND_DOMAIN_PORT}`   | Main Frontend                                        | Hosted checkout UI and customer portal surfaces.                                    |
+| `{$ADMIN_BACKEND_DOMAIN}:{$ADMIN_BACKEND_DOMAIN_PORT}`   | Admin Backend                                        | **`/api/*`** pass-through; **`/v1/*`** → **`/api/v1/*`** then proxy; **`/health`**. |
+| `{$MAIN_BACKEND_DOMAIN}:{$MAIN_BACKEND_DOMAIN_PORT}`     | Main Backend                                         | **`/api/*`**, **`/hooks/*`**, Apple Pay domain association, **`/health`**.          |
+| **`:443`** (catch-all)                                   | Main Backend or Main Frontend                        | On-demand TLS; backend path matcher then default to Main Frontend.                  |
+
+The Main Backend block is documented in-file as handling checkout retrieval (for the main frontend), transaction flows, and provider hooks — not Admin API management or `POST …/checkouts/{siteId}/create`.
+
+**Example hostnames** (your values come from env): `api.yourcompany.com` → `{$ADMIN_BACKEND_DOMAIN}`; `webhook.yourcompany.com` → `{$MAIN_BACKEND_DOMAIN}` — see [Hostnames & DNS conventions](./domains) for the hosted `*.payment-gateway.app` layout.
+
+---
+
+## Admin API hostname and `/v1` prefix
+
+On **`{$ADMIN_BACKEND_DOMAIN}`**, the default Caddyfile passes **`/api/*`** straight to the Admin Backend and rewrites **`/v1/*`** so the backend receives **`/api/v1/*`**:
+
+```text
+	# Direct /api/* pass-through – used by external API consumers
+	handle /api/* {
+		reverse_proxy {
+			to {$ADMIN_BACKEND_SERVICE}:{$ADMIN_BACKEND_SERVICE_PORT}
+			header_up X-Request-ID {http.request.uuid}
+		}
+	}
+
+	# Rewrite /v1/* to /api/v1/* so backend receives expected paths
+	# This allows clean external API paths while keeping internal routing consistent
+	handle /v1/* {
+		rewrite * /api{uri}
+		reverse_proxy {
+			to {$ADMIN_BACKEND_SERVICE}:{$ADMIN_BACKEND_SERVICE_PORT}
+			header_up X-Request-ID {http.request.uuid}
+		}
+	}
 ```
-{
-  storage mongo {
-    uri              mongodb://user:pass@mongo:27017/gateway
-    database         gateway
-    collection       caddy_certificates
-    timeout          10s
-    cache_ttl        1h
-  }
 
-  on_demand_tls {
-    ask https://admin.yourcompany.com/api/v1/domains/verify
-  }
-}
+(Excerpt from `payment-gateway-reverseproxy/Caddyfile` — see the file for `/health`, headers, and `{$CUSTOM_ADMIN_BACKEND_DOMAIN_OPTIONS}`.)
 
-# Admin Panel
-admin.yourcompany.com {
-  reverse_proxy payment-gateway-admin-backend:8080
-}
-
-# Admin API
-admin-api.yourcompany.com {
-  reverse_proxy payment-gateway-admin-backend:8080
-}
-
-# Payment Frontend (checkout pages)
-pay.yourcompany.com {
-  reverse_proxy payment-gateway-main-frontend:3000
-}
-
-# Payment API
-api.yourcompany.com {
-  reverse_proxy payment-gateway-main-backend:8081
-}
-
-# Customer Portal
-portal.yourcompany.com {
-  reverse_proxy payment-gateway-main-frontend:3000
-}
-
-# Custom domains (merchants' own domains — on-demand TLS)
-:443 {
-  tls {
-    on_demand
-  }
-  reverse_proxy payment-gateway-main-frontend:3000
-}
-```
+Merchant integrations may call either `https://api.yourcompany.com/v1/...` or `https://api.yourcompany.com/api/v1/...` on **`{$ADMIN_BACKEND_DOMAIN}`** (replace with your real API host).
 
 ---
 
@@ -76,7 +84,12 @@ portal.yourcompany.com {
 
 Merchants can map their own domains (e.g., `checkout.merchantshop.com`) to their payment portal. Caddy issues TLS certificates on first request using the `on_demand_tls` feature.
 
-The `ask` URL must return `200 OK` for valid domains and any other status for invalid ones. The Admin Backend's `GET /api/v1/domains/verify` endpoint serves this purpose — it is a **public, no-auth endpoint** dedicated to Caddy's on-demand TLS check. It validates that the requested hostname is registered and verified in the database before authorizing certificate issuance.
+The `ask` URL must return `200 OK` for valid domains and any other status for invalid ones. The Admin Backend's `GET /api/v1/domains/verify` endpoint serves this purpose — it is a **public, no-auth endpoint** dedicated to Caddy's on-demand TLS check.
+
+Implementation details:
+
+- The global `ask` URL in the default Caddyfile is `http://{$ADMIN_BACKEND_SERVICE}:{$ADMIN_BACKEND_SERVICE_PORT}/api/v1/domains/verify`; Caddy calls it with a query param: `GET /api/v1/domains/verify?domain=<hostname>`
+- The handler returns a **bare** `200` or `403` (no JSON body), matching the Caddy ask protocol
 
 > [!NOTE]
 > This is distinct from `GET /api/v1/domains/verify-cname`, which is the authenticated endpoint used by operators to manually trigger CNAME verification from the Admin Panel.
@@ -84,7 +97,7 @@ The `ask` URL must return `200 OK` for valid domains and any other status for in
 ### Merchant Domain Registration Flow
 
 1. Merchant adds their domain in **Admin Panel → Sites → Custom Domain**.
-2. Merchant creates a CNAME record: `checkout.merchantshop.com → pay.yourcompany.com`.
+2. Merchant creates a CNAME record to your **main frontend** hostname (the value of `MAIN_FRONTEND_DOMAIN` — e.g. `secure.yourcompany.com`, `pay.yourcompany.com`, or hosted `secure.payment-gateway.app`): `checkout.merchantshop.com → <main-frontend-host>`.
 3. Admin Panel verifies the CNAME via **Verify Domain**.
 4. On the next request to `checkout.merchantshop.com`, Caddy calls the `ask` endpoint, receives `200`, and issues a certificate via ACME (Let's Encrypt).
 
@@ -95,6 +108,7 @@ The `ask` URL must return `200 OK` for valid domains and any other status for in
 Caddy handles certificate issuance and renewal automatically via ACME (Let's Encrypt by default). No manual certificate management is required.
 
 **Requirements:**
+
 - The server must be reachable on ports `80` and `443` from the internet.
 - The domain must have a valid DNS A/CNAME record pointing to the server.
 - Let's Encrypt rate limits apply: 50 certificates per registered domain per week.
@@ -111,9 +125,11 @@ For private deployments or staging:
 
 ---
 
-## Security Headers
+## Security Headers (optional)
 
-Add security headers to all responses:
+The default `Caddyfile` already sets HSTS, `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, and `X-Request-ID` on the shipped site blocks. The snippet below is an **additional** pattern if you customize a host — it is **not** a copy of the default file.
+
+Add or extend security headers on a site block:
 
 ```
 pay.yourcompany.com {
@@ -129,12 +145,12 @@ pay.yourcompany.com {
 
 ---
 
-## Rate Limiting at the Proxy Layer
+## Rate limiting at the proxy layer (optional)
 
-Caddy's `rate_limit` module (available in the extended build) can add a coarse rate limit before requests reach the backend:
+**Not present in the default `Caddyfile`.** Caddy's `rate_limit` module (available in the extended build) can add a coarse rate limit before requests reach the backend:
 
 ```
-api.yourcompany.com {
+webhook.yourcompany.com {
   rate_limit {
     zone api_zone {
       key {remote_host}
@@ -148,17 +164,17 @@ api.yourcompany.com {
 
 ---
 
-## Health Check Routing
+## Health check routing (optional)
 
-Restrict the internal health endpoint to your monitoring system's IP range:
+**Not present in the default `Caddyfile`.** The default config responds `403` on **`/internal/health`** for the admin and main frontend hosts only. To restrict other paths or hosts, you can add matchers such as:
 
 ```
-api.yourcompany.com {
-  @internal {
+webhook.yourcompany.com {
+  @blocked {
     path /internal/*
-    remote_ip 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
+    not remote_ip 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
   }
-  respond @internal 403
+  respond @blocked 403
   reverse_proxy payment-gateway-main-backend:8081
 }
 ```

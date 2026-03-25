@@ -3,6 +3,7 @@
     "pages": [
         "organizations",
         "sites",
+        "ecommerce-integrations",
         "api-keys",
         "providers",
         "checkouts",

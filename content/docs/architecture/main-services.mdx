@@ -15,13 +15,14 @@ Analogous to the Admin Backend, the Main Backend is built in Go and utilizes the
 
 1. **Checkout Execution**: After a checkout session is securely created on the Admin Backend API (using an `sk_...` Organization API Key), the Main Backend handles retrieving the checkout session (`GET /api/v1/checkouts/:id`), serving the tokenization UI (e.g., Stripe Elements), and processing the transaction. This ensures the backend never touches cardholder data directly, keeping the system within SAQ A scope.
 2. **Asynchronous Distributed Queue (Garnet/Redis)**: To handle latency and PCI exposure effectively, transactions are published to a distributed message queue (`payment.initiated`). Workers consume these items to process external charges and invoke atomic settlement logics in MongoDB using `Idempotency-Key`.
-3. **Tax Calculation Process**: Tax amounts are always extracted from the raw *gross* amount presented during checkout. The system leverages tax rules defined by the Admin Panel and determines the tax at transaction creation time (relying on the validated billing address).
+3. **Tax Calculation Process**: Tax amounts are always extracted from the raw _gross_ amount presented during checkout. The system leverages tax rules defined by the Admin Panel and determines the tax at transaction creation time (relying on the validated billing address).
 4. **VAT Validation API**: The backend exposes public endpoints for validating European VAT IDs against the official EU VIES service (`/api/v1/vat/validate`), as well as endpoints to check EU member status.
 5. **IPN Webhook Integration**: Provides endpoints to receive Instant Payment Notifications (IPNs) from upstream providers. It automatically validates signatures using the securely stored webhook secret, extracts external references, and updates transaction states safely via the Garnet queue.
 6. **Customer Portal API**: Houses a `PortalInvoiceService` that allows end customers to download finalized invoices and credit notes securely using access tokens, review upcoming recurring charges, and request future-cycle cancellation for visible subscriptions.
 7. **PDF Worker Proxy**: When delivering invoices to the main frontend customer portal, the Main Backend proxies requests to the isolated `payment-gateway-main-worker` over HTTP, preventing security issues associated with shared docker volumes.
 
 ### Embedded Observability
+
 Similar to the administrative systems, the Main Backend enforces comprehensive request tracing via OpenTelemetry and logs heavily for forensic auditability of financial transactions.
 
 ## Main Frontend
@@ -32,6 +33,6 @@ The Main Frontend is the lightweight presentation layer directly accessed by cus
 
 - **API Proxying**: Built strongly to proxy API requests back to the corresponding Main Backend service via configuring endpoints in `server.js`.
 - **Graceful Shutdowns & Resiliency**: Designed to handle `SIGTERM` signals flawlessly, ensuring that active customer connections are not abruptly severed if the container orchestrator restarts the service.
-- **Environment Management**: Predictable Node.js environment configured through standard `REACT_APP_MAIN_FRONTEND_` environment variables defining connection protocols and ports.
+- **Environment Management**: Node.js runtime configuration is driven by `REACT_APP_*` variables consumed by `server.js` (e.g. `REACT_APP_MAIN_BACKEND_SERVICE`, `REACT_APP_MAIN_BACKEND_PORT`, `REACT_APP_MAIN_BACKEND_HTTPS`, `REACT_APP_MAIN_FRONTEND_HOST`, `REACT_APP_MAIN_FRONTEND_PORT`, …).
 
 To build the frontend for production, simply run `npm run build`, targeting the `/dist` deployment folder.

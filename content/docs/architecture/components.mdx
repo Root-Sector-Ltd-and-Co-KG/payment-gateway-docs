@@ -9,17 +9,19 @@ The Payment Gateway is composed of several independent but cooperating services.
 
 ## The Services
 
-Here is a breakdown of the core services deployed in the system:
+Here is a breakdown of the core services deployed in the system. **Public URLs are deployment-specific** — env variables and hosted vs self-hosted examples are in [Hostnames & DNS conventions](../deployment/domains).
 
-| Service | Purpose | Access |
-| --- | --- | --- |
-| **Admin Panel (Admin Frontend & Admin Backend)** | Management interface for operators. | `https://admin.yoursite.com` |
-| **Payment Portal (Main Frontend & Main Backend)** | Customer payment portal. | `https://pay.yoursite.com` |
-| **Database (MongoDB)** | The primary datastore for all transaction and configuration data. TLS encryption is supported. | Internal only |
-| **Cache (Garnet/Redis)** | Redis-compatible cache for fast data retrieval and session management. | Internal only |
-| **Worker (`payment-gateway-main-worker`)** | Background jobs processing, specifically handling PDF generation and PDF cache serving. | Internal only |
-| **Gotenberg** | A Docker-powered stateless API for converting HTML to PDF, used by the Worker. | Internal only |
-| **Reverse Proxy** | Handles TLS termination and routes traffic to the appropriate frontend/backend services. | Ports 80/443 |
+| Service                                    | Purpose                                                                                    | Public access (typical)                                                                                                                                          |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Admin Panel** (Admin Frontend)           | Management UI (WebAuthn, orgs, settings).                                                  | `ADMIN_FRONTEND_DOMAIN` — e.g. `dashboard.*` (hosted: `dashboard.payment-gateway.app`). Browser calls to `/api/*` on this host are proxied to the Admin Backend. |
+| **Admin API** (Admin Backend)              | REST API for the dashboard and **merchant integrations** (API keys, checkouts, etc.).      | `ADMIN_BACKEND_DOMAIN` — e.g. `api.*` (hosted: `api.payment-gateway.app`).                                                                                       |
+| **Payment Portal** (Main Frontend)         | Hosted checkout pages and **customer portal**.                                             | `MAIN_FRONTEND_DOMAIN` — e.g. `secure.*` or `pay.*` (hosted: `secure.payment-gateway.app`).                                                                      |
+| **Payment runtime** (Main Backend)         | Checkout session API, **provider webhooks** (`/hooks/...`), Apple Pay domain file, health. | `MAIN_BACKEND_DOMAIN` — e.g. `webhook.*` (hosted: `webhook.payment-gateway.app`).                                                                                |
+| **Database (MongoDB)**                     | Primary datastore for transactions and configuration. TLS recommended.                     | Internal only                                                                                                                                                    |
+| **Cache (Garnet/Redis)**                   | Redis-compatible cache and session data.                                                   | Internal only                                                                                                                                                    |
+| **Worker (`payment-gateway-main-worker`)** | Background jobs (PDF generation; serves PDF cache HTTP on default port 8090).              | Internal only (backends proxy PDF requests to the worker).                                                                                                       |
+| **Gotenberg**                              | Stateless HTML→PDF API used by the Worker.                                                 | Internal only                                                                                                                                                    |
+| **Reverse Proxy (Caddy)**                  | TLS, routing, on-demand TLS for custom checkout domains.                                   | Ports 80/443 — [Caddy reverse proxy](../deployment/caddy).                                                                                                       |
 
 ## PDF Generation & Storage Architecture
 
@@ -33,12 +35,13 @@ One of the complex subsystems is the PDF generation for invoices and receipts, d
 
 ## Database & Caching
 
-The system relies on **MongoDB** as its primary datastore. While it operates on an internal network, enabling MongoDB TLS encryption is highly recommended for production deployments to secure the internal traffic. 
+The system relies on **MongoDB** as its primary datastore. While it operates on an internal network, enabling MongoDB TLS encryption is highly recommended for production deployments to secure the internal traffic.
 
 For high performance, a Redis-compatible cache engine (**Garnet**) handles temporary data and session caching.
 
-## Shared Packages 
+## Shared Packages
 
 Under the hood, the backend services share common Go code:
+
 - **`lib-common`**: Contains shared utilities, notification templates (Email, Slack, SMS), and models.
 - **`lib-crypto`**: A dedicated library for cryptographic operations and secure data handling.
