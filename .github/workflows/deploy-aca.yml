@@ -119,22 +119,28 @@ jobs:
             REGISTRY_USERNAME="${{ secrets.GHCR_USERNAME }}"
             REGISTRY_PASSWORD="${{ secrets.GHCR_TOKEN }}"
 
-            # Ensure the Container Apps CLI extension is available in the Azure CLI container.
             az config set extension.use_dynamic_install=yes_without_prompt
             az extension add --name containerapp --upgrade
 
-            # Create the app if it doesn't exist yet; otherwise update.
+            # If app exists, ensure registry is configured, then update image
             if az containerapp show -g "$RG" -n "$APP" > /dev/null 2>&1; then
+
+              az containerapp registry set \
+                -g "$RG" \
+                -n "$APP" \
+                --server "$REGISTRY_SERVER" \
+                --username "$REGISTRY_USERNAME" \
+                --password "$REGISTRY_PASSWORD"
+
               az containerapp update \
                 -g "$RG" \
                 -n "$APP" \
                 --image "$IMAGE" \
-                --registry-server "$REGISTRY_SERVER" \
-                --registry-username "$REGISTRY_USERNAME" \
-                --registry-password "$REGISTRY_PASSWORD" \
                 --set-env-vars PORT=${{ env.CONTAINER_PORT }} HOSTNAME=0.0.0.0 \
                 --revision-suffix "${GITHUB_SHA::7}"
+
             else
+
               az containerapp create \
                 -g "$RG" \
                 -n "$APP" \
@@ -155,4 +161,5 @@ jobs:
 
             fi
 
-            az containerapp show -g "$RG" -n "$APP" --query "properties.configuration.ingress.fqdn" -o tsv
+            az containerapp show -g "$RG" -n "$APP" \
+              --query "properties.configuration.ingress.fqdn" -o tsv
