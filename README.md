@@ -4,8 +4,7 @@ This project hosts the public product documentation at:
 
 - `https://docs.payment-gateway.app`
 
-It is a Next.js 16 + Fumadocs site deployed to Cloudflare Workers using
-`@opennextjs/cloudflare`.
+It is a Next.js 16 + Fumadocs site deployed as a container to Azure Container Apps.
 
 There is no separate public staging deployment for the docs site. The only
 published environment is the production site at `docs.payment-gateway.app`.
@@ -14,8 +13,8 @@ published environment is the production site at `docs.payment-gateway.app`.
 
 - Runtime: Next.js App Router
 - Docs framework: Fumadocs
-- Cloudflare adapter: `@opennextjs/cloudflare`
-- Deploy target: Cloudflare Workers
+- Container image: Docker (distroless runtime)
+- Deploy target: Azure Container Apps
 - Custom domain: `docs.payment-gateway.app`
 
 ## Project Structure
@@ -36,12 +35,6 @@ Install dependencies:
 
 ```bash
 pnpm install
-```
-
-Set up local Cloudflare deployment credentials from the example file:
-
-```bash
-cp .cloudflare-secrets.example .cloudflare-secrets.local
 ```
 
 Run the local dev server:
@@ -74,49 +67,41 @@ pnpm validate
 
 ## Cloudflare Deployment
 
-The docs site deploys as a Cloudflare Worker using OpenNext.
+## Deployment (Azure Container Apps)
 
-Production-only deploy command:
+### One-time Azure setup (prerequisites)
 
-```bash
-pnpm deploy:cf:production
-```
+- Create an Azure **Resource Group**
+- Create an Azure **Container Apps Environment**
+- Create (or let CI create) an Azure **Container App**
+- Configure GitHub Actions **OIDC** for Azure login (federated credential)
 
-Validate your local Cloudflare credential file and any runtime secrets:
+### GitHub repo configuration
 
-```bash
-pnpm secrets:check
-```
+Add these **GitHub Secrets**:
 
-Run the docs secrets helper:
+- `AZURE_CLIENT_ID`
+- `AZURE_TENANT_ID`
+- `AZURE_SUBSCRIPTION_ID`
 
-```bash
-pnpm secrets:push
-```
+Add these **GitHub Variables**:
 
-These default aliases target production. Production-specific forms are also
-available:
+- `AZURE_RESOURCE_GROUP`
+- `AZURE_CONTAINERAPP_NAME`
+- `AZURE_CONTAINERAPPS_ENVIRONMENT`
+- `AZURE_LOCATION`
 
-```bash
-pnpm secrets:check:production
-pnpm secrets:push:production
-```
+### Deploy
 
-The helper validates the local `CLOUDFLARE_API_TOKEN` and
-`CLOUDFLARE_ACCOUNT_ID` values used by Wrangler, then uploads any additional
-non-empty variables in `.cloudflare-secrets.local` as Cloudflare Worker runtime
-secrets.
+Deploy happens automatically on push to `main` via:
 
-Local Cloudflare preview build:
+- `.github/workflows/deploy-aca.yml`
+
+### Container build (local)
 
 ```bash
-pnpm preview
-```
-
-Generate Wrangler environment typings if needed:
-
-```bash
-pnpm cf-typegen
+docker build -t payment-gateway-docs:local .
+docker run --rm -p 3000:3000 payment-gateway-docs:local
 ```
 
 ### Wrangler Config
