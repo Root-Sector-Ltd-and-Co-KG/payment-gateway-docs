@@ -152,8 +152,8 @@ jobs:
                 --registry-password "$REGISTRY_PASSWORD" \
                 --ingress external \
                 --target-port ${{ env.CONTAINER_PORT }} \
-                --min-replicas 1 \
-                --max-replicas 3 \
+                --min-replicas 0 \
+                --max-replicas 1 \
                 --cpu 0.5 \
                 --memory 1Gi \
                 --env-vars PORT=${{ env.CONTAINER_PORT }} HOSTNAME=0.0.0.0 \
