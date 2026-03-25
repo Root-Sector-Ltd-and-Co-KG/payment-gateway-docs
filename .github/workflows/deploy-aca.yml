@@ -50,8 +50,8 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v7
         with:
-          context: ./payment-gateway-docs
-          file: ./payment-gateway-docs/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           tags: |
             ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.sha_tag }}
