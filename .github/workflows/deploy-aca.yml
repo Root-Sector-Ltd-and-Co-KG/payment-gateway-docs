@@ -112,7 +112,6 @@ jobs:
             RG="${{ vars.AZURE_RESOURCE_GROUP }}"
             APP="${{ vars.AZURE_CONTAINERAPP_NAME }}"
             ENV_NAME="${{ vars.AZURE_CONTAINERAPPS_ENVIRONMENT }}"
-            LOCATION="${{ vars.AZURE_LOCATION }}"
 
             IMAGE="${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.sha_tag }}"
             REGISTRY_SERVER="ghcr.io"
@@ -145,7 +144,6 @@ jobs:
                 -g "$RG" \
                 -n "$APP" \
                 --environment "$ENV_NAME" \
-                --location "$LOCATION" \
                 --image "$IMAGE" \
                 --registry-server "$REGISTRY_SERVER" \
                 --registry-username "$REGISTRY_USERNAME" \
