@@ -104,4 +104,6 @@ jobs:
                 --env-vars PORT=${{ env.CONTAINER_PORT }} HOSTNAME=0.0.0.0 \
                 --revision-suffix "${GITHUB_SHA::7}"
 
+            fi
+
             az containerapp show -g "$RG" -n "$APP" --query "properties.configuration.ingress.fqdn" -o tsv
