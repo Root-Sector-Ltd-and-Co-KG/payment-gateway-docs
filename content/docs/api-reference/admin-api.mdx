@@ -137,22 +137,64 @@ GET /api/v1/transactions?status=succeeded&currency=EUR&from=2026-01-01&to=2026-0
 
 ## Invoices
 
-| Method   | Path                                               | Required Scope    | Description                                  |
-| -------- | -------------------------------------------------- | ----------------- | -------------------------------------------- |
-| `GET`    | `/api/v1/invoices`                                 | `invoice:read`    | List invoices                                |
-| `GET`    | `/api/v1/invoices/:id`                             | `invoice:read`    | Get invoice                                  |
-| `POST`   | `/api/v1/invoices`                                 | `invoice:create`  | Create draft invoice                         |
-| `GET`    | `/api/v1/invoices/from-transaction/:transactionId` | `invoice:create`  | Create invoice from transaction              |
-| `POST`   | `/api/v1/invoices/:id/issue`                       | `invoice:execute` | Issue invoice (draft → issued)               |
-| `POST`   | `/api/v1/invoices/:id/void`                        | `invoice:execute` | Void an issued invoice (Admin role required) |
-| `POST`   | `/api/v1/invoices/:id/correct`                     | `invoice:update`  | Issue credit note (correction)               |
-| `POST`   | `/api/v1/invoices/:id/send-email`                  | `invoice:execute` | Email invoice to client                      |
-| `GET`    | `/api/v1/invoices/:id/pdf`                         | `invoice:execute` | Download PDF                                 |
-| `GET`    | `/api/v1/invoices/:id/xml`                         | `invoice:execute` | Download XML (ZUGFeRD)                       |
-| `GET`    | `/api/v1/invoices/:id/xml/peppol`                  | `invoice:execute` | Download Peppol XML                          |
-| `GET`    | `/api/v1/invoices/:id/pdf/zugferd`                 | `invoice:execute` | Download ZUGFeRD PDF                         |
-| `POST`   | `/api/v1/invoices/:id/regenerate-pdf`              | `invoice:execute` | Force PDF regeneration                       |
-| `DELETE` | `/api/v1/invoices/:id`                             | `invoice:delete`  | Delete draft invoice                         |
+| Method   | Path                                               | Required Scope    | Description                                                |
+| -------- | -------------------------------------------------- | ----------------- | ---------------------------------------------------------- |
+| `GET`    | `/api/v1/invoices`                                 | `invoice:read`    | List invoices                                              |
+| `GET`    | `/api/v1/invoices/:id`                             | `invoice:read`    | Get invoice                                                |
+| `POST`   | `/api/v1/invoices`                                 | `invoice:create`  | Create draft invoice                                       |
+| `POST`   | `/api/v1/invoices/preview-tax`                     | `invoice:create`  | Preview canonical tax for a draft invoice payload          |
+| `POST`   | `/api/v1/invoices/from-transaction/:transactionId` | `invoice:create`  | Create invoice from transaction                            |
+| `PUT`    | `/api/v1/invoices/:id`                             | `invoice:update`  | Update draft invoice fields and/or line items              |
+| `PATCH`  | `/api/v1/invoices/:id/notes`                       | `invoice:update`  | Update invoice notes                                       |
+| `PUT`    | `/api/v1/invoices/:id/transaction`                 | `invoice:update`  | Assign a transaction to an existing invoice                |
+| `POST`   | `/api/v1/invoices/:id/issue`                       | `invoice:execute` | Issue invoice (draft → issued)                             |
+| `POST`   | `/api/v1/invoices/:id/void`                        | `invoice:execute` | Void an issued invoice (Admin role required)               |
+| `POST`   | `/api/v1/invoices/:id/correct`                     | `invoice:update`  | Correct an invoice with audit trail / credit-note workflow |
+| `POST`   | `/api/v1/invoices/:id/send-email`                  | `invoice:execute` | Email invoice to client                                    |
+| `POST`   | `/api/v1/invoices/:id/payment-checkout`            | `invoice:execute` | Create an online payment checkout for the invoice          |
+| `GET`    | `/api/v1/invoices/:id/pdf`                         | `invoice:execute` | Download PDF                                               |
+| `GET`    | `/api/v1/invoices/:id/xml`                         | `invoice:execute` | Download XML (XRechnung / configured e-invoice output)     |
+| `GET`    | `/api/v1/invoices/:id/xml/peppol`                  | `invoice:execute` | Download Peppol XML                                        |
+| `GET`    | `/api/v1/invoices/:id/pdf/zugferd`                 | `invoice:execute` | Download ZUGFeRD PDF                                       |
+| `POST`   | `/api/v1/invoices/:id/regenerate-pdf`              | `invoice:execute` | Force PDF regeneration                                     |
+| `DELETE` | `/api/v1/invoices/:id`                             | `invoice:delete`  | Delete draft invoice                                       |
+
+### Draft Invoice Tax Semantics
+
+Draft invoice creation, draft invoice updates, recurring invoice generation, and transaction tax calculation all rely on the same backend tax engine and tax-rate timing rules.
+
+- Omit `items[].taxRate` to let the backend auto-calculate tax from the seller context, client billing country, client tax country fallback, item type, and the effective tax-rate schedule.
+- Provide `items[].taxRate` to apply an explicit manual override for that line item.
+- Use `POST /api/v1/invoices/preview-tax` before creating or updating a draft invoice when you need the exact canonical rate, totals, and `taxRateCode` the backend will use.
+
+Example manual draft invoice payload with one automatic line and one explicit override:
+
+```json
+{
+  "siteId": "507f1f77bcf86cd799439011",
+  "clientId": "507f1f77bcf86cd799439012",
+  "currency": "EUR",
+  "items": [
+    {
+      "description": "Subscription",
+      "quantity": 1,
+      "unitPrice": 12100,
+      "amountType": "gross",
+      "itemType": "virtual"
+    },
+    {
+      "description": "Manual reduced VAT line",
+      "quantity": 1,
+      "unitPrice": 10700,
+      "amountType": "gross",
+      "taxRate": 7,
+      "itemType": "physical"
+    }
+  ]
+}
+```
+
+In the example above, the first line is auto-calculated and the second line uses an explicit `7%` override.
 
 ---
 
@@ -242,6 +284,73 @@ GET /api/v1/transactions?status=succeeded&currency=EUR&from=2026-01-01&to=2026-0
 
 ---
 
+## Portal
+
+| Method | Path                                                | Required Scope  | Description                                           |
+| ------ | --------------------------------------------------- | --------------- | ----------------------------------------------------- |
+| `POST` | `/api/v1/organizations/settings/portal/magic-links` | `portal:create` | Generate a one-time direct-login customer portal link |
+
+### Create Customer Portal Magic Link
+
+```http
+POST /api/v1/organizations/settings/portal/magic-links
+Authorization: Bearer sk_live_keyid.secret
+Content-Type: application/json
+```
+
+```json
+{
+  "email": "buyer@example.com",
+  "ttlMinutes": 15
+}
+```
+
+Returns a one-time magic-link URL that can be used to direct the customer straight into the portal login flow for that email.
+
+`ttlMinutes` is optional. If omitted, the system portal magic-link TTL is used. If provided, it can only shorten the lifetime; values above the system policy are capped to the configured system maximum.
+
+Example server-side usage:
+
+```ts
+const response = await fetch(
+  `${adminBaseUrl}/api/v1/organizations/settings/portal/magic-links`,
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${organizationApiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: "buyer@example.com",
+      ttlMinutes: 15,
+    }),
+  },
+);
+
+if (!response.ok) {
+  throw new Error(`Failed to create portal magic link: ${response.status}`);
+}
+
+const { url, expiresAt, ttlMinutes } = await response.json();
+
+return {
+  loginUrl: url,
+  expiresAt,
+  effectiveTtlMinutes: ttlMinutes,
+};
+```
+
+The endpoint only succeeds when:
+
+- system-level portal access is enabled,
+- system-level portal magic links are enabled,
+- the authenticated organization has portal access enabled, and
+- the email has at least one portal-visible invoice, credit note, or recurring subscription in that organization.
+
+Use this for trusted backend automations only. Do not expose it to browser or mobile clients.
+
+---
+
 ## Tax Management
 
 | Method   | Path                                       | Required Scope     | Description                    |
@@ -291,68 +400,68 @@ Returns aggregated metrics: gross volume, net revenue, transaction counts, failu
 
 ## API Key Scopes Reference
 
-| Scope                  | Grants                                                                                         |
-| ---------------------- | ---------------------------------------------------------------------------------------------- |
-| `checkout:read`        | Read checkouts                                                                                 |
-| `checkout:create`      | Create checkout URLs                                                                           |
-| `checkout:update`      | Update checkout metadata                                                                       |
-| `transaction:read`     | Read transactions and tax details                                                              |
-| `transaction:create`   | Create manual transactions                                                                     |
-| `transaction:update`   | Update transaction metadata                                                                    |
-| `transaction:delete`   | Delete transactions                                                                            |
-| `transaction:execute`  | Chargeback management                                                                          |
-| `invoice:read`         | Read invoices and recurring schedules                                                          |
-| `invoice:create`       | Create invoices and schedules                                                                  |
-| `invoice:update`       | Update invoice notes, correct invoices                                                         |
-| `invoice:execute`      | Issue, void, email, PDF download, and pause/resume/cancel/generate/preview recurring schedules |
-| `invoice:delete`       | Delete draft invoices                                                                          |
-| `credit_note:read`     | Read credit notes                                                                              |
-| `credit_note:execute`  | Download PDF, send email                                                                       |
-| `client:read`          | Read clients                                                                                   |
-| `client:create`        | Create clients                                                                                 |
-| `client:update`        | Update clients                                                                                 |
-| `client:delete`        | Delete clients                                                                                 |
-| `client:execute`       | Search clients, view history                                                                   |
-| `site:read`            | Read sites                                                                                     |
-| `site:create`          | Create sites                                                                                   |
-| `site:delete`          | Delete sites                                                                                   |
-| `site:update`          | Update sites, rotate webhook secret                                                            |
-| `provider:read`        | Read providers                                                                                 |
-| `provider:create`      | Create providers (Admin role also required)                                                    |
-| `provider:update`      | Enable/disable providers (Admin role)                                                          |
-| `provider:delete`      | Delete providers (Admin role)                                                                  |
-| `domain:read`          | Read domains                                                                                   |
-| `domain:create`        | Create domains (Admin role)                                                                    |
-| `domain:delete`        | Delete domains (Admin role)                                                                    |
-| `domain:execute`       | Verify CNAME, Apple Pay files                                                                  |
-| `api_key:read`         | Read API keys                                                                                  |
-| `api_key:create`       | Create API keys                                                                                |
-| `api_key:update`       | Rotate API keys                                                                                |
-| `api_key:delete`       | Revoke API keys                                                                                |
-| `organization:read`    | Read organization details                                                                      |
-| `organization:update`  | Update organization settings                                                                   |
-| `organization:execute` | Access settings, encryption operations                                                         |
-| `tax_rule:read`        | Read tax rules                                                                                 |
-| `tax_rule:create`      | Create tax rules                                                                               |
-| `tax_rule:update`      | Update tax rules                                                                               |
-| `tax_rule:delete`      | Delete tax rules                                                                               |
-| `tax_rule:execute`     | Populate defaults                                                                              |
-| `tax_rate:read`        | Read tax rates                                                                                 |
-| `tax_rate:create`      | Create tax rates                                                                               |
-| `tax_rate:update`      | Update tax rates                                                                               |
-| `tax_rate:delete`      | Delete tax rates                                                                               |
-| `tax_rate:execute`     | Populate EU rates                                                                              |
-| `tax_report:read`      | Read tax reports                                                                               |
-| `tax_report:execute`   | Export tax reports                                                                             |
-| `data_io:read`         | Read import/export templates                                                                   |
-| `data_io:execute`      | Import and export data                                                                         |
-| `export:execute`       | Generate CSV exports                                                                           |
-| `vies:read`            | Check EU countries                                                                             |
-| `vies:execute`         | Validate VAT IDs                                                                               |
-| `userprofile:read`     | Read own user profile                                                                          |
-| `userprofile:create`   | Create passkey links                                                                           |
-| `userprofile:update`   | Update passkey labels, notification prefs                                                      |
-| `userprofile:execute`  | Manage passkeys                                                                                |
+| Scope                  | Grants                                                                                          |
+| ---------------------- | ----------------------------------------------------------------------------------------------- |
+| `checkout:read`        | Read checkouts                                                                                  |
+| `checkout:create`      | Create checkout URLs                                                                            |
+| `checkout:update`      | Update checkout metadata                                                                        |
+| `transaction:read`     | Read transactions and tax details                                                               |
+| `transaction:create`   | Create manual transactions                                                                      |
+| `transaction:update`   | Update transaction metadata                                                                     |
+| `transaction:delete`   | Delete transactions                                                                             |
+| `transaction:execute`  | Chargeback management                                                                           |
+| `invoice:read`         | Read invoices and recurring schedules                                                           |
+| `invoice:create`       | Create invoices and schedules                                                                   |
+| `invoice:update`       | Update draft invoices, notes, invoice links, and correction workflows                           |
+| `invoice:execute`      | Preview tax, issue, void, email, payment checkout, PDF download, and recurring schedule actions |
+| `invoice:delete`       | Delete draft invoices                                                                           |
+| `credit_note:read`     | Read credit notes                                                                               |
+| `credit_note:execute`  | Download credit note PDFs and send credit note email                                            |
+| `client:read`          | Read clients                                                                                    |
+| `client:create`        | Create clients                                                                                  |
+| `client:update`        | Update clients                                                                                  |
+| `client:delete`        | Delete clients                                                                                  |
+| `client:execute`       | Search clients, view history                                                                    |
+| `site:read`            | Read sites                                                                                      |
+| `site:create`          | Create sites                                                                                    |
+| `site:delete`          | Delete sites                                                                                    |
+| `site:update`          | Update sites, rotate webhook secret                                                             |
+| `provider:read`        | Read providers                                                                                  |
+| `provider:create`      | Create providers (Admin role also required)                                                     |
+| `provider:update`      | Enable/disable providers (Admin role)                                                           |
+| `provider:delete`      | Delete providers (Admin role)                                                                   |
+| `domain:read`          | Read domains                                                                                    |
+| `domain:create`        | Create domains (Admin role)                                                                     |
+| `domain:delete`        | Delete domains (Admin role)                                                                     |
+| `domain:execute`       | Verify CNAME, Apple Pay files                                                                   |
+| `api_key:read`         | Read API keys                                                                                   |
+| `api_key:create`       | Create API keys                                                                                 |
+| `api_key:update`       | Rotate API keys                                                                                 |
+| `api_key:delete`       | Revoke API keys                                                                                 |
+| `organization:read`    | Read organization details                                                                       |
+| `organization:update`  | Update organization settings                                                                    |
+| `organization:execute` | Access settings, encryption operations                                                          |
+| `tax_rule:read`        | Read tax rules                                                                                  |
+| `tax_rule:create`      | Create tax rules                                                                                |
+| `tax_rule:update`      | Update tax rules                                                                                |
+| `tax_rule:delete`      | Delete tax rules                                                                                |
+| `tax_rule:execute`     | Populate defaults                                                                               |
+| `tax_rate:read`        | Read tax rates                                                                                  |
+| `tax_rate:create`      | Create tax rates                                                                                |
+| `tax_rate:update`      | Update tax rates                                                                                |
+| `tax_rate:delete`      | Delete tax rates                                                                                |
+| `tax_rate:execute`     | Populate EU rates                                                                               |
+| `tax_report:read`      | Read tax reports                                                                                |
+| `tax_report:execute`   | Export tax reports                                                                              |
+| `data_io:read`         | Read import/export templates                                                                    |
+| `data_io:execute`      | Import and export data                                                                          |
+| `export:execute`       | Generate CSV exports                                                                            |
+| `vies:read`            | Check EU countries                                                                              |
+| `vies:execute`         | Validate VAT IDs                                                                                |
+| `userprofile:read`     | Read own user profile                                                                           |
+| `userprofile:create`   | Create passkey links                                                                            |
+| `userprofile:update`   | Update passkey labels, notification prefs                                                       |
+| `userprofile:execute`  | Manage passkeys                                                                                 |
 
 ## Common least-privilege bundles
 

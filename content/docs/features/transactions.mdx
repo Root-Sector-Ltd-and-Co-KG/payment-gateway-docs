@@ -17,7 +17,7 @@ Transactions flow through several definitive states:
 
 1.  **`initiated`**: The customer has accessed the Checkout page and a payment intent has been formed with the upstream Provider, but no payment details have been finalized.
 2.  **`pending_provider`**: Often seen with asynchronous payment methods (e.g., SEPA Direct Debit or manual bank transfers). The system is awaiting final settlement confirmation via Webhook from the Provider.
-3.  **`succeeded`**: The funds have been successfully captured. The respective Invoice is automatically marked as paid.
+3.  **`succeeded`**: The funds have been successfully captured. Any linked invoice reflects that settlement through its computed payment state and settlement totals.
 4.  **`failed`**: The payment attempt was rejected (e.g., insufficient funds, fraudulent card).
 
 ### Analyzing transaction logs
@@ -33,7 +33,7 @@ By clicking on a specific Transaction, you can view the full metadata. This incl
 
 Support and Admin staff can directly manipulate active Transactions from this interface:
 
-- **Refund**: Issues a request to the Provider to return the funds. This automatically triggers the generation of a legally compliant **Credit Note**.
+- **Refund**: Issues a request to the Provider to return the funds. When an invoice is linked, the platform records the refund settlement and generates the legally compliant **Credit Note** that offsets the original invoice without mutating it.
 - **Void**: Used to cancel an authorization before final capture.
 
 > [!NOTE]

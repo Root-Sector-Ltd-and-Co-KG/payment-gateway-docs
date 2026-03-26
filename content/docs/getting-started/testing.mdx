@@ -72,10 +72,11 @@ You can POST a test payload directly to the webhook endpoint. Note that signatur
 To verify tax rules are applied correctly:
 
 1. Create a checkout with a known buyer country (set billing address at checkout).
-2. The Main Frontend applies tax before rendering the payment form.
+2. Confirm the checkout uses the expected tax treatment before payment.
 3. After payment, the transaction record includes a full `taxBreakdown` field with rate, treatment, and legal reference.
+4. For manual draft invoices, use the Admin Panel invoice editor or `POST /api/v1/invoices/preview-tax` to verify the same backend tax engine resolves the expected rate before saving.
 
-Use the Admin Panel under **Transactions → [transaction] → Tax Details** to inspect the tax decision metadata.
+Use the Admin Panel under **Transactions → [transaction] → Tax Details** to inspect transaction tax metadata, and under **Invoices → Draft Invoice** to inspect the previewed automatic invoice tax result.
 
 ---
 

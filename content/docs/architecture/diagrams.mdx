@@ -209,10 +209,20 @@ stateDiagram-v2
     [*] --> draft : Created manually or from transaction
     draft --> issued : Issue action
     draft --> [*] : Deleted
-    issued --> paid : Payment confirmed
-    issued --> void : Void action Admin only
-    paid --> refunded : Refund plus credit note
-    void --> [*]
-    paid --> [*]
-    refunded --> [*]
+    issued --> [*] : Remains legal record
+
+    state issued {
+        [*] --> open
+        open --> partially_settled : Partial settlement
+        partially_settled --> settled : Full settlement
+        open --> settled : Payment confirmed
+        settled --> partially_refunded : Partial refund plus credit note
+        partially_refunded --> refunded : Full refund plus credit note
+        settled --> credited : Credit note fully offsets invoice
+        open --> voided_or_reversed : Formal void or reversal workflow
+        partially_settled --> voided_or_reversed : Formal reversal workflow
+        refunded --> [*]
+        credited --> [*]
+        voided_or_reversed --> [*]
+    }
 ```

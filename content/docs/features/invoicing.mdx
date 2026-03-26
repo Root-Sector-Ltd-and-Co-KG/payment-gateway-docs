@@ -10,27 +10,45 @@ Invoices are the legal backbone of your transactions. The Payment Gateway automa
 ## Invoice Statuses
 
 Invoices exist in strict states to maintain accounting integrity:
+
 1. **`draft`**: The invoice is currently being constructed. You can edit line items, change the billing address, or delete it entirely without leaving an accounting trace.
 2. **`issued`**: Once the "Issue" button is clicked (or a transaction succeeds automatically), the invoice is locked. An official sequential `InvoiceNumber` is permanently assigned. **The line items and total amounts can never be changed again.**
-3. **`paid`**: The invoice has been fully settled by a successful payment capture. The gateway links the paid transaction to the invoice record.
-4. **`void`**: If an issued invoice is critically wrong and no payment occurred, it can be mathematically negated by voiding it. A void creates a corresponding reversal record to preserve the gapless number sequence.
-5. **`refunded`**: Issued after a Credit Note is generated for a `paid` invoice. The original invoice remains on file as a permanent accounting record; the Credit Note documents the reversal.
+3. **Payment state (computed)**: Whether an invoice is open, partially settled, settled, credited, refunded, or overpaid is derived from linked settlements and credit notes rather than stored as a separate mutable invoice status.
+4. **Void / refund workflows**: If an issued invoice is critically wrong or must be reversed, the platform creates the appropriate reversal artifact and keeps the original invoice on file as part of the permanent accounting record.
+
+## Draft Invoice Tax Calculation
+
+When creating or editing a draft invoice manually, VAT can be either automatic or explicit on a per-line basis.
+
+1. Leave the VAT field blank to let the backend calculate tax automatically.
+2. Enter a VAT percentage only when you intend to override the automatic result for that line item.
+3. The Admin Panel now previews the canonical backend tax result before save, including the resolved rate code when available.
+
+The same tax engine is used for transactions, recurring invoices, API-key draft invoice creation, and the draft-invoice preview endpoint, so the behavior stays consistent across flows.
 
 ## The Customer Portal
 
 Rather than emailing large PDF attachments that may be blocked by spam filters, the gateway hosts a secure **Customer Portal**.
 
 End-users navigate to your custom domain (e.g., `invoices.yourcompany.com`) and authenticate using a one-time secure link or their client portal password. From there, they can independently:
-* Download their invoice as a PDF.
-* Download their invoice as a machine-readable native E-Invoice (ZUGFeRD, XRechnung, Peppol) if configured.
+
+- Download their invoice as a PDF.
+- Download their invoice as a machine-readable native E-Invoice (ZUGFeRD, XRechnung, Peppol) if configured.
 
 ## Credit Notes (Refunds)
 
-Because `issued` invoices are strictly immutable, you cannot simply edit the total amount to reflect a refund. 
+Because `issued` invoices are strictly immutable, you cannot simply edit the total amount to reflect a refund.
 
 Instead, you must issue a **Credit Note**. A Credit Note is a separate legal document that mathematically counters the original invoice.
+
+The original invoice always remains part of the accounting record. Refund and reversal outcomes are represented by linked settlement totals and credit notes, not by editing or replacing the invoice itself.
 
 1. Navigate to a successful Transaction.
 2. Click **Refund**.
 3. Choose to perform a full or partial refund.
-4. The system communicates the refund request to the upstream Provider (e.g., Stripe) and synchronously generates the Credit Note PDF, sending a notification to the customer.
+4. The system communicates the refund request to the upstream Provider (e.g., Stripe), records the refund against the linked invoice settlement state, and generates the Credit Note document for the customer.
+
+Credit notes therefore serve two purposes:
+
+- They provide the legal reversal document required for accounting and tax records.
+- They explain why the invoice payment state may move to partially refunded, refunded, or fully credited without changing the original invoice contents.

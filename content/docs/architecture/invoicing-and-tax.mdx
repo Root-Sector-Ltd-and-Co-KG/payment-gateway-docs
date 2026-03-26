@@ -13,8 +13,8 @@ Invoices enforce a strict immutability rule designed for accounting compliance. 
 
 1. **`draft`**: The invoice is an editable placeholder. It can be fully modified, populated via the `InvoiceCorrectionService`, or deleted entirely without an audit trail.
 2. **`issued`**: The invoice becomes a finalized, legal entity. The legal `InvoiceNumber` is permanently assigned. From this point forward, the core contents cannot be mutated.
-3. **`void`**: If an issued invoice is severely incorrect before financial use, it can be mathematically negated by voiding it.
-4. **Payment State (Computed)**: The actual financial state of an invoice—like `open`, `partially_settled`, `settled`, or `credited`—is never persisted in a static string. It is dynamically computed by comparing the `amountPaid` integer (incremented atomically during successful transaction webhooks) against the `totalDue`.
+3. **Void / reversal workflow**: If an issued invoice must be negated, the platform performs a formal void / reversal workflow rather than mutating the invoice in place. The original invoice remains part of the legal record.
+4. **Payment State (Computed)**: Financial states such as `open`, `partially_settled`, `settled`, `credited`, `overpaid`, or refund-derived states are computed from settlement totals instead of being persisted as a mutable invoice status.
 
 ### Invoice Corrections
 
@@ -30,7 +30,7 @@ The system utilizes an isolated `invoice_sequences` MongoDB collection to secure
 
 ## The Advanced Tax Engine
 
-The tax capability is far beyond standard flat rates, supporting complex B2B and B2C cross-border scenarios including reverse charge mechanisms and small-business exemptions (e.g., German *Kleinunternehmerregelung*).
+The tax capability is far beyond standard flat rates, supporting complex B2B and B2C cross-border scenarios including reverse charge mechanisms and small-business exemptions (e.g., German _Kleinunternehmerregelung_).
 
 ### Supported Global Tax Schemes
 
@@ -44,10 +44,20 @@ The tax capability is far beyond standard flat rates, supporting complex B2B and
 
 To survive standard government tax code alterations, VAT rules are intrinsically version-controlled.
 
-When a tax rate is updated, it is never changed in place. Instead, a new `TaxRate` record is created featuring an `EffectiveFrom` UTC timestamp. When generating an invoice, the tax engine deterministically polls the `IssueDate` against active rates, locking the exact decimal calculation onto the finalized invoice object to ensure eternal immutability.
+When a tax rate is updated, it is never changed in place. Instead, a new `TaxRate` record is created featuring an `EffectiveFrom` UTC timestamp. When generating a transaction or invoice, the tax engine resolves the applicable rate against the relevant tax-point timestamp and locks the exact decimal calculation onto the resulting record to ensure auditability and immutability.
+
+### Manual Draft Invoices And Tax Preview
+
+Manual draft invoices, recurring-generated invoices, and transaction tax calculations intentionally share the same backend tax rules.
+
+- If a draft invoice line omits `taxRate`, the backend auto-calculates the rate from seller configuration, buyer billing country, client tax-country fallback, item type, and the effective tax rate at the invoice tax point.
+- If a draft invoice line includes `taxRate`, that line is treated as an explicit manual override.
+- The Admin API exposes `POST /api/v1/invoices/preview-tax` so dashboard flows and API key integrations can resolve the canonical tax result before creating or updating a draft invoice.
+
+This keeps the operator-facing invoice editor consistent with the transaction tax engine instead of relying on a frontend-only rate guess.
 
 ### EU VAT OSS: 10-Year Evidence Retention
 
-Operating under the Union OSS scheme mandates that merchants collect and preserve proof of the buyer's establishment. 
+Operating under the Union OSS scheme mandates that merchants collect and preserve proof of the buyer's establishment.
 
 When the transaction is categorized as an EU B2C cross-border supply of a `digital_service`, the engine automatically intercepts the API request and mandates **two non-contradictory pieces of location evidence** (e.g., comparing the Billing Address `Country` against the physical IP Address `CountryCode`). If the evidence matches, it is written immutably to the `TaxEvidence` array inside the invoice and retained automatically for 10 years, fulfilling the compliance burden.
