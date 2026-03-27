@@ -52,3 +52,47 @@ Credit notes therefore serve two purposes:
 
 - They provide the legal reversal document required for accounting and tax records.
 - They explain why the invoice payment state may move to partially refunded, refunded, or fully credited without changing the original invoice contents.
+
+## Numbering Configuration
+
+Organizations control invoice and credit note numbering from the invoicing settings page.
+
+Each organization can configure:
+
+- a dedicated prefix for invoices and credit notes
+- the first sequence number to allocate
+- the zero-padding width of the numeric sequence
+- whether sequences reset every calendar year
+- how much of the issue date appears in the number
+
+Supported date layouts are:
+
+- `No date` → example: `INV-0001`
+- `Year` → example: `INV-2026-0001`
+- `Year + Month` → example: `INV-2026-03-0001`
+- `Year + Month + Day` → example: `INV-2026-03-27-0001`
+
+When the separator is set to `None`, date parts are compacted:
+
+- `INV-20260327-0001`
+
+The sequence itself remains gapless and organization-scoped. Changing the format affects newly allocated numbers only. Existing invoices and credit notes keep their assigned document numbers permanently.
+
+## Custom Invoice Templates
+
+Organizations can create custom PDF document templates and use them for invoices, credit notes, and related document flows.
+
+Typical workflow:
+
+1. Open `Settings > Templates > Document Templates`.
+2. Create a new document template or duplicate a system default.
+3. Adjust branding, layout, footer content, and supported variables.
+4. Set the template as the organization default for invoicing, or select it when creating or editing a draft invoice.
+
+You can also assign a specific PDF template in invoicing settings so newly generated invoices use that template automatically. Sites may override the inherited organization template when a storefront needs different branding.
+
+This means custom invoice templates are supported both as:
+
+- organization defaults for invoice generation
+- per-site branding overrides
+- per-invoice selection during draft invoice creation or editing

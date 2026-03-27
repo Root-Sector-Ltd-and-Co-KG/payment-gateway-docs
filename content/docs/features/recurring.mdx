@@ -28,6 +28,8 @@ If a schedule is due, the worker automatically:
 3. Issues the invoice.
 4. Emails the payment link to the client for fulfillment, or attempts an automatic capture if a reusable Payment Mandate (e.g., GoCardless Direct Debit or saved Stripe Card) exists for that Client.
 
+Recurring-generated invoices also use the active invoice document template from the organization or site invoicing settings, so subscription invoices can share the same custom branding and PDF layout as manually created invoices.
+
 ## Customer-Facing View
 
 Recurring schedules also power the buyer-facing customer portal. The same underlying schedule can be:

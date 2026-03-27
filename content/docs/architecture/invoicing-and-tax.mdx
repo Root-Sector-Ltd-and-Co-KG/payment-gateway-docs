@@ -24,9 +24,18 @@ These corrections require a formal Reason String, User ID, and timestamp, perman
 
 ## Gapless Sequential Numbering
 
-Unlike the legacy `transaction.externalReference`, which holds the merchant-provided identifier, legal invoices require gapless, sequentially incrementing numbers per financial year.
+Unlike the legacy `transaction.externalReference`, which holds the merchant-provided identifier, legal invoices require gapless, sequentially incrementing numbers.
 
-The system utilizes an isolated `invoice_sequences` MongoDB collection to securely `$inc` and format document numbers synchronously. Organizations configure their numbering patterns (e.g., `INV{YEAR}-{SEQ:5}` -> `INV2026-00001`), and these counters optionally reset at the start of each calendar year.
+The system utilizes an isolated `invoice_sequences` MongoDB collection to securely `$inc` and format document numbers synchronously. Organizations configure prefixes, start numbers, digit width, whether the sequence resets yearly, and the date layout embedded in the visible number.
+
+Supported layouts include:
+
+- `INV-2026-00001`
+- `INV-2026-03-00001`
+- `INV-2026-03-27-00001`
+- `INV-20260327-00001`
+
+Sites inherit the organization-wide numbering layout and sequence policy. They may override prefixes, but they do not create independent per-site sequences.
 
 ## The Advanced Tax Engine
 
