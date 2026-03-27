@@ -26,7 +26,7 @@ These corrections require a formal Reason String, User ID, and timestamp, perman
 
 Unlike the legacy `transaction.externalReference`, which holds the merchant-provided identifier, legal invoices require gapless, sequentially incrementing numbers.
 
-The system utilizes an isolated `invoice_sequences` MongoDB collection to securely `$inc` and format document numbers synchronously. Organizations configure prefixes, start numbers, digit width, whether the sequence resets yearly, and the date layout embedded in the visible number.
+The system utilizes an isolated `invoice_sequences` MongoDB collection to securely `$inc` and format document numbers synchronously. Organizations configure per-document layouts that define prefixes, optional middle text and suffixes, start numbers, digit width, calendar-vs-fiscal year behavior, visible period detail, and reset policy.
 
 Supported layouts include:
 
@@ -34,8 +34,9 @@ Supported layouts include:
 - `INV-2026-03-00001`
 - `INV-2026-03-27-00001`
 - `INV-20260327-00001`
+- `INV2027AR00001`
 
-Sites inherit the organization-wide numbering layout and sequence policy. They may override prefixes, but they do not create independent per-site sequences.
+The backend calculates the visible calendar or fiscal period from the actual issue date. Sites inherit the organization-wide numbering layout and sequence policy. They may override prefixes, but they do not create independent per-site sequences or their own fiscal/calendar rules.
 
 ## The Advanced Tax Engine
 

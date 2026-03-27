@@ -24,6 +24,16 @@ Under `Settings > Templates`, you can manage both notification templates and doc
 
 Document templates can be created from scratch, duplicated from a system default, previewed, set as defaults, and assigned to invoice flows. Invoicing settings can point to an organization-wide default PDF template, while sites can override that template for storefront-specific branding.
 
+## Invoicing
+
+Under `Settings > Invoicing`, organizations configure two independent document-number layouts: one for invoices and one for credit notes.
+
+- Each layout controls prefix, optional middle text, suffix, start number, digit width, year basis, visible date detail, separator, and reset policy.
+- Fiscal-year labels are derived by the backend from the issue date and the configured fiscal-year start month.
+- Sites may override only the invoice and credit-note prefixes. They do not create their own sequence counters or fiscal/calendar rules.
+
+The full API payload shape for these settings is documented in the Admin API reference under `Organization Settings`.
+
 ## Data Retention & Geolocation
 
 The platform includes organization-scoped retention controls to support your

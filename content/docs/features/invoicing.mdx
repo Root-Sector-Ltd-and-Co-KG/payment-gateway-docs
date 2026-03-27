@@ -57,24 +57,36 @@ Credit notes therefore serve two purposes:
 
 Organizations control invoice and credit note numbering from the invoicing settings page.
 
-Each organization can configure:
+Each organization configures two independent document layouts: one for invoices and one for credit notes.
 
-- a dedicated prefix for invoices and credit notes
+Each layout can define:
+
+- a dedicated prefix
+- optional middle text between the visible period and the sequence
+- an optional suffix
 - the first sequence number to allocate
 - the zero-padding width of the numeric sequence
-- whether sequences reset every calendar year
+- whether the visible period uses no date, the calendar year, or the fiscal year
+- whether the sequence resets never, every calendar year, or every fiscal year
 - how much of the issue date appears in the number
+- how date parts are separated when month or day are shown
 
-Supported date layouts are:
+If a layout uses `No date`, the sequence is appended directly after the prefix unless you provide explicit middle text. This avoids accidental doubled separators for prefixes that already end in punctuation such as `-`.
+
+Typical layouts include:
 
 - `No date` → example: `INV-0001`
 - `Year` → example: `INV-2026-0001`
 - `Year + Month` → example: `INV-2026-03-0001`
 - `Year + Month + Day` → example: `INV-2026-03-27-0001`
+- `Fiscal year with middle text` → example: `INV2027AR0001`
+- `Fiscal year with suffix` → example: `CN-2026-0001-REV`
 
 When the separator is set to `None`, date parts are compacted:
 
 - `INV-20260327-0001`
+
+When fiscal numbering is enabled, the backend derives the year label from the actual issue date and the configured fiscal-year start month. That same fiscal definition also drives the optional fiscal-year reset policy.
 
 The sequence itself remains gapless and organization-scoped. Changing the format affects newly allocated numbers only. Existing invoices and credit notes keep their assigned document numbers permanently.
 

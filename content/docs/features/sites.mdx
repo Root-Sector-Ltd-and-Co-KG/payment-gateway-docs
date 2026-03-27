@@ -70,17 +70,22 @@ If a key is compromised, you can instantly revoke and roll it from the Admin int
 
 ## Site Invoicing Overrides
 
-Sites inherit the organization-wide numbering layout.
+Sites inherit the organization-wide numbering layouts for both invoices and credit notes.
 
-That means a site can use its own invoice or credit note prefix, but it does **not** create its own numbering sequence or date layout. The organization still controls:
+That means a site can use its own invoice or credit note prefix, but it does **not** create its own numbering sequence or period logic. The organization still controls:
 
 - starting numbers
 - digit width
-- yearly reset behavior
-- date layout (`No date`, `Year`, `Year + Month`, `Year + Month + Day`)
+- reset policy (`Never`, `Calendar year`, or `Fiscal year`)
+- whether the visible period uses no date, the calendar year, or the fiscal year
+- date detail (`Year`, `Year + Month`, `Year + Month + Day`)
 - date separator (`Dash` or `None`)
+- fiscal year start month and fiscal label style
+- middle text and suffix
 
 This keeps document numbers unique across the organization while still allowing brand-specific prefixes per site.
+
+The dashboard therefore presents invoice and credit-note numbering policies separately whenever their layouts differ.
 
 Sites can also override the PDF template and branding used for invoices. This is useful when multiple storefronts share one organization but need different logos, colors, or footers on customer-facing documents.
 

@@ -249,6 +249,68 @@ In the example above, the first line is auto-calculated and the second line uses
 
 ---
 
+## Organization Settings
+
+### Invoicing Settings
+
+| Method | Path                                       | Required Scope        | Description                                     |
+| ------ | ------------------------------------------ | --------------------- | ----------------------------------------------- |
+| `GET`  | `/api/v1/organizations/settings/invoicing` | `organization:read`   | Get invoicing settings for the active organization |
+| `PUT`  | `/api/v1/organizations/settings/invoicing` | `organization:update` | Update invoicing settings for the active organization |
+
+The numbering contract is layout-based. Organizations store one layout for invoices and one for credit notes.
+
+```json
+{
+  "enabled": true,
+  "autoGenerateInvoice": false,
+  "companyName": "Example GmbH",
+  "companyAddress": {
+    "street": "Example Street 1",
+    "city": "Berlin",
+    "postalCode": "10115",
+    "country": "DE"
+  },
+  "companyEmail": "billing@example.com",
+  "invoiceNumberLayout": {
+    "prefix": "INV-",
+    "periodType": "calendar",
+    "periodGranularity": "year",
+    "fiscalYearStartMonth": 1,
+    "fiscalYearLabelMode": "end_year",
+    "periodSeparator": "dash",
+    "infix": "-",
+    "sequenceDigits": 6,
+    "suffix": "",
+    "resetPolicy": "calendar_year",
+    "startNumber": 1
+  },
+  "creditNoteNumberLayout": {
+    "prefix": "CN-",
+    "periodType": "calendar",
+    "periodGranularity": "year",
+    "fiscalYearStartMonth": 1,
+    "fiscalYearLabelMode": "end_year",
+    "periodSeparator": "dash",
+    "infix": "-",
+    "sequenceDigits": 6,
+    "suffix": "",
+    "resetPolicy": "calendar_year",
+    "startNumber": 1
+  }
+}
+```
+
+Notes:
+
+- `periodType` is one of `none`, `calendar`, or `fiscal`.
+- `periodGranularity` is one of `year`, `year_month`, or `year_month_day`.
+- `periodSeparator` is `dash` or `none` and only matters when month or day is visible.
+- `resetPolicy` is one of `never`, `calendar_year`, or `fiscal_year`.
+- Sites inherit these layouts and may override only `invoicePrefix` and `creditNotePrefix` in their site-level invoicing settings.
+
+---
+
 ## Providers
 
 | Method   | Path                           | Required Scope    | Required Role | Description             |
