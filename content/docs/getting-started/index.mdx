@@ -53,12 +53,26 @@ A Site represents a checkout surface — your storefront, SaaS product, or brand
 1. Navigate to **Sites → New Site**.
 2. Give it a name (e.g., `My Store`).
 3. Assign the Stripe provider you just created.
-4. Set a **Success URL** and **Cancel URL** — these are where customers land after payment.
+4. Optionally choose the default provider customers should see first.
 5. Click **Create**.
 
-After creation, the system generates an **API Key** for this site. Copy the `sk_...` key — you will need it to authenticate API requests in Step 6.
+After creation, open **Sites → Edit Site** and copy two values for later integrations:
 
-## Step 5 — Create a Checkout Session (Dashboard)
+- the **Site ID** used in the checkout creation path, and
+- the **Webhook Signing Secret** used to verify outbound IPN requests sent to your own `ipnUrl`.
+
+Sites do **not** generate API keys. API keys are created separately at the **organization** level.
+
+## Step 5 — Create an Organization API Key
+
+For server-to-server integrations, create an organization API key before calling the Admin API.
+
+1. Navigate to **Settings → API Keys**.
+2. Click **Create API Key**.
+3. Assign at least the **`checkout:create`** scope.
+4. Store the generated `sk_...` secret in your secrets manager. It is shown only once.
+
+## Step 6 — Create a Checkout Session (Dashboard)
 
 The simplest way to test is through the Admin Panel:
 
@@ -69,7 +83,7 @@ The simplest way to test is through the Admin Panel:
 
 The system returns a URL on your **main frontend** host (`MAIN_FRONTEND_DOMAIN`), e.g. `https://secure.yourcompany.com/checkout/abc123` or hosted `https://secure.payment-gateway.app/checkout/abc123` — [Hostnames & DNS conventions](../deployment/domains).
 
-## Step 6 — Create a Checkout Session via API
+## Step 7 — Create a Checkout Session via API
 
 For real integrations, your backend server creates checkout sessions programmatically.
 
@@ -78,22 +92,26 @@ curl -X POST https://api.yourcompany.com/v1/checkouts/{siteId}/create \
   -H "Authorization: Bearer sk_live_keyid.secret" \
   -H "Content-Type: application/json" \
   -d '{
+    "amount": 4900,
     "currency": "EUR",
-    "successUrl": "https://yourapp.com/success?txId={transactionId}",
+    "email": "buyer@example.com",
+    "returnUrl": "https://yourapp.com/success?txId={transactionId}",
     "cancelUrl": "https://yourapp.com/cancel",
     "ipnUrl": "https://yourapp.com/webhooks/payment-ipn",
-    "lineItems": [
+    "externalReference": "order_12345",
+    "items": [
       {
-        "name": "Professional Plan",
+        "description": "Professional Plan",
         "quantity": 1,
-        "unitAmount": 4900
+        "unitPrice": 4900,
+        "itemType": "virtual"
       }
     ]
   }'
 ```
 
 > [!NOTE]
-> Find your **Site ID** in the Admin Panel under **Sites → [your site]** — it appears in the page URL (e.g., `sites/6507f1f3...`).
+> Find your **Site ID** in the Admin Panel under **Sites → Edit Site** — it appears in the page URL and in the site detail screen.
 
 > [!NOTE]
 > Use **`ADMIN_BACKEND_DOMAIN`** for this `curl` host (e.g. `api.yourcompany.com`; hosted: `api.payment-gateway.app`). The Admin Panel is on **`ADMIN_FRONTEND_DOMAIN`** (e.g. `dashboard.yourcompany.com`; hosted: `dashboard.payment-gateway.app`) — [Hostnames & DNS conventions](../deployment/domains).
@@ -103,15 +121,15 @@ curl -X POST https://api.yourcompany.com/v1/checkouts/{siteId}/create \
 
 The JSON response includes **`paymentUrl`** (and `sessionPublicId`, `id`, optional `shortCode`). Redirect your customer to `paymentUrl` to open the hosted checkout.
 
-## Step 7 — Receive the Webhook Confirmation
+## Step 8 — Receive the Webhook Confirmation
 
 After the customer pays, the payment provider sends a webhook to your **Main Backend**. The gateway verifies the signature, normalizes the event, and updates the transaction.
 
-To be notified on **your** server, pass **`ipnUrl`** when creating the checkout (as in Step 6) and verify posts with the **Webhook Signing Secret** from **Sites → Edit Site** — see [Webhooks & IPN](../api-reference/webhooks) for headers, payload shape, and signature algorithm.
+To be notified on **your** server, pass **`ipnUrl`** when creating the checkout (as in Step 7) and verify posts with the **Webhook Signing Secret** from **Sites → Edit Site** — see [Webhooks & IPN](../api-reference/webhooks) for headers, payload shape, and signature algorithm.
 
 See the same page for **inbound** provider webhooks vs **outbound** IPN to your `ipnUrl`.
 
-## Step 8 — View the Transaction
+## Step 9 — View the Transaction
 
 Navigate to **Transactions** in the Admin Panel. Your completed payment appears with full metadata: amount, provider, tax breakdown, customer details, and invoice link.
 

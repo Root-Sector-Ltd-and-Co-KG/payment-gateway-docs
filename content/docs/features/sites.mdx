@@ -55,6 +55,10 @@ The same request works with the backend’s canonical path prefix: `POST https:/
 > [!NOTE]
 > `{siteId}` is the **Site** id (MongoDB ObjectId from **Sites → Edit**).
 
+> [!NOTE]
+> The **Webhook Signing Secret** also lives on **Sites → Edit Site**. Use it to verify outbound IPN requests sent to
+> your own `ipnUrl`. It is site-specific, while API keys stay organization-scoped.
+
 For turnkey store integrations (WooCommerce, aMember Pro), see [E‑commerce integrations](./ecommerce-integrations).
 
 The API domain is typically separate from the Admin Panel domain. Operators log

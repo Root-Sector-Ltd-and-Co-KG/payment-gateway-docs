@@ -7,6 +7,8 @@ description: Management API — checkouts, transactions, invoices, clients, site
 
 **Base URL (canonical on the service):** `https://<your-admin-backend-host>/api/v1` — your deployment sets the host via **`ADMIN_BACKEND_DOMAIN`**. Self-hosted examples often use `api.yourcompany.com` or `api.example.com`; hosted production uses **`https://api.payment-gateway.app`** — [Hostnames & DNS conventions](../deployment/domains).
 
+**OpenAPI / Swagger UI:** `https://<your-admin-backend-host>/api/v1/docs/index.html`
+
 **Shorter public path (default reverse proxy):** same host with `/v1/...` — **`payment-gateway-reverseproxy/Caddyfile`** rewrites `/v1/*` → `/api/v1/*` on `{$ADMIN_BACKEND_DOMAIN}` before proxying to the Admin Backend.
 
 The Admin Backend is the primary integration surface for server-side automation. All endpoints require an **API Key** or **JWT** in the `Authorization: Bearer` header.
@@ -61,28 +63,26 @@ Content-Type: application/json
 
 ```json
 {
+  "amount": 4900,
   "currency": "EUR",
-  "successUrl": "https://yourapp.com/success?txId={transactionId}",
+  "email": "buyer@example.com",
+  "returnUrl": "https://yourapp.com/success?txId={transactionId}",
   "cancelUrl": "https://yourapp.com/cancel",
   "ipnUrl": "https://yourapp.com/webhooks/payment-ipn",
   "externalReference": "order_12345",
-  "lineItems": [
+  "items": [
     {
-      "name": "Professional Plan — Monthly",
+      "description": "Professional Plan — Monthly",
       "quantity": 1,
-      "unitAmount": 4900,
-      "description": "Billed monthly, cancel anytime"
+      "unitPrice": 4900,
+      "itemType": "virtual"
     }
-  ],
-  "metadata": {
-    "userId": "usr_abc",
-    "plan": "professional"
   }
 }
 ```
 
 > [!NOTE]
-> `{transactionId}` in `successUrl`/`cancelUrl` is a literal template placeholder — the gateway substitutes the actual transaction ID at redirect time.
+> `{transactionId}` in `returnUrl`/`cancelUrl` is a literal template placeholder — the gateway substitutes the actual transaction ID at redirect time.
 
 Optional **`ipnUrl`** sets where the Main Backend sends [outbound IPN](./webhooks#outbound-ipn-to-your-application) for transactions created from this checkout; the **Webhook Signing Secret** on the Site is used to sign those requests.
 
@@ -253,9 +253,9 @@ In the example above, the first line is auto-calculated and the second line uses
 
 ### Invoicing Settings
 
-| Method | Path                                       | Required Scope        | Description                                     |
-| ------ | ------------------------------------------ | --------------------- | ----------------------------------------------- |
-| `GET`  | `/api/v1/organizations/settings/invoicing` | `organization:read`   | Get invoicing settings for the active organization |
+| Method | Path                                       | Required Scope        | Description                                           |
+| ------ | ------------------------------------------ | --------------------- | ----------------------------------------------------- |
+| `GET`  | `/api/v1/organizations/settings/invoicing` | `organization:read`   | Get invoicing settings for the active organization    |
 | `PUT`  | `/api/v1/organizations/settings/invoicing` | `organization:update` | Update invoicing settings for the active organization |
 
 The numbering contract is layout-based. Organizations store one layout for invoices and one for credit notes.
@@ -336,13 +336,19 @@ Notes:
 
 ## API Keys
 
-| Method   | Path                          | Required Scope   | Description                        |
-| -------- | ----------------------------- | ---------------- | ---------------------------------- |
-| `GET`    | `/api/v1/api-keys`            | `api_key:read`   | List API keys                      |
-| `GET`    | `/api/v1/api-keys/:id`        | `api_key:read`   | Get API key details                |
-| `POST`   | `/api/v1/api-keys`            | `api_key:create` | Create API key                     |
-| `DELETE` | `/api/v1/api-keys/:id`        | `api_key:delete` | Revoke API key                     |
-| `POST`   | `/api/v1/api-keys/:id/rotate` | `api_key:update` | Rotate API key (issues new secret) |
+| Method   | Path                                                 | Required Scope    | Description                        |
+| -------- | ---------------------------------------------------- | ----------------- | ---------------------------------- |
+| `GET`    | `/api/v1/organizations/{orgId}/api-keys`             | `api_key:read`    | List organization API keys         |
+| `POST`   | `/api/v1/organizations/{orgId}/api-keys`             | `api_key:create`  | Create organization API key        |
+| `GET`    | `/api/v1/organizations/{orgId}/api-keys/{id}`        | `api_key:read`    | Get organization API key details   |
+| `PUT`    | `/api/v1/organizations/{orgId}/api-keys/{id}`        | `api_key:update`  | Update API key metadata / scopes   |
+| `DELETE` | `/api/v1/organizations/{orgId}/api-keys/{id}`        | `api_key:delete`  | Delete API key                     |
+| `POST`   | `/api/v1/organizations/{orgId}/api-keys/{id}/revoke` | `api_key:execute` | Revoke API key                     |
+| `POST`   | `/api/v1/organizations/{orgId}/api-keys/{id}/rotate` | `api_key:execute` | Rotate API key (issues new secret) |
+
+Organization API keys are already bound to one organization, but the management endpoints remain nested under
+`/organizations/{orgId}/api-keys` for admin and automation workflows. System API keys use the `/api/v1/system/api-keys`
+family and are intended for global administrative automation rather than normal merchant checkout integrations.
 
 ---
 
@@ -421,7 +427,7 @@ Use this for trusted backend automations only. Do not expose it to browser or mo
 | `POST`   | `/api/v1/tax-rules`                        | `tax_rule:create`  | Create tax rule                |
 | `PUT`    | `/api/v1/tax-rules/:id`                    | `tax_rule:update`  | Update tax rule                |
 | `DELETE` | `/api/v1/tax-rules/:id`                    | `tax_rule:delete`  | Delete tax rule                |
-| `POST`   | `/api/v1/tax-rules/populate-defaults`      | `tax_rule:execute` | Load default EU/UK/US/CA rules |
+| `POST`   | `/api/v1/tax-rules/populate-defaults`      | `tax_rule:create`  | Load default EU/UK/US/CA rules |
 | `GET`    | `/api/v1/tax-rates`                        | `tax_rate:read`    | List tax rates                 |
 | `POST`   | `/api/v1/tax-rates`                        | `tax_rate:create`  | Create tax rate                |
 | `POST`   | `/api/v1/tax-rates/populate-eu`            | `tax_rate:execute` | Load current EU VAT rates      |
@@ -498,16 +504,16 @@ Returns aggregated metrics: gross volume, net revenue, transaction counts, failu
 | `domain:execute`       | Verify CNAME, Apple Pay files                                                                   |
 | `api_key:read`         | Read API keys                                                                                   |
 | `api_key:create`       | Create API keys                                                                                 |
-| `api_key:update`       | Rotate API keys                                                                                 |
-| `api_key:delete`       | Revoke API keys                                                                                 |
+| `api_key:update`       | Update API key metadata, scopes, or whitelist                                                   |
+| `api_key:delete`       | Delete API keys                                                                                 |
+| `api_key:execute`      | Rotate or revoke API keys                                                                       |
 | `organization:read`    | Read organization details                                                                       |
 | `organization:update`  | Update organization settings                                                                    |
 | `organization:execute` | Access settings, encryption operations                                                          |
 | `tax_rule:read`        | Read tax rules                                                                                  |
-| `tax_rule:create`      | Create tax rules                                                                                |
+| `tax_rule:create`      | Create tax rules and populate default rule sets                                                 |
 | `tax_rule:update`      | Update tax rules                                                                                |
 | `tax_rule:delete`      | Delete tax rules                                                                                |
-| `tax_rule:execute`     | Populate defaults                                                                               |
 | `tax_rate:read`        | Read tax rates                                                                                  |
 | `tax_rate:create`      | Create tax rates                                                                                |
 | `tax_rate:update`      | Update tax rates                                                                                |
@@ -518,12 +524,12 @@ Returns aggregated metrics: gross volume, net revenue, transaction counts, failu
 | `data_io:read`         | Read import/export templates                                                                    |
 | `data_io:execute`      | Import and export data                                                                          |
 | `export:execute`       | Generate CSV exports                                                                            |
+| `portal:create`        | Generate direct-login customer portal magic links                                               |
 | `vies:read`            | Check EU countries                                                                              |
 | `vies:execute`         | Validate VAT IDs                                                                                |
 | `userprofile:read`     | Read own user profile                                                                           |
-| `userprofile:create`   | Create passkey links                                                                            |
 | `userprofile:update`   | Update passkey labels, notification prefs                                                       |
-| `userprofile:execute`  | Manage passkeys                                                                                 |
+| `userprofile:execute`  | Manage passkeys and related user profile actions                                                |
 
 ## Common least-privilege bundles
 

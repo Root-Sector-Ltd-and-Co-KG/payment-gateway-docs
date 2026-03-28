@@ -50,6 +50,8 @@ Recommended production posture:
 4. Use a supported KMS provider (AWS KMS, Azure Key Vault, Google Cloud KMS, or HashiCorp Vault).
 5. Define key and credential rotation procedures.
 
+For **how DEKs relate to KMS and application AES-GCM** (what the cloud provider sees vs what the app encrypts), see [Encryption Architecture](../architecture/encryption).
+
 ## 4) Retention Controls
 
 Under `Settings > Retention` (organization scope), configure:

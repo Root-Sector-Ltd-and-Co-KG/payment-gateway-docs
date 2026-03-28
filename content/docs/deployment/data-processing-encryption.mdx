@@ -1,80 +1,111 @@
 ---
 title: Data Processing & Encryption
-description: What data is processed, how encryption is applied, and which KMS providers are supported.
+description: What data is processed, which fields support encryption, and how system vs organization scopes apply.
 ---
 
 # Data Processing & Encryption
 
 This page explains:
 
-- which data categories are processed by the platform,
-- how encryption is applied at system and organization scope,
-- and which Key Management Service (KMS) providers are supported in the Admin UI.
+- which data categories the platform processes,
+- **which scope** (system vs organization DEK) applies,
+- representative **fields** that use `FieldEncrypted` when encryption is enabled for that scope,
+- and which KMS providers the Admin UI supports.
 
-## Data Categories Processed
+## How scopes map to data
 
-The platform processes data in multiple categories, including:
+Encryption is **not** one global switch for all MongoDB data. The application attaches an encryption **scope** to each operation:
 
-| Category | Typical Examples | Encryption Scope |
-| --- | --- | --- |
-| User data | Personal profile details, authentication data, contact details | System encryption |
-| Organization data | Business details, API keys, provider and site settings | System encryption |
-| Transaction data | Customer email, IP address, site label, payment metadata | Organization encryption |
-| Client and billing data | Names, company, phone, address, VAT identifiers | Organization encryption |
-| Notification and provider secrets | SMTP credentials, webhook secrets, provider credentials | Encrypted at rest through encryption services |
+- **System scope** — Used when handling **platform admin** documents (for example admin `User` records) and other system-level contexts. Requires **System > Encryption** to be configured and enabled with an active system DEK.
+- **Organization scope** — Used for **tenant-owned** documents (clients, transactions, providers, queued notifications, and similar). Requires **Settings > Encryption** for that organization to be configured and enabled with an active organization DEK.
 
-The exact records depend on enabled modules and your configuration.
+If encryption is disabled or no active DEK exists for a scope, affected `FieldEncrypted` fields remain in **plaintext** for that scope.
 
-## Is Encryption Enabled by Default?
+**Stack coverage:** Configuration and DEK management are performed in the **Admin UI** (admin backend). The **main (checkout) API** and **workers** read and write the same MongoDB documents; when organization encryption is enabled, they use the **same organization DEK** (unwrap via KMS) for tenant-scoped `FieldEncrypted` fields. Operate all of these processes with equivalent access to KMS and consistent deployment configuration.
 
-- **MongoDB transport encryption (TLS):** enabled by default in deployment config.
-- **Application field-level encryption:** available through **System Encryption** and **Organization Encryption** settings, and should be explicitly configured and enabled.
+## Data categories processed
 
-Both are recommended for production environments.
+| Category               | Typical examples                                                                        | DEK scope when field encryption is active                                          |
+| ---------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Platform admin users   | Email, display name, mobile phone                                                       | **System**                                                                         |
+| Tenant business data   | Clients, saved addresses, transactions, invoices, payment provider configuration        | **Organization**                                                                   |
+| Notifications (queued) | Email/SMS recipient channels, invoice template party lines, denormalized customer email | **Organization** (documents are tied to `organizationId`)                          |
+| System vs org SMTP     | System portal email settings vs organization invoice SMTP                               | **System** vs **Organization** respectively (each under its own settings document) |
 
-## System vs Organization Encryption
+The exact records depend on enabled modules and configuration.
 
-### System Encryption
+## Representative encrypted fields
 
-System encryption protects cross-platform administrative data, for example:
+The following lists are **representative** of types defined in the shared and backend type packages. They are encrypted **only when** the correct scope has encryption enabled and an active DEK. Fields omitted here may still be added over time; treat this as a guide for evaluations and DPIAs.
 
-- user data,
-- organization-level administrative settings,
-- sensitive credentials used by platform services.
+### Address-like values (`Address` / embedded billing & shipping)
 
-It is configured in Admin UI under **System > Encryption**.
+Encrypted: company name, first and last name, address lines, city, state, postcode, phone, VAT/tax id, email.
 
-### Organization Encryption
+**Not** encrypted as `FieldEncrypted`: **ISO 3166-1 alpha-2 country code** (stored as a normal string for validation and routing).
 
-Organization encryption protects tenant business data, for example:
+### Clients
 
-- transaction-level customer fields,
-- client and billing details,
-- organization-scoped business data.
+Encrypted: email, first/last name, company name, phone, tax id (in tax info). Billing and shipping addresses use the address rules above.
 
-Each organization has its own encryption boundary and key lifecycle, configured
-under **Settings > Encryption** within that organization scope.
+### Transactions
+
+Encrypted: customer email, return URL, IP address (when present), IPN URL. Other fields (amount, currency, status, provider response blobs, etc.) are not `FieldEncrypted` in the transaction document itself; **line items and addresses** use encrypted types where modeled.
+
+### Invoices (including portal-facing party blocks)
+
+Encrypted: seller/buyer name, email, VAT id, phone, address lines, city, state, postal code. Country remains a plaintext country code on party objects where applicable.
+
+### Payment providers
+
+The provider **`configuration`** payload (secrets and provider-specific JSON) is stored as `FieldEncrypted`.
+
+### Admin users (admin backend)
+
+Encrypted: email, name, mobile phone.
+
+### Email and SMS notification jobs
+
+Email notifications: recipient email, denormalized customer email, seller/buyer lines used in templates, etc. SMS notifications: subscriber phone number as `FieldEncrypted`.
+
+### Optional searchable fields
+
+Some fields (for example client email) may store a **search hash** alongside ciphertext to support lookup without indexing plaintext.
+
+## Existing data and background jobs
+
+Turning encryption **on** for a scope affects **new writes** immediately once a DEK is active. Older documents may still hold plaintext inside `FieldEncrypted` until they are updated or processed by a **bulk encryption job** started from the Admin UI encryption pages.
+
+Similarly, **full DEK rotation** (as opposed to envelope re-wrap) can start a **background re-encryption** pass so ciphertext is bound to the new DEK version. **Disabling** encryption or running **decryption** may use the same style of job. Monitor progress and errors in the encryption UI when running these operations on large datasets.
+
+## Is encryption enabled by default?
+
+- **MongoDB transport encryption (TLS):** enabled by default in typical deployment configurations.
+- **Application field-level encryption:** opt-in per scope through **System > Encryption** and **Settings > Encryption**; must be explicitly configured, validated, and enabled with a generated DEK.
+
+Both are recommended for production.
+
+**Admin UI entry points:** **System > Encryption** (system DEK and system KMS) and **Settings > Encryption** inside an organization (per-org DEK and KMS). A feature comparison and envelope-encryption detail are on [Encryption Architecture](../architecture/encryption).
 
 > [!IMPORTANT]
-> Configure **both** system and organization encryption for production. System
-> encryption alone does not replace organization-scoped protection.
+> Configure **both** system and organization encryption for production. Neither scope substitutes for the other.
 
-## Supported KMS Providers (Admin UI)
+## Supported KMS providers (Admin UI)
 
-The encryption configuration UI currently supports:
+The encryption configuration UI supports:
 
 - AWS KMS
 - Azure Key Vault
 - Google Cloud KMS
 - HashiCorp Vault
 
-For each provider, you configure provider-specific fields (such as key ID,
-region, vault address, mount, and credentials), validate connectivity, then
-generate and manage DEKs.
+For each provider you configure identifiers (key ID, region, vault address, mount, etc.), validate connectivity, then generate and manage DEKs.
 
-## GDPR-Oriented Checklist
+For **how** the KMS relates to field data (what the cloud sees vs what the application encrypts), see [Encryption Architecture](../architecture/encryption).
 
-To align with GDPR technical controls, ensure you have:
+## GDPR-oriented checklist
+
+To align with GDPR-oriented technical controls, ensure you have:
 
 1. TLS enabled for MongoDB and external endpoints.
 2. System encryption configured, validated, and enabled.
@@ -85,11 +116,9 @@ To align with GDPR technical controls, ensure you have:
 7. Access controls and audit logging enabled for admin operations.
 
 > [!IMPORTANT]
-> This documentation supports GDPR-oriented technical implementation but is not
-> legal advice. Full compliance also requires legal and organizational controls
-> in your company.
+> This documentation supports GDPR-oriented technical implementation but is not legal advice. Full compliance also requires legal and organizational controls in your company.
 
-## Related Pages
+## Related pages
 
 - [Configuration](./configuration)
 - [Data Protection Guide](./data-protection)

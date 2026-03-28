@@ -29,8 +29,8 @@ This URL is served by the **Main Frontend** (Payment Portal). When navigating to
 > [!CAUTION]
 > The checkout flow is designed for PCI-DSS SAQ A-oriented integrations. Cardholder data is handled by the payment provider UI components (for example, Stripe Elements) rather than being processed directly by your backend integration.
 
-## Success and Failure URLs
+## Return and Cancel URLs
 
-When creating a Checkout programmatically, you can specify `successUrl` and `cancelUrl`.
+When creating a Checkout programmatically, you can specify `returnUrl` and `cancelUrl`.
 
 After the customer completes the flow on the hosted page, they will be redirected back to your application, optionally with the transaction ID appended to the query string to allow you to fulfill their order instantly.
