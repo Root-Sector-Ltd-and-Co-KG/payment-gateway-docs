@@ -1,0 +1,135 @@
+---
+title: Release 4.1.0
+description: Stable release notes for Payment Gateway App 4.1.0.
+---
+
+# Release 4.1.0
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-03-27T20:03:21Z
+- Release tag: v4.1.0
+
+## [4.1.0] - 2026-03-27
+
+### Changed Components
+
+- **admin-backend** v4.1.0
+- **admin-frontend** v4.1.0
+- **main-backend** v4.1.0
+- **main-frontend** v4.1.0
+- **reverseproxy** v4.1.0
+
+### Added
+
+- **admin-backend:** Index creation for invoice sequences to ensure uniqueness and improve performance.
+- **admin-backend:** Preview tax calculation endpoint for invoices.
+- **admin-backend:** Endpoint for creating direct-login magic links for customers.
+- **admin-backend:** SetSelectedOrganizationHandler and organization selection cookie management.
+- **admin-backend:** Dev Unit Tests workflow for automated testing on push and pull requests.
+- **admin-backend:** Configuration validation and unit tests for Mollie payment provider.
+- **admin-backend:** Capacity limit checks for organizations and sites within the licensing system.
+- **admin-backend:** Support for no-auth SMTP servers and background context management for services.
+- **admin-backend:** System template settings service for managing email templates.
+- **admin-backend:** Bulk tax recalculation job handling and related API endpoints.
+- **admin-backend:** Auto payment link expiry settings and related functionality.
+- **admin-frontend:** Tax preview functionality for invoices.
+- **admin-frontend:** Organization switching functionality with dedicated tests.
+- **admin-frontend:** Subscription management toggle and portal settings.
+- **admin-frontend:** Mollie payment provider integration with configuration fields and webhook support.
+- **admin-frontend:** Utility functions for license state formatting, IP risk display, and organization limits.
+- **admin-frontend:** Global admin route for licensing and enhanced version check handling.
+- **admin-frontend:** TemplateInUseModal component for handling template deletion with active invoices.
+- **admin-frontend:** FileDropZone component for CSV file uploads.
+- **admin-frontend:** Bulk tax recalculation feature with confirmation and result summary.
+- **admin-frontend:** Custom Checkbox component and data-testid attributes for improved testing.
+- **admin-frontend:** Configurable rate limiting for the Express server.
+- **main-backend:** Magic link authentication for portal access and session management.
+- **main-backend:** OTP service and related tests for portal authentication.
+- **main-backend:** /portal/status endpoint to check customer portal availability.
+- **main-backend:** Capacity limits for organizations and sites in licensing.
+- **main-backend:** Licensing Authority URL resolution and license middleware for API route enforcement.
+- **main-backend:** Support for label and description translations in provider handling.
+- **main-backend:** Tax completion and invoice generation handlers for transaction processing.
+- **main-backend:** URL validation and #nosec annotations for outbound service requests.
+- **main-frontend:** Public portal for viewing invoices and credit notes with internationalization support.
+- **main-frontend:** Portuguese and Chinese localization for payment-related components.
+- **main-frontend:** Subscription management features including list and detail views.
+- **main-frontend:** Support for Wise and Wire payment providers with corresponding forms and modals.
+- **reverseproxy:** Internal health check endpoint and /api/* pass-through handling.
+- **reverseproxy:** GitHub Actions workflow for building and publishing Docker images.
+
+### Changed
+
+- **admin-backend:** Refactored document numbering system for invoices and credit notes.
+- **admin-backend:** Updated invoice and credit note prefixes to include a hyphen for improved formatting.
+- **admin-backend:** Enhanced Docker image build process with multi-arch support and version input.
+- **admin-backend:** Streamlined user role assignment and enhanced registration flow.
+- **admin-backend:** Refactored tax rule matching to consider effective dates.
+- **admin-backend:** Updated invoice sequence indexes to be organization-level.
+- **admin-frontend:** Refactored invoicing settings to use structured document number layouts.
+- **admin-frontend:** Migrated organization selection storage from localStorage to sessionStorage.
+- **admin-frontend:** Enhanced route access management and navigation filtering for licensed features.
+- **admin-frontend:** Refactored checkout and invoice components to use unified item type options.
+- **admin-frontend:** Renamed 'Backend Domain' to 'Webhook Domain' across related components.
+- **main-backend:** Updated invoice number layout structure and allocation logic for organization-level uniqueness.
+- **main-backend:** Enhanced invoice PDF generation with additional seller and buyer details and payment link QR codes.
+- **main-backend:** Upgraded Go version to 1.26 and enhanced billing request handling.
+- **main-backend:** Refactored temporary PDF cache directory handling with fallback logic.
+- **main-frontend:** Enhanced billing address structure to include company names and localized country names.
+- **main-frontend:** Updated LoadingSpinner component for a more consistent loading experience.
+- **main-frontend:** Standardized project naming to 'payment-gateway-main-frontend'.
+- **reverseproxy:** Consolidated API and webhook handling into streamlined backend routes.
+- **reverseproxy:** Updated Caddy and plugin versions in Dockerfile for improved functionality.
+
+### Fixed
+
+- **admin-backend:** Timeout settings for build, deploy, and cleanup jobs in CI workflows.
+- **admin-backend:** Enforced HTTPS for payment URLs in the checkout service.
+- **admin-backend:** Improved SMTP handling, including STARTTLS, base64-encoding, and proper client closure.
+- **admin-backend:** Migration registration error handling and transaction-not-found errors.
+- **admin-backend:** Rounded average tax rate calculations to prevent floating-point artifacts.
+- **admin-frontend:** Amazon SES SMTP host updated to the correct EU region.
+- **admin-frontend:** Release metadata URL updated to the production endpoint.
+- **admin-frontend:** Validation status logic in encryption settings and vault case typos.
+- **main-backend:** Downgraded pkcs7 dependency from v0.2.2 to v0.2.0.
+- **main-backend:** Corrected formatCurrency function to handle negative values properly.
+- **main-backend:** Improved retry count conversion in the queue service.
+- **main-backend:** Enforced 4xx responses for invalid webhook signatures or payloads.
+- **main-frontend:** Fixed redirect URL in PaymentForm to use sessionPublicId for accurate processing.
+- **main-frontend:** Disabled 'x-powered-by' header in the server for improved security.
+- **reverseproxy:** Corrected trusted proxy configurations and CORS handling in Caddyfile.
+
+### Removed
+
+- **admin-backend:** X-Organization-ID header references from API documentation.
+- **admin-frontend:** Unused productVersion and componentVersion from ReleaseEntry type.
+- **admin-frontend:** taxProvider and validateVatIds from TaxConfig settings.
+- **main-backend:** Unused domain verification handler and related routes.
+- **main-frontend:** Redundant security headers from server.js (now handled by reverse proxy).
+- **reverseproxy:** ZeroSSL certificate issuer from Caddyfile.
+
+### Security
+
+- **admin-backend:** Updated various dependencies including google.golang.org/grpc, golang.org/x/crypto, and payment-gateway-lib.
+- **admin-backend:** Added GH_PAT verification for Docker builds in CI.
+- **main-backend:** Implemented cache invalidation for organization encryption settings.
+- **main-backend:** Added security comments and directives (gosec) for sensitive operations like QR code generation.
+- **reverseproxy:** Added Trivy license scan workflows and system package upgrades in Dockerfile.
+- **reverseproxy:** Restricted access to internal health check endpoints.
+
+## Managed Image Baseline
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.1.0 | registry.payment-gateway.app/payment-gateway-admin-backend:4.1.0 |
+| admin-frontend | 4.1.0 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.1.0 |
+| garnet | 1.1.1 | registry.payment-gateway.app/garnet:1.1.1 |
+| gotenberg | 8.27.0 | registry.payment-gateway.app/gotenberg:8.27.0 |
+| main-backend | 4.1.0 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.0 |
+| main-frontend | 4.1.0 | registry.payment-gateway.app/payment-gateway-main-frontend:4.1.0 |
+| main-worker | 4.1.0 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.0 |
+| mgob | 2.0.28 | registry.payment-gateway.app/mgob:2.0.28 |
+| mongo | 8.2.4 | registry.payment-gateway.app/mongo:8.2.4 |
+| mongo-express | latest | registry.payment-gateway.app/mongo-express:latest |
+| reverseproxy | 4.1.0 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.1.0 |
