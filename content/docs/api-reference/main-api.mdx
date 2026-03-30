@@ -24,6 +24,8 @@ GET /api/v1/checkouts/:id
 
 Retrieves a checkout session by its public ID. Used by the Main Frontend to render the payment page.
 
+When the response includes `checkoutSettings.vatIdValidation`, the value is the **effective runtime mode** exposed to checkout, not just the raw merchant preference. If checkout is configured for `vies` but organization tax settings do not currently allow VIES-backed tax handling, the Main Backend downgrades the session response to `format` so buyer-facing validation stays aligned with backend tax behavior.
+
 **Authentication:** No API key/JWT required. **License enforcement applies** (requests are denied when license state is `BLOCKED` or `NOT_ACTIVATED`).
 
 **Browser access (CORS):** This endpoint enforces an **Origin allow-list** derived from the Site/Organization frontend domains plus `MPG_MAIN_FRONTEND_DOMAIN`. Requests without a valid `Origin` (or `Referer`) will be rejected with `403`.
@@ -143,6 +145,8 @@ POST /api/v1/vat/validate
 ```
 
 Validates a VAT ID via the EU VIES system. No authentication required.
+
+Hosted checkout only calls this endpoint when the effective `checkoutSettings.vatIdValidation` mode resolves to `vies` for the current session.
 
 **Request Body:**
 

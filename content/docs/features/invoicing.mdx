@@ -7,6 +7,19 @@ description: Managing the lifecycle of compliant invoices, corrections, and refu
 
 Invoices are the legal backbone of your transactions. The Payment Gateway automatically generates mathematically exact, legally compliant PDFs and E-Invoices (XML) for every successful captured payment.
 
+## Document Detail Views
+
+In the Admin UI, invoice and credit note detail pages use the same party structure:
+
+- **Seller**: The legal entity issuing the document.
+- **Client**: The billed counterparty shown on the document snapshot.
+
+This keeps invoices, credit notes, and transaction detail views consistent inside the admin control plane.
+
+When the document is linked to a stored Client record, the Client email in the detail view links directly to that Client profile. This gives operators a quick path from a document to the broader relationship history without changing the legal document itself.
+
+The document still preserves its own party snapshot. If the current Client profile changes later, the already-issued invoice or credit note continues to show the original document data that was valid at issuance time.
+
 ## Invoice Statuses
 
 Invoices exist in strict states to maintain accounting integrity:
@@ -43,15 +56,25 @@ Instead, you must issue a **Credit Note**. A Credit Note is a separate legal doc
 
 The original invoice always remains part of the accounting record. Refund and reversal outcomes are represented by linked settlement totals and credit notes, not by editing or replacing the invoice itself.
 
-1. Navigate to a successful Transaction.
-2. Click **Refund**.
-3. Choose to perform a full or partial refund.
-4. The system communicates the refund request to the upstream Provider (e.g., Stripe), records the refund against the linked invoice settlement state, and generates the Credit Note document for the customer.
+If an invoice is linked to payment records, the authoritative reversal workflow is **refund-first**.
+
+1. Open the Invoice or the linked successful Transaction.
+2. If exactly one refundable transaction is linked, click **Refund Payment** directly from the Invoice screen and complete the same refund form used in the Transaction screen.
+3. If multiple refundable transactions are linked, choose the relevant Transaction from the Invoice payment section and process the refund there.
+4. Choose to perform a full or partial refund.
+5. The system communicates the refund request to the upstream Provider (e.g., Stripe), records the refund against the linked invoice settlement state, and generates the Credit Note document for the Client.
+
+When an invoice has **no** linked payment refund path, the Invoice screen offers a **Create Credit Note** workflow for document-side full or partial reversals.
 
 Credit notes therefore serve two purposes:
 
 - They provide the legal reversal document required for accounting and tax records.
 - They explain why the invoice payment state may move to partially refunded, refunded, or fully credited without changing the original invoice contents.
+
+Refund-created credit notes inherit the original invoice's Seller and Client snapshot. That means the reversal document stays legally aligned with the invoice it offsets, even if the current Client profile has changed since the invoice was issued.
+
+> [!IMPORTANT]
+> The platform intentionally does not offer a paid-invoice workflow that creates a stand-alone credit note while leaving the linked payment untouched. For paid invoices, the credit note should follow the refund workflow so cash movement, settlement state, and accounting documents remain aligned.
 
 ## Numbering Configuration
 

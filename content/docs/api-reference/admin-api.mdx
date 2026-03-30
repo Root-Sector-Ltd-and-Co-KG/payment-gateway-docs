@@ -70,16 +70,23 @@ Content-Type: application/json
   "cancelUrl": "https://yourapp.com/cancel",
   "ipnUrl": "https://yourapp.com/webhooks/payment-ipn",
   "externalReference": "order_12345",
+  "invoiceNumber": "INV-2026-0001",
+  "clientId": "507f1f77bcf86cd799439014",
   "items": [
     {
+      "name": "Professional Plan — Monthly",
       "description": "Professional Plan — Monthly",
       "quantity": 1,
       "unitPrice": 4900,
+      "vatRate": 19,
       "itemType": "virtual"
     }
   }
 }
 ```
+
+> [!IMPORTANT]
+> Provide at least one of `externalReference` or `invoiceNumber`. The API accepts both, but a reference is required for reconciliation.
 
 > [!NOTE]
 > `{transactionId}` in `returnUrl`/`cancelUrl` is a literal template placeholder — the gateway substitutes the actual transaction ID at redirect time.

@@ -19,7 +19,7 @@ Standard Caddy stores TLS certificates on the local filesystem. When running mul
 
 - Persists certificates to MongoDB (replicated, backed up automatically)
 - Allows any Caddy instance to serve any domain's certificate
-- Supports on-demand TLS for dynamically registered custom domains
+- Supports on-demand TLS for dynamically registered custom domains when the merchant hostname reaches Caddy directly
 
 ---
 
@@ -84,6 +84,9 @@ Merchant integrations may call either `https://api.yourcompany.com/v1/...` or `h
 
 Merchants can map their own domains (e.g., `checkout.merchantshop.com`) to their payment portal. Caddy issues TLS certificates on first request using the `on_demand_tls` feature.
 
+> [!IMPORTANT]
+> This flow works when the merchant hostname reaches Caddy directly. It does **not** by itself solve the case where the merchant hostname points to a Cloudflare-proxied target hostname and Cloudflare terminates TLS first. In that model, Cloudflare needs a certificate for the merchant hostname at the edge before any request can reach origin.
+
 The `ask` URL must return `200 OK` for valid domains and any other status for invalid ones. The Admin Backend's `GET /api/v1/domains/verify` endpoint serves this purpose — it is a **public, no-auth endpoint** dedicated to Caddy's on-demand TLS check.
 
 Implementation details:
@@ -100,6 +103,13 @@ Implementation details:
 2. Merchant creates a CNAME record to your **main frontend** hostname (the value of `MAIN_FRONTEND_DOMAIN` — e.g. `secure.yourcompany.com`, `pay.yourcompany.com`, or hosted `secure.payment-gateway.app`): `checkout.merchantshop.com → <main-frontend-host>`.
 3. Admin Panel verifies the CNAME via **Verify Domain**.
 4. On the next request to `checkout.merchantshop.com`, Caddy calls the `ask` endpoint, receives `200`, and issues a certificate via ACME (Let's Encrypt).
+
+This registration flow assumes the target hostname is reachable at origin level. If the target hostname is itself proxied by Cloudflare, use one of these approaches instead:
+
+- Keep the merchant-facing target hostname **DNS only** so requests reach Caddy directly.
+- Or use **Cloudflare for SaaS / Custom Hostnames** so Cloudflare manages the merchant-domain certificate at the edge before forwarding traffic to origin.
+
+Reference: [Create custom hostnames](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/domain-support/create-custom-hostnames/).
 
 ---
 

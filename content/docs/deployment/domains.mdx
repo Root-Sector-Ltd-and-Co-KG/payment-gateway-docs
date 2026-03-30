@@ -25,7 +25,23 @@ The hosted platform uses a fixed subdomain layout. Each hostname maps to the **`
 
 **Sandbox / test** tiers often use parallel names (for example `test-api.payment-gateway.app` for the Admin API). Use the hostnames your operator gives you for that environment.
 
-**Merchant custom domains** (buyer-facing checkout on the merchant’s own DNS) are **additional** hostnames, verified in the Admin Panel and served via on-demand TLS — see [Caddy reverse proxy](./caddy).
+**Merchant custom domains** (buyer-facing checkout on the merchant’s own DNS) are **additional** hostnames, verified in the Admin Panel and typically served via on-demand TLS when the merchant hostname reaches the gateway origin directly — see [Caddy reverse proxy](./caddy).
+
+> [!IMPORTANT]
+> Custom domains are frequently part of payment-provider compliance, not just branding. Providers may require your checkout pages, callback URLs, and webhook endpoints to remain on domains you own and control.
+
+### Cloudflare proxy caveat for merchant custom domains
+
+If `MAIN_FRONTEND_DOMAIN` or `MAIN_BACKEND_DOMAIN` is itself routed through Cloudflare with **Proxy status = Proxied**, a customer hostname that CNAMEs to that proxied target may fail TLS at Cloudflare before the request ever reaches your reverse proxy.
+
+This usually shows up as browser TLS failures such as `ERR_SSL_VERSION_OR_CIPHER_MISMATCH` while the origin logs show little or no traffic for that hostname. The reason is architectural: Cloudflare is the TLS edge for the proxied hostname, so it needs a certificate for the customer hostname before it can forward anything to origin.
+
+For environments that onboard arbitrary merchant domains, use one of these models:
+
+- **Direct-to-origin model:** keep the merchant-facing target hostname **DNS only** so the request reaches the reverse proxy and origin-managed certificate flow can complete.
+- **Cloudflare edge-managed model:** enable **Cloudflare for SaaS / Custom Hostnames** and provision each merchant hostname in Cloudflare before sending traffic through the proxy.
+
+Cloudflare reference: [Create custom hostnames](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/domain-support/create-custom-hostnames/).
 
 ---
 

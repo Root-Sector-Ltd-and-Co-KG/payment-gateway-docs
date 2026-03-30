@@ -29,6 +29,8 @@ By clicking on a specific Transaction, you can view the full metadata. This incl
 - **Provider Raw Data**: The unstructured JSON payload received directly from Stripe or GoCardless, useful for debugging webhook sync issues.
 - **IPN Information** (when an IPN URL was set on the checkout): configured listener URL, attempt count, and last HTTP status from the Main Backend’s outbound IPN delivery.
 
+When the Transaction is linked to a stored Client, the detail view also provides a direct Client profile link so operators can jump into the full relationship history from the payment record.
+
 ## Operational Actions
 
 Support and Admin staff can directly manipulate active Transactions from this interface:
@@ -38,3 +40,5 @@ Support and Admin staff can directly manipulate active Transactions from this in
 
 > [!NOTE]
 > Refunding a transaction is an immutable action. The system will asynchronously query Garnet/Redis queues to guarantee idempotency and prevent double-spending refunds across simultaneous requests.
+
+The same refund workflow can also be launched from the Invoice screen when exactly one refundable Transaction is linked. In that case, the Invoice screen opens the same refund form and submits the same Transaction refund operation rather than introducing a separate invoice-only refund engine.

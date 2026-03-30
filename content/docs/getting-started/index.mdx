@@ -101,14 +101,19 @@ curl -X POST https://api.yourcompany.com/v1/checkouts/{siteId}/create \
     "externalReference": "order_12345",
     "items": [
       {
+        "name": "Professional Plan",
         "description": "Professional Plan",
         "quantity": 1,
         "unitPrice": 4900,
+        "vatRate": 19,
         "itemType": "virtual"
       }
     ]
   }'
 ```
+
+> [!IMPORTANT]
+> Provide at least one of `externalReference` or `invoiceNumber`. The API accepts both.
 
 > [!NOTE]
 > Find your **Site ID** in the Admin Panel under **Sites → Edit Site** — it appears in the page URL and in the site detail screen.

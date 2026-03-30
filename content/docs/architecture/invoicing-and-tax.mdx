@@ -66,6 +66,28 @@ Manual draft invoices, recurring-generated invoices, and transaction tax calcula
 
 This keeps the operator-facing invoice editor consistent with the transaction tax engine instead of relying on a frontend-only rate guess.
 
+### Checkout VAT Validation Resolution
+
+Checkout VAT ID validation is intentionally split into two layers:
+
+- **Checkout settings** decide the buyer-facing validation preference for a Site or Organization: `none`, `format`, or `vies`.
+- **Tax settings** decide whether the merchant is actually allowed to use VIES-backed VAT treatment, via the organization tax capability flags.
+
+At runtime, the Main Backend resolves an **effective checkout VAT validation mode** before the checkout page is rendered:
+
+- `none` stays `none`
+- `format` stays `format`
+- `vies` stays `vies` only when the organization tax settings have VIES validation enabled
+- `vies` is downgraded to `format` when tax VIES capability is disabled
+
+This prevents a hosted checkout from showing successful live VIES validation to a buyer when the backend tax engine would not honor that validation for tax treatment.
+
+In practice, this means:
+
+- merchants configure the preferred checkout UX in **Settings → Checkout**
+- merchants configure reverse-charge and VIES tax capability in **Settings → Tax**
+- the hosted checkout always consumes the resolved runtime mode exposed by the Main Backend session response
+
 ### EU VAT OSS: 10-Year Evidence Retention
 
 Operating under the Union OSS scheme mandates that merchants collect and preserve proof of the buyer's establishment.

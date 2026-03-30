@@ -25,6 +25,9 @@ Stripe is the recommended starting point — it supports cards (Visa, Mastercard
 
 Stripe must be told where to send payment event notifications. The URL must be on your **Main Backend** host (`MAIN_BACKEND_DOMAIN` — hosted: `webhook.payment-gateway.app`) — [Hostnames & DNS conventions](../deployment/domains).
 
+> [!NOTE]
+> For self-hosted stacks using branded webhook domains, keep this hostname stable and under your control. Many providers expect webhook and return/callback URLs to stay on approved domains. If that hostname is behind Cloudflare proxying, review the custom-domain Cloudflare caveat in [Hostnames & DNS conventions](../deployment/domains#cloudflare-proxy-caveat-for-merchant-custom-domains).
+
 1. In Stripe Dashboard, go to **Developers → Webhooks → Add endpoint**.
 2. Set the **Endpoint URL** to:
    ```
@@ -67,6 +70,9 @@ GoCardless handles direct debit / bank mandates. Customers authorize recurring d
 ### 2. Register the Webhook Endpoint
 
 Use your **Main Backend** host (`MAIN_BACKEND_DOMAIN` — hosted: `webhook.payment-gateway.app`) — [Hostnames & DNS conventions](../deployment/domains).
+
+> [!NOTE]
+> For self-hosted stacks using branded webhook domains, keep this hostname stable and under your control. If you proxy it through Cloudflare, review the custom-domain Cloudflare caveat in [Hostnames & DNS conventions](../deployment/domains#cloudflare-proxy-caveat-for-merchant-custom-domains) before onboarding merchant custom domains.
 
 1. In GoCardless Dashboard, go to **Developers → Webhooks → Create Webhook**.
 2. Set the **URL** to:

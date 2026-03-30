@@ -105,8 +105,20 @@ This means:
 
 To provide a seamless, white-labeled experience for your customers during checkout and when accessing the Customer Portal, you can configure **Custom Domains**.
 
+These domains are often operationally important, not only cosmetic. Many payment providers expect checkout pages, return URLs, and webhook endpoints to stay on domains you control and have registered in the provider dashboard. Keeping branded, stable domains for checkout and webhook traffic helps avoid compliance and trust issues during provider review.
+
 Under **Domains**, you can map your own subdomains (e.g., `pay.yourcompany.com` or `invoices.yourcompany.com`) to the gateway.
 
 1. Ensure you have added the correct CNAME or A records to your DNS provider pointing to the Gateway's infrastructure.
 2. Add the Domain to the Admin panel.
 3. The platform will automatically provision and renew TLS certificates for your domain, ensuring a secure `https://` connection for your buyers.
+
+> [!IMPORTANT]
+> If your gateway frontend or webhook target hostname is itself served through Cloudflare with **Proxy status = Proxied**, third-party custom domains that are not hosted on Cloudflare can fail TLS negotiation at Cloudflare before any request reaches the gateway origin. In that case, automatic origin-side certificate provisioning is not enough on its own.
+
+When this applies, use one of these approaches:
+
+- Disable Cloudflare proxying on the related gateway target hostname so traffic reaches the origin directly.
+- Or enable **Cloudflare for SaaS / Custom Hostnames** and provision the customer hostname in Cloudflare before routing traffic through the proxy.
+
+See [Hostnames & DNS conventions](../deployment/domains) for the DNS model and Cloudflare caveat.
