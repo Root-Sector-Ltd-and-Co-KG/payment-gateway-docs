@@ -1,0 +1,53 @@
+---
+title: Release 4.1.1
+description: Stable release notes for Payment Gateway App 4.1.1.
+---
+
+# Release 4.1.1
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-03-28T21:28:25Z
+- Release tag: v4.1.1
+
+## [4.1.1] - 2026-03-28
+
+### Changed Components
+
+- **admin-backend** v4.1.1
+- **admin-frontend** v4.1.1
+- **main-backend** v4.1.1
+- **main-frontend** v4.1.1
+- **reverseproxy** v4.1.1
+
+### Added
+- **admin-backend:** Added tests for storing encrypted and plaintext invoice fields.
+- **admin-frontend:** Added quick add buttons for recommended scopes in the API key creation dialog.
+- **main-backend:** Added unit tests for client address encryption and decryption.
+
+### Changed
+- **admin-backend:** Streamlined transaction and invoice client reconciliation logic.
+- **admin-backend:** Enhanced client billing address handling and synchronization with transactions.
+- **admin-backend:** Updated actions/upload-artifact and actions/download-artifact to v7.
+- **admin-frontend:** Updated actions/upload-artifact and actions/download-artifact to v7.
+- **main-backend:** Updated actions/upload-artifact and actions/download-artifact to v7.
+- **main-frontend:** Enhanced payment provider selection and error handling.
+- **main-frontend:** Updated actions/upload-artifact and actions/download-artifact to latest versions.
+- **reverseproxy:** Bumped Caddy version to 2.11.2 and MongoDB storage version to v2.1.3 in the Dockerfile.
+- **reverseproxy:** Upgraded actions/upload-artifact and actions/download-artifact to version 7.
+
+## Managed Image Baseline
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.1.1 | registry.payment-gateway.app/payment-gateway-admin-backend:4.1.1 |
+| admin-frontend | 4.1.1 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.1.1 |
+| garnet | 1.1.1 | registry.payment-gateway.app/garnet:1.1.1 |
+| gotenberg | 8.27.0 | registry.payment-gateway.app/gotenberg:8.27.0 |
+| main-backend | 4.1.1 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.1 |
+| main-frontend | 4.1.1 | registry.payment-gateway.app/payment-gateway-main-frontend:4.1.1 |
+| main-worker | 4.1.1 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.1 |
+| mgob | 2.0.28 | registry.payment-gateway.app/mgob:2.0.28 |
+| mongo | 8.2.4 | registry.payment-gateway.app/mongo:8.2.4 |
+| mongo-express | latest | registry.payment-gateway.app/mongo-express:latest |
+| reverseproxy | 4.1.1 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.1.1 |
