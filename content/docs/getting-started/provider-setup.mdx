@@ -35,9 +35,11 @@ Stripe must be told where to send payment event notifications. The URL must be o
    ```
    (Hosted: `https://webhook.payment-gateway.app/hooks/stripe/{providerId}`.)
    The `{providerId}` is the MongoDB ObjectId of your provider record — visible in the Admin Panel URL after you create the provider.
-3. Under **Events to listen to**, select **All events** (or at minimum: `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`, `charge.dispute.created`).
-4. Click **Add endpoint**.
-5. Copy the **Signing secret** (`whsec_...`).
+3. Set the webhook **Event payload API version** to `2026-03-25.dahlia` or later.
+   The gateway tolerates signed Stripe webhooks from other API versions, but matching the backend SDK version gives the safest object deserialization.
+4. Under **Events to listen to**, select only the events you need. At minimum, enable `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.succeeded`, `charge.failed`, `charge.refunded`, and `charge.dispute.created`.
+5. Click **Add endpoint**.
+6. Copy the **Signing secret** (`whsec_...`).
 
 ### 3. Add Provider in Admin Panel
 
@@ -106,9 +108,9 @@ Unlike card payments, GoCardless uses a **redirect mandate flow**:
 
 ---
 
-## Wise (Bank Transfers)
+## Wise (Wire Transfers)
 
-Wise (formerly TransferWise) enables international bank transfers with competitive FX rates.
+Wise (formerly TransferWise) enables international wire transfers with competitive FX rates.
 
 ### 1. Get Your Wise API Token
 
