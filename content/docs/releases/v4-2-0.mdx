@@ -1,0 +1,81 @@
+---
+title: Release 4.2.0
+description: Stable release notes for Payment Gateway App 4.2.0.
+---
+
+# Release 4.2.0
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-03-31T20:11:33Z
+- Release tag: v4.2.0
+
+## [4.2.0] - 2026-03-31
+
+### Changed Components
+
+- **admin-backend** v4.1.2
+- **admin-frontend** v4.1.2
+- **main-backend** v4.1.2
+- **main-frontend** v4.1.2
+- **reverseproxy** v4.1.2
+
+### Added
+- **admin-backend:** Added a new retry IPN endpoint and enhanced transaction handling capabilities.
+- **admin-backend:** Implemented organization user management functionality.
+- **admin-backend:** Added ACME HTTP challenge management and domain activation retry logic.
+- **admin-backend:** Introduced support for creating manual credit notes for invoices along with related testing.
+- **admin-frontend:** Integrated IPN retry functionality and a new Webhook information section within the TransactionEdit view.
+- **admin-frontend:** Added Stripe webhook API version guidance and enhanced setup instructions.
+- **admin-frontend:** Implemented organization member management and user settings configuration.
+- **admin-frontend:** Added new tax services for managing rates, rules, and settings.
+- **main-backend:** Implemented webhook processing status updates for Stripe and GoCardless.
+- **main-backend:** Added a `PaymentURL` field to invoice and session response types.
+- **main-backend:** Implemented VAT validation and tax preview functionality.
+- **main-frontend:** Added payment functionality and expanded localization for finalization messages.
+- **main-frontend:** Added an optional company name field and improved VAT ID validation messages in the BillingDetailsSection.
+- **main-frontend:** Implemented VAT ID validation and tax preview features in the PaymentForm.
+
+### Changed
+- **admin-backend:** Updated Go version to 1.26.1 and upgraded `stripe-go` to v85.0.0.
+- **admin-backend:** Enhanced checkout session handling, item mapping, and email formatting.
+- **admin-backend:** Refined payment confirmation descriptions and tax decision handling.
+- **admin-backend:** Updated VAT ID validation logic and documentation/Swagger definitions.
+- **admin-backend:** Updated dependencies for `zerolog`, `cors`, `sse`, `validator`, and `cbor`.
+- **admin-frontend:** Improved address handling, validation logic, and payment link settings descriptions.
+- **admin-frontend:** Enhanced checkout detail and creation components for better user flow.
+- **admin-frontend:** Updated provider and transaction components to clarify wire transfer terminology and instructions.
+- **admin-frontend:** Refactored recurring invoice handling and calculation logic.
+- **admin-frontend:** Renamed the `SystemGeneral` route to `SystemGeneralPage` for consistency.
+- **admin-frontend:** Refactored `AuthContext` to improve the readability of user data handling.
+- **admin-frontend:** Updated `lodash` to version 4.18.0 and updated `pnpm` versions in workflows.
+- **main-backend:** Updated Go version to 1.26.1 and migrated to Stripe SDK v85.
+- **main-backend:** Enhanced portal session management and transaction service methods.
+- **main-backend:** Updated CI workflows to use `ubicloud-standard-2` runners.
+- **main-frontend:** Updated workflow runners to `ubicloud-standard-2` and updated the `pnpm` action version.
+- **main-frontend:** Updated localization guidance to clarify currency selection for wire and Wise payments.
+- **reverseproxy:** Migrated build, deploy, and cleanup jobs to `ubicloud-standard-2` runners.
+- **reverseproxy:** Updated Caddyfile to implement ACME HTTP validation token handling and mandatory HTTPS redirection.
+
+### Fixed
+- **admin-backend:** Fixed `genproto` indirect dependency issues.
+- **admin-frontend:** Fixed the `packageManager` version specification in `package.json`.
+
+### Removed
+- **admin-frontend:** Removed the line items display from the TransactionDetails component to provide a cleaner user interface.
+
+## Managed Image Baseline
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.1.2 | registry.payment-gateway.app/payment-gateway-admin-backend:4.1.2 |
+| admin-frontend | 4.1.2 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.1.2 |
+| garnet | 1.1.1 | registry.payment-gateway.app/garnet:1.1.1 |
+| gotenberg | 8.27.0 | registry.payment-gateway.app/gotenberg:8.27.0 |
+| main-backend | 4.1.2 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.2 |
+| main-frontend | 4.1.2 | registry.payment-gateway.app/payment-gateway-main-frontend:4.1.2 |
+| main-worker | 4.1.2 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.2 |
+| mgob | 2.0.28 | registry.payment-gateway.app/mgob:2.0.28 |
+| mongo | 8.2.4 | registry.payment-gateway.app/mongo:8.2.4 |
+| mongo-express | latest | registry.payment-gateway.app/mongo-express:latest |
+| reverseproxy | 4.1.2 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.1.2 |
