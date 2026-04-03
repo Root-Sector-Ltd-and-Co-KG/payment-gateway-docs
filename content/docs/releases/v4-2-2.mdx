@@ -1,0 +1,43 @@
+---
+title: Release 4.2.2
+description: Stable release notes for Payment Gateway App 4.2.2.
+---
+
+# Release 4.2.2
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-04-03T22:28:34Z
+- Release tag: v4.2.2
+
+## [4.2.2] - 2026-04-03
+
+### Changed Components
+
+- **admin-backend** v4.1.4
+- **admin-frontend** v4.1.4
+
+### Added
+- **admin-backend:** New test suite for metadata handling and channel normalization.
+- **admin-frontend:** Comprehensive tests for the VAT OSS report page.
+
+### Changed
+- **admin-backend:** Refactored release information fetching logic for improved metadata handling.
+- **admin-backend:** Implemented flexible date parsing and enhanced date range handling within the dashboard and transactions modules.
+- **admin-frontend:** Enhanced date handling functionality to improve reporting accuracy.
+
+## Managed Image Baseline
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.1.4 | registry.payment-gateway.app/payment-gateway-admin-backend:4.1.4 |
+| admin-frontend | 4.1.4 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.1.4 |
+| garnet | 1.1.1 | registry.payment-gateway.app/garnet:1.1.1 |
+| gotenberg | 8.27.0 | registry.payment-gateway.app/gotenberg:8.27.0 |
+| main-backend | 4.1.3 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.3 |
+| main-frontend | 4.1.3 | registry.payment-gateway.app/payment-gateway-main-frontend:4.1.3 |
+| main-worker | 4.1.3 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.3 |
+| mgob | 2.0.28 | registry.payment-gateway.app/mgob:2.0.28 |
+| mongo | 8.2.4 | registry.payment-gateway.app/mongo:8.2.4 |
+| mongo-express | latest | registry.payment-gateway.app/mongo-express:latest |
+| reverseproxy | 4.1.3 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.1.3 |
