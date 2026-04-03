@@ -1,0 +1,70 @@
+---
+title: Release 4.2.1
+description: Stable release notes for Payment Gateway App 4.2.1.
+---
+
+# Release 4.2.1
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-04-03T20:48:25Z
+- Release tag: v4.2.1
+
+## [4.2.1] - 2026-04-03
+
+### Changed Components
+
+- **admin-backend** v4.1.3
+- **admin-frontend** v4.1.3
+- **main-backend** v4.1.3
+- **main-frontend** v4.1.3
+- **reverseproxy** v4.1.3
+
+### Added
+- **admin-backend:** Email validation in AddUserToOrganization and new user registration handling functions.
+- **admin-backend:** Self-role change restrictions and enhanced organization user management features.
+- **admin-backend:** Enhanced JWT refresh handling and session validation checks.
+- **admin-backend:** Transaction tax snapshot normalization and improved country code validation.
+- **admin-backend:** Revenue report endpoints and payment event notifications for VAT OSS services.
+- **admin-frontend:** Enhanced authentication flow with login bootstrap retry logic and improved user feedback.
+- **admin-frontend:** WebAuthn timeout handling and user-friendly error messages for registration and authentication.
+- **admin-frontend:** User management features and role-based access control in member settings.
+- **admin-frontend:** Session refresh error logging and date-only formatting/parsing utilities.
+- **admin-frontend:** Tax rate code resolution logic and updated rendering for tax summaries.
+- **main-backend:** Enhanced tax calculation logic, item normalization, and item merging functionality.
+- **main-backend:** Session item merging logic to preserve computed fields in GoCardless and Stripe providers.
+- **main-backend:** Notification service enhancements integrated with tax calculation logic.
+- **main-frontend:** Ability to change payment methods when multiple providers are available.
+
+### Changed
+- **admin-backend:** Refactored checkout status handling and transaction filters.
+- **admin-backend:** Updated canonical country code and buyer country filters to allow "UNKNOWN" values.
+- **admin-backend:** Security scan workflow updated to install and run Govulncheck for vulnerability checks.
+- **admin-frontend:** CI/CD workflow updated to use `ubuntu-latest` for all jobs.
+- **admin-frontend:** Refactored address validation hook to improve formatting and remove unused code.
+- **main-backend:** Security scan workflow updated to include Govulncheck via custom scripts.
+- **main-backend:** Updated `pkcs7` dependency to v0.2.0 for better compatibility.
+- **reverseproxy:** Updated CI/CD runner from `ubicloud-standard-2` to `ubuntu-latest`.
+
+### Fixed
+- **admin-frontend:** Improved formatting and readability of `confirmedBy` fields and tax detail descriptions.
+- **admin-frontend:** Updated parameter naming and logic for tax rate code resolution in TaxSummary.
+- **admin-frontend:** Enhanced session refresh error handling for rate limits and non-parsable responses.
+- **admin-frontend:** Improved type safety for notification settings in the user profile.
+- **admin-frontend:** Cleaned up unused imports in the RevenueByCountryPage test suite.
+
+## Managed Image Baseline
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.1.3 | registry.payment-gateway.app/payment-gateway-admin-backend:4.1.3 |
+| admin-frontend | 4.1.3 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.1.3 |
+| garnet | 1.1.1 | registry.payment-gateway.app/garnet:1.1.1 |
+| gotenberg | 8.27.0 | registry.payment-gateway.app/gotenberg:8.27.0 |
+| main-backend | 4.1.3 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.3 |
+| main-frontend | 4.1.3 | registry.payment-gateway.app/payment-gateway-main-frontend:4.1.3 |
+| main-worker | 4.1.3 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.3 |
+| mgob | 2.0.28 | registry.payment-gateway.app/mgob:2.0.28 |
+| mongo | 8.2.4 | registry.payment-gateway.app/mongo:8.2.4 |
+| mongo-express | latest | registry.payment-gateway.app/mongo-express:latest |
+| reverseproxy | 4.1.3 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.1.3 |
