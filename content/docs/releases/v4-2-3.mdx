@@ -1,0 +1,67 @@
+---
+title: Release 4.2.3
+description: Stable release notes for Payment Gateway App 4.2.3.
+---
+
+# Release 4.2.3
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-04-04T17:25:02Z
+- Release tag: v4.2.3
+
+## [4.2.3] - 2026-04-04
+
+### Changed Components
+
+- **admin-backend** v4.1.5
+- **admin-frontend** v4.1.5
+- **main-backend** v4.1.4
+- **main-frontend** v4.1.4
+- **reverseproxy** v4.1.4
+
+### Added
+- **admin-backend:** Update deployment script to include image repository variable and refine image cleanup logic.
+- **admin-backend:** Add podman system prune command to cleanup unused data during deployment.
+- **admin-backend:** Add timezone and date range validation for export requests.
+- **admin-backend:** Enhance VAT OSS report generation with timezone support and add tests for date formatting.
+- **admin-frontend:** Update deployment script to include image repository variable and refine image cleanup logic.
+- **admin-frontend:** Add podman system prune command to cleanup unused data during deployment.
+- **admin-frontend:** Enhance data export functionality.
+- **admin-frontend:** Add timezone support to tax report components and services.
+- **main-backend:** Update deployment script to include image repository variable and refine image cleanup logic.
+- **main-backend:** Add podman system prune command to cleanup unused data during deployment.
+- **main-frontend:** Update deployment script to include image repository variable and refine image cleanup logic.
+- **main-frontend:** Add podman system prune command to cleanup unused data during deployment.
+- **reverseproxy:** Update deployment script to include image repository variable and refine image cleanup logic.
+- **reverseproxy:** Add podman system prune command to cleanup unused data during deployment.
+
+### Changed
+- **admin-backend:** Update dependencies in go.sum to latest versions, including AWS SDK, OpenTelemetry, and HashiCorp libraries.
+- **admin-frontend:** Refactor code structure for improved readability and maintainability.
+- **main-backend:** Update UPX version from 5.1.0 to 5.1.1 in Dockerfile.
+- **main-backend:** Update base image from Debian 12 to Debian 13 in Dockerfile.
+- **main-backend:** Update dependencies, including AzureAD, AWS SDK v2 modules, and OpenTelemetry packages.
+- **main-frontend:** Refactor code structure for improved readability and maintainability.
+
+### Fixed
+- **main-backend:** Downgrade github.com/hhrutter/pkcs7 from v0.2.2 to v0.2.0 in go.sum.
+
+### Removed
+- **admin-frontend:** Remove CSV export component.
+
+## Managed Image Baseline
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.1.5 | registry.payment-gateway.app/payment-gateway-admin-backend:4.1.5 |
+| admin-frontend | 4.1.5 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.1.5 |
+| garnet | 1.1.1 | registry.payment-gateway.app/garnet:1.1.1 |
+| gotenberg | 8.27.0 | registry.payment-gateway.app/gotenberg:8.27.0 |
+| main-backend | 4.1.4 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.4 |
+| main-frontend | 4.1.4 | registry.payment-gateway.app/payment-gateway-main-frontend:4.1.4 |
+| main-worker | 4.1.4 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.4 |
+| mgob | 2.0.28 | registry.payment-gateway.app/mgob:2.0.28 |
+| mongo | 8.2.4 | registry.payment-gateway.app/mongo:8.2.4 |
+| mongo-express | latest | registry.payment-gateway.app/mongo-express:latest |
+| reverseproxy | 4.1.4 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.1.4 |
