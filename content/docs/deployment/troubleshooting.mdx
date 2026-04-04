@@ -29,14 +29,14 @@ If you are deploying with Podman, use the built-in diagnostic script for easier 
 
 Regardless of the platform, follow these general steps if something goes wrong:
 
-1. **Check Deployment Logs**: 
+1. **Check Deployment Logs**:
    - `cat podman/deploy.log` or `cat docker-compose/deploy.log`
-2. **View Service Logs**: 
-   - For Docker Compose: `docker-compose logs -f <service-name>`
+2. **View Service Logs**:
+   - For Docker Compose: `docker compose logs -f <service-name>`
    - For Podman: Follow the log commands outputted by `./deploy.sh` or check the journal for specific systemd services (e.g. `journalctl --user -u podman-compose@payment-gateway -f`).
-3. **Emergency Rollback**: 
+3. **Emergency Rollback**:
    - Use `./rollback.sh` in the respective platform directory to revert to the previous working state.
-4. **Reset Deployment**: 
+4. **Reset Deployment**:
    - Delete the secrets file `.env.secrets` from the project root.
    - For Podman: Remove the `~/.config/payment-gateway-deploy/` directory.
    - For Docker Compose: Remove the `.env` file from the platform directory.

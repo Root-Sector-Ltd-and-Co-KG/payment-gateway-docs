@@ -150,7 +150,7 @@ You can install weekly systemd timers on Linux to handle background updates for 
 
 ## Component Updates
 
-Sometimes you only need to update a single microservice (e.g., `admin-backend` or `payment-gateway-main-worker`) without a full redeployment. The system supports targeted service updates:
+Sometimes you only need to update a single microservice (e.g., `admin-backend` or `main-worker`) without a full redeployment. The system supports targeted service updates:
 
 ```bash
 # Update a single component (works on both platforms)
@@ -158,7 +158,7 @@ Sometimes you only need to update a single microservice (e.g., `admin-backend` o
 ```
 
 **Common Components:**
-`payment-gateway-admin-backend`, `payment-gateway-admin-frontend`, `payment-gateway-main-backend`, `payment-gateway-main-frontend`, `payment-gateway-reverseproxy`, `payment-gateway-main-worker`, `mongo`, `garnet`, `mgob`, `mongo-express`, `gotenberg`
+`admin-backend`, `admin-frontend`, `main-backend`, `main-frontend`, `main-worker`, `reverseproxy`, `mongo`, `garnet`, `mgob`, `gotenberg`, `mongo-express`
 
 ## Container Registries & Auto-Renew
 

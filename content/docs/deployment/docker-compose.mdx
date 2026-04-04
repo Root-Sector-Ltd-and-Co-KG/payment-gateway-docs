@@ -13,41 +13,39 @@ For the first customer deployment, start with [Self-Hosted Installation](../gett
 
 Before starting, ensure your system meets these requirements:
 
-- Docker Engine (v20.10.0+)
-- Docker Compose v2 (v2.10.x+)
-- Minimum 4GB RAM
-- Optional: Configured TLS certificates (highly recommended for production)
+- Docker Engine 24+ and Docker Compose v2
+- `curl`, `jq`, and `openssl` installed
+- At least 4 CPU cores and 8 GB RAM
+- Optional: MongoDB TLS certificates (recommended for production)
 
 ## Docker Compose Flow
 
 1. Clone the repository and navigate to the Docker Compose folder:
-    ```bash
-    git clone https://github.com/root-sector-ltd-and-co-kg/payment-gateway-deploy
-    cd payment-gateway-deploy/docker-compose
-    ```
 
-2. Create and edit `.env`, add your public domains, and add the license registry access values described in [Self-Hosted Installation](../getting-started/installation).
-See [Configuration Requirements](./configuration) for details on setting up MongoDB TLS and Registry Auth.
-For backup/recovery operations and GDPR-oriented retention guidance, see
-[Backup & Recovery (GDPR)](./backup-recovery).
-For encryption scope and processed-data overview, see
-[Data Processing & Encryption](./data-processing-encryption).
+   ```bash
+   git clone https://github.com/root-sector-ltd-and-co-kg/payment-gateway-deploy
+   cd payment-gateway-deploy/docker-compose
+   ```
 
-3. Generate `.env.secrets` from the repository root if this is the first deployment.
+2. Create `.env` from the template, replace `yourdomain.com` with your actual domain, and add your registry access values from the license dashboard. See [Configuration Requirements](./configuration) for MongoDB TLS and [Self-Hosted Installation](../getting-started/installation) for the full credential setup.
 
-4. Deploy the application:
-    ```bash
-    ./deploy.sh
-    ```
+3. Deploy the application (auto-generates `.env.secrets` on first run):
 
-5. Activate the license from the same deployed environment after the stack is running. The admin backend creates the installation ID automatically on first startup.
+   ```bash
+   ./deploy.sh
+   ```
+
+4. Activate the license from the same host after the stack is running. The admin backend creates the installation ID automatically on first startup.
+
+For backup/recovery operations, see [Backup & Recovery (GDPR)](./backup-recovery).
+For encryption scope and processed-data overview, see [Data Processing & Encryption](./data-processing-encryption).
 
 ## Managing Services
 
 After deployment, manage your containers using standard Docker Compose commands from inside the `docker-compose/` directory:
 
-- Check logs: `docker-compose logs -f`
-- Restart services: `docker-compose restart`
-- Stop the stack: `docker-compose down`
+- Check logs: `docker compose logs -f`
+- Restart services: `docker compose restart`
+- Stop the stack: `docker compose down`
 
-**Note:** For component updates or full stack updates, you should use the provided unified updater or component flag via `./deploy.sh` rather than `docker-compose up -d`. This ensures proper graceful reloads and backups.
+**Note:** For component updates or full stack updates, use the unified updater or component flag via `./deploy.sh` rather than `docker compose up -d`. This ensures proper graceful reloads and backups.
