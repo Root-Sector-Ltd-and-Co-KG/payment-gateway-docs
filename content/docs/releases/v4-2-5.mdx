@@ -1,0 +1,43 @@
+---
+title: Release 4.2.5
+description: Stable release notes for Payment Gateway App 4.2.5.
+---
+
+# Release 4.2.5
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-04-07T19:36:03Z
+- Release tag: v4.2.5
+
+## [4.2.5] - 2026-04-07
+
+### Changed Components
+
+- **admin-backend** v4.1.7
+- **admin-frontend** v4.1.6
+- **main-backend** v4.1.5
+
+### Added
+- **admin-backend**: Implement tax rounding method configuration and validation in invoice calculations.
+- **admin-backend**: Implement failing field service for encryption tests and update test cases.
+- **admin-frontend**: Add tax preview functionality to transaction items and summary components.
+
+### Changed
+- **main-backend**: Update tax calculation methods to support configurable rounding and defer tax snapshot for pending transactions.
+
+## Managed Image Baseline
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.1.7 | registry.payment-gateway.app/payment-gateway-admin-backend:4.1.7 |
+| admin-frontend | 4.1.6 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.1.6 |
+| garnet | 1.1.1 | registry.payment-gateway.app/garnet:1.1.1 |
+| gotenberg | 8.27.0 | registry.payment-gateway.app/gotenberg:8.27.0 |
+| main-backend | 4.1.5 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.5 |
+| main-frontend | 4.1.4 | registry.payment-gateway.app/payment-gateway-main-frontend:4.1.4 |
+| main-worker | 4.1.5 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.5 |
+| mgob | 2.0.28 | registry.payment-gateway.app/mgob:2.0.28 |
+| mongo | 8.2.4 | registry.payment-gateway.app/mongo:8.2.4 |
+| mongo-express | latest | registry.payment-gateway.app/mongo-express:latest |
+| reverseproxy | 4.1.4 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.1.4 |
