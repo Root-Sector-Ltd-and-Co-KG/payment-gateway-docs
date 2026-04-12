@@ -1,0 +1,56 @@
+---
+title: Release 4.2.6
+description: Stable release notes for Payment Gateway App 4.2.6.
+---
+
+# Release 4.2.6
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-04-12T13:02:24Z
+- Release tag: v4.2.6
+
+## [4.2.6] - 2026-04-12
+
+### Changed Components
+
+- **admin-backend** v4.1.8
+- **admin-frontend** v4.1.7
+- **main-backend** v4.1.6
+- **main-frontend** v4.1.5
+
+### Added
+- **admin-backend:** Enhanced heartbeat response metadata.
+- **admin-frontend:** Added detailed tax calculation guidance and hints for required billing fields in SiteCheckoutSettings.
+- **admin-frontend:** Added comprehensive tests for the SystemLicensing component and SiteCheckoutSettings behavior.
+- **main-backend:** Implemented email deduplication and provider reference fallback in notification scheduling.
+- **main-frontend:** Added billing and payment localization updates for multiple languages.
+
+### Changed
+- **admin-backend:** Enhanced billing field modes configuration and validation in checkout settings.
+- **admin-backend:** Updated dependencies to the latest versions.
+- **admin-backend:** Updated licensing authority error handling.
+- **admin-frontend:** Refactored TaxEvidenceTooltip component for improved UI and functionality.
+- **admin-frontend:** Enhanced SiteCheckoutSettings with billing field modes normalization.
+- **main-backend:** Updated Swagger documentation and improved checkout settings.
+- **main-backend:** Refactored invoice generation encryption and linking logic.
+- **main-frontend:** Upgraded multiple dependencies.
+
+### Fixed
+- **admin-frontend:** Enhanced error handling within the SystemLicensing component.
+
+## Managed Image Baseline
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.1.8 | registry.payment-gateway.app/payment-gateway-admin-backend:4.1.8 |
+| admin-frontend | 4.1.7 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.1.7 |
+| garnet | 1.1.1 | registry.payment-gateway.app/garnet:1.1.1 |
+| gotenberg | 8.27.0 | registry.payment-gateway.app/gotenberg:8.27.0 |
+| main-backend | 4.1.6 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.6 |
+| main-frontend | 4.1.5 | registry.payment-gateway.app/payment-gateway-main-frontend:4.1.5 |
+| main-worker | 4.1.6 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.6 |
+| mgob | 2.0.28 | registry.payment-gateway.app/mgob:2.0.28 |
+| mongo | 8.2.4 | registry.payment-gateway.app/mongo:8.2.4 |
+| mongo-express | latest | registry.payment-gateway.app/mongo-express:latest |
+| reverseproxy | 4.1.4 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.1.4 |
