@@ -1,0 +1,56 @@
+---
+title: Release 4.2.7
+description: Stable release notes for Payment Gateway App 4.2.7.
+---
+
+# Release 4.2.7
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-04-19T18:19:55Z
+- Release tag: v4.2.7
+
+## [4.2.7] - 2026-04-19
+
+### Changed Components
+
+- **admin-backend** v4.1.9
+- **admin-frontend** v4.1.8
+- **main-backend** v4.1.7
+- **main-frontend** v4.1.6
+
+### Added
+- **admin-backend:** Added currency filter handling in transaction retrieval.
+- **admin-backend:** Added retention days configuration and update handling in geolocation settings.
+- **admin-frontend:** Enhanced transaction filtering with currency support and improved request handling.
+- **admin-frontend:** Implemented license requirement checks for specific routes.
+- **admin-frontend:** Added SettingsGeolocation component tests and enhanced provider management logic.
+- **main-backend:** Added retention days setting for geolocation during organization creation.
+- **main-backend:** Enhanced provider debug logging and improved request/response tracking across payment providers.
+
+### Changed
+- **admin-backend:** Updated license service to improve remote runtime status handling and caching.
+- **admin-backend:** Updated Go version to 1.26.2 and bumped library dependencies.
+- **admin-frontend:** Updated navigation links to use React Router.
+- **admin-frontend:** Refactored Dashboard and related components for improved transaction preview handling and data fetching.
+- **admin-frontend:** Refactored code structure for improved readability and maintainability.
+- **main-backend:** Updated payment-gateway-lib-common to v1.0.38 and implemented effective state context handling.
+- **main-backend:** Updated Go version and dependencies in Dockerfile and go.mod.
+- **main-backend:** Enhanced invoice generation process with concurrent handling and improved idempotency checks.
+- **main-frontend:** Refactored code structure for improved readability and maintainability.
+
+## Managed Image Baseline
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.1.9 | registry.payment-gateway.app/payment-gateway-admin-backend:4.1.9 |
+| admin-frontend | 4.1.8 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.1.8 |
+| garnet | 1.1.1 | registry.payment-gateway.app/garnet:1.1.1 |
+| gotenberg | 8.27.0 | registry.payment-gateway.app/gotenberg:8.27.0 |
+| main-backend | 4.1.7 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.7 |
+| main-frontend | 4.1.6 | registry.payment-gateway.app/payment-gateway-main-frontend:4.1.6 |
+| main-worker | 4.1.7 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.7 |
+| mgob | 2.0.28 | registry.payment-gateway.app/mgob:2.0.28 |
+| mongo | 8.2.4 | registry.payment-gateway.app/mongo:8.2.4 |
+| mongo-express | latest | registry.payment-gateway.app/mongo-express:latest |
+| reverseproxy | 4.1.4 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.1.4 |
