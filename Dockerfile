@@ -7,7 +7,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 # Fumadocs runs `fumadocs-mdx` in postinstall; in container builds this can be brittle.
 # We intentionally skip lifecycle scripts and rely on `pnpm build` (Next build) to generate MDX.
 # Cache mount: speeds reinstalls when lockfile unchanged (pairs with buildx GHA cache, mode=max).
@@ -25,6 +25,12 @@ RUN --mount=type=cache,id=payment-gateway-docs-next,target=/app/.next/cache \
 FROM gcr.io/distroless/nodejs24-debian13:nonroot AS runner
 
 WORKDIR /app
+
+LABEL org.opencontainers.image.title="payment-gateway-docs" \
+    org.opencontainers.image.description="Documentation Component of Payment Gateway App" \
+    org.opencontainers.image.documentation="https://payment-gateway.app" \
+    org.opencontainers.image.authors="support@payment-gateway.app" \
+    org.opencontainers.image.vendor="Root Sector Ltd. & Co. KG"
 
 ENV NODE_ENV=production
 ENV PORT=3000
