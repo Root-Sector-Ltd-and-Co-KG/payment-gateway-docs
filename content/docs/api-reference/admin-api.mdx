@@ -119,6 +119,10 @@ Optional **`ipnUrl`** sets where the Main Backend sends [outbound IPN](./webhook
 | `DELETE` | `/api/v1/transactions/:id`                          | `transaction:delete`  | Delete transaction                         |
 | `POST`   | `/api/v1/transactions/manual`                       | `transaction:create`  | Create a manual (off-platform) transaction |
 | `PATCH`  | `/api/v1/transactions/:id/chargeback/:chargebackId` | `transaction:execute` | Update chargeback status                   |
+| `POST`   | `/api/v1/transactions/:id/recalculate-tax`          | `transaction:execute` | Re-run tax engine for one transaction      |
+| `GET`    | `/api/v1/transactions/bulk-recalculate-tax`         | `transaction:read`    | Get latest bulk tax recalculation job      |
+| `POST`   | `/api/v1/transactions/bulk-recalculate-tax`         | `transaction:execute` | Start bulk tax recalculation               |
+| `GET`    | `/api/v1/transactions/bulk-recalculate-tax/:jobId`  | `transaction:read`    | Poll bulk tax recalculation job status     |
 
 ### List Transactions
 
@@ -308,6 +312,16 @@ The numbering contract is layout-based. Organizations store one layout for invoi
 }
 ```
 
+### Tax settings (organization)
+
+| Method | Path                                                      | Required Scope         | Description                                                                |
+| ------ | --------------------------------------------------------- | ---------------------- | -------------------------------------------------------------------------- |
+| `GET`  | `/api/v1/organizations/settings/tax`                      | `organization:execute` | Read org tax configuration (OSS/IOSS flags, VIES, rounding, etc.)          |
+| `PUT`  | `/api/v1/organizations/settings/tax`                      | `organization:execute` | Update org tax configuration (Admin permission; API keys need scope above) |
+| `GET`  | `/api/v1/organizations/settings/tax/oss-threshold-status` | `organization:read`    | EU B2C cross-border threshold vs OSS registration status                   |
+
+---
+
 Notes:
 
 - `periodType` is one of `none`, `calendar`, or `fiscal`.
@@ -428,27 +442,51 @@ Use this for trusted backend automations only. Do not expose it to browser or mo
 
 ## Tax Management
 
-| Method   | Path                                       | Required Scope     | Description                    |
-| -------- | ------------------------------------------ | ------------------ | ------------------------------ |
-| `GET`    | `/api/v1/tax-rules`                        | `tax_rule:read`    | List tax rules                 |
-| `POST`   | `/api/v1/tax-rules`                        | `tax_rule:create`  | Create tax rule                |
-| `PUT`    | `/api/v1/tax-rules/:id`                    | `tax_rule:update`  | Update tax rule                |
-| `DELETE` | `/api/v1/tax-rules/:id`                    | `tax_rule:delete`  | Delete tax rule                |
-| `POST`   | `/api/v1/tax-rules/populate-defaults`      | `tax_rule:create`  | Load default EU/UK/US/CA rules |
-| `GET`    | `/api/v1/tax-rates`                        | `tax_rate:read`    | List tax rates                 |
-| `POST`   | `/api/v1/tax-rates`                        | `tax_rate:create`  | Create tax rate                |
-| `POST`   | `/api/v1/tax-rates/populate-eu`            | `tax_rate:execute` | Load current EU VAT rates      |
-| `POST`   | `/api/v1/tax-rates/populate-special-zones` | `tax_rate:execute` | Load EU special zone rates     |
+| Method   | Path                                  | Required Scope     | Description                                    |
+| -------- | ------------------------------------- | ------------------ | ---------------------------------------------- |
+| `GET`    | `/api/v1/tax-rules`                   | `tax_rule:read`    | List tax rules                                 |
+| `POST`   | `/api/v1/tax-rules`                   | `tax_rule:create`  | Create tax rule                                |
+| `DELETE` | `/api/v1/tax-rules`                   | `tax_rule:delete`  | Delete **all** tax rules (destructive)         |
+| `PUT`    | `/api/v1/tax-rules/:id`               | `tax_rule:update`  | Update tax rule                                |
+| `DELETE` | `/api/v1/tax-rules/:id`               | `tax_rule:delete`  | Delete one tax rule                            |
+| `POST`   | `/api/v1/tax-rules/populate-defaults` | `tax_rule:create`  | Load default EU/UK/US/CA rules                 |
+| `GET`    | `/api/v1/tax-rates`                   | `tax_rate:read`    | List tax rates                                 |
+| `POST`   | `/api/v1/tax-rates`                   | `tax_rate:create`  | Create tax rate                                |
+| `DELETE` | `/api/v1/tax-rates`                   | `tax_rate:delete`  | Delete **all** tax rates (destructive)         |
+| `POST`   | `/api/v1/tax-rates/replace-defaults`  | `tax_rate:execute` | Replace rates with the current default catalog |
+| `GET`    | `/api/v1/tax-rates/:id`               | `tax_rate:read`    | Get one tax rate                               |
+| `PUT`    | `/api/v1/tax-rates/:id`               | `tax_rate:update`  | Update tax rate                                |
+| `DELETE` | `/api/v1/tax-rates/:id`               | `tax_rate:delete`  | Delete one tax rate                            |
+
+Admin JWT calls use the **Admin** role for these routes; API keys need the matching `tax_rule:*` / `tax_rate:*` scopes.
 
 ### Tax Reports
 
-| Method | Path                                        | Required Scope       | Description                               |
-| ------ | ------------------------------------------- | -------------------- | ----------------------------------------- |
-| `GET`  | `/api/v1/tax/reports/by-country`            | `tax_report:read`    | Tax summary grouped by country            |
-| `GET`  | `/api/v1/tax/reports/vat-oss`               | `tax_report:read`    | EU VAT OSS quarterly report               |
-| `POST` | `/api/v1/tax/reports/by-country/export`     | `tax_report:execute` | Export country report as CSV              |
-| `POST` | `/api/v1/tax/reports/vat-oss/export`        | `tax_report:execute` | Export OSS report as XML                  |
-| `POST` | `/api/v1/tax/reports/vat-oss/export-elster` | `tax_report:execute` | Export OSS report as Elster CSV (Germany) |
+Reports use **query parameters** for filters (e.g. `startDate`, `endDate`, `timezone`, `source=transactions|invoices|both`, `currency`, `siteId`). VAT OSS endpoints require `year` and `quarter` (1–4). **Export** endpoints return a file download and are **`GET`**, not `POST`.
+
+| Method | Path                                            | Required Scope       | Description                                      |
+| ------ | ----------------------------------------------- | -------------------- | ------------------------------------------------ |
+| `GET`  | `/api/v1/tax/reports/by-country`                | `tax_report:read`    | Tax summary grouped by buyer country             |
+| `GET`  | `/api/v1/tax/reports/by-country/details`        | `tax_report:read`    | Row-level basis for one country in that report   |
+| `GET`  | `/api/v1/tax/reports/by-country/export`         | `tax_report:execute` | Download country report as CSV                   |
+| `GET`  | `/api/v1/tax/reports/revenue-by-country`        | `tax_report:read`    | Revenue-style summary by country                 |
+| `GET`  | `/api/v1/tax/reports/revenue-by-country/export` | `tax_report:execute` | Download revenue-by-country report as CSV        |
+| `GET`  | `/api/v1/tax/reports/currencies`                | `tax_report:read`    | Currencies available for report filters          |
+| `GET`  | `/api/v1/tax/reports/vat-oss`                   | `tax_report:read`    | EU VAT OSS quarterly aggregation                 |
+| `GET`  | `/api/v1/tax/reports/vat-oss/details`           | `tax_report:read`    | OSS line basis (country, rate code, supply type) |
+| `GET`  | `/api/v1/tax/reports/vat-oss/export`            | `tax_report:execute` | Download OSS report as XML                       |
+| `GET`  | `/api/v1/tax/reports/vat-oss/export-elster`     | `tax_report:execute` | Download OSS data as Elster CSV (Germany)        |
+
+### Tax records (canonical ledger)
+
+Immutable **tax records** back admin reporting drill-downs and traceability. List filters include date range, `sourceKind`, `taxCountry`, `recognitionMode` (`accrual` / `cash`), pagination, and links to transactions or invoices.
+
+| Method | Path                                   | Required Scope    | Description                         |
+| ------ | -------------------------------------- | ----------------- | ----------------------------------- |
+| `GET`  | `/api/v1/tax/records`                  | `tax_record:read` | List tax records                    |
+| `GET`  | `/api/v1/tax/records/:id`              | `tax_record:read` | Get one tax record                  |
+| `GET`  | `/api/v1/transactions/:id/tax-records` | `tax_record:read` | Tax records linked to a transaction |
+| `GET`  | `/api/v1/invoices/:id/tax-records`     | `tax_record:read` | Tax records linked to an invoice    |
 
 ---
 
@@ -525,9 +563,10 @@ Returns aggregated metrics: gross volume, net revenue, transaction counts, failu
 | `tax_rate:create`      | Create tax rates                                                                                |
 | `tax_rate:update`      | Update tax rates                                                                                |
 | `tax_rate:delete`      | Delete tax rates                                                                                |
-| `tax_rate:execute`     | Populate EU rates                                                                               |
+| `tax_rate:execute`     | Replace default tax rates (`replace-defaults`)                                                  |
 | `tax_report:read`      | Read tax reports                                                                                |
-| `tax_report:execute`   | Export tax reports                                                                              |
+| `tax_report:execute`   | Export tax reports (CSV/XML/Elster)                                                             |
+| `tax_record:read`      | Read canonical tax ledger records                                                               |
 | `data_io:read`         | Read import/export templates                                                                    |
 | `data_io:execute`      | Import and export data                                                                          |
 | `export:execute`       | Generate CSV exports                                                                            |

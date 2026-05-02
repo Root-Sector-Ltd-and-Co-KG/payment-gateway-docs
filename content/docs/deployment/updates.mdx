@@ -150,10 +150,10 @@ You can install weekly systemd timers on Linux to handle background updates for 
 
 ## Component Updates
 
-Sometimes you only need to update a single microservice (e.g., `admin-backend` or `main-worker`) without a full redeployment. The system supports targeted service updates:
+Sometimes you only need to update a single microservice (e.g. `admin-backend` or `main-worker`) without a full metadata-driven upgrade. Targeted updates use the platform `deploy.sh`:
 
 ```bash
-# Update a single component (works on both platforms)
+# Run from payment-gateway-deploy/docker-compose OR payment-gateway-deploy/podman
 ./deploy.sh --update-component admin-backend --version 3.1.1
 ```
 
@@ -169,7 +169,7 @@ For production, the Payment Gateway requires access to the OCI registry that ser
 - `REGISTRY_ACCESS_ID`
 - `REGISTRY_ACCESS_SECRET`
 
-When these are securely injected, the deployment and update scripts automatically request short-lived bearer tokens from the configured registry token service. In the first-party hosted setup that token service is `registry-auth.payment-gateway.app`. The first successful exchange binds the deployment host&apos;s public IP on first use and configures `docker` / `podman` pulls non-interactively.
+When these are securely injected, the deployment and update scripts automatically request short-lived bearer tokens from the configured registry token service. In the first-party hosted setup that token service is `registry-auth.payment-gateway.app`. The first successful exchange binds the deployment host's public IP on first use and configures `docker` / `podman` pulls non-interactively.
 
 The license access scope must cover every mirrored repository in the shipped stack, not only the first-party application images. In the first-party hosted setup that means the registry grant should cover `payment-gateway-admin-backend`, `payment-gateway-admin-frontend`, `payment-gateway-main-backend`, `payment-gateway-main-frontend`, `payment-gateway-reverseproxy`, `mongo`, `garnet`, `mgob`, `gotenberg`, and `mongo-express`.
 

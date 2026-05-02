@@ -24,7 +24,7 @@ The application separates concerns into logical layers:
 
 ### Key Features & Subsystems
 
-1. **Tax Management**: The backend features comprehensive tax capabilities. Organizations can configure Seller Location, Default Tax Rates, EU OSS (One-Stop Shop), and Small Business Exemptions. Tax Rules govern how taxes apply depending on the buyer/seller country and the type of supply.
+1. **Tax Management**: Organizations configure seller context, rate schedules, EU OSS / IOSS flags, small-business exemptions, and rounding. Tax rules map buyer/seller countries and supply types to rates. The service materializes **canonical tax records** for audit and drives **by-country**, **revenue-by-country**, and **VAT OSS** reporting (see [Invoicing & Tax architecture](./invoicing-and-tax) and the **Tax Management** section in the [Admin API](../api-reference/admin-api)).
 2. **Checkout Management**: Provides the necessary endpoints to manage payment providers and issue API keys securely. It allows merchants to generate `sk_...` Organization API Keys with specific scopes (like `checkout:create`) required for programmatic transaction initiation.
 3. **Observability**: Built-in OpenTelemetry (OTEL) support allows tracing requests and metrics export via OTLP to systems like Grafana Cloud. Every request includes a unique ID, client IP, paths, status, and trace/span IDs. Rate limiting and structured JSON logging are also included out of the box.
 

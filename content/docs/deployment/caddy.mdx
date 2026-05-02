@@ -149,7 +149,7 @@ pay.yourcompany.com {
     X-Content-Type-Options "nosniff"
     Referrer-Policy "strict-origin-when-cross-origin"
   }
-  reverse_proxy payment-gateway-main-frontend:3000
+  reverse_proxy payment-gateway-main-frontend:6000
 }
 ```
 
@@ -185,7 +185,7 @@ webhook.yourcompany.com {
     not remote_ip 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
   }
   respond @blocked 403
-  reverse_proxy payment-gateway-main-backend:8081
+  reverse_proxy payment-gateway-main-backend:6001
 }
 ```
 

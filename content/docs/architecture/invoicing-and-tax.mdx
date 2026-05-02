@@ -93,3 +93,11 @@ In practice, this means:
 Operating under the Union OSS scheme mandates that merchants collect and preserve proof of the buyer's establishment.
 
 When the transaction is categorized as an EU B2C cross-border supply of a `digital_service`, the engine automatically intercepts the API request and mandates **two non-contradictory pieces of location evidence** (e.g., comparing the Billing Address `Country` against the physical IP Address `CountryCode`). If the evidence matches, it is written immutably to the `TaxEvidence` array inside the invoice and retained automatically for 10 years, fulfilling the compliance burden.
+
+## Canonical tax records, reports, and recalculation
+
+For every material tax event, the Admin Backend also persists **canonical tax records** (stored in MongoDB, e.g. collection `tax_records`). These rows are the audit trail behind **Tax by country**, **Revenue by country**, and **VAT OSS** screens: they support drill-down from aggregates to recognized net/tax/gross amounts, buyer/tax country, recognition mode (**accrual** vs **cash**), and links back to transactions or invoices.
+
+Report APIs accept an IANA **`timezone`** for period boundaries and filenames, and a **`source`** filter where relevant (`transactions`, `invoices`, or `both`). VAT OSS endpoints are keyed by **calendar year** and **quarter**. File exports are implemented as **`GET`** download endpoints (CSV, OSS XML, or Elster CSV for Germany), not JSON `POST` bodies.
+
+When governments publish new rates or you change rules retroactively, operators can **recalculate tax** on existing transactions: a single-transaction endpoint and a **bulk** job with status polling regenerate tax decisions and downstream records according to current configuration. Endpoint tables live under **Tax Management**, **Tax records**, and **Transactions** on the [Admin API reference](../api-reference/admin-api) page.
