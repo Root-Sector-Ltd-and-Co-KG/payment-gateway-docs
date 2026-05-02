@@ -1,0 +1,71 @@
+---
+title: Release 4.3.0
+description: Stable release notes for Payment Gateway App 4.3.0.
+---
+
+# Release 4.3.0
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-04-25T17:09:31Z
+- Release tag: v4.3.0
+
+## [4.3.0] - 2026-04-25
+
+### Changed Components
+
+- **admin-backend** v4.1.10
+- **admin-frontend** v4.1.9
+- **main-backend** v4.1.8
+- **main-frontend** v4.1.7
+- **reverseproxy** v4.1.5
+
+### Added
+- **admin-backend**: Enhanced transaction handling with VAT OSS and chargeback support.
+- **admin-backend**: Improved error responses for transaction handling and added configuration validation for PayPal providers.
+- **admin-backend**: Enhanced error message checks for address fields in validation tests.
+- **admin-frontend**: Introduced ErrorBoundary component for enhanced error handling.
+- **admin-frontend**: Implemented country name resolution for improved display in charts and reports.
+- **admin-frontend**: Added PayPal provider support with configuration fields and tests.
+- **admin-frontend**: Enhanced VAT OSS reporting with chargeback and refund details.
+- **main-backend**: Enhanced API response structure with warnings for degraded states.
+- **main-backend**: Added PayPal provider integration.
+- **main-backend**: Enhanced transaction handling with VAT OSS and chargeback support.
+- **main-frontend**: Added PayPal payment integration with support for advanced card fields and error handling.
+- **main-frontend**: Enhanced server configuration with improved asset handling, rate limiting, and graceful shutdown.
+- **reverseproxy**: Added metadata labels to Dockerfile for image documentation and authorship.
+
+### Changed
+- **admin-backend**: Refactored transaction handling logic for improved reliability.
+- **admin-frontend**: Updated ESLint rules for accessibility warnings.
+- **admin-frontend**: Refactored code for improved readability and updated README for clarity.
+- **admin-frontend**: Updated server.js with static asset handling and rate limiting logic.
+- **admin-frontend**: Updated pnpm modules in package.json.
+- **main-frontend**: Enhanced checkout experience with localization updates.
+- **main-frontend**: Updated pnpm modules and added Node types to TypeScript configuration.
+
+### Fixed
+- **admin-frontend**: Updated express-rate-limit and @colordx/core dependencies.
+- **main-backend**: Updated YAML references to use single quotes for consistency.
+- **main-frontend**: Refined Content Security Policy to enhance XSS protection while allowing payment SDKs.
+- **main-frontend**: Updated button classes to include cursor pointer for better UX.
+- **main-frontend**: Updated express-rate-limit to version 8.4.1 and @colordx/core to version 5.4.2.
+
+### Removed
+- **main-frontend**: Removed PostCSS configuration file.
+
+## Managed Image Baseline
+
+| Component | Component Version | Image |
+|---|---|---|
+| admin-backend | 4.1.10 | registry.payment-gateway.app/payment-gateway-admin-backend:4.1.10 |
+| admin-frontend | 4.1.9 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.1.9 |
+| garnet | 1.1.1 | registry.payment-gateway.app/garnet:1.1.1 |
+| gotenberg | 8.27.0 | registry.payment-gateway.app/gotenberg:8.27.0 |
+| main-backend | 4.1.8 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.8 |
+| main-frontend | 4.1.7 | registry.payment-gateway.app/payment-gateway-main-frontend:4.1.7 |
+| main-worker | 4.1.8 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.8 |
+| mgob | 2.0.28 | registry.payment-gateway.app/mgob:2.0.28 |
+| mongo | 8.2.4 | registry.payment-gateway.app/mongo:8.2.4 |
+| mongo-express | latest | registry.payment-gateway.app/mongo-express:latest |
+| reverseproxy | 4.1.5 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.1.5 |
