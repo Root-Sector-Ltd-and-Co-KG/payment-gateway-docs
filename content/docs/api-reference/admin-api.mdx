@@ -120,9 +120,9 @@ Optional **`ipnUrl`** sets where the Main Backend sends [outbound IPN](./webhook
 | `POST`   | `/api/v1/transactions/manual`                       | `transaction:create`  | Create a manual (off-platform) transaction |
 | `PATCH`  | `/api/v1/transactions/:id/chargeback/:chargebackId` | `transaction:execute` | Update chargeback status                   |
 | `POST`   | `/api/v1/transactions/:id/recalculate-tax`          | `transaction:execute` | Re-run tax engine for one transaction      |
-| `GET`    | `/api/v1/transactions/bulk-recalculate-tax`         | `transaction:read`    | Get latest bulk tax recalculation job      |
-| `POST`   | `/api/v1/transactions/bulk-recalculate-tax`         | `transaction:execute` | Start bulk tax recalculation               |
-| `GET`    | `/api/v1/transactions/bulk-recalculate-tax/:jobId`  | `transaction:read`    | Poll bulk tax recalculation job status     |
+| `GET`    | `/api/v1/transactions/bulk-recalculate-tax`         | `transaction:read`    | Get latest tax-record rebuild job          |
+| `POST`   | `/api/v1/transactions/bulk-recalculate-tax`         | `transaction:execute` | Start tax-record rebuild                   |
+| `GET`    | `/api/v1/transactions/bulk-recalculate-tax/:jobId`  | `transaction:read`    | Poll tax-record rebuild job status         |
 
 ### List Transactions
 
@@ -169,6 +169,8 @@ GET /api/v1/transactions?status=succeeded&currency=EUR&from=2026-01-01&to=2026-0
 | `GET`    | `/api/v1/invoices/:id/pdf/zugferd`                 | `invoice:execute` | Download ZUGFeRD PDF                                       |
 | `POST`   | `/api/v1/invoices/:id/regenerate-pdf`              | `invoice:execute` | Force PDF regeneration                                     |
 | `DELETE` | `/api/v1/invoices/:id`                             | `invoice:delete`  | Delete draft invoice                                       |
+
+The e-invoice download endpoints enforce **Settings > Invoicing > eInvoice Generation** before proxying to the worker. Requests return `403 EINVOICE_DISABLED` when eInvoice generation is disabled and `403 EINVOICE_FORMAT_NOT_ALLOWED` when the requested format is not listed in `settings.invoicing.eInvoice.allowedFormats`.
 
 ### Draft Invoice Tax Semantics
 

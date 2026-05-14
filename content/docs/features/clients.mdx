@@ -26,10 +26,12 @@ This lets support and finance staff move between a single document and the broad
 
 ## Demographics & VAT Validation
 
-Crucially, the Client record stores their official Billing Addresses.
+Client records store billing addresses and tax identifiers that can be reused by invoices, reporting, and operator workflows.
 
 If a B2B client provides a European VAT ID or a business tax number:
 
-1. The Admin UI will display the **Validation Status**.
-2. The Main Backend automatically proxies the ID against the VIES (VAT Information Exchange System).
-3. If validated, the system automatically applies the B2B Reverse Charge mechanism, overriding default consumer tax configurations on their future Checkouts.
+1. The Admin UI can display the validation status and stored tax identity.
+2. The buyer-facing runtime can validate EU VAT IDs against VIES when both checkout settings and organization tax settings allow VIES.
+3. A validated EU VAT ID can make the buyer eligible for B2B treatment, including reverse charge, when the matching tax rule permits it.
+
+Reverse charge is not applied from the client record alone. The final decision is made by the tax engine from the active organization tax settings, effective tax rules, buyer country, buyer type, supply type, and tax point.

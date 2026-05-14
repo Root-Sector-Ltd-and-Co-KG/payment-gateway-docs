@@ -5,34 +5,43 @@ description: Implementation details for the Main Backend and Main Frontend servi
 
 # Main Services Implementation
 
-The Main Services form the customer-facing core of the payment gateway, handling the presentation of checkout sessions, executing payments, and managing external Webhooks.
+The Main Services form the customer-facing runtime of the payment gateway. They render checkout and portal pages, read checkout sessions, create transactions, receive provider webhooks, and expose customer document downloads.
 
 ## Main Backend
 
-Analogous to the Admin Backend, the Main Backend is built in Go and utilizes the same robust architectural pattern (`handlers`, `middleware`, `services`, `models`, `health`, `utils`).
+The Main Backend is a Go service using Gin, MongoDB, Garnet-compatible cache access, OpenTelemetry middleware, structured logging, rate limiting, and the shared encryption libraries.
 
-### Core Payment Responsibilities
+### Runtime Responsibilities
 
-1. **Checkout Execution**: After a checkout session is securely created on the Admin Backend API (using an `sk_...` Organization API Key), the Main Backend handles retrieving the checkout session (`GET /api/v1/checkouts/:id`), serving the tokenization UI (e.g., Stripe Elements), and processing the transaction. This ensures the backend never touches cardholder data directly, keeping the system within SAQ A scope.
-2. **Asynchronous Distributed Queue (Garnet / Redis protocol)**: To handle latency and PCI exposure effectively, transactions are published to a distributed message queue (`payment.initiated`). **Consumers run inside the Main Backend process** (not the separate `payment-gateway-main-worker` container) to process external charges and invoke atomic settlement logic in MongoDB using `Idempotency-Key`.
-3. **Tax Calculation Process**: Tax amounts are always extracted from the raw _gross_ amount presented during checkout. The system leverages tax rules defined by the Admin Panel and determines the tax at transaction creation time (relying on the validated billing address).
-4. **VAT Validation API**: The backend exposes public endpoints for validating European VAT IDs against the official EU VIES service (`/api/v1/vat/validate`), as well as endpoints to check EU member status.
-5. **IPN Webhook Integration**: Provides endpoints to receive Instant Payment Notifications (IPNs) from upstream providers. It automatically validates signatures using the securely stored webhook secret, extracts external references, and updates transaction states safely via the Garnet queue.
-6. **Customer Portal API**: Houses a `PortalInvoiceService` that allows end customers to download finalized invoices and credit notes securely using access tokens, review upcoming recurring charges, and request future-cycle cancellation for visible subscriptions.
-7. **PDF Worker Proxy**: When delivering invoices to the main frontend customer portal, the Main Backend proxies requests to the isolated `payment-gateway-main-worker` over HTTP, preventing security issues associated with shared docker volumes.
+1. **Checkout session retrieval**: The customer checkout app calls `GET /api/v1/checkouts/:id` and `POST /api/v1/checkouts/:id/tax-preview`. Checkout creation itself is owned by the Admin Backend at `POST /api/v1/checkouts/{siteId}/create`.
+2. **Transaction creation and status**: The checkout app calls `POST /api/v1/transactions/create`, `GET /api/v1/transactions/:id/status`, `POST /api/v1/transactions/:id/cancel`, and `POST /api/v1/transactions/:id/mark-pending`. Provider-specific implementations update payment intents or create billing requests from these handlers.
+3. **Billing requests**: Non-card and redirect-style providers use `POST /api/v1/billing-requests/create` to initialize provider-side payment flows.
+4. **Provider webhooks**: Upstream provider callbacks arrive at `/hooks/{type}/{providerId}` on the Main Backend host. These routes are intentionally registered outside `/api/v1` so provider dashboards can use short webhook URLs.
+5. **Customer portal API**: Routes under `/api/v1/portal` support status checks, OTP/magic-link authentication, document listing, PDF/e-invoice downloads, subscription views, upcoming proforma PDFs, and cancellation requests.
+6. **VAT validation API**: Checkout pages can validate EU VAT IDs through `/api/v1/vat/validate` and check EU membership through `/api/v1/vat/eu-country/:code`.
+7. **License enforcement**: All `/api/v1` routes run through the Main Backend license middleware. Provider webhooks are registered at the root route group and are handled by provider-specific verification.
+8. **Document delivery**: The Main Backend proxies customer-facing PDF and e-invoice requests to `payment-gateway-main-worker`; it does not require a shared volume with the worker.
 
-### Embedded Observability
+### Transaction Flow
 
-Similar to the administrative systems, the Main Backend enforces comprehensive request tracing via OpenTelemetry and logs heavily for forensic auditability of financial transactions.
+The current implementation does not publish `payment.initiated` events to Garnet. Garnet is used as a Redis-compatible cache. Transaction creation and provider calls happen in the request path or provider-specific webhook path, with side effects dispatched asynchronously where appropriate.
+
+For background work, the service uses a MongoDB-backed `jobs` collection. Invoices enqueue `pdf:generate`; notification scheduling enqueues `email:send`, `slack:send`, or `sms:send`; the Worker claims those jobs and performs the slow work outside the API request.
+
+### Observability
+
+The Main Backend installs request IDs, structured request logs, OpenTelemetry Gin middleware, rate limiting, global request timeouts, and health checks for MongoDB, cache, and provider availability.
 
 ## Main Frontend
 
-The Main Frontend is the lightweight presentation layer directly accessed by customers when they are redirected to `paymentUrl`.
+The Main Frontend is the customer-facing React application served by a Node/Express server. It is accessed when customers open a checkout `paymentUrl` or customer portal route.
 
 ### Operational Features
 
-- **API Proxying**: Built strongly to proxy API requests back to the corresponding Main Backend service via configuring endpoints in `server.js`.
-- **Graceful Shutdowns & Resiliency**: Designed to handle `SIGTERM` signals flawlessly, ensuring that active customer connections are not abruptly severed if the container orchestrator restarts the service.
-- **Environment Management**: Node.js runtime configuration is driven by `REACT_APP_*` variables consumed by `server.js` (e.g. `REACT_APP_MAIN_BACKEND_SERVICE`, `REACT_APP_MAIN_BACKEND_PORT`, `REACT_APP_MAIN_BACKEND_HTTPS`, `REACT_APP_MAIN_FRONTEND_HOST`, `REACT_APP_MAIN_FRONTEND_PORT`, …).
+- **Checkout and portal UI**: React 19 and React Router render checkout pages, invoice/credit-note pages, portal login, document lists, subscription views, and provider-specific payment forms.
+- **API proxying**: The Express server proxies `/api/*` to the configured Main Backend target using `REACT_APP_MAIN_BACKEND_SERVICE`, `REACT_APP_MAIN_BACKEND_PORT`, and `REACT_APP_MAIN_BACKEND_HTTPS`.
+- **Provider browser SDKs**: The content security policy allows the configured payment SDK domains used by Stripe, Mollie, PayPal, and other provider forms.
+- **Runtime configuration endpoint**: The server exposes frontend environment values needed by the UI without baking deployment domains into the built assets.
+- **Graceful shutdown**: The server handles `SIGTERM` and `SIGINT`, closes the HTTP server, and exits cleanly for container restarts.
 
-To build the checkout UI for production from source, use **pnpm** (Node 22+): `pnpm run build`, which emits the `dist/` folder consumed by the container image.
+To build the checkout UI for production from source, use **pnpm** with Node 22+: `pnpm run build`, which emits the `dist/` folder consumed by the container image.

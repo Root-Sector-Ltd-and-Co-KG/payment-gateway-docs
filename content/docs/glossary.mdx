@@ -1,0 +1,78 @@
+---
+title: Glossary
+description: Common terms used across the Payment Gateway documentation.
+---
+
+# Glossary
+
+## Admin Backend
+
+The authenticated management API used by operators and merchant server-side integrations. It owns organizations, sites, providers, API keys, checkout creation, settings, invoices, reports, and administrative workflows.
+
+## Admin Frontend
+
+The browser-based Admin Panel used by operators to configure the gateway and review payments, invoices, clients, settings, reports, and licensing state.
+
+## API Key
+
+A bearer credential used by trusted server-side integrations. Organization API keys are scoped to one organization. System API keys are for global administrative automation.
+
+## Checkout
+
+A temporary hosted payment session created by the Admin API or Admin Panel. Buyers open the checkout URL on the Main Frontend and complete payment through a provider-backed flow.
+
+## Client
+
+The gateway's customer record for a billed party. Clients can be created manually, imported, or inferred from completed checkout and invoice activity.
+
+## Credit Note
+
+A legal reversal document that offsets an issued invoice. Credit notes do not mutate the original invoice; they create a separate accounting and tax trail.
+
+## External Reference
+
+The merchant-provided order or business identifier attached to checkout and transaction records. Use it to reconcile gateway records with your own system.
+
+## IPN
+
+Instant Payment Notification. This is the outbound signed notification sent from the gateway to your application when transaction status changes. It is separate from provider webhooks.
+
+## Main Backend
+
+The buyer-facing and provider-facing runtime API. It serves checkout sessions, transaction submission, customer portal APIs, VAT validation, and provider webhook endpoints.
+
+## Main Frontend
+
+The buyer-facing hosted checkout and customer portal UI.
+
+## Organization
+
+The top-level tenant boundary. Users, sites, providers, API keys, clients, transactions, invoices, and tax settings are scoped to an organization unless explicitly documented otherwise.
+
+## Provider
+
+An upstream payment processor or payment method integration, such as Stripe, GoCardless, Wise Transfers, or Wire Transfer.
+
+## Provider Webhook
+
+An inbound webhook sent by a payment provider to the Main Backend. Provider webhooks update gateway transaction state and should be configured on the Main Backend host.
+
+## Site
+
+A checkout surface within an organization. Sites group branding, provider availability, checkout behavior, custom domains, and webhook signing secrets.
+
+## Tax Decision
+
+The persisted explanation of how tax was resolved for a transaction or document. It can include treatment, rule metadata, seller country, buyer country, buyer type, VIES validation metadata, and evidence confidence.
+
+## Tax Record
+
+An immutable canonical tax ledger record used by tax reports and exports. Tax records are written for material tax events such as transactions, invoices, credit notes, refunds, and chargebacks.
+
+## VAT OSS
+
+EU VAT One Stop Shop. In the gateway, OSS reports aggregate canonical tax records for eligible EU B2C cross-border sales, including refund and chargeback adjustments.
+
+## Webhook Signing Secret
+
+The Site-level secret used to sign outbound IPN payloads. Provider webhook secrets are configured separately on provider records.

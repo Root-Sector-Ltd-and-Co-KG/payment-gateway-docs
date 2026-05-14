@@ -1,0 +1,167 @@
+---
+title: Tax Configuration Examples
+description: Scenario-based examples for configuring VAT, OSS, reverse charge, gross/net prices, and tax reporting.
+---
+
+# Tax Configuration Examples
+
+These examples show how merchants typically configure tax. They are implementation recipes, not tax advice. Confirm the final setup with your tax advisor before relying on it for filing.
+
+## Before You Start
+
+Configure the shared foundation first:
+
+1. Open **Settings > Tax**.
+2. Enable tax calculation.
+3. Set seller country and seller VAT/tax identifiers.
+4. Choose whether your displayed prices normally include tax.
+5. Choose the rounding method.
+6. Load default tax rates or create your own effective-dated rates.
+7. Create rules that match your sales scenarios.
+
+> [!NOTE]
+> Screenshot placeholder: **Settings > Tax** overview showing seller country, VAT ID, price mode, rounding method, and OSS/VIES toggles.
+
+## Example 1: German Seller, Domestic B2C
+
+Use this when a German seller charges German consumers.
+
+Recommended setup:
+
+- Seller country: `DE`
+- Tax calculation: enabled
+- Price mode: choose gross if storefront prices already include VAT
+- Rate: `DE_STANDARD` at `19`
+- Rule:
+  - Seller country: `DE`
+  - Buyer country: `DE`
+  - Buyer type: `B2C`
+  - Supply types: `*` or the specific item type
+  - Treatment: `standard`
+  - Rate code: `DE_STANDARD`
+
+Expected behavior:
+
+- Checkout previews German VAT.
+- Transactions store `totalNet`, `totalTax`, `totalGross`, `taxBreakdown`, and a standard tax decision.
+- Reports group the sale under Germany.
+
+## Example 2: German Seller, EU B2B Reverse Charge
+
+Use this when a German seller sells to a VAT-registered business in another EU country.
+
+Recommended setup:
+
+- Seller country: `DE`
+- VIES validation: enabled
+- Checkout VAT validation: `vies` under **Settings > Checkout**
+- Rule:
+  - Seller country: `DE`
+  - Buyer country: `EU` or the target country, depending on your rule design
+  - Buyer type: `B2B`
+  - Supply types: `*` or a narrower set
+  - Treatment: `reverse_charge`
+  - Rate code: empty or a zero-rate code, depending on your reporting policy
+  - Legal reference: your reverse-charge reference text
+
+Expected behavior:
+
+- The checkout exposes VIES-backed validation only when **Settings > Tax** allows it.
+- A valid EU VAT ID can make the buyer `B2B`.
+- The matching reverse-charge rule produces zero tax charged by the seller.
+- The tax decision stores VIES validation metadata when available.
+
+> [!NOTE]
+> Screenshot placeholder: **Settings > Checkout** showing `vatIdValidation = vies` and tax breakdown display enabled.
+
+## Example 3: EU VAT OSS B2C Cross-Border
+
+Use this when an EU seller charges consumers in other EU member states under OSS.
+
+Recommended setup:
+
+- Seller country: your EU seller country, for example `DE`.
+- OSS enabled: yes.
+- OSS country and registration ID: set to your member state of identification.
+- Rates: load or create standard rates for destination countries, such as `FR_STANDARD`, `AT_STANDARD`, `NL_STANDARD`.
+- Rules:
+  - Seller country: your seller country.
+  - Buyer country: each target EU country, or use generated default OSS rules.
+  - Buyer type: `B2C`.
+  - Supply types: `*` or your relevant supply types.
+  - Treatment: `oss`.
+  - Rate code: destination country's standard rate.
+  - Evidence requirement: enabled where your rule policy requires it.
+
+Expected behavior:
+
+- Checkout and transaction tax use the buyer country's VAT rate.
+- In mixed baskets, physical goods and shipping lines use the shipping destination with billing country as fallback, while virtual/service lines use billing country.
+- For a DE seller with DE billing and AT shipping, a physical line should resolve to `AT_STANDARD` and a virtual/service line should resolve to `DE_STANDARD`.
+- For a DE seller with FR billing and CH shipping, a physical line should be treated as an export to `CH`, while a virtual/service line should resolve to `FR_STANDARD` under OSS.
+- For a DE seller with CH billing and AT shipping, a physical line should resolve to `AT_STANDARD` under OSS, while a virtual/service line should be treated as an export to `CH`.
+- The engine stores location evidence such as billing country, shipping country, IP country, payment method country, and phone prefix when available.
+- Strict OSS evidence mode can block checkout when evidence is missing or conflicting.
+- VAT OSS reports aggregate active tax records by quarter, country, rate, and supply type.
+
+> [!NOTE]
+> Screenshot placeholder: **Tax Rules** list showing generated OSS destination rules and priorities.
+
+## Example 4: Gross-Price Checkout
+
+Use this when storefront prices already include VAT, such as a EUR 49.00 consumer-facing plan.
+
+Recommended setup:
+
+- **Settings > Tax > Prices include tax**: enabled.
+- Checkout item `unitPrice`: gross amount in the smallest currency unit, e.g. `4900`.
+- Item `amountType`: omit it when organization defaults are sufficient, or set it explicitly to `gross` if your integration sends mixed item modes.
+
+Expected behavior:
+
+- The backend extracts net and tax from the gross amount using the matched tax rate and configured rounding method.
+- `totalGross` remains aligned with the buyer-facing amount.
+- `totalNet` and `totalTax` are stored for invoices and reports.
+
+## Example 5: Net-Price B2B Checkout
+
+Use this when your integration sends net prices and the gateway should add tax when applicable.
+
+Recommended setup:
+
+- **Settings > Tax > Prices include tax**: disabled.
+- Checkout item `unitPrice`: net amount in the smallest currency unit.
+- Rules: define whether the buyer scenario is standard, reverse charge, zero-rated, or exempt.
+
+Expected behavior:
+
+- Standard-tax buyers see tax added on top of the net amount.
+- Reverse-charge or exempt buyers keep gross equal to net.
+- Reports still receive canonical tax records even when tax charged is zero, as long as the source document carries tax metadata.
+
+## Example 6: Refunds And Credit Notes
+
+Use this when a paid transaction or issued invoice must be reversed.
+
+Recommended workflow:
+
+1. Start from the transaction or invoice detail page.
+2. Use the refund workflow when payment has moved through a provider.
+3. Let the platform create the credit note when an invoice is linked.
+4. Review the transaction, invoice, and tax record links before filing.
+
+Expected behavior:
+
+- The original sale tax record remains unchanged.
+- Refunds and chargebacks create negative tax adjustment records.
+- Credit notes create separate document-side tax records.
+- Mixed-line adjustments preserve the original line country and VAT code where available.
+- Untaxed residual amounts, such as export lines not present in a taxable breakdown, remain separate negative lines instead of inheriting another line's VAT code.
+- If imported or legacy breakdown data exceeds the recorded refund or chargeback total, reports cap the negative adjustment to the recorded total and do not create positive balancing rows.
+- VAT OSS and by-country reports reduce totals through adjustment records rather than rewriting the original sale.
+
+> [!NOTE]
+> Screenshot placeholder: **VAT OSS report** showing source filter, quarter selector, country breakdown, and export buttons.
+
+> [!NOTE]
+> Screenshot placeholder: **Invoice detail** showing linked transaction, credit notes, tax summary, and PDF/XML download actions.

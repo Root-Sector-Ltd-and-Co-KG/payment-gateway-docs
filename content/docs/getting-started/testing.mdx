@@ -78,6 +78,13 @@ To verify tax rules are applied correctly:
 
 Use the Admin Panel under **Transactions → [transaction] → Tax Details** to inspect transaction tax metadata, and under **Invoices → Draft Invoice** to inspect the previewed automatic invoice tax result.
 
+Include at least these edge cases before moving tax changes to production:
+
+- Mixed physical and virtual baskets where billing and shipping countries differ, including EU/EU, EU/non-EU, and non-EU/EU combinations.
+- Gross-price and net-price checkouts when automatic tax calculation is enabled.
+- Refund, lost/accepted chargeback, and won-chargeback flows; won chargebacks should not remain as reportable tax reductions.
+- Tax record rebuild after test data creation; Tax by country, Revenue by country, and VAT OSS should use active canonical tax records without `UNKNOWN` country rows.
+
 ---
 
 ## Testing Recurring Schedules

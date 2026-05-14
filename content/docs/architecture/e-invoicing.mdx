@@ -12,7 +12,7 @@ The Payment Gateway implements robust native e-invoicing pipelines capable of sa
 The system's invoice generation is actively verified against official EU schemas (EN16931). 
 
 The supported standards currently include:
-1. **ZUGFeRD / Factur-X**: A hybrid XML/PDF format dominant in Germany and France. 
+1. **ZUGFeRD / Factur-X**: Factur-X CII XML, with hybrid PDF/A-3 output available on the admin ZUGFeRD PDF endpoint.
 2. **Peppol BIS Billing 3.0**: An international standard mapped back to UBL (Universal Business Language).
 3. **XRechnung**: A strict UBL subset essential for German B2G transactions.
 
@@ -43,4 +43,4 @@ As different regions require varying formats (or restrict them entirely), the AP
 1. **Organization-Level Rules**: Configures what the organization is physically capable of generating globally via `settings.invoicing.eInvoice.allowedFormats`.
 2. **Portal-Level Exposure**: Determines which of those generated formats should be visibly offered to the end-consumer via the customer portal (`settings.portal.allowedDownloadFormats`).
 
-The resulting configuration dictates whether `/portal/documents/:id/einvoice` should yield a UBL XML stream, a hybrid ZUGFeRD PDF, or simply standard static binary PDF representations.
+The resulting configuration dictates which standalone XML formats `/portal/documents/:id/einvoice?format=...` may return. XRechnung and Peppol return UBL XML; `format=zugferd` returns Factur-X/ZUGFeRD CII XML. Hybrid ZUGFeRD PDF/A-3 output is served by the admin endpoint `/api/v1/invoices/:id/pdf/zugferd`; standard portal PDFs remain on `/portal/documents/:id/pdf`.

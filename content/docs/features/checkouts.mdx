@@ -14,7 +14,7 @@ From the **Checkouts** tab, you can view all active and historical payment sessi
 You have two primary ways to create a Checkout session:
 
 1. **Dashboard (Manual)**: For ad-hoc invoices or personalized payment links, you can use the **Create Checkout** interface directly in the Admin Panel. You define the line items, the currency, and the assigned Site, and the system generates a shareable URL.
-2. **API Integration**: Your trusted server-side runtime (backend service, worker, or secure edge function) can programmatically create checkout sessions by calling `POST /v1/checkouts/{siteId}/create` (or `/api/v1/...`) on **`ADMIN_BACKEND_DOMAIN`** — e.g. `https://api.yourcompany.com/v1/...` self-hosted or `https://api.payment-gateway.app/v1/...` hosted. Authenticate with an `sk_...` Organization API key as a Bearer token. Do not use **Main Backend** (`MAIN_BACKEND_DOMAIN`, e.g. `webhook.*`) for this call; that host serves `/hooks/...` and checkout **runtime** only — [Hostnames & DNS conventions](../deployment/domains).
+2. **API Integration**: Your trusted server-side runtime (backend service, worker, or secure edge function) can programmatically create checkout sessions by calling `POST /v1/checkouts/{siteId}/create` (or `/api/v1/...`) on **`ADMIN_BACKEND_DOMAIN`**, for example `https://api.yourcompany.com/v1/...` self-hosted or `https://api.payment-gateway.app/v1/...` hosted. Authenticate with an `sk_...` Organization API key as a Bearer token. Do not use **Main Backend** (`MAIN_BACKEND_DOMAIN`, e.g. `webhook.*`) for this call; that host serves `/hooks/...` and checkout **runtime** only. See [Hostnames & DNS conventions](../deployment/domains).
 
 ## The Customer Experience
 
@@ -26,10 +26,20 @@ This URL is served by the **Main Frontend** (Payment Portal). When navigating to
 2. Display the line items and calculate required taxes based on the buyer's billing details.
 3. Present the relevant Payment Providers (e.g., Stripe credit card inputs, GoCardless mandate forms, or Wire Transfer instructions).
 
+## Checkout Tax Integration
+
+Checkout totals are calculated in two stages:
+
+1. The checkout page loads the session from `GET /api/v1/checkouts/{sessionPublicId}`. The response includes current totals and the effective checkout VAT validation mode.
+2. As the buyer enters billing/shipping details, the checkout page can call `POST /api/v1/checkouts/{sessionPublicId}/tax-preview` to show the current backend-calculated net, tax, gross, and tax breakdown.
+3. When the buyer submits payment, `POST /api/v1/transactions/create` recalculates tax authoritatively and stores the transaction tax snapshot.
+
+The preview and final transaction use the same organization tax settings, rates, rules, rounding method, gross/net price mode, VAT validation behavior, and OSS evidence rules. If VIES validation is disabled in **Settings > Tax**, a checkout preference of `vies` is downgraded to format-only validation at runtime.
+
 > [!CAUTION]
 > The checkout flow is designed for PCI-DSS SAQ A-oriented integrations. Cardholder data is handled by the payment provider UI components (for example, Stripe Elements) rather than being processed directly by your backend integration.
 
-## Return and Cancel URLs
+## Return And Cancel URLs
 
 When creating a Checkout programmatically, you can specify `returnUrl` and `cancelUrl`.
 

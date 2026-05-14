@@ -5,40 +5,43 @@ description: View and manage the lifecycle of customer payments and authorizatio
 
 # Transactions
 
-A **Transaction** represents the actual financial movement of funds or authorization captured during a Checkout session.
+A **Transaction** represents the financial movement, authorization, or pending provider flow captured during a Checkout session.
 
-You can monitor your real-time payment volume under the **Transactions** section.
+You can monitor payment volume under the **Transactions** section.
 
 ## Transaction Lifecycle
 
-The dashboard describes states in business terms (for example **initiated**, **pending provider**, **succeeded**). The Admin API, exports, and [outbound IPN](../api-reference/webhooks) payloads use **integer** `status` codes; see [Webhooks & IPN](../api-reference/webhooks) and API references for the numeric mapping.
+The dashboard describes states in business terms, for example **initiated**, **pending provider**, and **succeeded**. The Admin API, exports, and [outbound IPN](../api-reference/webhooks) payloads use integer `status` codes; see [Webhooks & IPN](../api-reference/webhooks) and the API references for the numeric mapping.
 
 Transactions flow through several definitive states:
 
-1.  **`initiated`**: The customer has accessed the Checkout page and a payment intent has been formed with the upstream Provider, but no payment details have been finalized.
-2.  **`pending_provider`**: Often seen with asynchronous payment methods (e.g., SEPA Direct Debit or manual bank transfers). The system is awaiting final settlement confirmation via Webhook from the Provider.
-3.  **`succeeded`**: The funds have been successfully captured. Any linked invoice reflects that settlement through its computed payment state and settlement totals.
-4.  **`failed`**: The payment attempt was rejected (e.g., insufficient funds, fraudulent card).
+1. **`initiated`**: The customer has opened the Checkout page and the gateway has created the local transaction or provider payment object, but the payment is not final.
+2. **`pending_provider`**: Used for asynchronous payment methods such as bank transfers, mandates, redirects, or provider flows that settle later.
+3. **`succeeded`**: The funds have been captured or the provider has confirmed successful settlement. Any linked invoice reflects that settlement through payment state and settlement totals.
+4. **`failed`**: The provider rejected the payment attempt.
+5. **`canceled`**: The customer, operator, timeout, or provider flow canceled the attempt before completion.
+6. **`refunded`**: The original successful transaction has been fully refunded. Partial refunds keep the transaction linked to refund events and settlement totals.
 
-### Analyzing transaction logs
+### Analyzing Transaction Logs
 
-By clicking on a specific Transaction, you can view the full metadata. This includes:
+By clicking a specific transaction, you can inspect:
 
-- **Timeline Events**: Every interaction with the payment provider, including HTTP request traces.
-- **Tax Evidence**: For EU VAT OSS, the stored proof of customer location (e.g., matching IPs against billing addresses).
-- **Provider Raw Data**: The unstructured JSON payload received directly from Stripe or GoCardless, useful for debugging webhook sync issues.
-- **IPN Information** (when an IPN URL was set on the checkout): configured listener URL, attempt count, and last HTTP status from the Main Backend’s outbound IPN delivery.
+- **Timeline events**: Provider interactions and status changes.
+- **Tax evidence**: Stored buyer location proof and tax decision data used for EU VAT OSS and reporting.
+- **Provider raw data**: The unstructured JSON payload or provider response used for debugging webhook and settlement issues.
+- **IPN information**: When an IPN URL was set on the checkout, the transaction stores the configured listener URL, attempt count, delivery outcome, and last HTTP status from the Main Backend's outbound IPN delivery.
 
-When the Transaction is linked to a stored Client, the detail view also provides a direct Client profile link so operators can jump into the full relationship history from the payment record.
+When the transaction is linked to a stored Client, the detail view also provides a direct Client profile link so operators can jump into the full relationship history.
 
 ## Operational Actions
 
-Support and Admin staff can directly manipulate active Transactions from this interface:
+Support and admin staff can directly operate eligible transactions:
 
-- **Refund**: Issues a request to the Provider to return the funds. When an invoice is linked, the platform records the refund settlement and generates the legally compliant **Credit Note** that offsets the original invoice without mutating it.
-- **Void**: Used to cancel an authorization before final capture.
+- **Refund**: Requests the provider to return funds. When an invoice is linked, the platform records refund settlement data and generates the legally compliant credit note that offsets the original invoice without mutating it.
+- **Void / cancel**: Cancels an authorization or pending flow before final capture.
+- **Manual status updates**: Used for provider-independent flows such as wire payments, with IPN dispatch available when explicitly requested.
 
 > [!NOTE]
-> Refunding a transaction is an immutable action. The system will asynchronously query Garnet/Redis queues to guarantee idempotency and prevent double-spending refunds across simultaneous requests.
+> Refunding a transaction is an immutable action. The backend updates refund totals, refund events, tax adjustments, and linked credit-note side effects with atomic MongoDB update operations so repeated or concurrent requests cannot silently mutate the original payment record.
 
-The same refund workflow can also be launched from the Invoice screen when exactly one refundable Transaction is linked. In that case, the Invoice screen opens the same refund form and submits the same Transaction refund operation rather than introducing a separate invoice-only refund engine.
+The same refund workflow can also be launched from the Invoice screen when exactly one refundable transaction is linked. In that case, the Invoice screen opens the same refund form and submits the same transaction refund operation rather than introducing a separate invoice-only refund engine.

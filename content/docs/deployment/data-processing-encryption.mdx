@@ -16,8 +16,8 @@ This page explains:
 
 Encryption is **not** one global switch for all MongoDB data. The application attaches an encryption **scope** to each operation:
 
-- **System scope** — Used when handling **platform admin** documents (for example admin `User` records) and other system-level contexts. Requires **System > Encryption** to be configured and enabled with an active system DEK.
-- **Organization scope** — Used for **tenant-owned** documents (clients, transactions, providers, queued notifications, and similar). Requires **Settings > Encryption** for that organization to be configured and enabled with an active organization DEK.
+- **System scope**: Used when handling **platform and configuration** documents, including admin `User` records, organization profile fields, payment provider configuration, site labels, and saved organization/site SMTP or geolocation secrets. Requires **System > Encryption** to be configured and enabled with an active system DEK.
+- **Organization scope**: Used for **tenant runtime/customer** documents such as clients, checkout sessions, transactions, invoices, credit notes, and queued notification payloads. Requires **Settings > Encryption** for that organization to be configured and enabled with an active organization DEK.
 
 If encryption is disabled or no active DEK exists for a scope, affected `FieldEncrypted` fields remain in **plaintext** for that scope.
 
@@ -25,12 +25,13 @@ If encryption is disabled or no active DEK exists for a scope, affected `FieldEn
 
 ## Data categories processed
 
-| Category               | Typical examples                                                                        | DEK scope when field encryption is active                                          |
-| ---------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| Platform admin users   | Email, display name, mobile phone                                                       | **System**                                                                         |
-| Tenant business data   | Clients, saved addresses, transactions, invoices, payment provider configuration        | **Organization**                                                                   |
-| Notifications (queued) | Email/SMS recipient channels, invoice template party lines, denormalized customer email | **Organization** (documents are tied to `organizationId`)                          |
-| System vs org SMTP     | System portal email settings vs organization invoice SMTP                               | **System** vs **Organization** respectively (each under its own settings document) |
+| Category                      | Typical examples                                                                        | DEK scope when field encryption is active                                           |
+| ----------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Platform admin users          | Email, display name, mobile phone                                                       | **System**                                                                          |
+| Tenant configuration records  | Organization profile fields, payment provider configuration, site labels, saved organization/site SMTP and geolocation secrets | **System**                                                                          |
+| Tenant runtime/customer data  | Clients, saved addresses, checkout sessions, transactions, invoices, credit notes       | **Organization**                                                                    |
+| Notifications (queued)        | Email/SMS recipient channels, invoice template party lines, denormalized customer email | **Organization** (documents are tied to `organizationId`)                           |
+| System notification settings  | Platform portal SMTP settings in the singleton system document                          | **System**                                                                          |
 
 The exact records depend on enabled modules and configuration.
 
@@ -56,9 +57,9 @@ Encrypted: customer email, return URL, IP address (when present), IPN URL. Other
 
 Encrypted: seller/buyer name, email, VAT id, phone, address lines, city, state, postal code. Country remains a plaintext country code on party objects where applicable.
 
-### Payment providers
+### Payment providers and tenant configuration
 
-The provider **`configuration`** payload (secrets and provider-specific JSON) is stored as `FieldEncrypted`.
+The provider **`configuration`** payload (secrets and provider-specific JSON) is stored as `FieldEncrypted` under the system encryption scope. Organization profile fields, site labels, and saved organization/site SMTP or geolocation provider secrets are also configuration data protected by the system scope.
 
 ### Admin users (admin backend)
 
@@ -77,6 +78,20 @@ Some fields (for example client email) may store a **search hash** alongside cip
 Turning encryption **on** for a scope affects **new writes** immediately once a DEK is active. Older documents may still hold plaintext inside `FieldEncrypted` until they are updated or processed by a **bulk encryption job** started from the Admin UI encryption pages.
 
 Similarly, **full DEK rotation** (as opposed to envelope re-wrap) can start a **background re-encryption** pass so ciphertext is bound to the new DEK version. **Disabling** encryption or running **decryption** may use the same style of job. Monitor progress and errors in the encryption UI when running these operations on large datasets.
+
+## Context-bound encrypted fields
+
+Application encrypted fields use authenticated encryption. Ciphertext is bound to its encryption context, including the scope, organization, collection, field, and DEK version. Do not copy encrypted field metadata from one document shape to another. For example, an encrypted `invoices.client.name` value must not be copied into `credit_notes.client.name`; the target field must be written from plaintext so it is encrypted under the credit-note context.
+
+This is especially important for legal document snapshots. Invoices and credit notes may copy seller and client snapshot values for accounting consistency, but the copy must be plaintext-only before persistence. If encrypted metadata is moved between contexts, reads can fail with `message authentication failed` and the original plaintext cannot be recovered from that ciphertext alone.
+
+For local environments, use:
+
+```bash
+node payment-gateway-local-dev/local-dev.mjs db audit encryption
+```
+
+The audit checks for copied encrypted snapshot payloads and scans local backend logs for system-scope and organization-scope authentication failures.
 
 ## Is encryption enabled by default?
 

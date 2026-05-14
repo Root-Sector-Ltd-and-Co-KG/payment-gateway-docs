@@ -5,9 +5,9 @@ description: Understanding runtime license states and recovery actions.
 
 # Licensing Operations
 
-The Payment Gateway operates under a commercial license verification system. The backend licensing engine continuously evaluates signed JWT claims against your active subscription and heartbeat cadence to derive a runtime state.
+The Payment Gateway operates under a commercial license verification system. The backend licensing engine evaluates signed license claims against your active subscription and heartbeat cadence to derive a runtime state.
 
-Understanding these states is critical for system operators to ensure uninterrupted service.
+Understanding these states helps system operators keep service uninterrupted.
 
 ## License Tiers
 
@@ -19,10 +19,10 @@ Three commercial tiers are available:
 | Professional | 2,990 EUR | 990 EUR        | 1    | Unlimited | Email (48 h)   |
 | Business     | 7,490 EUR | 2,490 EUR      | 5    | Unlimited | Priority (4 h) |
 
-Additional organisations beyond the tier allowance can be added for 250 EUR per organisation per year on any tier.
+Additional organizations beyond the tier allowance can be added for 250 EUR per organization per year on any tier.
 
 > [!TIP]
-> Use a non-production licensing environment to validate activation, heartbeat, and update flows before going live. In the first-party deployment that environment is exposed at https://staging-dashboard.payment-gateway.app/.
+> Use a non-production licensing environment to validate activation, heartbeat, and update flows before going live.
 
 ## Runtime States
 
@@ -30,18 +30,21 @@ Additional organisations beyond the tier allowance can be added for 250 EUR per 
 - `GRACE`: Heartbeat not received for 14+ days. Payment processing, data access, and scheduled jobs continue normally, but administrators will see warnings in the Admin Panel. Updates and support are paused until a successful heartbeat restores the license to `ACTIVE`.
 - `SOFT_LOCK`: Heartbeat gap 31+ days. Payment processing, data access, and scheduled jobs still continue. This is an informational state surfaced on the admin dashboard for visibility. Updates and support remain paused.
 - `READ_ONLY`: Heartbeat gap 45+ days, or never heartbeated. Payment processing, data access, and scheduled jobs still continue. This is also an informational state. Updates and support remain paused.
-- `BLOCKED`: The license has been revoked or suspended by the licensing authority, or the installation has been blocked for a policy violation such as reporting a product version newer than the highest version entitled by its support window. All protected endpoints return `403 Forbidden`. This is the only state that restricts runtime access.
+- `BLOCKED`: The license has been revoked or suspended, or the installation has been blocked for a policy violation such as reporting a product version newer than the highest version entitled by its support window. All protected endpoints return `403 Forbidden`. This is the only state that restricts runtime access.
 - `NOT_ACTIVATED`: No license key is configured for the installation. All protected endpoints return `403 Forbidden` until a license key is activated. This state is shown immediately on a fresh install; it is not treated as `GRACE`.
 
 > [!IMPORTANT]
-> Operations continue normally through `GRACE`, `SOFT_LOCK`, and `READ_ONLY`. These states only affect update eligibility and support access — they do not degrade or restrict your running system. Only `BLOCKED` and `NOT_ACTIVATED` prevent runtime access. `BLOCKED` is never caused by an expired heartbeat alone, but it can be applied manually by the licensing authority or automatically when the installation reports an out-of-entitlement product version.
+> Operations continue normally through `GRACE`, `SOFT_LOCK`, and `READ_ONLY`. These states only affect update eligibility and support access; they do not degrade or restrict your running system. Only `BLOCKED` and `NOT_ACTIVATED` prevent runtime access. `BLOCKED` is never caused by an expired heartbeat alone, but it can be applied manually by the vendor or automatically when the installation reports an out-of-entitlement product version.
 
 ## Operator Actions
 
 If your system enters a non-active state, follow these procedures to recover:
 
-1. **Verify Connectivity**: The Admin Backend must be able to make outbound HTTPS requests to the License Authority. Check your firewall and NAT configurations.
-2. **NTP Drift**: Keep the host clock synchronized using NTP (Network Time Protocol). Severe clock drift will cause the JWT verification to fail prematurely or appear expired.
-3. **Manual Heartbeat**: If the state drops to `GRACE`, `SOFT_LOCK`, or `READ_ONLY`, navigate to the Admin UI and trigger a manual heartbeat to force a synchronization. This will restore the license to `ACTIVE` and resume update/support eligibility.
-4. **Runtime Block (`BLOCKED`)**: If the state becomes `BLOCKED`, confirm whether the licensing authority revoked or suspended the license, or whether the installation reported a version newer than the maximum version allowed by that license's support window. Resolve the account or version issue, downgrade if necessary, then trigger a manual heartbeat to restore the system to `ACTIVE`.
-5. **Initial Activation (`NOT_ACTIVATED`)**: As a **global administrator**, open the Admin UI at **System → Licensing** (`/system/licensing`), enter the license key, and activate. This page remains accessible to global admins even when the installation is unlicensed so you can recover from `NOT_ACTIVATED` / `BLOCKED` states. A successful activation also updates the operator-facing license workspace managed by your licensing authority. In the first-party deployment that workspace is hosted at `payment-gateway.app`.
+1. **Verify connectivity**: The Admin Backend must be able to make outbound HTTPS requests to the vendor license endpoint configured for your deployment. Check your firewall and NAT configuration.
+2. **NTP drift**: Keep the host clock synchronized using NTP. Severe clock drift will cause signature verification to fail prematurely or appear expired.
+3. **Manual heartbeat**: If the state drops to `GRACE`, `SOFT_LOCK`, or `READ_ONLY`, navigate to the Admin UI and trigger a manual heartbeat to force a synchronization. This restores the license to `ACTIVE` and resumes update/support eligibility when the remote license is valid.
+4. **Runtime block (`BLOCKED`)**: If the state becomes `BLOCKED`, confirm whether the license was revoked or suspended, or whether the installation reported a version newer than the maximum version allowed by that license's support window. Resolve the account or version issue, downgrade if necessary, then trigger a manual heartbeat to restore the system to `ACTIVE`.
+5. **Initial activation (`NOT_ACTIVATED`)**: As a **global administrator**, open the Admin UI at **System > Licensing** (`/system/licensing`), enter the license key, and activate. This page remains accessible to global admins even when the installation is unlicensed so you can recover from `NOT_ACTIVATED` / `BLOCKED` states.
+
+> [!NOTE]
+> Screenshot placeholder: **System > Licensing** showing runtime state, activation form, heartbeat action, support window, and last synchronization time.

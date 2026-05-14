@@ -1,0 +1,154 @@
+---
+title: Integration Recipes
+description: Practical server-side recipes for checkouts, webhooks, IPN, invoices, and tax reconciliation.
+---
+
+# Integration Recipes
+
+Use these recipes when you are wiring a merchant backend to the gateway. They focus on the customer-facing integration surface and avoid deployment internals.
+
+## Recipe 1: Create A Hosted Checkout
+
+Use the **Admin API** host for checkout creation. This is a trusted server-to-server call and must never be made from browser code.
+
+```bash
+curl -X POST https://api.yourcompany.com/v1/checkouts/{siteId}/create \
+  -H "Authorization: Bearer sk_live_keyid.secret" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 4900,
+    "currency": "EUR",
+    "email": "buyer@example.com",
+    "externalReference": "order_12345",
+    "returnUrl": "https://yourapp.com/success?txId={transactionId}",
+    "cancelUrl": "https://yourapp.com/cancel",
+    "ipnUrl": "https://yourapp.com/webhooks/payment-ipn",
+    "items": [
+      {
+        "description": "Professional Plan",
+        "quantity": 1,
+        "unitPrice": 4900,
+        "itemType": "virtual"
+      }
+    ]
+  }'
+```
+
+Required setup:
+
+- Create an Organization API key with `checkout:create`.
+- Create a Site and copy its Site ID.
+- Assign at least one provider to the Site.
+- Configure `returnUrl`, `cancelUrl`, and `ipnUrl` if your application needs redirect and server-side notification.
+
+> [!NOTE]
+> Screenshot placeholder: **Settings > API Keys** showing a least-privilege `checkout:create` key and the one-time secret reveal state.
+
+> [!NOTE]
+> Screenshot placeholder: **Sites > Edit Site** showing Site ID, assigned providers, and Webhook Signing Secret.
+
+## Recipe 2: Let Hosted Checkout Calculate Tax
+
+Your merchant backend does not normally call the checkout tax-preview endpoint directly. Hosted checkout calls it while the buyer enters billing details:
+
+```http
+POST https://webhook.yourcompany.com/api/v1/checkouts/{sessionPublicId}/tax-preview
+```
+
+The final transaction still recalculates tax authoritatively when the buyer submits payment. This means your integration should send stable line-item data at checkout creation time and let the gateway apply organization tax settings, rates, rules, VAT validation, OSS evidence rules, and rounding.
+
+When you need deterministic tax behavior:
+
+- Set item `itemType` consistently (`virtual`, `physical`, `shipping`, or `discount`).
+- Use gross or net pricing consistently with the organization's **Settings > Tax** price mode.
+- Configure tax rules before sending production traffic.
+- Use `externalReference` to correlate gateway records with your order.
+
+## Recipe 3: Register Provider Webhooks
+
+Provider webhooks belong on the **Main Backend** host, not the Admin API host.
+
+```http
+POST https://webhook.yourcompany.com/hooks/stripe/{providerId}
+POST https://webhook.yourcompany.com/hooks/gocardless/{providerId}
+```
+
+Setup checklist:
+
+1. Create the provider in the Admin Panel.
+2. Copy the provider ID from the provider detail URL or provider record.
+3. Register the webhook URL in Stripe or GoCardless.
+4. Save the provider webhook signing secret on the provider record.
+5. Run a provider test event and confirm that the gateway accepts it.
+
+Provider webhooks update gateway transaction state. Your own application should listen to outbound IPN unless you intentionally poll the Admin API.
+
+> [!NOTE]
+> Screenshot placeholder: **Providers > Edit Provider** showing the provider ID and webhook secret fields.
+
+## Recipe 4: Receive And Verify Outbound IPN
+
+Set `ipnUrl` when creating the checkout. The gateway sends a small signed JSON payload to that URL when transaction status changes.
+
+```json
+{
+  "id": "67c8e2f7d6ef0dc8a3fa2011",
+  "externalReference": "order_12345",
+  "status": 2
+}
+```
+
+Verify these headers before trusting the payload:
+
+- `X-Signature-Timestamp`
+- `X-Signature-HMAC-SHA256`
+
+The signature is the hex HMAC-SHA256 of `{timestamp}.{rawBody}` using the Site Webhook Signing Secret. Return `200 OK` after accepting the message. Other status codes trigger retries.
+
+> [!IMPORTANT]
+> Store and process IPN idempotently. Use `id` plus `status` as a deduplication key and keep your own order state transition guarded.
+
+> [!NOTE]
+> Screenshot placeholder: **Transactions > Transaction Detail > IPN Information** showing delivery attempts, last status, and retry state.
+
+## Recipe 5: Reconcile Transaction, Invoice, And Tax
+
+A typical paid-order reconciliation flow looks like this:
+
+```mermaid
+sequenceDiagram
+    participant App as Merchant backend
+    participant Admin as Admin API
+    participant Buyer as Buyer checkout
+    participant Main as Main Backend
+    participant Provider as Payment provider
+
+    App->>Admin: POST /v1/checkouts/{siteId}/create
+    Admin-->>App: paymentUrl, sessionPublicId
+    App-->>Buyer: Redirect to paymentUrl
+    Buyer->>Main: Submit payment
+    Main->>Provider: Create or confirm payment
+    Provider-->>Main: Webhook confirms payment
+    Main-->>App: Signed IPN
+    App->>Admin: GET /api/v1/transactions/{id}
+    App->>Admin: Optional invoice/tax report queries
+```
+
+Recommended reconciliation rules:
+
+- Treat provider webhooks as input to the gateway, not as your application fulfillment trigger.
+- Treat signed IPN or Admin API polling as your application fulfillment trigger.
+- Use `externalReference` to match gateway transactions to your order ID.
+- Read invoice and tax report data from the Admin API when you need accounting exports, not from provider dashboards.
+
+## Recipe 6: Export Tax Evidence For Filing
+
+For VAT OSS and by-country reports, use the Admin API report endpoints or the Admin Panel:
+
+```http
+GET /api/v1/tax/reports/vat-oss?year=2026&quarter=2&timezone=Europe/Berlin&source=both
+GET /api/v1/tax/reports/vat-oss/export?year=2026&quarter=2&timezone=Europe/Berlin&source=both
+GET /api/v1/tax/records?sourceKind=transaction&taxTreatment=oss
+```
+
+Reports are backed by canonical `tax_records`, including refund, chargeback, and credit-note adjustments. Use the detail endpoints when you need to explain an aggregate number back to source transactions or invoices.

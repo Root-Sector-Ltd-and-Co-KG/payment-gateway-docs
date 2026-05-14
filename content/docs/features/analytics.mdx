@@ -5,25 +5,40 @@ description: Exporting data, understanding the dashboard, and generating tax com
 
 # Analytics & Reporting
 
-Data visibility is critical for merchants. The platform provides real-time overviews as well as robust, scheduled reporting capabilities to appease local tax authorities.
+Data visibility is critical for merchants. The platform provides real-time operational dashboards and tax-oriented reporting backed by canonical tax records.
 
 ## The Dashboard
 
 The default view upon logging in is the **Dashboard**. It aggregates real-time data across your active Sites.
 
 Key metrics include:
-* **Gross Volume**: Total processed transactions over the selected trailing period (e.g., 7 Days, 30 Days).
-* **Net Revenue**: Gross minus refunds and computed upstream provider fees.
-* **Failed Attempt Ratios**: Helps identify surges in fraudulent card testing or widespread bank outages.
 
-## Tax & VAT OSS Reports
+- **Gross volume**: Total processed transactions over the selected trailing period, such as 7 days or 30 days.
+- **Net revenue**: Gross minus refunds and computed upstream provider fees.
+- **Failed attempt ratios**: Helps identify surges in fraudulent card testing or widespread bank outages.
 
-If your Organization is configured for B2C cross-border digital goods within the European Union, you are required to submit quarterly VAT-OSS (One Stop Shop) declarations.
+## Tax And VAT OSS Reports
 
-Navigate to **Reports > VAT OSS**.
-1. Select the relevant Fiscal Quarter.
-2. The engine will aggregate all `succeeded` transactions where the OSS rules applied.
-3. It bins the collected tax amounts per destination Member State (e.g., France: €200 collected, Germany: €500 collected).
-4. Export the data structurally to map directly to the ELSTER (or respective local authority) submission gateway.
+Tax reports are generated from canonical `tax_records`, not from ad hoc transaction totals. This lets the Admin Panel aggregate sales, invoices, refunds, chargebacks, and credit notes consistently while preserving drill-down links to the source documents.
 
-A generalized **Tax by Country** report is also available for non-OSS sales logic (such as physical goods subject to domestic VAT accounting).
+Available tax reporting views include:
+
+- **Tax by country**: Net, tax, and gross amounts grouped by tax country and rate.
+- **Revenue by country**: Revenue-style summary by country.
+- **VAT OSS**: Quarterly EU OSS aggregation with country/rate/supply-type basis rows.
+
+Navigate to **Reports > VAT OSS** for OSS filings:
+
+1. Select the calendar year, quarter, timezone, and source basis (`transactions`, `invoices`, or `both`).
+2. The report aggregates active tax records where OSS or OSS-reportable cross-border B2C treatment applies.
+3. Refund and fund-impacting chargeback tax records reduce the relevant totals instead of mutating the original sale. Won chargebacks are voided for reporting, and chargeback credit notes are issued only for lost or accepted disputes.
+4. Mixed physical/virtual and EU/non-EU adjustments stay line-based: goods and shipping follow the shipping destination, virtual/service lines follow billing country, and export or untaxed residual lines stay outside VAT OSS.
+5. Export the data as OSS XML or Elster CSV when the local filing workflow requires it.
+
+See [Invoicing & Tax architecture](../architecture/invoicing-and-tax) for the full tax record lifecycle.
+
+> [!NOTE]
+> Screenshot placeholder: **Reports > VAT OSS** showing year, quarter, timezone, source filter, country breakdown, row details, and export actions.
+
+> [!NOTE]
+> Screenshot placeholder: **Reports > Tax by Country** showing country totals and drill-down from aggregate rows to source tax records.

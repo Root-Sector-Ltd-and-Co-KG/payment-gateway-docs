@@ -5,43 +5,46 @@ description: Breakdown of the individual components that make up the Payment Gat
 
 # Architecture & Components
 
-The Payment Gateway is composed of several independent but cooperating services. By using a microservices architecture, the system is reliable, scalable, and secure.
+The Payment Gateway is composed of independent services that communicate through HTTP, MongoDB, and a MongoDB-backed background job queue. Caddy owns public TLS and routing; the Go backends own business rules; the React frontends are served by small Node/Express servers that proxy `/api/*` to the matching backend.
 
 ## The Services
 
-Here is a breakdown of the core services deployed in the system. **Public URLs are deployment-specific** — env variables and hosted vs self-hosted examples are in [Hostnames & DNS conventions](../deployment/domains).
+Here is a breakdown of the core services deployed in the system. Public URLs are deployment-specific; environment variables and hosted vs self-hosted examples are in [Hostnames & DNS conventions](../deployment/domains).
 
-| Service                                    | Purpose                                                                                                                 | Public access (typical)                                                                                                                                          |
-| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Admin Panel** (Admin Frontend)           | Management UI (WebAuthn, orgs, settings).                                                                               | `ADMIN_FRONTEND_DOMAIN` — e.g. `dashboard.*` (hosted: `dashboard.payment-gateway.app`). Browser calls to `/api/*` on this host are proxied to the Admin Backend. |
-| **Admin API** (Admin Backend)              | REST API for the dashboard and **merchant integrations** (API keys, checkouts, etc.).                                   | `ADMIN_BACKEND_DOMAIN` — e.g. `api.*` (hosted: `api.payment-gateway.app`).                                                                                       |
-| **Payment Portal** (Main Frontend)         | Hosted checkout pages and **customer portal**.                                                                          | `MAIN_FRONTEND_DOMAIN` — e.g. `secure.*` or `pay.*` (hosted: `secure.payment-gateway.app`).                                                                      |
-| **Payment runtime** (Main Backend)         | Checkout session API, **provider webhooks** (`/hooks/...`), Apple Pay domain file, health.                              | `MAIN_BACKEND_DOMAIN` — e.g. `webhook.*` (hosted: `webhook.payment-gateway.app`).                                                                                |
-| **Database (MongoDB)**                     | Primary datastore for transactions and configuration. TLS recommended.                                                  | Internal only                                                                                                                                                    |
-| **Cache (Garnet/Redis)**                   | Redis-compatible cache and session data.                                                                                | Internal only                                                                                                                                                    |
-| **Worker (`payment-gateway-main-worker`)** | Job queue: invoice PDF generation (via Gotenberg), outbound email/SMS/Slack; serves PDF cache over HTTP (default 8090). | Internal only (backends proxy PDF requests to the worker).                                                                                                       |
-| **Gotenberg**                              | Stateless HTML→PDF API used by the Worker.                                                                              | Internal only                                                                                                                                                    |
-| **Reverse Proxy (Caddy)**                  | TLS, routing, on-demand TLS for custom checkout domains.                                                                | Ports 80/443 — [Caddy reverse proxy](../deployment/caddy).                                                                                                       |
+| Service                                    | Purpose                                                                                                                   | Public access (typical)                                                                                                                                         |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Admin Panel** (Admin Frontend)           | React management UI for WebAuthn, organizations, settings, invoices, reporting, and system licensing.                      | `ADMIN_FRONTEND_DOMAIN`, for example `dashboard.*`. Browser calls to `/api/*` on this host are proxied to the Admin Backend.                                     |
+| **Admin API** (Admin Backend)              | Go REST API for the dashboard and merchant integrations: API keys, checkout creation, domains, invoices, reporting.        | `ADMIN_BACKEND_DOMAIN`, for example `api.*`. Caddy also rewrites `/v1/*` to `/api/v1/*` for cleaner external API paths.                                          |
+| **Payment Portal** (Main Frontend)         | React hosted checkout UI and customer portal. Its Node/Express server proxies `/api/*` to the Main Backend.                | `MAIN_FRONTEND_DOMAIN`, for example `secure.*` or `pay.*`. Custom checkout hostnames also fall through Caddy's `:443` catch-all to this frontend.                 |
+| **Payment runtime** (Main Backend)         | Go API for checkout session reads, transaction creation/status, billing requests, customer portal APIs, and provider hooks. | `MAIN_BACKEND_DOMAIN`, for example `webhook.*`; provider callbacks use `/hooks/{type}/{providerId}` without the `/api/v1` prefix.                                 |
+| **Worker (`payment-gateway-main-worker`)** | Processes MongoDB-backed jobs: PDF generation, email, Slack, and SMS. Also serves cached PDFs/e-invoice artifacts over HTTP. | Internal only, default port `8090`. Backends proxy document downloads to the worker.                                                                             |
+| **Gotenberg**                              | Stateless HTML-to-PDF service used only by the Worker.                                                                     | Internal only, default port `3000`.                                                                                                                             |
+| **Database (MongoDB)**                     | Primary datastore for application collections, the `jobs` queue, and Caddy certificate storage through the MongoDB Caddy module. | Internal only; TLS is enabled by default in the deployment templates when certificates are present.                                                              |
+| **Cache (Garnet/Redis)**                   | Redis-compatible cache used by backend services. It is not the background job queue.                                      | Internal only.                                                                                                                                                   |
+| **Reverse Proxy (Caddy)**                  | Public TLS termination, security headers, domain routing, ACME HTTP challenge forwarding, and on-demand TLS ask checks.    | Host ports `80`, `443/tcp`, and `443/udp`; see [Caddy reverse proxy](../deployment/caddy).                                                                       |
+| **Mongo Express**                          | Optional database inspection UI protected by Caddy IP allow-listing and its own basic auth settings.                       | Optional `MONGO_EXPRESS_DOMAIN`; should remain restricted.                                                                                                      |
+| **MGOB**                                   | Scheduled MongoDB backup container.                                                                                        | Internal only.                                                                                                                                                   |
 
 ## PDF Generation & Storage Architecture
 
-One of the complex subsystems is the PDF generation for invoices and receipts, designed for horizontal scalability.
+One of the complex subsystems is PDF generation for invoices and receipts, designed so the API containers do not need a shared filesystem.
 
-1. The **Worker** service consumes queued jobs: for PDFs it calls **Gotenberg**; notification jobs (email, SMS, Slack) use the same worker process.
-2. The generated PDF is stored in a local temporary cache (defaulting to `/tmp/pdf-cache`). The worker automatically cleans up PDFs older than 24 hours.
-3. The Worker acts as an HTTP server (default port 8090) to serve these cached PDFs.
-4. The Admin and Main Backends proxy PDF requests directly to the Worker, meaning no shared volumes are necessary between them.
-5. If an organization configures cloud storage (S3, Azure, or GCS) via settings, the PDFs are eventually stored there permanently instead of being dropped after 24 hours.
+1. Backends enqueue work into the MongoDB `jobs` collection with task types such as `pdf:generate`, `email:send`, `slack:send`, and `sms:send`.
+2. The **Worker** service claims jobs from MongoDB. For PDFs it calls **Gotenberg**; notification jobs use the same worker process.
+3. The generated PDF is stored in a local temporary cache, defaulting to `/tmp/pdf-cache`. The worker automatically cleans up PDFs older than 24 hours.
+4. The Worker acts as an HTTP server, default port `8090`, to serve cached PDFs and e-invoice artifacts.
+5. The Admin and Main Backends proxy PDF requests directly to the Worker, meaning no shared volumes are necessary between them.
+6. If an organization configures cloud storage, S3, Azure, or GCS, PDFs are stored there permanently; otherwise the temporary worker cache is the delivery source.
 
 ## Database & Caching
 
-The system relies on **MongoDB** as its primary datastore. While it operates on an internal network, enabling MongoDB TLS encryption is highly recommended for production deployments to secure the internal traffic.
+The system relies on **MongoDB** as its primary datastore. It stores operational data, configuration, license state cached by the self-hosted installation, Caddy TLS storage, and background jobs.
 
-For high performance, a Redis-compatible cache engine (**Garnet**) handles temporary data and session caching.
+For high performance, a Redis-compatible cache engine (**Garnet**) handles cache data. Background jobs are not stored in Garnet; they are persisted in MongoDB so workers can retry, requeue stale jobs, and survive container restarts.
 
 ## Shared Packages
 
 Under the hood, the backend services share common Go code:
 
-- **`lib-common`**: Contains shared utilities, notification templates (Email, Slack, SMS), and models.
-- **`lib-crypto`**: A dedicated library for cryptographic operations and secure data handling.
+- **`payment-gateway-lib-common`**: Shared types, validation, notification templates, tax utilities, address helpers, and document numbering logic.
+- **`payment-gateway-lib-crypto`**: Field encryption, DEK storage, KMS provider abstractions, and credential encryption helpers.

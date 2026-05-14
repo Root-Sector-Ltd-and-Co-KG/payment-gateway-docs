@@ -5,144 +5,294 @@ description: Visual diagrams of the Payment Gateway system architecture, service
 
 # Architecture Diagrams
 
-## System Overview
+## System Context
 
 ```mermaid
-graph TB
-    subgraph Internet
-        Customer[Customer Browser]
-        Merchant[Merchant Backend]
-        Provider[Payment Provider\nStripe / GoCardless]
+flowchart TB
+    Customer["Customer browser"]
+    Merchant["Merchant backend"]
+    Operator["Merchant admin / operator"]
+    Provider["Payment provider\nStripe, GoCardless, Mollie, PayPal, Wise, Wire"]
+    LicenseService["Vendor license service"]
+
+    subgraph SelfHosted["Self-hosted Payment Gateway installation"]
+        Caddy["Caddy reverse proxy"]
+        AdminFE["Admin Frontend\nReact + Express"]
+        AdminBE["Admin Backend\nGo API"]
+        MainFE["Main Frontend\nCheckout + portal"]
+        MainBE["Main Backend\nPayment runtime API"]
+        Worker["Main Worker\njobs + PDF server"]
+        Mongo[("MongoDB")]
+        Garnet[("Garnet / Redis-compatible cache")]
+        Gotenberg["Gotenberg\nHTML to PDF"]
     end
 
-    subgraph Gateway
-        Caddy[Caddy Reverse Proxy\nTLS + Custom Domains]
-        MF[Main Frontend\nCheckout UI]
-        MB[Main Backend\nPayment API]
-        Worker[PDF Worker]
-        AF[Admin Frontend\nAdmin Panel]
-        AB[Admin Backend\nManagement API]
-    end
-
-    subgraph Data
-        Mongo[(MongoDB)]
-        Redis[(Redis / Garnet)]
-        Gotenberg[Gotenberg\nPDF Service]
-    end
-
-    Customer -->|Checkout URL| Caddy
-    Merchant -->|Create Checkout API| Caddy
-    Caddy --> MF
-    Caddy --> MB
-    Caddy --> AF
-    Caddy --> AB
-
-    MB <--> Mongo
-    MB <--> Redis
-    AB <--> Mongo
-    AB <--> Redis
-
-    MB -->|Webhook events| Provider
-    Provider -->|Webhook IPN| MB
-
-    AB --> Worker
-    MB --> Worker
-    Worker --> Gotenberg
+    Operator -->|dashboard UI| Caddy
+    Merchant -->|create checkout API| Caddy
+    Customer -->|checkout / portal UI| Caddy
+    Provider -->|provider webhooks| Caddy
+    AdminBE -->|activate / sync entitlement| LicenseService
+    MainBE -->|license checks from local state| Mongo
+    Caddy --> AdminFE
+    Caddy --> AdminBE
+    Caddy --> MainFE
+    Caddy --> MainBE
+    AdminBE --> Mongo
+    MainBE --> Mongo
     Worker --> Mongo
-
-    Caddy -.->|ACME / TLS storage| Mongo
-    Caddy -.->|on-demand TLS verify| AB
+    AdminBE --> Garnet
+    MainBE --> Garnet
+    Worker --> Garnet
+    Worker --> Gotenberg
 ```
 
-Which service receives traffic for a given hostname and path is determined by the default **`payment-gateway-reverseproxy/Caddyfile`**. The diagram **rolls four public hostnames into one Caddy box**: merchant **create-checkout** calls go to **`ADMIN_BACKEND_DOMAIN`**, the customer **checkout UI** to **`MAIN_FRONTEND_DOMAIN`**, checkout **runtime APIs** and **provider webhooks** to **`MAIN_BACKEND_DOMAIN`**, and the **Admin Panel** to **`ADMIN_FRONTEND_DOMAIN`** (with `/api/*` on that host proxied to the Admin Backend — see the Caddyfile). **Mongo Express**, the **`:443` catch-all** for custom checkout domains, and **registry / licensing** traffic are omitted here; see [Hostnames & DNS conventions](../deployment/domains).
-
-The shipped Caddy image uses the **`storage mongodb`** block so certificate metadata is written to the same MongoDB deployment (a separate concern from application collections). For **on-demand TLS**, Caddy’s `ask` URL targets the Admin Backend **`/api/v1/domains/verify`**. **Both** backends proxy invoice PDF bytes from the **Worker** (admin downloads and customer portal flows).
-
-Hosted reference names (`api.payment-gateway.app`, `webhook.payment-gateway.app`, etc.) and self-hosted examples are summarized in [Hostnames & DNS conventions](../deployment/domains). For **which host** to use for merchant server calls vs provider webhooks, follow [Server integration checklist](../getting-started/integration-checklist).
+The self-hosted stack is deployed from the Docker Compose package. The installation contacts the vendor license service only for activation and entitlement sync; runtime enforcement is based on the local signed license state stored by the installation.
 
 ---
 
-## Request Flow — Checkout Creation
+## Docker Compose Topology
 
 ```mermaid
-sequenceDiagram
-    participant M as Merchant Backend
-    participant AB as Admin Backend
-    participant DB as MongoDB
-    participant MF as Main Frontend
-    participant MB as Main Backend
-    participant P as Payment Provider
+flowchart LR
+    subgraph Public["Public edge"]
+        Caddy["payment-gateway-reverseproxy\n80, 443/tcp, 443/udp"]
+    end
 
-    M->>AB: POST /api/v1/checkouts/{siteId}/create
-    AB->>AB: Validate API key scope (checkout:create)
-    AB->>DB: Create checkout session record
-    AB-->>M: { paymentUrl, id, sessionPublicId, shortCode? }
+    subgraph Frontends["Frontend network"]
+        AdminFE["payment-gateway-admin-frontend\n:5000"]
+        MainFE["payment-gateway-main-frontend\n:6000"]
+    end
 
-    Note over M: Redirect customer to paymentUrl
+    subgraph APIs["Backend networks"]
+        AdminBE["payment-gateway-admin-backend\n:5001"]
+        MainBE["payment-gateway-main-backend\n:6001"]
+    end
 
-    M->>MF: Customer opens checkout page
-    MF->>MB: GET /api/v1/checkouts/{sessionPublicId}
-    MB->>DB: Fetch session + branding
-    MB-->>MF: Session data + provider config
+    subgraph Jobs["Worker network"]
+        Worker["payment-gateway-main-worker\n:8090"]
+        Gotenberg["gotenberg\n:3000"]
+    end
 
-    MF->>MF: Render payment form
+    subgraph Data["Internal data networks"]
+        Mongo[("mongo\napplication data, jobs, Caddy storage")]
+        Garnet[("garnet\nRedis-compatible cache")]
+        MGOB["mgob\nscheduled backups"]
+        MongoExpress["mongo-express\noptional restricted UI"]
+    end
 
-    MF->>P: Customer submits card details
-    P-->>MF: Payment token / redirect URL
-
-    MF->>MB: POST /api/v1/transactions/create
-    MB->>DB: Create transaction record (initiated)
-    MB->>P: Create payment intent
-    P-->>MB: Payment confirmation
-    MB-->>MF: { transactionId, status, redirectUrl }
+    Caddy --> AdminFE
+    Caddy --> AdminBE
+    Caddy --> MainFE
+    Caddy --> MainBE
+    Caddy -.-> MongoExpress
+    AdminFE -->|/api proxy| AdminBE
+    MainFE -->|/api proxy| MainBE
+    AdminBE --> Mongo
+    MainBE --> Mongo
+    Worker --> Mongo
+    AdminBE --> Garnet
+    MainBE --> Garnet
+    Worker --> Garnet
+    AdminBE -->|PDF proxy| Worker
+    MainBE -->|PDF / e-invoice proxy| Worker
+    Worker -->|render PDFs| Gotenberg
+    MGOB --> Mongo
+    Caddy -.->|TLS certificate storage| Mongo
 ```
 
-> [!NOTE]
-> **TLS** terminates at **Caddy** (not shown as a separate hop). In production, the merchant server calls **`ADMIN_BACKEND_DOMAIN`** for `POST …/checkouts/…/create`; the customer opens **`paymentUrl`** on **`MAIN_FRONTEND_DOMAIN`**; the checkout app then calls **`MAIN_BACKEND_DOMAIN`** for `GET`/`POST /api/v1/...` as above. Paths match the Main Backend router under `/api/v1`.
+MongoDB is the source of truth for application data and the background `jobs` collection. Garnet is used as a Redis-compatible cache, not as the durable job queue.
 
 ---
 
-## Request Flow — Webhook to Transaction Update
+## Reverse Proxy Routing
+
+```mermaid
+flowchart TB
+    Internet["Incoming HTTPS request"]
+    Caddy["Caddy"]
+
+    Internet --> Caddy
+
+    Caddy -->|ADMIN_FRONTEND_DOMAIN| AdminHost["Admin Frontend"]
+    AdminHost -->|/api/*| AdminBE["Admin Backend"]
+    AdminHost -->|other paths| AdminFE["Admin React app"]
+
+    Caddy -->|ADMIN_BACKEND_DOMAIN /api/*| AdminBE
+    Caddy -->|ADMIN_BACKEND_DOMAIN /v1/*| Rewrite["rewrite /v1/* to /api/v1/*"]
+    Rewrite --> AdminBE
+
+    Caddy -->|MAIN_FRONTEND_DOMAIN| MainFE["Main React checkout / portal"]
+    Caddy -->|MAIN_BACKEND_DOMAIN /api/*, /hooks/*, /.well-known/*, /health| MainBE["Main Backend"]
+
+    Caddy -->|unknown HTTPS host| CatchAll["custom checkout domain catch-all"]
+    CatchAll -->|/api/*, /hooks/*, /.well-known/apple..., /health| MainBE
+    CatchAll -->|other paths| MainFE
+
+    Caddy -.->|on-demand TLS ask| Ask["Admin Backend\n/api/v1/domains/verify"]
+    Caddy -.->|ACME HTTP challenge| ACME["Admin Backend\n/api/v1/domains/acme-challenge/{token}"]
+```
+
+Specific domain blocks are evaluated before the `:443` catch-all. The catch-all enables custom checkout hostnames after the Admin Backend approves them through the Caddy `ask` endpoint.
+
+---
+
+## Checkout Creation And Payment
 
 ```mermaid
 sequenceDiagram
-    participant P as Payment Provider
-    participant MB as Main Backend
-    participant DB as MongoDB
-    participant W as Your Application
+    participant Merchant as Merchant Backend
+    participant Admin as Admin Backend
+    participant Mongo as MongoDB
+    participant MainFE as Main Frontend
+    participant MainBE as Main Backend
+    participant Provider as Payment Provider
 
-    P->>MB: POST /hooks/stripe/{providerId}
-    MB->>MB: Verify provider signature (e.g. Stripe-Signature)
-    MB->>DB: Fetch provider + webhook secret
-    MB->>MB: Parse event type (payment_intent.succeeded)
-    MB->>DB: Update transaction status to succeeded
-    MB->>DB: Create invoice if configured
-    MB->>W: POST signed IPN to checkout ipnUrl (if set)
-    W-->>MB: 200 OK
-    MB-->>P: 200 OK
+    Merchant->>Admin: POST /api/v1/checkouts/{siteId}/create
+    Admin->>Admin: API key auth + checkout:create scope
+    Admin->>Mongo: Load site, provider, org settings
+    Admin->>Provider: Optional provider setup, e.g. Stripe PaymentIntent
+    Admin->>Mongo: Insert checkout session
+    Admin-->>Merchant: paymentUrl, session IDs, short code
+
+    Merchant-->>MainFE: Redirect customer to paymentUrl
+    MainFE->>MainBE: GET /api/v1/checkouts/{sessionPublicId}
+    MainBE->>Mongo: Read session and branding
+    MainBE-->>MainFE: Session, provider, tax, UI data
+
+    MainFE->>MainBE: POST /api/v1/transactions/create
+    MainBE->>Provider: Update/create provider payment object
+    MainBE->>Mongo: Insert transaction
+    MainBE-->>MainFE: transactionId, status, redirect data
 ```
 
-Provider callbacks use **`MAIN_BACKEND_DOMAIN`** with paths under **`/hooks/...`** (no `/api/v1` prefix). The outbound **IPN** to your application is optional and only runs when the checkout specifies an `ipnUrl`.
+The merchant server creates sessions on the Admin Backend. Customers interact with the Main Frontend and Main Backend. Card data is handled by provider browser SDKs and provider APIs; the gateway stores normalized transaction metadata.
+
+---
+
+## Tax Calculation And Reporting
+
+```mermaid
+flowchart TB
+    Settings["Organization tax settings\nseller, rates, rules, rounding"]
+    CheckoutPreview["Checkout tax preview\nPOST /checkouts/{id}/tax-preview"]
+    TransactionCreate["Transaction create / completion"]
+    InvoicePreview["Invoice tax preview\nPOST /invoices/preview-tax"]
+    InvoiceIssue["Invoice issue / settlement"]
+    Adjustments["Refunds, chargebacks, credit notes"]
+    Snapshot["Source tax snapshots\ntaxDecision, taxBreakdown, evidence"]
+    Records[("tax_records\ncanonical ledger")]
+    Reports["Tax by country\nRevenue by country\nVAT OSS exports"]
+
+    Settings --> CheckoutPreview
+    Settings --> TransactionCreate
+    Settings --> InvoicePreview
+    Settings --> InvoiceIssue
+    CheckoutPreview --> TransactionCreate
+    TransactionCreate --> Snapshot
+    InvoicePreview --> InvoiceIssue
+    InvoiceIssue --> Snapshot
+    Adjustments --> Records
+    Snapshot --> Records
+    Records --> Reports
+```
+
+Checkout preview and invoice preview are convenience flows. The authoritative tax state is the snapshot stored on transactions, invoices, credit notes, refunds, and chargebacks, plus the canonical `tax_records` used by tax reports and exports.
+
+---
+
+## Provider Webhook To Side Effects
+
+```mermaid
+sequenceDiagram
+    participant Provider as Payment Provider
+    participant Caddy as Caddy
+    participant MainBE as Main Backend
+    participant Mongo as MongoDB
+    participant Worker as Worker
+    participant Merchant as Merchant IPN endpoint
+
+    Provider->>Caddy: POST /hooks/{type}/{providerId}
+    Caddy->>MainBE: Forward webhook
+    MainBE->>Mongo: Load provider config and webhook secret
+    MainBE->>MainBE: Verify signature and parse event
+    MainBE->>Mongo: Update transaction with guarded status transition
+    MainBE->>Mongo: Create invoice/tax side effects when configured
+    MainBE->>Mongo: Enqueue pdf:generate / email:send / slack:send / sms:send as needed
+    MainBE-->>Provider: 200 OK or validation error
+    MainBE-->>Merchant: Signed IPN POST when checkout has ipnUrl
+    Worker->>Mongo: Claim queued jobs
+```
+
+Provider webhook implementations live in the Main Backend provider package. Outbound merchant IPN payloads are signed with the site's webhook secret and record delivery outcomes on the transaction.
+
+---
+
+## Background Job And PDF Flow
+
+```mermaid
+sequenceDiagram
+    participant Admin as Admin Backend
+    participant MainBE as Main Backend
+    participant Mongo as MongoDB jobs
+    participant Worker as Main Worker
+    participant Gotenberg as Gotenberg
+    participant Storage as Temp cache or org cloud storage
+
+    Admin->>Mongo: Enqueue pdf:generate when invoice is issued/regenerated
+    MainBE->>Mongo: Enqueue pdf:generate from checkout/portal flows when needed
+    MainBE->>Mongo: Enqueue email:send, slack:send, sms:send
+    Worker->>Mongo: Dequeue next pending job
+    Worker->>Gotenberg: Convert HTML to PDF
+    Worker->>Storage: Store generated document
+    Worker->>Mongo: Update invoice/credit note with pdfUrl and pdfGenAt
+    Admin->>Worker: Proxy document download over HTTP
+    MainBE->>Worker: Proxy portal document download over HTTP
+```
+
+The Worker validates the Gotenberg connection on startup when configured, serves cached documents on its own HTTP port, and reuses the same process for notification delivery jobs.
+
+---
+
+## Licensing Flow
+
+```mermaid
+sequenceDiagram
+    participant AdminUI as Admin Frontend
+    participant AdminBE as Admin Backend
+    participant Mongo as Local MongoDB
+    participant License as Vendor license service
+
+    AdminUI->>AdminBE: POST /api/v1/system/licensing/activate
+    AdminBE->>License: Activate license for this installation
+    License-->>AdminBE: Signed license claims and installation state
+    AdminBE->>Mongo: Store local license identity and claims
+    AdminBE-->>AdminUI: Current runtime state
+
+    AdminUI->>AdminBE: POST /api/v1/system/licensing/heartbeat
+    AdminBE->>License: Sync entitlement, version, and usage counters
+    License-->>AdminBE: Updated signed claims
+    AdminBE->>Mongo: Refresh local license state
+```
+
+The Admin Backend and Main Backend enforce runtime state locally. If the remote service is temporarily unavailable, the installation continues to use the locally stored signed claims and heartbeat-age rules described on the licensing page.
 
 ---
 
 ## Encryption Key Hierarchy
 
 ```mermaid
-graph TD
+flowchart TD
     ENV["SYSTEM_ENCRYPTION_KEY\nenvironment variable"]
 
-    ENV -->|encrypts credentials for| SKMSCreds["KMS Provider Credentials\nstored encrypted in MongoDB"]
-    SKMSCreds -->|used by| SKMS["System KMS Provider\nAWS / Azure / GCP / Vault"]
-    SKMS -->|manages| SDEK["System DEK\nData Encryption Key"]
+    ENV -->|encrypts credentials for| SKMSCreds["System KMS provider credentials\nstored encrypted in MongoDB"]
+    SKMSCreds -->|used by| SKMS["System KMS provider\nAWS, Azure, GCP, Vault"]
+    SKMS -->|manages| SDEK["System DEK"]
+    SDEK -->|encrypts| SysData["System-level data\nusers, organizations, system settings"]
 
-    SDEK -->|encrypts| SysData["System-Level Data\nUser accounts\nOrganization settings\nSystem configuration"]
-
-    ENV -->|encrypts credentials for| OKMSCreds["Org KMS Credentials\nper-org, stored encrypted"]
-    OKMSCreds -->|used by| OKMS["Organization KMS Provider\nper-org, optional BYOK"]
-    OKMS -->|manages| ODEK["Organization DEK\nper-org"]
-
-    ODEK -->|encrypts| OrgData["Organization-Level Data\nTransaction records\nCustomer information\nPayment details"]
+    ENV -->|encrypts credentials for| OKMSCreds["Org KMS credentials\nper organization"]
+    OKMSCreds -->|used by| OKMS["Organization KMS provider\noptional BYOK"]
+    OKMS -->|manages| ODEK["Organization DEK"]
+    ODEK -->|encrypts| OrgData["Organization-level data\ntransactions, clients, payment details"]
 ```
 
 ---
@@ -150,36 +300,31 @@ graph TD
 ## Multi-Tenant Data Model
 
 ```mermaid
-graph TD
-    Org[Organization]
-    Site1[Site A - E-Commerce Store]
-    Site2[Site B - SaaS Product]
-    P1[Stripe Provider]
-    P2[GoCardless Provider]
-    Key1[API Key live]
-    Key2[API Key test]
-    C1[Client Jane Smith]
-    C2[Client Acme Corp]
-    Tx1[Transaction 1]
-    Tx2[Transaction 2]
-    Inv1[Invoice 2026-0001]
+flowchart TD
+    Org["Organization"]
+    Site1["Site A"]
+    Site2["Site B"]
+    P1["Stripe Provider"]
+    P2["GoCardless Provider"]
+    Key1["API key\nlive/test scoped"]
+    Client1["Client"]
+    Tx1["Transaction"]
+    Inv1["Invoice"]
+    CN1["Credit note"]
+    Rec1["Recurring schedule"]
 
     Org --> Site1
     Org --> Site2
     Org --> P1
     Org --> P2
     Site1 --> Key1
-    Site1 --> Key2
     Site1 --> P1
-    Site2 --> P2
-    Org --> C1
-    Org --> C2
-    Tx1 --> Site1
-    Tx1 --> C1
-    Tx1 --> P1
+    Org --> Client1
+    Client1 --> Inv1
+    Site1 --> Tx1
     Tx1 --> Inv1
-    Tx2 --> Site2
-    Tx2 --> C2
+    Inv1 --> CN1
+    Client1 --> Rec1
 ```
 
 ---
@@ -188,14 +333,17 @@ graph TD
 
 ```mermaid
 stateDiagram-v2
-    [*] --> initiated : Customer submits checkout
-    initiated --> pending_provider : Async payment GoCardless or Wire
-    initiated --> succeeded : Card / wallet often immediate
-    initiated --> failed : Payment rejected
-    pending_provider --> succeeded : Provider webhook confirms
-    pending_provider --> failed : Provider webhook fails
+    [*] --> initiated : Checkout transaction created
+    initiated --> pending_provider : Redirect, bank, wire, or mandate flow
+    initiated --> succeeded : Immediate provider success
+    initiated --> failed : Provider rejection
+    initiated --> canceled : Customer or timeout cancellation
+    pending_provider --> succeeded : Provider webhook or polling confirms
+    pending_provider --> failed : Provider webhook or polling fails
+    pending_provider --> canceled : Cancellation or expiry
     succeeded --> refunded : Refund processed
     refunded --> [*]
+    canceled --> [*]
     succeeded --> [*]
     failed --> [*]
 ```
@@ -209,7 +357,7 @@ stateDiagram-v2
     [*] --> draft : Created manually or from transaction
     draft --> issued : Issue action
     draft --> [*] : Deleted
-    issued --> [*] : Remains legal record
+    issued --> [*] : Legal record remains
 
     state issued {
         [*] --> open

@@ -7,7 +7,7 @@ description: Deploying using traditional Docker Compose on any operating system.
 
 Docker Compose is an excellent choice for deploying the Payment Gateway on a variety of operating systems, including Linux, Windows, and macOS, for both development and production.
 
-For the first customer deployment, start with [Self-Hosted Installation](../getting-started/installation). This page focuses on Docker Compose specific operations after you already know your required domains, registry access values, and activation flow.
+For the first customer deployment, start with [Self-Hosted Installation](../getting-started/installation). This page focuses on Docker Compose specific operations after you already know your required domains, deployment access values, and activation flow.
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ Before starting, ensure your system meets these requirements:
    cd payment-gateway-deploy/docker-compose
    ```
 
-2. Create `.env` from the template, replace `yourdomain.com` with your actual domain, and add your registry access values from the license dashboard. See [Configuration Requirements](./configuration) for MongoDB TLS and [Self-Hosted Installation](../getting-started/installation) for the full credential setup.
+2. Create `.env` from the template, replace `yourdomain.com` with your actual domain, and add your deployment access values from the license dashboard. See [Configuration Requirements](./configuration) for MongoDB TLS and [Self-Hosted Installation](../getting-started/installation) for the full credential setup.
 
 3. Deploy the application (auto-generates `.env.secrets` on first run):
 

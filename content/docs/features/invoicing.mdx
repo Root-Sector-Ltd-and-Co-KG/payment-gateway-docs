@@ -20,6 +20,9 @@ When the document is linked to a stored Client record, the Client email in the d
 
 The document still preserves its own party snapshot. If the current Client profile changes later, the already-issued invoice or credit note continues to show the original document data that was valid at issuance time.
 
+> [!NOTE]
+> Screenshot placeholder: **Invoice detail** showing Seller, Client, document status, payment state, tax summary, PDF/XML downloads, and linked transaction.
+
 ## Invoice Statuses
 
 Invoices exist in strict states to maintain accounting integrity:
@@ -39,6 +42,8 @@ When creating or editing a draft invoice manually, VAT can be either automatic o
 
 The same tax engine is used for transactions, recurring invoices, API-key draft invoice creation, and the draft-invoice preview endpoint, so the behavior stays consistent across flows. For lifecycle, OSS evidence, and ledger concepts, see [Invoicing & Tax architecture](../architecture/invoicing-and-tax); for `POST /api/v1/invoices/preview-tax` and tax report routes, see [Admin API](../api-reference/admin-api).
 
+When a draft is issued, the invoice stores the resulting tax snapshot and writes canonical tax records. Depending on the organization tax recognition mode, those records are recognized at invoice issue time (`accrual`) or deferred until settlement (`cash`). Credit notes write separate offsetting tax records; the original invoice tax snapshot remains unchanged.
+
 ## The Customer Portal
 
 Rather than emailing large PDF attachments that may be blocked by spam filters, the gateway hosts a secure **Customer Portal**.
@@ -46,7 +51,7 @@ Rather than emailing large PDF attachments that may be blocked by spam filters, 
 End-users navigate to your custom domain (e.g., `invoices.yourcompany.com`) and authenticate using a one-time secure link or their client portal password. From there, they can independently:
 
 - Download their invoice as a PDF.
-- Download their invoice as a machine-readable native E-Invoice (ZUGFeRD, XRechnung, Peppol) if configured.
+- Download their invoice as a machine-readable native E-Invoice XML (ZUGFeRD/Factur-X CII, XRechnung, Peppol) if configured.
 
 ## Credit Notes (Refunds)
 
@@ -71,7 +76,11 @@ Credit notes therefore serve two purposes:
 - They provide the legal reversal document required for accounting and tax records.
 - They explain why the invoice payment state may move to partially refunded, refunded, or fully credited without changing the original invoice contents.
 
+Tax reporting follows the same principle. Refunds, fund-impacting chargebacks, and credit notes are represented as negative adjustment records linked to the original sale or invoice; the original tax record remains part of the audit trail. Adjustment records preserve line-level tax country and VAT rate code where available, which keeps mixed physical and virtual sales aligned with their original reporting basis. If the source only has aggregate tax breakdown data, the adjustment still preserves untaxed residuals as their own line basis and caps over-allocated breakdowns to the recorded refund or chargeback total.
+
 Refund-created credit notes inherit the original invoice's Seller and Client snapshot. That means the reversal document stays legally aligned with the invoice it offsets, even if the current Client profile has changed since the invoice was issued.
+
+Chargebacks follow dispute outcome. Open or under-review chargebacks can reduce revenue reporting as payment-risk adjustments, but they do not issue a legal credit note yet. If the dispute is lost or accepted, the platform creates the chargeback credit note; if the dispute is won, active chargeback tax adjustments are voided and no credit note is issued.
 
 > [!IMPORTANT]
 > The platform intentionally does not offer a paid-invoice workflow that creates a stand-alone credit note while leaving the linked payment untouched. For paid invoices, the credit note should follow the refund workflow so cash movement, settlement state, and accounting documents remain aligned.
@@ -131,3 +140,8 @@ This means custom invoice templates are supported both as:
 - organization defaults for invoice generation
 - per-site branding overrides
 - per-invoice selection during draft invoice creation or editing
+
+For issued documents, `standard` and `corrective` invoice business types resolve to the `invoice` document template type. Draft pro forma documents resolve to the `proforma` template type. When a site-level PDF template override is configured, the backend treats that setting as a concrete document template ID.
+
+> [!NOTE]
+> Screenshot placeholder: **Settings > Templates > Document Templates** showing default template selection, preview, duplicate, and assignment controls.

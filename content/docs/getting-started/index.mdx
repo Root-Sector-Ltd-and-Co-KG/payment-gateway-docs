@@ -46,6 +46,9 @@ A provider is the external payment processor that handles card tokenization and 
 > [!CAUTION]
 > Provider credentials are encrypted with your organization's Data Encryption Key (DEK) at rest. Do not share or log raw provider API keys.
 
+> [!NOTE]
+> Screenshot placeholder: **Providers > Add Provider** showing Stripe credential fields and webhook secret configuration.
+
 ## Step 4 — Create a Site
 
 A Site represents a checkout surface — your storefront, SaaS product, or branded payment page.
@@ -63,6 +66,9 @@ After creation, open **Sites → Edit Site** and copy two values for later integ
 
 Sites do **not** generate API keys. API keys are created separately at the **organization** level.
 
+> [!NOTE]
+> Screenshot placeholder: **Sites > Edit Site** showing Site ID, assigned providers, and Webhook Signing Secret.
+
 ## Step 5 — Create an Organization API Key
 
 For server-to-server integrations, create an organization API key before calling the Admin API.
@@ -71,6 +77,9 @@ For server-to-server integrations, create an organization API key before calling
 2. Click **Create API Key**.
 3. Assign at least the **`checkout:create`** scope.
 4. Store the generated `sk_...` secret in your secrets manager. It is shown only once.
+
+> [!NOTE]
+> Screenshot placeholder: **Settings > API Keys > Create API Key** showing `checkout:create` scope selection and one-time secret reveal.
 
 ## Step 6 — Create a Checkout Session (Dashboard)
 
@@ -138,7 +147,15 @@ See the same page for **inbound** provider webhooks vs **outbound** IPN to your 
 
 Navigate to **Transactions** in the Admin Panel. Your completed payment appears with full metadata: amount, provider, tax breakdown, customer details, and invoice link.
 
+For tax-enabled organizations, verify the full checkout chain: the checkout/session totals, completed transaction totals, issued invoice totals, and canonical tax record totals should agree. For mixed baskets, goods and shipping lines should use the shipping country with billing fallback, while virtual/service lines should use the billing country. The line-level tax-rate codes on the transaction, invoice, and tax record should reflect those destinations.
+
+> [!NOTE]
+> Screenshot placeholder: **Transactions > Transaction Detail** showing payment status, provider reference, tax breakdown, invoice link, and IPN information.
+
 ## What's Next
+
+- [Integration Recipes](./integration-recipes) - Practical checkout, webhook, IPN, reconciliation, and tax export examples
+- [Tax Configuration Examples](../features/tax-examples) - Scenario-based VAT, OSS, reverse-charge, and gross/net pricing setup
 
 - [Server integration checklist](./integration-checklist) — Ordered steps for APIs, webhooks, and IPN (skip if you only use the dashboard)
 - [Provider Setup Guides](./provider-setup) — Detailed Stripe, GoCardless, and Wise configuration

@@ -5,46 +5,46 @@ description: High-level overview of the Payment Gateway application stack and it
 
 # Overview
 
-Welcome to the **Payment Gateway** documentation. The Payment Gateway is a self-hosted, enterprise-grade platform for accepting online payments, managing invoices, and handling complex tax compliance — all under your own infrastructure and brand.
+Welcome to the **Payment Gateway** documentation. The Payment Gateway is a self-hosted, enterprise-grade platform for accepting online payments, managing invoices, and handling configurable tax compliance under your own infrastructure and brand.
 
 One of the main strategic advantages of the platform is continuity. Your payment history, invoice records, and buyer-facing billing data stay in your own system even when payment provider terms, risk decisions, or commercial models change.
 
 ## Core Capabilities
 
-- **Multi-Provider Payments**: Accept cards, direct debits, and wire transfers through a unified interface (Stripe, GoCardless, Wise Transfers, and Wire Transfer).
-- **Payment Data Boundary**: Card input is handled through provider-hosted or tokenized flows; the gateway does not store raw PAN/CVC values.
-- **Persistent History and Invoicing**: Keep one payment and invoice history across provider changes, with gapless numbering, PDF invoice customisation, and support for ZUGFeRD, Peppol, and XRechnung workflows. Finalized buyer documents are downloaded through the customer portal.
-- **Multi-Tenant Organizations**: Full role-based access control for teams with a dedicated Admin Panel.
-- **Advanced Tax Engine**: Native EU VAT OSS/IOSS, UK VAT, US Sales Tax, and Canadian GST/HST with temporal rate scheduling.
-- **Customer Portal**: A branded, self-service portal for buyers to access invoices, preview upcoming recurring charges, and manage subscription cancellation on your configured hosted portal domain or your own mapped portal domain.
+- **Multi-provider payments**: Accept cards, direct debits, and wire transfers through a unified interface, including Stripe, GoCardless, Wise Transfers, and Wire Transfer.
+- **Payment data boundary**: Card input is handled through provider-hosted or tokenized flows; the gateway does not store raw PAN/CVC values.
+- **Persistent history and invoicing**: Keep one payment and invoice history across provider changes, with gapless numbering, PDF invoice customization, and support for ZUGFeRD, Peppol, and XRechnung workflows. Finalized buyer documents are downloaded through the customer portal.
+- **Multi-tenant organizations**: Full role-based access control for teams with a dedicated Admin Panel.
+- **Configurable tax engine**: Effective-dated tax rates, tax rules, VAT ID validation, EU VAT OSS reporting, tax snapshots, and canonical tax records for reporting and auditability.
+- **Customer portal**: A branded, self-service portal for buyers to access invoices, preview upcoming recurring charges, and manage subscription cancellation on your configured hosted portal domain or your own mapped portal domain.
 
-## Portal Roles
+## Portal Experience
 
-- **Operator License Portal**: Your licensing and deployment workspace, such as `payment-gateway.app` in the first-party deployment, where operators manage licenses, registry access, and account onboarding.
-- **Customer Portal**: Your buyer-facing invoice and subscription workspace, such as `secure.payment-gateway.app` in the first-party deployment, where end customers authenticate with OTP and manage their billing relationship.
+The buyer-facing customer portal is deployment-specific. Product documentation uses first-party domains only as examples; self-hosted customers can map their own domains and branding.
 
-Both portals are deployment-specific. Product documentation uses the first-party domains only as examples; self-hosted customers can map their own domains and branding.
-
-**Application hostnames** on the hosted stack (`dashboard`, `api`, `secure`, `webhook` under `payment-gateway.app`) are summarized in [Hostnames & DNS conventions](./deployment/domains). **Registry and licensing** endpoints (`registry.payment-gateway.app`, `registry-auth.payment-gateway.app`) are covered there too.
+Application hostnames on the hosted stack (`dashboard`, `api`, `secure`, `webhook` under `payment-gateway.app`) are summarized in [Hostnames & DNS conventions](./deployment/domains).
 
 ## Operations
 
-- **Flexible Deployment**: Docker Compose or rootless Podman on Linux, with automated upgrade tooling.
-- **Data Lifecycle Controls**: Organization-level retention settings plus GDPR-oriented backup and restore runbooks.
+- **Flexible deployment**: Docker Compose or rootless Podman on Linux, with automated upgrade tooling.
+- **License activation**: Self-hosted installations activate with a license key and periodically synchronize signed entitlement state. Runtime enforcement uses the local signed state described in the deployment guide.
+- **Data lifecycle controls**: Organization-level retention settings plus GDPR-oriented backup and restore runbooks.
 
 ## Commercial Model
 
-- **One Implementation**: Integrate once against your own gateway surface and keep providers replaceable behind it.
-- **Custom Provider Additions**: Additional payment providers can be added for **100 EUR one-time per provider**.
-- **Invoice Output Flexibility**: PDF invoice customisation and related billing adjustments are available for teams that need tailored output.
+- **One implementation**: Integrate once against your own gateway surface and keep providers replaceable behind it.
+- **Custom provider additions**: Additional payment providers can be added for **100 EUR one-time per provider**.
+- **Invoice output flexibility**: PDF invoice customization and related billing adjustments are available for teams that need tailored output.
 
 ## Getting Started
 
-- [Hostnames & DNS conventions](./deployment/domains) — Hosted `*.payment-gateway.app` layout, env variables, registry hosts.
-- [Self-Hosted Installation](./getting-started/installation) — Install the stack with Docker Compose, required domains, license registry access, activation, and updates.
-- [Quick Start](./getting-started) — Set up your first hosted checkout flow.
-- [Server integration checklist](./getting-started/integration-checklist) — Hostnames, webhooks, Admin API, IPN.
-- [Features & User Guide](./features/organizations) — How to use the platform as a merchant.
-- [API Reference](./api-reference) — REST API documentation for programmatic integration.
-- [Architecture & Components](./architecture/components) — How the system fits together technically.
-- [Deployment](./deployment) — Self-hosting installation guide.
+- [Hostnames & DNS conventions](./deployment/domains) - Hosted `*.payment-gateway.app` layout and deployment hostname variables.
+- [Self-Hosted Installation](./getting-started/installation) - Install the stack with Docker Compose, required domains, activation, and updates.
+- [Quick Start](./getting-started) - Set up your first hosted checkout flow.
+- [Server integration checklist](./getting-started/integration-checklist) - Hostnames, webhooks, Admin API, IPN.
+- [Integration Recipes](./getting-started/integration-recipes) - Practical checkout, webhook, IPN, reconciliation, and tax export flows.
+- [Features & User Guide](./features/organizations) - How to use the platform as a merchant.
+- [Tax Configuration Examples](./features/tax-examples) - Scenario-based VAT, OSS, reverse-charge, and gross/net pricing setup.
+- [API Reference](./api-reference) - REST API documentation for programmatic integration.
+- [Architecture & Components](./architecture/components) - How the system fits together technically.
+- [Deployment](./deployment) - Self-hosting installation guide.

@@ -41,3 +41,82 @@ Regardless of the platform, follow these general steps if something goes wrong:
    - For Podman: Remove the `~/.config/payment-gateway-deploy/` directory.
    - For Docker Compose: Remove the `.env` file from the platform directory.
    - Re-run `./deploy.sh`.
+
+## Common Runtime Runbooks
+
+### Checkout Domain TLS Fails
+
+Symptoms: the buyer-facing checkout domain shows a browser TLS error, but the stack is running.
+
+1. Confirm the hostname resolves to the gateway server's public IP.
+2. Confirm ports `80` and `443` are reachable from the internet.
+3. Check whether an upstream CDN/proxy is terminating TLS before the request reaches Caddy.
+4. Review reverse proxy logs and the domain verification status in the Admin Panel.
+5. For merchant custom domains, confirm that the domain is verified before sending buyer traffic.
+
+> [!NOTE]
+> Screenshot placeholder: **Domains / Site custom domain detail** showing verification status, DNS target, and TLS readiness.
+
+### Provider Webhook Does Not Arrive
+
+Symptoms: the provider shows payment success, but the gateway transaction stays pending.
+
+1. Confirm the provider webhook URL uses `MAIN_BACKEND_DOMAIN` and the root `/hooks/{type}/{providerId}` path.
+2. Confirm the provider ID in the URL matches the provider record.
+3. Confirm the provider webhook signing secret is saved on the provider record.
+4. Check Main Backend logs for signature or payload validation errors.
+5. Send a test webhook from the provider dashboard after saving changes.
+
+### Invoice PDF Generation Fails
+
+Symptoms: invoice exists, but PDF download fails or remains unavailable.
+
+1. Check the worker service logs.
+2. Confirm `MPG_MAIN_WORKER_SERVICE_URL` is configured for the backend that proxies PDF downloads.
+3. Confirm Gotenberg is running and reachable from the worker.
+4. Regenerate the invoice PDF from the invoice detail page after fixing service connectivity.
+
+> [!NOTE]
+> Screenshot placeholder: **Invoice detail** showing PDF generation state, regenerate action, and download buttons.
+
+### Tax Reports Are Empty Or Show Unknown Country
+
+Symptoms: **Tax by country** or **VAT OSS** is empty after using Rebuild Tax Records, or **Revenue by country** shows `UNKNOWN`.
+
+1. Run the local ledger audit against the affected environment:
+   ```bash
+   node payment-gateway-local-dev/local-dev.mjs db audit tax
+   ```
+2. Confirm there are no active `tax_records` with missing line-level tax country.
+3. Confirm issued invoices and issued credit notes have active canonical tax records.
+4. Confirm issued document `taxRecordIds` point at active records for the same source document, not superseded records or transaction-sourced records.
+5. Confirm invoice-linked transaction records are not independently active when invoice records exist.
+6. Re-run **Settings > Tax > Rebuild Tax Records** after fixing source snapshot or migration issues.
+
+The rebuild should preserve issued invoice and credit-note snapshots. It should not apply current tax settings to historical legal documents unless a single-transaction recalculation was explicitly requested.
+
+If the affected rows came from recently completed checkouts, inspect the main-backend logs for repeated completion handling around the same transaction. Completion tax finalization should run once, then automatic invoice generation should promote the transaction tax record to an invoice-sourced record. Repeated status polling must not leave the invoice linked to a superseded tax record.
+
+### Encrypted Document Fields Fail To Decrypt
+
+Symptoms: invoice or credit-note pages show blank encrypted fields, logs include `message authentication failed`, or tax-record rebuild fails while reading issued credit notes.
+
+1. Run the encryption audit:
+   ```bash
+   node payment-gateway-local-dev/local-dev.mjs db audit encryption
+   ```
+2. Check whether failures are organization-scope or system-scope in the audit output.
+3. For organization-scope document snapshot failures, confirm encrypted field metadata was not copied between collections or fields.
+4. Repair from source plaintext where available, such as the original client profile or document history. Ciphertext that fails authenticated decryption cannot be decrypted by changing code or keys alone.
+5. After repair, rerun the tax audit and Rebuild Tax Records.
+
+### Update Fails Before Deployment
+
+Symptoms: update exits before restarting services.
+
+1. Check that `RELEASE_METADATA_URL` is reachable from the server.
+2. Confirm deployment access credentials are still valid.
+3. Confirm the license support window entitles the target release.
+4. Review the updater log before retrying.
+
+The updater intentionally fails fast when release metadata cannot be validated.

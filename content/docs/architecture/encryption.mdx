@@ -13,7 +13,7 @@ In the Admin UI, **System > Encryption** configures the platform-wide KMS and sy
 
 | Aspect                  | System encryption                                                                                               | Organization encryption                                                                                                                        |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Purpose**             | Protects cross-tenant platform data: admin users, and any document handled under the system encryption context. | Protects tenant business data: clients, transactions, invoices, payment provider secrets, notification payloads, and other org-scoped records. |
+| **Purpose**             | Protects platform and tenant configuration data: admin users, organization profile fields, provider configuration, site labels, and saved organization/site SMTP or geolocation secrets. | Protects tenant runtime/customer data: clients, sessions, transactions, invoices, credit notes, and queued notification payloads. |
 | **DEK**                 | One **system DEK** for the whole installation.                                                                  | One **organization DEK per organization** (isolated key boundary).                                                                             |
 | **KMS**                 | System KMS (e.g. one AWS/Azure/GCP/Vault key for the platform).                                                 | Per-organization KMS configuration (BYOK or a dedicated key for that org).                                                                     |
 | **Wrapped DEK storage** | Stored with system scope in the DEK store.                                                                      | Stored per `organizationId` in the DEK store.                                                                                                  |
@@ -68,9 +68,11 @@ So: **cloud KMS protects the DEK**; **`SYSTEM_ENCRYPTION_KEY` protects KMS crede
 
 ## Field-level encryption mechanics
 
-- **Algorithm:** AES-256-GCM with a random nonce per encryption; additional authenticated data (AAD) binds ciphertext to scope, collection, field name, and DEK version.
+- **Algorithm:** AES-256-GCM with a random nonce per encryption; additional authenticated data (AAD) binds ciphertext to scope, organization id for organization scope, collection, field name, and DEK version.
 - **Storage:** Each `FieldEncrypted` value stores ciphertext, IV, and DEK version in BSON; API responses expose only the decrypted plaintext string to authorized callers.
 - **Search:** Selected fields may store a **search hash** (HMAC-based) so the system can query without storing plaintext in indexes.
+
+Because the AAD includes the encryption context, encrypted field metadata is not portable. Code that creates a credit note from an invoice, or any similar document snapshot, must copy plaintext values and let the target document encrypt them under its own collection and field context. Copying ciphertext, IV, version, or search hash between contexts can make the target field undecryptable.
 
 ## Two DEK scopes in code
 
@@ -121,6 +123,8 @@ KMS calls are latency-sensitive. The encryption layer caches **DEK metadata** an
 When the system generates email or IPN payloads, it decrypts `FieldEncrypted` fields using an **organization-scoped** encryption context where the data belongs to a tenant—for example recipient email on notification jobs, billing-related strings on invoice emails, and SMS phone numbers.
 
 ## Deployment and operations
+
+Saved SMTP, geolocation, provider, and site configuration secrets are protected with the **system** encryption context even when they belong to a specific organization. Queued notification payloads and customer-facing document data remain organization-scoped runtime data.
 
 - **Multiple processes, one database:** The **admin backend**, **main (checkout) backend**, and **worker** processes all read and write the same MongoDB. Each must run with a consistent configuration so organization- and system-scoped requests can unwrap the correct DEK (environment, KMS reachability, and `SYSTEM_ENCRYPTION_KEY` on services that handle encrypted settings).
 - **Backups and restores:** Backups contain **ciphertext** and **wrapped DEKs**. Restoring to a new environment only works if that environment can still reach the **same KMS keys** (or a deliberate key migration has been completed) and has valid bootstrap secrets.

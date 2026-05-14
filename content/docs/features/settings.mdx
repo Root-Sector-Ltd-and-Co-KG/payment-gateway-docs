@@ -22,7 +22,7 @@ Under `Settings > Templates`, you can manage both notification templates and doc
 - **Notification Templates**: Email, Slack, and related outbound communication templates.
 - **Document Templates**: PDF layouts for invoices, credit notes, and receipts.
 
-Document templates can be created from scratch, duplicated from a system default, previewed, set as defaults, and assigned to invoice flows. Invoicing settings can point to an organization-wide default PDF template, while sites can override that template for storefront-specific branding.
+Document templates can be created from scratch, duplicated from a system default, previewed, set as defaults, and assigned to invoice flows. Invoicing settings can point to an organization-wide default PDF template, while sites can override that template for storefront-specific branding. Site overrides store a concrete template ID; standard and corrective invoice business types still render through the `invoice` document template type.
 
 ## Invoicing
 
@@ -68,10 +68,18 @@ specific jurisdictions).
 
 ## The Tax Engine
 
-The gateway features a robust, multi-national tax capability.
+The gateway provides an organization-scoped tax configuration that is reused by hosted checkout, transactions, draft invoices, recurring invoices, refunds, chargebacks, and reporting.
 
-1.  **Tax Rates**: Define specific percentages (e.g., `Standard 20%`). Crucially, these rates feature an `EffectiveFrom` timestamp. If a government passes a law increasing tax to 21% starting next year, you can program it today; the engine handles the temporal switch exactly at midnight UTC.
-2.  **Tax Rules**: Connect a Rate to a demographic. You define rules like _"If Seller=DE and Buyer=Any EU Country, and the item is a Digital Service, apply the Buyer's local rate (OSS)"_.
-3.  **EU VAT OSS Configuration**: Specifically configure your physical presence, and the gateway will automatically mandate the collection of 2 non-contradictory pieces of location evidence (e.g., IP vs Billing Country) for 10-year safe-keeping.
+1. **Seller registration**: Configure seller country, VAT/tax IDs, OSS/IOSS registration metadata, UK VAT settings, and small-business exemption references where applicable.
+2. **Tax rates**: Define effective-dated percentages such as `DE_STANDARD`. Future rates can be added ahead of time and are resolved by the transaction or invoice tax-point timestamp.
+3. **Tax rules**: Connect rates to seller country, buyer country, buyer type, supply type, priority, and tax treatment such as `standard`, `reverse_charge`, `exempt`, `zero_rated`, `oss`, `export`, or `uk_vat`.
+4. **Calculation behavior**: Choose whether merchant prices normally include tax, the rounding method, and the tax recognition mode used for canonical tax records.
+5. **VAT validation and OSS evidence**: Enable VIES-backed EU VAT ID validation and strict OSS evidence checks when you want checkout to require non-conflicting buyer-location evidence.
+
+Checkout-specific display preferences, such as whether buyers see tax breakdowns or whether the VAT ID field uses `none`, `format`, or `vies` validation, live under **Settings > Checkout**. The runtime mode is still gated by **Settings > Tax**, so checkout cannot show VIES-backed treatment when tax settings do not allow it.
+
+For EU-focused merchants, automatic tax calculation should normally be paired with **tax included in price** and OSS registration when the merchant is registered for OSS. The seller country is the authoritative origin country for new calculations. Physical goods and shipping lines use the shipping destination when available, while virtual/service lines use the billing country, so mixed baskets can intentionally choose different VAT rate codes per line.
+
+The **Rebuild Tax Records** action repairs canonical reporting records from stored source snapshots. It preserves issued invoice and credit-note history instead of applying current rules to old legal documents. Use it after migrations or data repair when Tax by country, Revenue by country, or VAT OSS needs complete canonical `tax_records`.
 
 **Reporting and API:** Tax by country, revenue by country, and VAT OSS filings in the Admin Panel are backed by canonical **tax records** and report endpoints (see [Invoicing & Tax architecture](../architecture/invoicing-and-tax) and the **Tax Management** / **Tax records** tables in the [Admin API](../api-reference/admin-api)). Programmatic rate maintenance includes `POST /api/v1/tax-rates/replace-defaults` (scoped `tax_rate:execute`).

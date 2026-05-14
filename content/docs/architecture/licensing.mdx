@@ -5,23 +5,43 @@ description: Details on the licensing engine, license states, and operator actio
 
 # Licensing Engine
 
-The Payment Gateway uses a sophisticated licensing engine evaluated within the backend to govern functionality and access based on the health and state of your license.
+The Payment Gateway uses a signed-license runtime model. During activation and sync, the installation receives signed entitlement claims from the vendor license service. The self-hosted installation stores the local license identity and enforces the evaluated runtime state in the Admin Backend and Main Backend.
 
-## How it Works
+## Runtime Architecture
 
-The backend licensing engine evaluates signed license JWT claims and a heartbeat cadence into runtime states. These states enforce how the software operates and interacts with users:
+```mermaid
+flowchart TB
+    AdminUI["Admin Frontend\n/system/licensing"]
+    AdminBE["Admin Backend\nlicense service"]
+    MainBE["Main Backend\nlicense service"]
+    Mongo[("Local MongoDB\nsettings.license")]
+    License["Vendor license service"]
 
-| State           | Trigger                                                                                                                                                | Effect                                                                                       |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| `ACTIVE`        | Heartbeat received within 14 days.                                                                                                                     | Full access. The system behaves normally with all features enabled.                          |
-| `GRACE`         | Heartbeat not received for 14+ days.                                                                                                                   | Full access. Warning shown in admin panel. Updates and support paused.                       |
-| `SOFT_LOCK`     | Heartbeat gap 31+ days.                                                                                                                                | Full access. Informational state for admin dashboard visibility. Updates and support paused. |
-| `READ_ONLY`     | Heartbeat gap 45+ days, or never heartbeated.                                                                                                          | Full access. Informational state. Updates and support paused.                                |
-| `BLOCKED`       | Token status is `REVOKED` or `SUSPENDED`, or the installation reports a product version newer than the highest version entitled by its support window. | All protected endpoints return `403 Forbidden`. Only state that restricts runtime.           |
-| `NOT_ACTIVATED` | No license key configured.                                                                                                                             | All protected endpoints return `403 Forbidden` until activated.                              |
+    AdminUI -->|activate, sync, deactivate| AdminBE
+    AdminBE -->|activation and sync| License
+    License -->|signed entitlement state| AdminBE
+    AdminBE --> Mongo
+    MainBE --> Mongo
+    AdminBE -->|middleware checks| AdminRoutes["Admin protected routes"]
+    MainBE -->|middleware checks| MainRoutes["Main /api/v1 routes"]
+```
 
-> [!NOTE]
-> Only `BLOCKED` and `NOT_ACTIVATED` restrict runtime behaviour. The `GRACE`, `SOFT_LOCK`, and `READ_ONLY` states are informational — the system continues to operate normally, but updates and support are paused until a successful heartbeat restores the license to `ACTIVE`. `BLOCKED` is never triggered by heartbeat gaps alone, but it can be applied manually by the licensing authority or automatically when the installation reports an out-of-entitlement product version.
+`/api/v1/system/licensing` is intentionally exempt from license blocking so a global admin can activate, sync, or recover a host. Main Backend provider webhooks are registered outside the `/api/v1` group and are handled by provider-specific verification.
+
+## Runtime States
+
+The backend licensing engine evaluates signed license claims and local heartbeat age into runtime states:
+
+| State           | Trigger                                                                                                                                                | Runtime effect                                                                                 |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `ACTIVE`        | Heartbeat received within 14 days.                                                                                                                     | Full access.                                                                                   |
+| `GRACE`         | Heartbeat gap of 14+ days, or missing heartbeat on an otherwise usable local license.                                                                   | Full access. Warnings indicate updates and support need attention.                              |
+| `SOFT_LOCK`     | Heartbeat gap of 31+ days.                                                                                                                             | Full access. Informational state; updates and support remain paused.                            |
+| `READ_ONLY`     | Heartbeat gap of 45+ days.                                                                                                                             | Full access in the current middleware. Informational state; updates and support remain paused.   |
+| `BLOCKED`       | Vendor entitlement reports `BLOCKED`, `REVOKED`, or `SUSPENDED`, or version entitlement policy blocks the reported product version.                      | Protected runtime requests return `403 Forbidden`.                                              |
+| `NOT_ACTIVATED` | No usable license key or local license identity is configured.                                                                                          | Protected runtime requests return `403 Forbidden` until activation succeeds.                    |
+
+Only `BLOCKED` and `NOT_ACTIVATED` restrict runtime behavior. `GRACE`, `SOFT_LOCK`, and `READ_ONLY` are warning states in the current implementation.
 
 ## License Tiers
 
@@ -35,20 +55,21 @@ Three commercial tiers are available:
 
 Limited-time promotional one-time pricing may be offered through the commercial dashboard. When active, the pricing page and checkout surface the lower one-time campaign price until the configured expiry date, while annual renewal pricing remains unchanged.
 
-Additional organisations beyond the tier allowance can be added for 250 EUR per organisation per year on any tier.
+Additional organisations beyond the tier allowance can be added for 250 EUR per organisation per year. Starter licenses can also add site packs; Professional and Business include unlimited sites.
 
 ## Operator Actions
 
-As a system operator, managing the licensing states is critical to business continuity:
-
 1. **When in `GRACE`, `SOFT_LOCK`, or `READ_ONLY`:**
-   - These are informational states — the system continues full operation.
-   - To restore `ACTIVE` status (and resume updates/support), verify outbound connectivity to the license authority and trigger a manual heartbeat from the Admin licensing UI.
+   - The installation continues to run.
+   - Verify outbound connectivity to the vendor license service.
+   - Use **System -> Licensing -> Sync License Now** from the self-hosted admin UI to refresh the local claims.
 2. **When in `BLOCKED`:**
-   - This state is the only state that restricts runtime access.
-   - Confirm whether the license was revoked or suspended, or whether the installation reported a product version newer than the highest version entitled for that license.
-   - Resolve the account or version issue, then trigger a heartbeat to restore the system to the `ACTIVE` state.
+   - Confirm whether the license was manually blocked, suspended, revoked, or blocked by version entitlement.
+   - Resolve the account, support window, or version issue in the vendor license portal.
+   - Run **Sync License Now** on the self-hosted installation after the remote state changes.
 3. **When in `NOT_ACTIVATED`:**
-   - Configure your license key in the Admin Panel under **Settings > Licensing** and perform initial activation.
-4. **General Maintenance:**
-   - Always keep the host clock synchronized via NTP. Drift in system clocks can cause JWT verification to fail or falsely trigger an expiry.
+   - Configure the license key from **System -> Licensing** and complete activation.
+   - If activation fails, keep the host clock synchronized and verify the installation can reach the vendor license service over HTTPS.
+4. **General maintenance:**
+   - Keep host time synchronized via NTP; clock drift can break token validation or heartbeat freshness.
+   - Do not rely on `LICENSING_BYPASS` outside development builds. The backends only honor bypass when the build version is a development version.

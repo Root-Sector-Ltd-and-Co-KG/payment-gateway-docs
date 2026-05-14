@@ -29,14 +29,14 @@ Regardless of your chosen platform, the journey looks similar:
    git clone https://github.com/root-sector-ltd-and-co-kg/payment-gateway-deploy
    cd payment-gateway-deploy
    ```
-2. **Prepare your domains and license registry credentials** using the [Self-Hosted Installation](../getting-started/installation) guide.
+2. **Prepare your domains and deployment access credentials** using the [Self-Hosted Installation](../getting-started/installation) guide.
 3. **Choose your platform directory (`podman/` or `docker-compose/`)** and run `./deploy.sh`.
 
 ## Automation and Upgrades
 
 The deployment process plays well with automation tools like **Ansible** or **Terraform**.
 
-The customer-facing deployment guides in this documentation assume the image source configured for the self-hosted deployment repository and, in the first-party hosted setup, that means `registry.payment-gateway.app`. Internal infrastructure automation can use different image sources; for example, `payment-gateway-infra-deploy` currently keeps origin image sources by default unless an environment overrides them explicitly.
+The customer-facing deployment guides in this documentation assume the image source configured in the self-hosted deployment repository. Internal infrastructure automation can use different image sources when an environment overrides them explicitly.
 
 Furthermore, maintaining the platform is built-in:
 
