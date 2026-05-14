@@ -11,9 +11,9 @@ The **Customer Portal** is a branded, self-service interface where your buyers c
 
 Because the portal houses sensitive financial documents, it employs strict, passwordless authentication.
 
-1. **One-Time Password (OTP)**: Customers enter the email address they used during checkout at your portal URL (by default: `https://<MAIN_FRONTEND_DOMAIN>/portal`; e.g. `https://pay.yourdomain.com/portal`).
-2. **Email Verification**: The system securely dispatches a time-sensitive 6-digit OTP to their inbox.
-3. **Session Issuance**: Upon entering the correct OTP, the backend exchanges it for a signed portal session token (opaque bearer token), granting read-only access to their specific Organization-bound Client profile.
+1. **Email challenge**: Customers enter the email address they used during checkout at your portal URL (by default: `https://<MAIN_FRONTEND_DOMAIN>/portal`; e.g. `https://pay.yourdomain.com/portal`).
+2. **Magic link or OTP delivery**: The system dispatches a time-sensitive login link, with OTP confirmation available as a fallback flow where configured.
+3. **Session issuance**: After the link or OTP is accepted, the backend exchanges it for a signed portal session token (opaque bearer token), granting read-only access to their specific Organization-bound Client profile.
 
 ## Portal Capabilities
 
@@ -25,6 +25,10 @@ Customers can view a chronological list of every `issued` invoice or credit note
 
 - Download the standard PDF document.
 - Download configured XML E-Invoice formats (ZUGFeRD/Factur-X CII, Peppol, XRechnung) required for corporate accounting in the EU.
+
+![Customer portal document list showing an issued invoice grouped by site and organization](/screenshots/app/customer-portal-documents.png)
+
+![Customer portal invoice detail showing line items, totals, and document download actions](/screenshots/app/customer-portal-invoice.png)
 
 ### Subscription Management
 

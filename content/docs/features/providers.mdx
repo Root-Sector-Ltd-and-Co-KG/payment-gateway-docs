@@ -17,6 +17,8 @@ Currently natively supported integrations include:
 *   **Wise Transfers**: For transfer-based payment flows where Wise is your payout/collection rail.
 *   **Wire Transfer**: A manual payment method for B2B customers who pay via bank wire. The gateway generates a payment request with the bank details and amount, and the operator manually reconciles the incoming wire against the open transaction.
 
+![Provider management showing enabled Stripe, GoCardless, and wire transfer rails](/screenshots/app/providers.png)
+
 When adding a provider, you will need to supply the upstream API credentials (e.g., the Stripe Secret Key).
 
 > [!NOTE]
@@ -34,3 +36,5 @@ Merely linking a Provider to your Organization does not make it active. You must
 3. When creating a Checkout Session for that Site, the customer will only be offered the payment methods supported by the assigned Providers.
 
 This architecture allows you to run multiple Stripe accounts under one Organization, safely routing specific product lines to entirely different bank payouts.
+
+![Site provider routing showing site-level provider assignment and default selection](/screenshots/app/site-provider-routing.png)

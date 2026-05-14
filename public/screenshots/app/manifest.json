@@ -1,0 +1,110 @@
+{
+  "capturedAt": "2026-05-14T15:52:15.622Z",
+  "organizationName": "Marketing Demo Commerce GmbH",
+  "screenshots": [
+    {
+      "id": "dashboard",
+      "route": "/dashboard",
+      "title": "Dashboard",
+      "description": "Operational dashboard with payment volume, transaction health, and country revenue visibility.",
+      "docsAsset": "/screenshots/app/dashboard.png",
+      "websiteAsset": "/screenshots/app/dashboard-framed.png"
+    },
+    {
+      "id": "organizations",
+      "route": "/organizations",
+      "title": "Organizations",
+      "description": "Global organization list showing separate tenants that share one self-hosted deployment.",
+      "docsAsset": "/screenshots/app/organizations.png",
+      "websiteAsset": "/screenshots/app/organizations-framed.png"
+    },
+    {
+      "id": "providers",
+      "route": "/providers",
+      "title": "Provider Management",
+      "description": "Provider management with enabled card, direct debit, and wire-transfer rails in one organization.",
+      "docsAsset": "/screenshots/app/providers.png",
+      "websiteAsset": "/screenshots/app/providers-framed.png"
+    },
+    {
+      "id": "sites",
+      "route": "/sites",
+      "title": "Sites",
+      "description": "Multiple sites for storefront, subscription, and B2B invoice channels with separate provider routing.",
+      "docsAsset": "/screenshots/app/sites.png",
+      "websiteAsset": "/screenshots/app/sites-framed.png"
+    },
+    {
+      "id": "site-provider-routing",
+      "route": "/sites/edit/6a05e62f0cae73516675b5b9",
+      "title": "Site Provider Routing",
+      "description": "Site-level provider assignment showing checkout routing priority and default provider selection.",
+      "docsAsset": "/screenshots/app/site-provider-routing.png",
+      "websiteAsset": "/screenshots/app/site-provider-routing-framed.png"
+    },
+    {
+      "id": "transactions",
+      "route": "/transactions?searchQuery=MKT-DEMO-SCREENSHOTS-OSS-B2C-V2",
+      "title": "Transactions",
+      "description": "Transaction list for reviewing provider status, settlement state, tax totals, and linked documents.",
+      "docsAsset": "/screenshots/app/transactions.png",
+      "websiteAsset": "/screenshots/app/transactions-framed.png"
+    },
+    {
+      "id": "invoice-detail",
+      "route": "/invoices/6a05e7dc0cae73516675b753",
+      "title": "Invoice Detail",
+      "description": "Issued invoice detail with seller/client snapshots, tax breakdown, payment state, and document actions.",
+      "docsAsset": "/screenshots/app/invoice-detail.png",
+      "websiteAsset": "/screenshots/app/invoice-detail-framed.png"
+    },
+    {
+      "id": "tax-settings",
+      "route": "/settings/tax",
+      "title": "Tax Settings",
+      "description": "Organization tax settings for seller country, OSS, VIES, rounding, and gross-price behavior.",
+      "docsAsset": "/screenshots/app/tax-settings.png",
+      "websiteAsset": "/screenshots/app/tax-settings-framed.png"
+    },
+    {
+      "id": "tax-rules",
+      "route": "/settings/tax/rules",
+      "title": "Tax Rules",
+      "description": "Generated EU VAT OSS destination rules with priorities and active rate codes.",
+      "docsAsset": "/screenshots/app/tax-rules.png",
+      "websiteAsset": "/screenshots/app/tax-rules-framed.png"
+    },
+    {
+      "id": "vat-oss",
+      "route": "/reports/vat-oss?source=both",
+      "title": "VAT OSS Report",
+      "description": "Quarterly OSS report with current net, VAT, and gross totals plus Austria goods/services rows.",
+      "docsAsset": "/screenshots/app/vat-oss.png",
+      "websiteAsset": "/screenshots/app/vat-oss-framed.png"
+    },
+    {
+      "id": "einvoicing-settings",
+      "route": "/settings/invoicing",
+      "title": "E-Invoicing Settings",
+      "description": "E-invoice settings for XRechnung, ZUGFeRD, Peppol, and PDF document generation.",
+      "docsAsset": "/screenshots/app/einvoicing-settings.png",
+      "websiteAsset": "/screenshots/app/einvoicing-settings-framed.png"
+    },
+    {
+      "id": "customer-portal-documents",
+      "route": "/portal/documents",
+      "title": "Customer Portal Documents",
+      "description": "Customer portal document list grouped by issuer and site for invoice and credit-note downloads.",
+      "docsAsset": "/screenshots/app/customer-portal-documents.png",
+      "websiteAsset": "/screenshots/app/customer-portal-documents-framed.png"
+    },
+    {
+      "id": "customer-portal-invoice",
+      "route": "/portal/documents/6a05e7dc0cae73516675b753?type=invoice",
+      "title": "Customer Portal Invoice",
+      "description": "Customer portal invoice detail with payment state, seller/client data, VAT lines, and e-invoice downloads.",
+      "docsAsset": "/screenshots/app/customer-portal-invoice.png",
+      "websiteAsset": "/screenshots/app/customer-portal-invoice-framed.png"
+    }
+  ]
+}

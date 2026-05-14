@@ -19,8 +19,7 @@ Configure the shared foundation first:
 6. Load default tax rates or create your own effective-dated rates.
 7. Create rules that match your sales scenarios.
 
-> [!NOTE]
-> Screenshot placeholder: **Settings > Tax** overview showing seller country, VAT ID, price mode, rounding method, and OSS/VIES toggles.
+![Tax settings page showing calculation guidance, buyer-country detection guidance, and Settings, Rules, and Rates tabs](/screenshots/app/tax-settings.png)
 
 ## Example 1: German Seller, Domestic B2C
 
@@ -71,8 +70,7 @@ Expected behavior:
 - The matching reverse-charge rule produces zero tax charged by the seller.
 - The tax decision stores VIES validation metadata when available.
 
-> [!NOTE]
-> Screenshot placeholder: **Settings > Checkout** showing `vatIdValidation = vies` and tax breakdown display enabled.
+Set checkout VAT ID validation in **Settings > Checkout** so the buyer-facing flow can request and validate VAT IDs consistently with the tax settings above.
 
 ## Example 3: EU VAT OSS B2C Cross-Border
 
@@ -104,8 +102,7 @@ Expected behavior:
 - Strict OSS evidence mode can block checkout when evidence is missing or conflicting.
 - VAT OSS reports aggregate active tax records by quarter, country, rate, and supply type.
 
-> [!NOTE]
-> Screenshot placeholder: **Tax Rules** list showing generated OSS destination rules and priorities.
+![Tax rules page showing domestic, reverse-charge, and OSS B2C rule rows with priority and active state](/screenshots/app/tax-rules.png)
 
 ## Example 4: Gross-Price Checkout
 
@@ -160,8 +157,6 @@ Expected behavior:
 - If imported or legacy breakdown data exceeds the recorded refund or chargeback total, reports cap the negative adjustment to the recorded total and do not create positive balancing rows.
 - VAT OSS and by-country reports reduce totals through adjustment records rather than rewriting the original sale.
 
-> [!NOTE]
-> Screenshot placeholder: **VAT OSS report** showing source filter, quarter selector, country breakdown, and export buttons.
+![VAT OSS report showing current net, VAT, and gross totals plus Austria goods and services rows](/screenshots/app/vat-oss.png)
 
-> [!NOTE]
-> Screenshot placeholder: **Invoice detail** showing linked transaction, credit notes, tax summary, and PDF/XML download actions.
+![Invoice detail showing seller and client snapshots, payment state badges, totals, document actions, line items, and billing details](/screenshots/app/invoice-detail.png)

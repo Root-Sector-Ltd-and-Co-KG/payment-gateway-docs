@@ -20,8 +20,7 @@ When the document is linked to a stored Client record, the Client email in the d
 
 The document still preserves its own party snapshot. If the current Client profile changes later, the already-issued invoice or credit note continues to show the original document data that was valid at issuance time.
 
-> [!NOTE]
-> Screenshot placeholder: **Invoice detail** showing Seller, Client, document status, payment state, tax summary, PDF/XML downloads, and linked transaction.
+![Invoice detail showing seller and client snapshots, payment state badges, totals, document actions, line items, and billing details](/screenshots/app/invoice-detail.png)
 
 ## Invoice Statuses
 
@@ -52,6 +51,10 @@ End-users navigate to your custom domain (e.g., `invoices.yourcompany.com`) and 
 
 - Download their invoice as a PDF.
 - Download their invoice as a machine-readable native E-Invoice XML (ZUGFeRD/Factur-X CII, XRechnung, Peppol) if configured.
+
+E-invoice settings control the formats and routing identifiers available for portal downloads and email workflows.
+
+![E-invoicing settings page showing XRechnung, ZUGFeRD, Peppol, validation, Leitweg-ID, and seller identity fields](/screenshots/app/einvoicing-settings.png)
 
 ## Credit Notes (Refunds)
 
@@ -143,5 +146,4 @@ This means custom invoice templates are supported both as:
 
 For issued documents, `standard` and `corrective` invoice business types resolve to the `invoice` document template type. Draft pro forma documents resolve to the `proforma` template type. When a site-level PDF template override is configured, the backend treats that setting as a concrete document template ID.
 
-> [!NOTE]
-> Screenshot placeholder: **Settings > Templates > Document Templates** showing default template selection, preview, duplicate, and assignment controls.
+The template management screen is the place to preview default layouts, duplicate a template before editing, and assign the resulting template at the organization or site level.

@@ -31,6 +31,14 @@ Each site can maintain its own:
 - **Invoice Overrides**: Site-specific logos, footers, or numbering prefixes that override the Organization's default settings.
 - **Checkout/Route Context**: Site-targeted checkout sessions and endpoint usage in your backend integration.
 
+![Sites list showing storefront, subscription, and B2B invoice channels in one organization](/screenshots/app/sites.png)
+
+## Provider Routing per Site
+
+Each site can expose a different set of payment rails. This keeps provider credentials and checkout behavior explicit instead of making every organization-level provider available everywhere by default.
+
+![Site edit screen showing assigned Stripe and wire transfer providers for a storefront site](/screenshots/app/site-provider-routing.png)
+
 ## API Keys & Authentication
 
 To interact programmatically with the Payment Gateway (for example, to create a Checkout Session from your own backend), you must generate an **Organization API Key**.
