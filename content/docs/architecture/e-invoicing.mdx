@@ -1,13 +1,13 @@
 ---
-title: E-Invoice Compliance
-description: Technical overview of e-Invoice formats, compliance rules, and PDF/A-3 generation.
+title: E-Invoice Formats
+description: Technical overview of e-invoice formats, validation rules, and PDF/A-3 generation.
 ---
 
-# E-Invoice Compliance
+# E-Invoice Formats
 
-The Payment Gateway implements robust native e-invoicing pipelines capable of satisfying B2B and B2G (Business to Government) mandates globally. It generates legally compliant machine-readable XML structures embedded within PDF/A-3 archives or delivered standalone.
+The Payment Gateway implements native e-invoicing pipelines for supported formats such as ZUGFeRD/Factur-X, Peppol BIS Billing, and XRechnung. It generates machine-readable XML structures embedded within PDF/A-3 archives or delivered standalone where the organization has enabled the relevant formats. Legal suitability depends on your jurisdiction, buyer type, seller configuration, and review process.
 
-## Core Mandates & Validation
+## Supported Formats & Validation
 
 The system's invoice generation is actively verified against official EU schemas (EN16931). 
 
@@ -43,4 +43,4 @@ As different regions require varying formats (or restrict them entirely), the AP
 1. **Organization-Level Rules**: Configures what the organization is physically capable of generating globally via `settings.invoicing.eInvoice.allowedFormats`.
 2. **Portal-Level Exposure**: Determines which of those generated formats should be visibly offered to the end-consumer via the customer portal (`settings.portal.allowedDownloadFormats`).
 
-The resulting configuration dictates which standalone XML formats `/portal/documents/:id/einvoice?format=...` may return. XRechnung and Peppol return UBL XML; `format=zugferd` returns Factur-X/ZUGFeRD CII XML. Hybrid ZUGFeRD PDF/A-3 output is served by the admin endpoint `/api/v1/invoices/:id/pdf/zugferd`; standard portal PDFs remain on `/portal/documents/:id/pdf`.
+The resulting configuration dictates which standalone XML formats `/api/v1/portal/documents/:id/einvoice?format=...` may return. XRechnung and Peppol return UBL XML; `format=zugferd` returns Factur-X/ZUGFeRD CII XML. Hybrid ZUGFeRD PDF/A-3 output is served by the admin endpoint `/api/v1/invoices/:id/pdf/zugferd`; standard portal PDFs remain on `/api/v1/portal/documents/:id/pdf`.

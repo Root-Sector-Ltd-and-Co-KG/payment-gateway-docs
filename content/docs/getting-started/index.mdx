@@ -32,6 +32,8 @@ Organizations are the top-level tenant in the system. All payment data, provider
 
 You will be placed inside the new organization's context automatically.
 
+![Organization management showing multiple demo tenants in one self-hosted deployment](/screenshots/app/organizations.png)
+
 ## Step 3 — Add a Payment Provider
 
 A provider is the external payment processor that handles card tokenization and money movement.
@@ -46,8 +48,9 @@ A provider is the external payment processor that handles card tokenization and 
 > [!CAUTION]
 > Provider credentials are encrypted with your organization's Data Encryption Key (DEK) at rest. Do not share or log raw provider API keys.
 
-> [!NOTE]
-> Screenshot placeholder: **Providers > Add Provider** showing Stripe credential fields and webhook secret configuration.
+Before saving, verify that the provider record shows both public and secret credential fields as configured and that the webhook secret matches the provider dashboard.
+
+![Provider management showing enabled Stripe, GoCardless, and wire transfer rails](/screenshots/app/providers.png)
 
 ## Step 4 — Create a Site
 
@@ -66,8 +69,9 @@ After creation, open **Sites → Edit Site** and copy two values for later integ
 
 Sites do **not** generate API keys. API keys are created separately at the **organization** level.
 
-> [!NOTE]
-> Screenshot placeholder: **Sites > Edit Site** showing Site ID, assigned providers, and Webhook Signing Secret.
+Use the Site detail screen as the source of truth for the Site ID and Webhook Signing Secret used by your integration.
+
+![Site edit screen showing assigned Stripe and wire transfer providers for a storefront site](/screenshots/app/site-provider-routing.png)
 
 ## Step 5 — Create an Organization API Key
 
@@ -78,8 +82,9 @@ For server-to-server integrations, create an organization API key before calling
 3. Assign at least the **`checkout:create`** scope.
 4. Store the generated `sk_...` secret in your secrets manager. It is shown only once.
 
-> [!NOTE]
-> Screenshot placeholder: **Settings > API Keys > Create API Key** showing `checkout:create` scope selection and one-time secret reveal.
+The API key secret is revealed only once. Store it before leaving the creation flow.
+
+![API key management showing organization-scoped keys, creation controls, and checkout scope guidance](/screenshots/app/api-keys.png)
 
 ## Step 6 — Create a Checkout Session (Dashboard)
 
@@ -97,7 +102,7 @@ The system returns a URL on your **main frontend** host (`MAIN_FRONTEND_DOMAIN`)
 For real integrations, your backend server creates checkout sessions programmatically.
 
 ```bash
-curl -X POST https://api.yourcompany.com/v1/checkouts/{siteId}/create \
+curl -X POST https://api.yourcompany.com/api/v1/checkouts/{siteId}/create \
   -H "Authorization: Bearer sk_live_keyid.secret" \
   -H "Content-Type: application/json" \
   -d '{
@@ -149,8 +154,9 @@ Navigate to **Transactions** in the Admin Panel. Your completed payment appears 
 
 For tax-enabled organizations, verify the full checkout chain: the checkout/session totals, completed transaction totals, issued invoice totals, and canonical tax record totals should agree. For mixed baskets, goods and shipping lines should use the shipping country with billing fallback, while virtual/service lines should use the billing country. The line-level tax-rate codes on the transaction, invoice, and tax record should reflect those destinations.
 
-> [!NOTE]
-> Screenshot placeholder: **Transactions > Transaction Detail** showing payment status, provider reference, tax breakdown, invoice link, and IPN information.
+The Transactions list is the first operator checkpoint for payment status, provider reference, tax context, invoice link, and outbound IPN delivery state. Open a transaction for the full detail view.
+
+![Transactions list showing filters and columns for created date, status, amount, site, email, billing country, provider, external reference, and transaction ID](/screenshots/app/transactions.png)
 
 ## What's Next
 

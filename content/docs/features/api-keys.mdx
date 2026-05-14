@@ -21,6 +21,8 @@ server-side runtimes with the gateway.
 2. Click **Create Key** and assign it specific, least-privilege scopes.
 3. Use the generated secret token to authenticate requests meant for your Organization (e.g., creating Checkouts, refunding Transactions, or querying Clients).
 
+![API key management showing organization-scoped keys, creation controls, and checkout scope guidance](/screenshots/app/api-keys.png)
+
 ### Scope Model
 
 Scopes follow `resource:action`.
@@ -74,7 +76,7 @@ individual organizations. They are used for:
 
 ## Key Lifecycle and Rotation
 
-To maintain PCI-DSS and security best practices, the gateway supports full lifecycle management for all keys:
+To support security best practices, the gateway provides lifecycle management for all keys:
 
 - **Rotation**: You can generate a new secret for an existing key ID, allowing for zero-downtime credential rotation.
 - **Revocation**: If a key is compromised (e.g., leaked in source code), you can instantly revoke it, rendering it immediately invalid across the distributed system.

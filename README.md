@@ -57,11 +57,41 @@ Build the production Next.js app locally:
 pnpm build
 ```
 
+Preview the standalone production build locally:
+
+```bash
+pnpm start
+```
+
+`pnpm start` mirrors the container runtime: it starts `.next/standalone/server.js`
+after copying `.next/static` and `public` into the standalone directory so
+optimized docs images and screenshot media are served correctly.
+
 Run the standard local validation sequence:
 
 ```bash
 pnpm validate
 ```
+
+## Screenshot Assets
+
+Customer docs embed generated product screenshots from:
+
+- `public/screenshots/app/`
+
+Those images are produced by the internal local-dev screenshot suite and
+inventoried in `public/screenshots/app/manifest.json`. When adding or changing
+an app screenshot reference, use an asset path from the manifest and regenerate
+the suite from the umbrella project root:
+
+```bash
+node payment-gateway-local-dev/local-dev.mjs screenshots marketing --email local.llm@example.com
+```
+
+The root documentation consistency check verifies that screenshot references in
+`content/docs` point at existing files, that `/screenshots/app/*` references are
+listed in the generated manifest, and that every generated docs screenshot is
+linked from at least one customer doc page.
 
 ## Deployment (Azure Container Apps)
 
@@ -112,4 +142,3 @@ docker run --rm -p 3000:3000 payment-gateway-docs:local
   `payment-gateway.app` and `secure.payment-gateway.app` are examples of the
   Root Sector deployment, not hard-coded product requirements for self-hosted
   customers.
--

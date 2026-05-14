@@ -1,11 +1,11 @@
 ---
 title: Invoicing & Credit Notes
-description: Managing the lifecycle of compliant invoices, corrections, and refunds.
+description: Managing the lifecycle of invoices, corrections, and refunds.
 ---
 
 # Invoicing & Credit Notes
 
-Invoices are the legal backbone of your transactions. The Payment Gateway automatically generates mathematically exact, legally compliant PDFs and E-Invoices (XML) for every successful captured payment.
+Invoices are the accounting backbone of your transactions. The Payment Gateway generates locked invoice PDFs and configured e-invoice XML formats for successful captured payments. Your organization remains responsible for validating document settings, numbering, tax treatment, and jurisdiction-specific legal requirements.
 
 ## Document Detail Views
 
@@ -76,7 +76,7 @@ When an invoice has **no** linked payment refund path, the Invoice screen offers
 
 Credit notes therefore serve two purposes:
 
-- They provide the legal reversal document required for accounting and tax records.
+- They provide the reversal document used for accounting and tax records.
 - They explain why the invoice payment state may move to partially refunded, refunded, or fully credited without changing the original invoice contents.
 
 Tax reporting follows the same principle. Refunds, fund-impacting chargebacks, and credit notes are represented as negative adjustment records linked to the original sale or invoice; the original tax record remains part of the audit trail. Adjustment records preserve line-level tax country and VAT rate code where available, which keeps mixed physical and virtual sales aligned with their original reporting basis. If the source only has aggregate tax breakdown data, the adjustment still preserves untaxed residuals as their own line basis and caps over-allocated breakdowns to the recorded refund or chargeback total.

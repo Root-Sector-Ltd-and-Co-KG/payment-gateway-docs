@@ -54,8 +54,7 @@ Symptoms: the buyer-facing checkout domain shows a browser TLS error, but the st
 4. Review reverse proxy logs and the domain verification status in the Admin Panel.
 5. For merchant custom domains, confirm that the domain is verified before sending buyer traffic.
 
-> [!NOTE]
-> Screenshot placeholder: **Domains / Site custom domain detail** showing verification status, DNS target, and TLS readiness.
+Use the domain detail page in the Admin Panel to confirm verification status, DNS target, and TLS readiness before sending buyer traffic to the hostname.
 
 ### Provider Webhook Does Not Arrive
 
@@ -76,20 +75,16 @@ Symptoms: invoice exists, but PDF download fails or remains unavailable.
 3. Confirm Gotenberg is running and reachable from the worker.
 4. Regenerate the invoice PDF from the invoice detail page after fixing service connectivity.
 
-> [!NOTE]
-> Screenshot placeholder: **Invoice detail** showing PDF generation state, regenerate action, and download buttons.
+Use the invoice detail page to confirm PDF generation state, retry generation after fixing connectivity, and verify that download actions return the expected document.
 
 ### Tax Reports Are Empty Or Show Unknown Country
 
 Symptoms: **Tax by country** or **VAT OSS** is empty after using Rebuild Tax Records, or **Revenue by country** shows `UNKNOWN`.
 
-1. Run the local ledger audit against the affected environment:
-   ```bash
-   node payment-gateway-local-dev/local-dev.mjs db audit tax
-   ```
-2. Confirm there are no active `tax_records` with missing line-level tax country.
+1. Review the Tax Reports and Tax Records pages for the affected organization and date range.
+2. Confirm there are no active tax records with missing line-level tax country.
 3. Confirm issued invoices and issued credit notes have active canonical tax records.
-4. Confirm issued document `taxRecordIds` point at active records for the same source document, not superseded records or transaction-sourced records.
+4. Confirm issued document tax-record references point at active records for the same source document, not superseded records or transaction-sourced records.
 5. Confirm invoice-linked transaction records are not independently active when invoice records exist.
 6. Re-run **Settings > Tax > Rebuild Tax Records** after fixing source snapshot or migration issues.
 
@@ -101,14 +96,11 @@ If the affected rows came from recently completed checkouts, inspect the main-ba
 
 Symptoms: invoice or credit-note pages show blank encrypted fields, logs include `message authentication failed`, or tax-record rebuild fails while reading issued credit notes.
 
-1. Run the encryption audit:
-   ```bash
-   node payment-gateway-local-dev/local-dev.mjs db audit encryption
-   ```
-2. Check whether failures are organization-scope or system-scope in the audit output.
+1. Check admin-backend and worker logs for `message authentication failed` and field-level decryption errors.
+2. Identify whether failures are organization-scope or system-scope from the log context and the affected Admin UI page.
 3. For organization-scope document snapshot failures, confirm encrypted field metadata was not copied between collections or fields.
 4. Repair from source plaintext where available, such as the original client profile or document history. Ciphertext that fails authenticated decryption cannot be decrypted by changing code or keys alone.
-5. After repair, rerun the tax audit and Rebuild Tax Records.
+5. After repair, re-run **Settings > Tax > Rebuild Tax Records** if the affected records are used by tax reporting.
 
 ### Update Fails Before Deployment
 

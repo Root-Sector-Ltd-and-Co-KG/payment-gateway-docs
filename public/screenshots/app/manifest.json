@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-05-14T16:41:56.691Z",
+  "capturedAt": "2026-05-14T19:54:13.139Z",
   "organizationName": "Marketing Demo Commerce GmbH",
   "screenshots": [
     {
@@ -36,6 +36,13 @@
       "title": "Site Provider Routing",
       "description": "Site-level provider assignment showing checkout routing priority and default provider selection.",
       "asset": "/screenshots/app/site-provider-routing.png"
+    },
+    {
+      "id": "api-keys",
+      "route": "/settings/api-keys",
+      "title": "API Keys",
+      "description": "Organization API key management with least-privilege scope guidance for server integrations.",
+      "asset": "/screenshots/app/api-keys.png"
     },
     {
       "id": "transactions",

@@ -5,7 +5,7 @@ description: Overview of the deployment methods and integration.
 
 # Deployment Overview
 
-Deploying the Payment Gateway App is straightforward thanks to its containerized microservices architecture. Depending on your platform and preferences, we offer two main methods for standing up the stack, alongside options for automation.
+Deploying the Payment Gateway App is based on the customer deployment repository and containerized services. Customers normally choose one of two supported runtime modes: Docker Compose or rootless Podman.
 
 If you are installing the stack for the first time as a customer, start with [Self-Hosted Installation](../getting-started/installation). The deployment pages in this section are the deeper operational references for each platform after you know the required domains, license access flow, activation order, and update workflow.
 
@@ -34,11 +34,9 @@ Regardless of your chosen platform, the journey looks similar:
 
 ## Automation and Upgrades
 
-The deployment process plays well with automation tools like **Ansible** or **Terraform**.
+Customer-facing automation is provided by the scripts in `payment-gateway-deploy`: the deploy scripts, updater, rollback helper, diagnostics, scheduled update timers, and backup runbooks. Separate infrastructure-provisioning systems are internal implementation details and are not required for customer installation.
 
-The customer-facing deployment guides in this documentation assume the image source configured in the self-hosted deployment repository. Internal infrastructure automation can use different image sources when an environment overrides them explicitly.
-
-Furthermore, maintaining the platform is built-in:
+Maintaining the platform is built in:
 
 - **Unified Updater:** Easily update versions with `./scripts/update.sh --engine <docker-compose|podman> --channel stable`.
 - **Systemd Timers:** Setup automated weekly updates on Linux platforms.

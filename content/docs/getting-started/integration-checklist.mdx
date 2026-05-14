@@ -49,8 +49,10 @@ Never call the Admin API from untrusted browsers; keys are server-side only.
 ## 4. Create checkout sessions via the Admin API
 
 - **Host:** `ADMIN_BACKEND_DOMAIN` only.
-- **Path:** `POST /v1/checkouts/{siteId}/create` or `POST /api/v1/checkouts/{siteId}/create` (default Caddy rewrites `/v1` → `/api/v1` on the Admin API host).
+- **Path:** `POST /api/v1/checkouts/{siteId}/create` on the Admin API host. The default Caddy config also accepts `/v1/*` as a convenience rewrite, but `/api/v1/*` is the canonical backend route and generated API reference path.
 - **`{siteId}`** is the Site’s MongoDB ObjectId (**Sites → Edit**).
+
+![Site edit screen showing assigned Stripe and wire transfer providers for a storefront site](/screenshots/app/site-provider-routing.png)
 
 Response includes **`paymentUrl`** on **`MAIN_FRONTEND_DOMAIN`** — redirect the customer there.
 

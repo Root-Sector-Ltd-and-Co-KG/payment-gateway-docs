@@ -5,7 +5,7 @@ description: Official WooCommerce and aMember Pro plugins that connect your stor
 
 # E‑commerce integrations
 
-These extensions keep **providers, routing, and webhooks** in Payment Gateway App while your store shows a **single** payment method at checkout. Configure each plugin with your **Admin API** hostname (**`ADMIN_BACKEND_DOMAIN`** — no `https://` in the plugin field; hosted: `api.payment-gateway.app`), **Site ID**, an **API key** with the **`checkout:create`** scope (some plugin READMEs still say `checkout:write` — use the scope shown in Admin → API Keys), and the **Webhook Signing Secret** from **Sites → Edit Site** (used to verify IPN signatures). The plugin registers its own **IPN URL** on the store side; the gateway posts signed notifications to that URL when transaction status changes. See [Hostnames & DNS conventions](../deployment/domains).
+These extensions keep **providers, routing, and webhooks** in Payment Gateway App while your store shows a **single** payment method at checkout. Configure each plugin with your **Admin API** hostname (**`ADMIN_BACKEND_DOMAIN`** — no `https://` in the plugin field; hosted: `api.payment-gateway.app`), **Site ID**, an **API key** with the **`checkout:create`** scope shown in Admin → API Keys, and the **Webhook Signing Secret** from **Sites → Edit Site** (used to verify IPN signatures). The plugin registers its own **IPN URL** on the store side; the gateway posts signed notifications to that URL when transaction status changes. See [Hostnames & DNS conventions](../deployment/domains).
 
 Full product documentation lives at [docs.payment-gateway.app](https://docs.payment-gateway.app), including API references and IPN verification details.
 

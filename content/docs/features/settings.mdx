@@ -34,6 +34,8 @@ Under `Settings > Invoicing`, organizations configure two independent document-n
 
 The full API payload shape for these settings is documented in the Admin API reference (see **Organization Settings** on the [Admin API](../api-reference/admin-api) page).
 
+![E-invoicing settings page showing XRechnung, ZUGFeRD, Peppol, validation, Leitweg-ID, and seller identity fields](/screenshots/app/einvoicing-settings.png)
+
 ## Data Retention & Geolocation
 
 The platform includes organization-scoped retention controls to support your
@@ -69,6 +71,8 @@ specific jurisdictions).
 ## The Tax Engine
 
 The gateway provides an organization-scoped tax configuration that is reused by hosted checkout, transactions, draft invoices, recurring invoices, refunds, chargebacks, and reporting.
+
+![Tax settings page showing calculation guidance, buyer-country detection guidance, and Settings, Rules, and Rates tabs](/screenshots/app/tax-settings.png)
 
 1. **Seller registration**: Configure seller country, VAT/tax IDs, OSS/IOSS registration metadata, UK VAT settings, and small-business exemption references where applicable.
 2. **Tax rates**: Define effective-dated percentages such as `DE_STANDARD`. Future rates can be added ahead of time and are resolved by the transaction or invoice tax-point timestamp.

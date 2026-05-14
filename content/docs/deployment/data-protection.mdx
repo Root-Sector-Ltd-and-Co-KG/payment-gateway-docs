@@ -67,7 +67,7 @@ Document rationale for each value and align with jurisdiction/accounting rules.
 Data protection is not complete without verified recoverability:
 
 - configure scheduled MongoDB backups (`mgob` -> S3-compatible storage),
-- configure durable invoice/PDF object storage,
+- define how issued invoices, credit notes, PDFs, and e-invoice artifacts are archived outside the worker cache,
 - test restore procedures periodically and keep evidence.
 
 Use [Backup & Recovery (GDPR)](./backup-recovery) as your runbook.

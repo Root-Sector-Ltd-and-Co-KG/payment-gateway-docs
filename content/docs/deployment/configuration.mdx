@@ -9,8 +9,11 @@ Configuring the Payment Gateway correctly ensures secure and reliable operation.
 
 ## MongoDB TLS Encryption
 
-TLS encryption is **enabled by default** in current deployment configuration and
-should remain enabled for production deployments.
+MongoDB TLS becomes active when `MONGO_TLS_ENABLED=true` and certificate files
+exist. Linux shell tooling defaults to TLS-enabled connection strings when the
+flag is not set; the PowerShell secrets generator defaults to non-TLS unless you
+set the flag explicitly. Generate certificates and set `MONGO_TLS_ENABLED=true`
+before relying on TLS in production.
 
 ### Quick TLS Setup
 
@@ -48,7 +51,7 @@ should remain enabled for production deployments.
 
 The `payment-gateway-main-worker` handles PDF generation using Gotenberg via HTTP. 
 
-Key environment variables for configuring the worker in `.env-main-worker` (Podman/Ansible) or your unified `.env` (Docker Compose) include:
+Key environment variables for configuring the worker in Podman environment files or your unified `.env` (Docker Compose) include:
 
 | Variable | Description | Default |
 | --- | --- | --- |
@@ -59,11 +62,18 @@ Key environment variables for configuring the worker in `.env-main-worker` (Podm
 
 *Best Practice:* Deploy configs should mount `MPG_MAIN_WORKER_TEMP_CACHE_DIR` as a `tmpfs` volume with mode `1777` for performance and automatic clearing.
 
-## Persistent Storage Configuration
+## PDF Storage Configuration
 
-Out of the box, generated PDFs are stored in the temporary cache for 24 hours. For permanent storage:
-1. Navigate to **Organization Settings -> Invoicing -> PDF Storage** in the Admin panel.
-2. Configure credentials and paths for AWS S3, Azure Blob Storage, or Google Cloud Storage.
+Out of the box, generated PDFs and e-invoice artifacts are served from the
+worker's temporary cache and cleaned up automatically. Treat this as an
+operational delivery cache, not as your legal archive.
+
+Some releases expose organization-level PDF storage settings in **Settings >
+Invoicing > PDF Storage**. Before depending on those settings for durable
+retention, verify the exact storage provider in your release by generating,
+downloading, restarting the worker, and downloading the same issued document
+again. Keep MongoDB backups and your own accounting archive in place regardless
+of PDF cache behavior.
 
 ## Backup and Recovery
 

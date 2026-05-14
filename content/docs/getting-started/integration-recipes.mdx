@@ -12,7 +12,7 @@ Use these recipes when you are wiring a merchant backend to the gateway. They fo
 Use the **Admin API** host for checkout creation. This is a trusted server-to-server call and must never be made from browser code.
 
 ```bash
-curl -X POST https://api.yourcompany.com/v1/checkouts/{siteId}/create \
+curl -X POST https://api.yourcompany.com/api/v1/checkouts/{siteId}/create \
   -H "Authorization: Bearer sk_live_keyid.secret" \
   -H "Content-Type: application/json" \
   -d '{
@@ -41,11 +41,7 @@ Required setup:
 - Assign at least one provider to the Site.
 - Configure `returnUrl`, `cancelUrl`, and `ipnUrl` if your application needs redirect and server-side notification.
 
-> [!NOTE]
-> Screenshot placeholder: **Settings > API Keys** showing a least-privilege `checkout:create` key and the one-time secret reveal state.
-
-> [!NOTE]
-> Screenshot placeholder: **Sites > Edit Site** showing Site ID, assigned providers, and Webhook Signing Secret.
+Use **Settings > API Keys** for the one-time `sk_...` secret reveal, and **Sites > Edit Site** for the Site ID plus Webhook Signing Secret.
 
 ## Recipe 2: Let Hosted Checkout Calculate Tax
 
@@ -83,8 +79,7 @@ Setup checklist:
 
 Provider webhooks update gateway transaction state. Your own application should listen to outbound IPN unless you intentionally poll the Admin API.
 
-> [!NOTE]
-> Screenshot placeholder: **Providers > Edit Provider** showing the provider ID and webhook secret fields.
+The provider detail page is the source of truth for the provider ID and the saved provider webhook secret.
 
 ## Recipe 4: Receive And Verify Outbound IPN
 
@@ -108,8 +103,7 @@ The signature is the hex HMAC-SHA256 of `{timestamp}.{rawBody}` using the Site W
 > [!IMPORTANT]
 > Store and process IPN idempotently. Use `id` plus `status` as a deduplication key and keep your own order state transition guarded.
 
-> [!NOTE]
-> Screenshot placeholder: **Transactions > Transaction Detail > IPN Information** showing delivery attempts, last status, and retry state.
+Use **Transactions > Transaction Detail > IPN Information** to inspect delivery attempts, last HTTP status, and retry state.
 
 ## Recipe 5: Reconcile Transaction, Invoice, And Tax
 
@@ -123,7 +117,7 @@ sequenceDiagram
     participant Main as Main Backend
     participant Provider as Payment provider
 
-    App->>Admin: POST /v1/checkouts/{siteId}/create
+    App->>Admin: POST /api/v1/checkouts/{siteId}/create
     Admin-->>App: paymentUrl, sessionPublicId
     App-->>Buyer: Redirect to paymentUrl
     Buyer->>Main: Submit payment

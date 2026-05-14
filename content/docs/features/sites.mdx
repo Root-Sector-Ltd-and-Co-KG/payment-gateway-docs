@@ -51,11 +51,11 @@ Your trusted server-side runtime should use this key as a Bearer token to
 authenticate REST requests against your configured **Admin API** host (not the Main Backend / payment-hooks host):
 
 ```http
-POST https://api.yourcompany.com/v1/checkouts/{siteId}/create
+POST https://api.yourcompany.com/api/v1/checkouts/{siteId}/create
 Authorization: Bearer sk_<id>.<secret>
 ```
 
-The same request works with the backend’s canonical path prefix: `POST https://api.yourcompany.com/api/v1/checkouts/{siteId}/create`. The default **`payment-gateway-reverseproxy/Caddyfile`** rewrites `/v1/*` to `/api/v1/*` on `{$ADMIN_BACKEND_DOMAIN}`, so integrations can use the shorter URL (for example `https://test-api.payment-gateway.app/v1/...`).
+The default reverse proxy can also rewrite `/v1/*` to `/api/v1/*` on `ADMIN_BACKEND_DOMAIN`, but customer integrations should prefer the canonical `/api/v1` path because it matches the backend route registration and generated API reference.
 
 > [!NOTE]
 > Use your real **`ADMIN_BACKEND_DOMAIN`** value (often `api.*`; hosted: `api.payment-gateway.app`). Provider webhooks and checkout **runtime** use **`MAIN_BACKEND_DOMAIN`** (often `webhook.*`; hosted: `webhook.payment-gateway.app`) — [Hostnames & DNS conventions](../deployment/domains), [Self-Hosted Installation](../getting-started/installation).

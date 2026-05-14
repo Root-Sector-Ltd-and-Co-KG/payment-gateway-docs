@@ -67,7 +67,7 @@ If signature verification fails or the payload is invalid, the gateway returns `
 
 ## Outbound IPN (to Your Application)
 
-When you create a checkout (Admin **Checkouts → Create** or `POST /v1/checkouts/{siteId}/create` / `POST /api/v1/checkouts/{siteId}/create` on the Admin API host), you can set **`ipnUrl`** to the HTTPS endpoint on your infrastructure that should receive IPN posts for transactions created from that checkout. The URL is stored on the **transaction** (see **Transactions → [transaction] → IPN Information** in the admin UI for delivery attempts and last HTTP status).
+When you create a checkout (Admin **Checkouts → Create** or `POST /api/v1/checkouts/{siteId}/create` on the Admin API host), you can set **`ipnUrl`** to the HTTPS endpoint on your infrastructure that should receive IPN posts for transactions created from that checkout. The URL is stored on the **transaction** (see **Transactions → [transaction] → IPN Information** in the admin UI for delivery attempts and last HTTP status).
 
 Signing uses the **Webhook Signing Secret** from the **Site** that owns the checkout: **Sites → Add New Site** or **Sites → Edit Site** → **Webhook Signing Secret** (often `whsec_…`). Regenerate it with **Regenerate** if it is compromised; then update every integration that verifies IPN signatures.
 

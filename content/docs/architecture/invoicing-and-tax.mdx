@@ -1,6 +1,6 @@
 ---
 title: Invoicing & Tax Architecture
-description: Comprehensive guide to the invoicing lifecycle, tax engine, and EU VAT OSS compliance.
+description: Comprehensive guide to the invoicing lifecycle, tax engine, and EU VAT OSS reporting.
 ---
 
 # Invoicing & Tax Architecture
@@ -9,11 +9,11 @@ The Payment Gateway combines document lifecycle controls with a configurable tax
 
 ## The Invoicing Lifecycle
 
-Invoices enforce a strict immutability rule designed for accounting compliance. They transition through specific statuses:
+Invoices enforce a strict immutability rule designed for accounting integrity. They transition through specific statuses:
 
 1. **`draft`**: The invoice is an editable placeholder. It can be fully modified, populated via the `InvoiceCorrectionService`, or deleted entirely without an audit trail.
-2. **`issued`**: The invoice becomes a finalized, legal entity. The legal `InvoiceNumber` is permanently assigned. From this point forward, the core contents cannot be mutated.
-3. **Void / reversal workflow**: If an issued invoice must be negated, the platform performs a formal void / reversal workflow rather than mutating the invoice in place. The original invoice remains part of the legal record.
+2. **`issued`**: The invoice becomes a finalized accounting document. The invoice number is permanently assigned. From this point forward, the core contents cannot be mutated.
+3. **Void / reversal workflow**: If an issued invoice must be negated, the platform performs a formal void / reversal workflow rather than mutating the invoice in place. The original invoice remains part of the accounting record.
 4. **Payment state (computed)**: Financial states such as `open`, `partially_settled`, `settled`, `credited`, `overpaid`, or refund-derived states are computed from settlement totals instead of being persisted as a mutable invoice status.
 
 ### Invoice Corrections
@@ -24,7 +24,7 @@ These corrections require a formal reason string, user ID, and timestamp, perman
 
 ## Gapless Sequential Numbering
 
-Unlike the legacy `transaction.externalReference`, which holds the merchant-provided identifier, legal invoices require gapless, sequentially incrementing numbers.
+Unlike the legacy `transaction.externalReference`, which holds the merchant-provided identifier, invoice numbering commonly requires gapless, sequentially incrementing numbers.
 
 The system uses an isolated `invoice_sequences` MongoDB collection to securely `$inc` and format document numbers synchronously. Organizations configure per-document layouts that define prefixes, optional middle text and suffixes, start numbers, digit width, calendar-vs-fiscal year behavior, visible period detail, and reset policy.
 

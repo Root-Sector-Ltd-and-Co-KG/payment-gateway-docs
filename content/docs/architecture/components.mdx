@@ -34,7 +34,7 @@ One of the complex subsystems is PDF generation for invoices and receipts, desig
 3. The generated PDF is stored in a local temporary cache, defaulting to `/tmp/pdf-cache`. The worker automatically cleans up PDFs older than 24 hours.
 4. The Worker acts as an HTTP server, default port `8090`, to serve cached PDFs and e-invoice artifacts.
 5. The Admin and Main Backends proxy PDF requests directly to the Worker, meaning no shared volumes are necessary between them.
-6. If an organization configures cloud storage, S3, Azure, or GCS, PDFs are stored there permanently; otherwise the temporary worker cache is the delivery source.
+6. If no verified durable document-storage provider is active for the organization, the temporary worker cache is the delivery source. Operators should keep their own accounting archive and verify any configured object-storage provider before treating it as durable retention.
 
 ## Database & Caching
 

@@ -85,17 +85,11 @@ Application encrypted fields use authenticated encryption. Ciphertext is bound t
 
 This is especially important for legal document snapshots. Invoices and credit notes may copy seller and client snapshot values for accounting consistency, but the copy must be plaintext-only before persistence. If encrypted metadata is moved between contexts, reads can fail with `message authentication failed` and the original plaintext cannot be recovered from that ciphertext alone.
 
-For local environments, use:
-
-```bash
-node payment-gateway-local-dev/local-dev.mjs db audit encryption
-```
-
-The audit checks for copied encrypted snapshot payloads and scans local backend logs for system-scope and organization-scope authentication failures.
+For customer environments, diagnose these failures from admin-backend and worker logs plus the affected Admin UI page. Look for `message authentication failed` and field-level decrypt errors; the log context identifies whether the failure is system-scope or organization-scope. Internal development audit tools may exist, but they are not part of the customer deployment package.
 
 ## Is encryption enabled by default?
 
-- **MongoDB transport encryption (TLS):** enabled by default in typical deployment configurations.
+- **MongoDB transport encryption (TLS):** recommended for production and active when `MONGO_TLS_ENABLED=true` and certificate files are present.
 - **Application field-level encryption:** opt-in per scope through **System > Encryption** and **Settings > Encryption**; must be explicitly configured, validated, and enabled with a generated DEK.
 
 Both are recommended for production.

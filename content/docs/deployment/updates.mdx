@@ -7,7 +7,7 @@ description: How to maintain and automatically update your deployment safely.
 
 The Deployment repository (`payment-gateway-deploy`) includes a powerful set of scripts and mechanisms to keep your Payment Gateway updated, ensuring you receive the latest security patches and features.
 
-This page describes the customer-facing updater behavior from `payment-gateway-deploy`. Internal automation stacks may choose different image sources; for example, `payment-gateway-infra-deploy` currently defaults to origin image sources unless an environment overrides them explicitly.
+This page describes the customer-facing updater behavior from `payment-gateway-deploy`. Infrastructure provisioning stacks, registry services, local development harnesses, and release orchestration repositories are internal implementation details; customers do not need them to install or update the product.
 
 The important trust boundary is this:
 
@@ -30,7 +30,7 @@ Each published product release now includes auditable security artifacts:
 - A release-time Trivy scan runs after changed component images are published and promoted.
 - CycloneDX SBOM files are generated per repository and versioned.
 - Trivy vulnerability and misconfiguration reports are generated per repository and versioned.
-- These artifacts are committed to the internal release-orchestrator repository, then linked to the same product version used by release notes and deploy metadata.
+- These artifacts are produced by the internal release pipeline, then linked to the same product version used by release notes and deploy metadata.
 
 In addition, component repositories enforce branch-based license scanning with Trivy:
 
@@ -51,7 +51,7 @@ Additional security checks in the release ecosystem:
 
 | Control                               | Scope                                        | Trigger                                            | Output                                                                                                                               | Blocking                      |
 | ------------------------------------- | -------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
-| Trivy vuln+misconfig + CycloneDX SBOM | release-managed repos + shared libs          | product release continuation after image promotion | `security/sbom/v<version>/*.cyclonedx.json`, `security/reports/v<version>/*.vuln.json`, `scan-manifest.json` in release-orchestrator | Yes                           |
+| Trivy vuln+misconfig + CycloneDX SBOM | release-managed repos + shared libs          | product release continuation after image promotion | Versioned SBOM, vulnerability report, and scan manifest artifacts published for the release | Yes                           |
 | Trivy license gate                    | each component repository                    | push (`develop` for app repos, `main` for libs)    | machine-readable JSON output in CI workflow run                                                                                      | Yes (`UNKNOWN,HIGH,CRITICAL`) |
 | Govulncheck                           | admin/main backend                           | backend security scan workflow on push             | workflow findings                                                                                                                    | Yes                           |
 | Gosec                                 | admin/main backend                           | backend security scan workflow on push             | workflow findings                                                                                                                    | Yes                           |
@@ -206,7 +206,4 @@ That public metadata should mirror the channel information already present in
 The admin frontend Version Badge consumes the same public metadata and changes
 state based on channel-aware version comparison plus dependency health.
 
-This is preferable to making the internal release orchestrator repository public
-just to expose version discovery. The updater, however, should use
-authenticated metadata whenever deployment access credentials are available so
-release resolution respects the license support window.
+This keeps customer version discovery on a stable public metadata endpoint. The updater, however, should use authenticated metadata whenever deployment access credentials are available so release resolution respects the license support window.

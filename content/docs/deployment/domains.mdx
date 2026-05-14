@@ -16,7 +16,7 @@ The hosted platform uses a fixed subdomain layout. Each hostname maps to the cor
 | Hostname                                | Deploy / Caddy variable | What it serves                                                                                                                       |
 | --------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `https://dashboard.payment-gateway.app` | `ADMIN_FRONTEND_DOMAIN` | Admin Panel (WebAuthn, organizations, settings)                                                                                      |
-| `https://api.payment-gateway.app`       | `ADMIN_BACKEND_DOMAIN`  | Admin API - Organization API keys, `POST /v1/checkouts/{siteId}/create`, management REST                                             |
+| `https://api.payment-gateway.app`       | `ADMIN_BACKEND_DOMAIN`  | Admin API - Organization API keys, `POST /api/v1/checkouts/{siteId}/create`, management REST                                         |
 | `https://secure.payment-gateway.app`    | `MAIN_FRONTEND_DOMAIN`  | Hosted checkout UI and customer portal                                                                                               |
 | `https://webhook.payment-gateway.app`   | `MAIN_BACKEND_DOMAIN`   | Main Backend - provider webhooks (`/hooks/...`), checkout runtime (`/api/v1/checkouts/...`), Apple Pay domain association, `/health` |
 
@@ -56,4 +56,4 @@ On your own infrastructure you assign DNS under **your** zone. Typical choices m
 | Main frontend (checkout / portal)  | `secure.yourcompany.com` or `pay.yourcompany.com`      |
 | Main backend (hooks + runtime API) | `webhook.yourcompany.com`                              |
 
-Variable names and a worked `example.com` table: [Self-Hosted Installation](../getting-started/installation). Routing and `/v1` rewrites: [Caddy reverse proxy](./caddy). Integration order (webhooks -> API key -> checkout -> IPN): [Server integration checklist](../getting-started/integration-checklist).
+Variable names and a worked `example.com` table: [Self-Hosted Installation](../getting-started/installation). Routing and the optional `/v1` to `/api/v1` rewrite: [Caddy reverse proxy](./caddy). Integration order (webhooks -> API key -> checkout -> IPN): [Server integration checklist](../getting-started/integration-checklist).
