@@ -20,9 +20,11 @@ Under `Settings > Notifications`, you define how the platform communicates with 
 Under `Settings > Templates`, you can manage both notification templates and document templates.
 
 - **Notification Templates**: Email, Slack, and related outbound communication templates.
-- **Document Templates**: PDF layouts for invoices, credit notes, and receipts.
+- **Document Templates**: PDF layouts for invoices, pro forma documents, credit notes, and receipts.
 
-Document templates can be created from scratch, duplicated from a system default, previewed, set as defaults, and assigned to invoice flows. Invoicing settings can point to an organization-wide default PDF template, while sites can override that template for storefront-specific branding. Site overrides store a concrete template ID; standard and corrective invoice business types still render through the `invoice` document template type.
+Document templates can be created from scratch, duplicated from a system default, previewed, set as defaults, and assigned to invoice flows. The editor exposes grouped variables for document metadata, seller data, client billing and shipping addresses, supported payment data, line items, VAT breakdown rows, footer data, and custom fields. VAT breakdown variables include country-aware fields such as `CountryCode`, `CountryName`, `CountryLabel`, `DisplayLabel`, and `VATBase`.
+
+Invoicing settings can point to an organization-wide default PDF template, while sites can override that template for storefront-specific branding. Site overrides store a concrete template ID; standard and corrective invoice business types still render through the `invoice` document template type. Draft pro forma output uses the `proforma` template type, and credit notes and receipts have their own template defaults.
 
 ## Invoicing
 

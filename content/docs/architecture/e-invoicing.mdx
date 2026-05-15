@@ -9,14 +9,14 @@ The Payment Gateway implements native e-invoicing pipelines for supported format
 
 ## Supported Formats & Validation
 
-The system's invoice generation is actively verified against official EU schemas (EN16931). 
+The system includes built-in preflight checks, XML well-formedness checks, required-element checks, and local-dev regression flows for generated e-invoice outputs. Official XSD/Schematron validation is treated as periodic release evidence and should be rerun after generator changes or before a compliance-sensitive release.
 
 The supported standards currently include:
 1. **ZUGFeRD / Factur-X**: Factur-X CII XML, with hybrid PDF/A-3 output available on the admin ZUGFeRD PDF endpoint.
 2. **Peppol BIS Billing 3.0**: An international standard mapped back to UBL (Universal Business Language).
 3. **XRechnung**: A strict UBL subset essential for German B2G transactions.
 
-Validation testing is performed via strict Schematron rule mapping (e.g., `FACTUR-X_EN16931.xslt`, `PEPPOL-EN16931-UBL.xslt`) using external engines like ecosio.
+External validation can be performed with official KoSIT, Peppol, and Factur-X/ZUGFeRD validators, including Schematron rule sets such as `FACTUR-X_EN16931.xslt`, `PEPPOL-EN16931-UBL.xslt`, and XRechnung UBL rules. These external validators are not embedded in the runtime path.
 
 ## The ZUGFeRD / Factur-X Generation Pipeline
 
@@ -30,7 +30,7 @@ Generating a ZUGFeRD document securely without destroying the underlying Chromiu
 
 ## EN16931 Rules Handling
 
-Native generation automatically enforces major business rules prescribed by EN16931 to ensure validity:
+Native generation enforces several major EN16931 business rules and fallbacks:
 
 - **BR-CO-25 (Missing Due Dates)**: If an invoice's total due is strictly positive but lacks payment terms or a due date, the system injects the default descriptive tag `"Payable upon receipt"`.
 - **Empty Delivery Nodes**: Extraneous XML elements, such as `ApplicableHeaderTradeDelivery`, are explicitly pruned when a transaction is purely virtual/digital.

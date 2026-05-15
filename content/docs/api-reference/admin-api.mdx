@@ -164,7 +164,7 @@ GET /api/v1/transactions?status=succeeded&currency=EUR&from=2026-01-01&to=2026-0
 | `POST`   | `/api/v1/invoices/:id/send-email`                  | `invoice:execute` | Email invoice to client                                    |
 | `POST`   | `/api/v1/invoices/:id/payment-checkout`            | `invoice:execute` | Create an online payment checkout for the invoice          |
 | `GET`    | `/api/v1/invoices/:id/pdf`                         | `invoice:execute` | Download PDF                                               |
-| `GET`    | `/api/v1/invoices/:id/xml`                         | `invoice:execute` | Download XML (XRechnung / configured e-invoice output)     |
+| `GET`    | `/api/v1/invoices/:id/xml`                         | `invoice:execute` | Download XRechnung XML                                     |
 | `GET`    | `/api/v1/invoices/:id/xml/peppol`                  | `invoice:execute` | Download Peppol XML                                        |
 | `GET`    | `/api/v1/invoices/:id/pdf/zugferd`                 | `invoice:execute` | Download ZUGFeRD PDF                                       |
 | `POST`   | `/api/v1/invoices/:id/regenerate-pdf`              | `invoice:execute` | Force PDF regeneration                                     |

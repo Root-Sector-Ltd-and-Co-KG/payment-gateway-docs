@@ -93,6 +93,16 @@ The root documentation consistency check verifies that screenshot references in
 listed in the generated manifest, and that every generated docs screenshot is
 linked from at least one customer doc page.
 
+After both `payment-gateway-docs` and `payment-gateway-app-website` have been
+built, run the rendered screenshot check from the umbrella project root. It
+starts the built docs site and marketing Worker, opens them in Chromium, and
+verifies that linked docs screenshots, website gallery thumbnails, full-size
+marketing screenshots, and the API Keys preview image load successfully:
+
+```bash
+node tools/doc-consistency/check-rendered-screenshots.mjs
+```
+
 ## Deployment (Azure Container Apps)
 
 ### One-time Azure setup (prerequisites)

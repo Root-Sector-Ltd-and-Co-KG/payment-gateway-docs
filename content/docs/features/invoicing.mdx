@@ -125,25 +125,60 @@ When fiscal numbering is enabled, the backend derives the year label from the ac
 
 The sequence itself remains gapless and organization-scoped. Changing the format affects newly allocated numbers only. Existing invoices and credit notes keep their assigned document numbers permanently.
 
-## Custom Invoice Templates
+## Document Template Customization
 
-Organizations can create custom PDF document templates and use them for invoices, credit notes, and related document flows.
+Organizations can create custom PDF document templates for invoices, pro forma documents, credit notes, and receipts. The template editor is shared across these document types, but each type has its own default template and type-specific labels.
 
 Typical workflow:
 
 1. Open `Settings > Templates > Document Templates`.
-2. Create a new document template or duplicate a system default.
-3. Adjust branding, layout, footer content, and supported variables.
-4. Set the template as the organization default for invoicing, or select it when creating or editing a draft invoice.
+2. Select the document type: `Invoice`, `Pro Forma`, `Credit Note`, or `Receipt`.
+3. Create a new document template or duplicate a system default.
+4. Adjust branding, layout, footer content, watermark behavior, and supported variables.
+5. Set the template as the default for that document type, or select an invoice/pro forma template when creating or editing a draft invoice.
 
 You can also assign a specific PDF template in invoicing settings so newly generated invoices use that template automatically. Sites may override the inherited organization template when a storefront needs different branding.
 
-This means custom invoice templates are supported both as:
+This means custom document templates are supported as:
 
 - organization defaults for invoice generation
 - per-site branding overrides
 - per-invoice selection during draft invoice creation or editing
+- separate defaults for pro forma, credit-note, and receipt layouts
 
 For issued documents, `standard` and `corrective` invoice business types resolve to the `invoice` document template type. Draft pro forma documents resolve to the `proforma` template type. When a site-level PDF template override is configured, the backend treats that setting as a concrete document template ID.
 
 The template management screen is the place to preview default layouts, duplicate a template before editing, and assign the resulting template at the organization or site level.
+
+### Template Variables
+
+Document templates use Go `html/template` syntax. The variable panel groups available fields so the template body can be edited without guessing the data shape:
+
+- **Document**: numbers, issue date, currency, totals, and type-specific fields such as `InvoiceNumber`, `ProFormaNumber`, `ReceiptNumber`, `CreditNoteNumber`, `OriginalInvoiceNumber`, and `Reason`. Due date, validity date, draft state, and payment-link fields are shown only for document types whose render data supports them.
+- **Seller**: seller identity, contact data, address, VAT ID, national tax ID, commercial register, managing director, and website.
+- **Client**: billed client identity, email, phone, VAT ID, client identifiers, billing address, and shipping address.
+- **Payment**: payment terms, bank details, hosted payment link, and payment-link QR code.
+- **Line Items**: fields used inside `{{range .LineItems}}...{{end}}`, including description, quantity, net unit price, `VATRate`, `VATAmount`, net amount, and gross line total.
+- **VAT Breakdown**: fields used inside `{{range .VATBreakdown}}...{{end}}`, including `DisplayLabel`, `Rate`, `Amount`, `VATBase`, `CountryCode`, `CountryName`, and `CountryLabel`.
+- **Document Notes**, **Footer**, and **Custom**: notes, small-business exemption text, logo/footer fields, and user-defined custom variables.
+
+The VAT breakdown variables are country-aware for EU/VAT reporting. If the tax rate code includes a recognizable country, `DisplayLabel` renders labels such as `17% VAT (LU/Luxembourg)`, while `CountryCode`, `CountryName`, and `CountryLabel` are available separately for custom tables. If no country can be derived, the label falls back to the VAT rate only.
+
+Shipping address variables are exposed separately from billing address variables under `Client.ShippingAddress.*`. The default templates render a **Shipping Address** block only when at least one shipping-address field is present. Physical goods and shipping lines can use the shipping destination for tax calculation, but the template does not invent a shipping address when the document snapshot does not contain one.
+
+Custom variables defined on a template can be supplied when a draft invoice is created or when a transaction-based invoice is generated. Use `templateVariables` for invoice templates and `proFormaVariables` for draft/pro forma templates. Values are rendered as top-level template fields, such as `{{.CustomDeliveryNote}}`, and are also available through `{{index .CustomVariables "CustomDeliveryNote"}}`.
+
+### Default Layout Semantics
+
+The system defaults for invoice, pro forma, credit note, and receipt templates share a compact business-document layout:
+
+- A seller sender line and billed-client address appear on the left; document metadata, logo, number, date, and total appear on the right.
+- Billing address is the primary recipient address. Shipping address is shown as a secondary block only when present.
+- Line items show net unit price, VAT rate, VAT amount, and gross line total.
+- VAT breakdown rows prefer the country-aware `DisplayLabel`.
+- Invoices can include payment terms, required invoice notes, small-business exemption text, and a hosted payment link with QR code.
+- Pro forma templates label the due-date field as **Valid Until** and display a pro forma watermark for draft previews.
+- Credit note templates show the credit-note number, original invoice number, reason, and negative amount semantics while preserving the original invoice snapshot basis.
+- Receipt templates use receipt-specific labels and receipt confirmation text for payment confirmations.
+
+The stored `layout` object on a document template records page and styling defaults such as A4 portrait orientation, margins, font settings, and colors. Current system defaults still define their own HTML/CSS structure, so practical rendering behavior is governed by the template body plus the PDF renderer margins and footer behavior.
