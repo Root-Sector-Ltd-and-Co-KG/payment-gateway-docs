@@ -42,9 +42,6 @@ The system relies on **MongoDB** as its primary datastore. It stores operational
 
 For high performance, a Redis-compatible cache engine (**Garnet**) handles cache data. Background jobs are not stored in Garnet; they are persisted in MongoDB so workers can retry, requeue stale jobs, and survive container restarts.
 
-## Shared Packages
+## Shared Backend Capabilities
 
-Under the hood, the backend services share common Go code:
-
-- **`payment-gateway-lib-common`**: Shared types, validation, notification templates, tax utilities, address helpers, and document numbering logic.
-- **`payment-gateway-lib-crypto`**: Field encryption, DEK storage, KMS provider abstractions, and credential encryption helpers.
+The backend services share common validation, notification, tax, address, document-numbering, field-encryption, DEK storage, KMS, and credential-protection capabilities.

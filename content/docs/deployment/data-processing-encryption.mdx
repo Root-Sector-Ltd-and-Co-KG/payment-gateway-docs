@@ -85,7 +85,7 @@ Application encrypted fields use authenticated encryption. Ciphertext is bound t
 
 This is especially important for legal document snapshots. Invoices and credit notes may copy seller and client snapshot values for accounting consistency, but the copy must be plaintext-only before persistence. If encrypted metadata is moved between contexts, reads can fail with `message authentication failed` and the original plaintext cannot be recovered from that ciphertext alone.
 
-For customer environments, diagnose these failures from admin-backend and worker logs plus the affected Admin UI page. Look for `message authentication failed` and field-level decrypt errors; the log context identifies whether the failure is system-scope or organization-scope. Internal development audit tools may exist, but they are not part of the customer deployment package.
+For customer environments, diagnose these failures from admin-backend and worker logs plus the affected Admin UI page. Look for `message authentication failed` and field-level decrypt errors; the log context identifies whether the failure is system-scope or organization-scope.
 
 ## Is encryption enabled by default?
 

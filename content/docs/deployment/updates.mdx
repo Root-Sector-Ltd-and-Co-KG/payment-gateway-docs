@@ -5,13 +5,12 @@ description: How to maintain and automatically update your deployment safely.
 
 # Updates & Upgrades
 
-The Deployment repository (`payment-gateway-deploy`) includes a powerful set of scripts and mechanisms to keep your Payment Gateway updated, ensuring you receive the latest security patches and features.
+The Deployment repository (`payment-gateway-deploy`) includes scripts and mechanisms to keep your Payment Gateway updated, ensuring you receive the latest security patches and features.
 
-This page describes the customer-facing updater behavior from `payment-gateway-deploy`. Infrastructure provisioning stacks, registry services, local development harnesses, and release orchestration repositories are internal implementation details; customers do not need them to install or update the product.
+This page describes the customer-facing updater behavior from `payment-gateway-deploy`. Additional engineering repositories are not part of the customer installation path; customers do not need them to install or update the product.
 
 The important trust boundary is this:
 
-- Release orchestration is internal.
 - Customer upgrades are driven by release metadata from
   `RELEASE_METADATA_URL`. When deployment access credentials are configured, the
   updater authenticates to that endpoint and receives only the releases
@@ -25,45 +24,23 @@ Published **release notes** (changelog-style pages per product version) are main
 
 ## Release Security Transparency
 
-Each published product release now includes auditable security artifacts:
-
-- A release-time Trivy scan runs after changed component images are published and promoted.
-- CycloneDX SBOM files are generated per repository and versioned.
-- Trivy vulnerability and misconfiguration reports are generated per repository and versioned.
-- These artifacts are produced by the internal release pipeline, then linked to the same product version used by release notes and deploy metadata.
-
-In addition, component repositories enforce branch-based license scanning with Trivy:
-
-- Trigger: push to `develop` for application repositories, push to `main` for `payment-gateway-lib-common` and `payment-gateway-lib-crypto`.
-- Command behavior: `trivy fs --scanners license --format json`.
-- Gate policy: the workflow fails on license findings with severities `UNKNOWN,HIGH,CRITICAL`.
-
-For additional shared libraries scanned by the release pipeline, the scanner prefers a matching `v<version>` tag and falls back to `main` if that tag does not exist yet. This keeps release-version traceability explicit while still ensuring coverage.
-
-This gives operators and customers better traceability between what was released and what was scanned.
-
-Additional security checks in the release ecosystem:
-
-- Backend CI includes Go-native vulnerability/security checks (such as `govulncheck` and `gosec`) in dedicated security workflows.
-- Aikido Security can run as an additional organization/repository security integration for continuous code and dependency monitoring.
+Published product releases can include auditable security artifacts tied to the same product version used by release notes and deployment metadata. These artifacts help operators understand what was shipped and what was scanned.
 
 ### Security Scan Matrix
 
-| Control                               | Scope                                        | Trigger                                            | Output                                                                                                                               | Blocking                      |
-| ------------------------------------- | -------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
-| Trivy vuln+misconfig + CycloneDX SBOM | release-managed repos + shared libs          | product release continuation after image promotion | Versioned SBOM, vulnerability report, and scan manifest artifacts published for the release | Yes                           |
-| Trivy license gate                    | each component repository                    | push (`develop` for app repos, `main` for libs)    | machine-readable JSON output in CI workflow run                                                                                      | Yes (`UNKNOWN,HIGH,CRITICAL`) |
-| Govulncheck                           | admin/main backend                           | backend security scan workflow on push             | workflow findings                                                                                                                    | Yes                           |
-| Gosec                                 | admin/main backend                           | backend security scan workflow on push             | workflow findings                                                                                                                    | Yes                           |
-| Aikido Security                       | organization/repository security integration | continuous                                         | Aikido findings dashboard                                                                                                            | Policy-driven                 |
+| Artifact | Purpose |
+| --- | --- |
+| SBOM | Provides a dependency and component inventory for the released version. |
+| Vulnerability report | Summarizes known vulnerability findings reviewed for the released version. |
+| Scan manifest | Ties published security artifacts to the product release version and deployment metadata. |
 
 ## Security Reporting Policy
 
-The public disclosure and reporting policy should be published on the operator-facing license portal for your deployment. In the first-party production deployment it is available here:
+The public disclosure and reporting policy should be published on the customer-facing product portal for your deployment. In the first-party production deployment it is available here:
 
 - `https://payment-gateway.app/security-policy`
 
-The required discovery file should also be published on that same operator-facing portal. In the first-party production deployment it is available at:
+The required discovery file should also be published on that same customer-facing portal. In the first-party production deployment it is available at:
 
 - `https://payment-gateway.app/.well-known/security.txt`
 

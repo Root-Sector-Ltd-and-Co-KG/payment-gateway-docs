@@ -1,25 +1,15 @@
 ---
-title: Admin Services Implementation
-description: Implementation details for the Admin Backend and Admin Frontend services.
+title: Admin Services
+description: Responsibilities of the Admin Backend and Admin Frontend services.
 ---
 
-# Admin Services Implementation
+# Admin Services
 
 The Admin Services provide the management plane for system operators and merchant integrations. They manage organizations, users, sites, providers, domains, API keys, invoices, reporting, tax, data import/export, and license activation.
 
 ## Admin Backend
 
-The Admin Backend is a Go service using Gin, MongoDB, WebAuthn, JWT sessions, API-key authentication, OpenTelemetry middleware, structured logging, and the shared crypto libraries.
-
-### Core Package Structure
-
-Most business areas follow the same pattern under `internal/`:
-
-- **Feature packages** such as `checkouts`, `invoices`, `transactions`, `providers`, `domains`, `tax`, `dataio`, and `system` contain handlers and business services for one domain.
-- **`server/`** owns route registration, health checks, rate limiting, auth middleware, license middleware, request IDs, CORS, and Swagger exposure.
-- **`database/`** owns MongoDB connection setup, collection constants, indexes, and migrations.
-- **`server/middleware/`** provides JWT auth, API-key auth and scope checks, API-key audit logging, license enforcement, rate limiting, logging, and request timeouts.
-- **`organizations/settings/*`** and **`system/settings/*`** separate tenant-level settings from global installation settings.
+The Admin Backend is a Go service using Gin, MongoDB, WebAuthn, JWT sessions, API-key authentication, OpenTelemetry middleware, structured logging, and field-encryption support.
 
 ### Key Subsystems
 

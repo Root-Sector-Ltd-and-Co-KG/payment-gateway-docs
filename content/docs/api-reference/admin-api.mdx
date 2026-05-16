@@ -213,15 +213,23 @@ In the example above, the first line is auto-calculated and the second line uses
 
 ## Recurring Schedules
 
-| Method | Path                                      | Required Scope    | Description                    |
-| ------ | ----------------------------------------- | ----------------- | ------------------------------ |
-| `GET`  | `/api/v1/invoices/recurring`              | `invoice:read`    | List schedules                 |
-| `POST` | `/api/v1/invoices/recurring`              | `invoice:create`  | Create schedule                |
-| `POST` | `/api/v1/invoices/recurring/:id/pause`    | `invoice:execute` | Pause schedule                 |
-| `POST` | `/api/v1/invoices/recurring/:id/resume`   | `invoice:execute` | Resume schedule                |
-| `POST` | `/api/v1/invoices/recurring/:id/cancel`   | `invoice:execute` | Cancel schedule                |
-| `POST` | `/api/v1/invoices/recurring/:id/generate` | `invoice:execute` | Manually generate next invoice |
-| `GET`  | `/api/v1/invoices/recurring/:id/upcoming` | `invoice:execute` | Preview upcoming invoices      |
+| Method | Path                                      | Required Scope    | Description                                                            |
+| ------ | ----------------------------------------- | ----------------- | ---------------------------------------------------------------------- |
+| `GET`  | `/api/v1/invoices/recurring`              | `invoice:read`    | List schedules                                                         |
+| `POST` | `/api/v1/invoices/recurring`              | `invoice:create`  | Create schedule                                                        |
+| `GET`  | `/api/v1/invoices/recurring/:id`          | `invoice:read`    | Get schedule detail                                                    |
+| `PUT`  | `/api/v1/invoices/recurring/:id`          | `invoice:update`  | Update schedule fields and template line items                         |
+| `POST` | `/api/v1/invoices/recurring/:id/pause`    | `invoice:execute` | Pause schedule                                                         |
+| `POST` | `/api/v1/invoices/recurring/:id/resume`   | `invoice:execute` | Resume schedule                                                        |
+| `POST` | `/api/v1/invoices/recurring/:id/cancel`   | `invoice:execute` | Cancel schedule or request cancellation for future cycles              |
+| `POST` | `/api/v1/invoices/recurring/:id/generate` | `invoice:execute` | Manually generate next invoice                                         |
+| `GET`  | `/api/v1/invoices/recurring/:id/upcoming` | `invoice:execute` | Preview upcoming invoices                                              |
+| `POST` | `/api/v1/system/recurring/process`        | `system:execute`  | Process all currently due schedules (global/system automation surface) |
+| `GET`  | `/api/v1/system/recurring/status`         | `system:read`     | Read recurring processor status and metrics                            |
+
+Recurring schedule payloads and responses use `nextRunDate` for the next scheduled processing date. Use `startDate` when creating a schedule; the backend materializes `nextRunDate` from the start date and interval. Do not use the older `nextRunAt` name in integrations.
+
+The due-schedule processor generates invoices for schedules whose `nextRunDate` is due. Generated invoices remain drafts unless the schedule has `autoFinalizeInvoices` enabled. Automatic email sending only happens when schedule and organization email settings allow it; recurring processing does not automatically capture payment-provider funds.
 
 ---
 
@@ -572,6 +580,8 @@ Returns aggregated metrics: gross volume, net revenue, transaction counts, failu
 | `data_io:read`         | Read import/export templates                                                                    |
 | `data_io:execute`      | Import and export data                                                                          |
 | `export:execute`       | Generate CSV exports                                                                            |
+| `system:read`          | Read system-level operational status endpoints                                                  |
+| `system:execute`       | Execute system-level operational actions such as recurring due-schedule processing              |
 | `portal:create`        | Generate direct-login customer portal magic links                                               |
 | `vies:read`            | Check EU countries                                                                              |
 | `vies:execute`         | Validate VAT IDs                                                                                |
@@ -582,7 +592,7 @@ Returns aggregated metrics: gross volume, net revenue, transaction counts, failu
 ## Common least-privilege bundles
 
 - **Checkout creation**: `checkout:create`
-- **Website billing bridge auto-provisioning**: `client:read`, `client:create`, `invoice:read`, `invoice:create`
-- **Recurring schedule management**: `invoice:read`, `invoice:create`, `invoice:execute`
+- **Recurring schedule management**: `invoice:read`, `invoice:create`, `invoice:update`, `invoice:execute`
+- **Recurring processor operations**: `system:read`, `system:execute` (system API keys or global administrator sessions)
 
 Recurring schedules do not use a separate `recurring:*` scope family. They are governed by the `invoice:*` scope family.

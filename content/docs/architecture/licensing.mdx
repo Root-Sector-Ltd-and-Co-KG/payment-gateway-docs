@@ -43,6 +43,12 @@ The backend licensing engine evaluates signed license claims and local heartbeat
 
 Only `BLOCKED` and `NOT_ACTIVATED` restrict runtime behavior. `GRACE`, `SOFT_LOCK`, and `READ_ONLY` are warning states in the current implementation.
 
+## Boundary with Merchant Billing
+
+Licensing state controls whether the installation may run protected gateway features. It is separate from merchant billing data created inside the gateway.
+
+Recurring schedules in the gateway create invoices for the merchant's customers only. They do not modify installation license state, support status, update eligibility, or license enforcement state.
+
 ## License Tiers
 
 Three commercial tiers are available:
@@ -53,7 +59,7 @@ Three commercial tiers are available:
 | Professional | 2,990 EUR | 990 EUR        | 1    | Unlimited | Email (48 h)   |
 | Business     | 7,490 EUR | 2,490 EUR      | 5    | Unlimited | Priority (4 h) |
 
-Limited-time promotional one-time pricing may be offered through the commercial dashboard. When active, the pricing page and checkout surface the lower one-time campaign price until the configured expiry date, while annual renewal pricing remains unchanged.
+Promotional purchase pricing may be available on your account or quote. Renewal pricing remains governed by the commercial terms shown for the license.
 
 Additional organisations beyond the tier allowance can be added for 250 EUR per organisation per year. Starter licenses can also add site packs; Professional and Business include unlimited sites.
 
@@ -61,15 +67,15 @@ Additional organisations beyond the tier allowance can be added for 250 EUR per 
 
 1. **When in `GRACE`, `SOFT_LOCK`, or `READ_ONLY`:**
    - The installation continues to run.
-   - Verify outbound connectivity to the vendor license service.
+   - Verify outbound connectivity to the configured licensing endpoint.
    - Use **System -> Licensing -> Sync License Now** from the self-hosted admin UI to refresh the local claims.
 2. **When in `BLOCKED`:**
    - Confirm whether the license was manually blocked, suspended, revoked, or blocked by version entitlement.
-   - Resolve the account, support window, or version issue in the vendor license portal.
+   - Resolve the account, support-window, or version-entitlement issue through your support or account contact.
    - Run **Sync License Now** on the self-hosted installation after the remote state changes.
 3. **When in `NOT_ACTIVATED`:**
    - Configure the license key from **System -> Licensing** and complete activation.
-   - If activation fails, keep the host clock synchronized and verify the installation can reach the vendor license service over HTTPS.
+   - If activation fails, keep the host clock synchronized and verify the installation can reach the configured licensing endpoint over HTTPS.
 4. **General maintenance:**
    - Keep host time synchronized via NTP; clock drift can break token validation or heartbeat freshness.
    - Do not rely on `MPG_LICENSING_BYPASS` outside development builds. The backends only honor bypass when the build version is a development version.

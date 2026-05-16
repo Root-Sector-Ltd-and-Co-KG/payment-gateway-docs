@@ -48,7 +48,7 @@ description: Stable release notes for Payment Gateway App 4.1.0.
 - **main-backend:** OTP service and related tests for portal authentication.
 - **main-backend:** /portal/status endpoint to check customer portal availability.
 - **main-backend:** Capacity limits for organizations and sites in licensing.
-- **main-backend:** Licensing Authority URL resolution and license middleware for API route enforcement.
+- **main-backend:** Licensing endpoint URL resolution and license middleware for API route enforcement.
 - **main-backend:** Support for label and description translations in provider handling.
 - **main-backend:** Tax completion and invoice generation handlers for transaction processing.
 - **main-backend:** URL validation and #nosec annotations for outbound service requests.
@@ -111,7 +111,7 @@ description: Stable release notes for Payment Gateway App 4.1.0.
 
 ### Security
 
-- **admin-backend:** Updated various dependencies including google.golang.org/grpc, golang.org/x/crypto, and payment-gateway-lib.
+- **admin-backend:** Updated various backend dependencies.
 - **admin-backend:** Added GH_PAT verification for Docker builds in CI.
 - **main-backend:** Implemented cache invalidation for organization encryption settings.
 - **main-backend:** Added security comments and directives (gosec) for sensitive operations like QR code generation.

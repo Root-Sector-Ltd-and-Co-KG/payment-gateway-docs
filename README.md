@@ -79,25 +79,20 @@ Customer docs embed generated product screenshots from:
 
 - `public/screenshots/app/`
 
-Those images are produced by the internal local-dev screenshot suite and
-inventoried in `public/screenshots/app/manifest.json`. When adding or changing
-an app screenshot reference, use an asset path from the manifest and regenerate
-the suite from the umbrella project root:
-
-```bash
-node payment-gateway-local-dev/local-dev.mjs screenshots marketing --email local.llm@example.com
-```
+Those images are inventoried in `public/screenshots/app/manifest.json`. When
+adding or changing an app screenshot reference, use an asset path from the
+manifest and regenerate the screenshot suite from the umbrella project root.
 
 The root documentation consistency check verifies that screenshot references in
 `content/docs` point at existing files, that `/screenshots/app/*` references are
 listed in the generated manifest, and that every generated docs screenshot is
 linked from at least one customer doc page.
 
-After both `payment-gateway-docs` and `payment-gateway-app-website` have been
-built, run the rendered screenshot check from the umbrella project root. It
-starts the built docs site and marketing Worker, opens them in Chromium, and
-verifies that linked docs screenshots, website gallery thumbnails, full-size
-marketing screenshots, and the API Keys preview image load successfully:
+After the docs site and related marketing build have been generated, run the
+rendered screenshot check from the umbrella project root. It starts the built
+sites, opens them in Chromium, and verifies that linked docs screenshots,
+gallery thumbnails, full-size marketing screenshots, and the API Keys preview
+image load successfully:
 
 ```bash
 node tools/doc-consistency/check-rendered-screenshots.mjs
@@ -145,9 +140,8 @@ docker run --rm -p 3000:3000 payment-gateway-docs:local
 ## Notes
 
 - The docs site uses production-only routing at `docs.payment-gateway.app`.
-- Unlike `payment-gateway-app-website`, there is no staging worker or staging
-  custom domain.
-- The docs distinguish between the operator-facing license portal and the
+- There is no staging worker or staging custom domain for this docs site.
+- The docs distinguish between the account portal and the
   buyer-facing customer portal. First-party domains such as
   `payment-gateway.app` and `secure.payment-gateway.app` are examples of the
   Root Sector deployment, not hard-coded product requirements for self-hosted

@@ -89,11 +89,13 @@ Include at least these edge cases before moving tax changes to production:
 
 ## Testing Recurring Schedules
 
-Recurring schedules run on an hourly worker cron. To test without waiting:
+Recurring schedules use `nextRunDate` as the next due date. To test without waiting for the scheduled job:
 
-1. Create a schedule with a past `nextRunAt` date.
-2. The worker will pick it up on the next hourly cycle.
-3. Or, use the Admin Panel **Recurring → [schedule] → Generate Now** button to trigger manually.
+1. Create a schedule whose `startDate` materializes a due or past `nextRunDate`.
+2. Run the Admin Panel **Recurring -> Run Scheduler Now** action as a global administrator, or call `POST /api/v1/system/recurring/process`.
+3. Run the processor a second time to verify the schedule does not generate duplicate invoices after `nextRunDate` advances.
+4. Cancel a due schedule and verify terminal schedules no longer expose lifecycle actions.
+
 
 ---
 
