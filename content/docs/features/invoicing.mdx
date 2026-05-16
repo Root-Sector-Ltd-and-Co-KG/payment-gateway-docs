@@ -172,9 +172,10 @@ Custom variables defined on a template can be supplied when a draft invoice is c
 
 The system defaults for invoice, pro forma, credit note, and receipt templates share a compact business-document layout:
 
-- A seller sender line and billed-client address appear on the left; document metadata, logo, number, date, and total appear on the right.
+- A seller sender line and billed-client address appear on the left; document metadata, logo, number, and date appear on the right.
 - Billing address is the primary recipient address. Shipping address is shown as a secondary block only when present.
 - Line items show net unit price, VAT rate, VAT amount, and gross line total.
+- The lower summary shows subtotal first, then country-aware VAT breakdown rows, then the total amount.
 - VAT breakdown rows prefer the country-aware `DisplayLabel`.
 - Invoices can include payment terms, required invoice notes, small-business exemption text, and a hosted payment link with QR code.
 - Pro forma templates label the due-date field as **Valid Until** and display a pro forma watermark for draft previews.
