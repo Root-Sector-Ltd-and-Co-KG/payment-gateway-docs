@@ -172,6 +172,27 @@ GET /api/v1/transactions?status=succeeded&currency=EUR&from=2026-01-01&to=2026-0
 
 The e-invoice download endpoints enforce **Settings > Invoicing > eInvoice Generation** before proxying to the worker. Requests return `403 EINVOICE_DISABLED` when eInvoice generation is disabled and `403 EINVOICE_FORMAT_NOT_ALLOWED` when the requested format is not listed in `settings.invoicing.eInvoice.allowedFormats`.
 
+### Create Invoice Payment Checkout
+
+`POST /api/v1/invoices/:id/payment-checkout` creates a hosted payment link for an issued invoice.
+
+The request body is optional:
+
+```json
+{
+  "amount": 10899,
+  "expireInHours": 336,
+  "returnUrl": "https://yourapp.com/success",
+  "cancelUrl": "https://yourapp.com/cancel"
+}
+```
+
+- `amount` is in minor units. If omitted, the backend uses the invoice's payable outstanding amount.
+- Partial payment links are allowed from `50` minor units up to the outstanding amount.
+- Empty invoices, fully settled invoices, zero-outstanding invoices, and amounts below the minimum return `400`.
+- If `expireInHours` is omitted, the backend uses the effective invoicing setting `autoPaymentLinkExpiresInHours`, falling back to `336` hours. Explicit values must be between `1` and `3120`.
+- Reverse-charge, export, exempt, zero-rated, and manual synthetic invoice tax codes are not sent as checkout tax-rate codes; settlement tax allocation still follows the invoice tax snapshot.
+
 ### Draft Invoice Tax Semantics
 
 Draft invoice creation, draft invoice updates, recurring invoice generation, and transaction tax calculation all rely on the same backend tax engine and tax-rate timing rules.

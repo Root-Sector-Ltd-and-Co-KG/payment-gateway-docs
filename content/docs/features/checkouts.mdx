@@ -16,6 +16,8 @@ You have two primary ways to create a Checkout session:
 1. **Dashboard (Manual)**: For ad-hoc invoices or personalized payment links, you can use the **Create Checkout** interface directly in the Admin Panel. You define the line items, the currency, and the assigned Site, and the system generates a shareable URL.
 2. **API Integration**: Your trusted server-side runtime (backend service, worker, or secure edge function) can programmatically create checkout sessions by calling `POST /api/v1/checkouts/{siteId}/create` on **`ADMIN_BACKEND_DOMAIN`**, for example `https://api.yourcompany.com/api/v1/...` self-hosted or `https://api.payment-gateway.app/api/v1/...` hosted. Authenticate with an `sk_...` Organization API key as a Bearer token. Do not use **Main Backend** (`MAIN_BACKEND_DOMAIN`, e.g. `webhook.*`) for this call; that host serves `/hooks/...` and checkout **runtime** only. See [Hostnames & DNS conventions](../deployment/domains).
 
+Invoice detail pages also create invoice-bound checkout links. Those links default to the invoice outstanding amount, can be partial down to `0.50`, and use the invoicing payment-link expiry setting unless an explicit expiry is supplied.
+
 Sites define the checkout surfaces and provider routing used by both manual and API-created checkout sessions.
 
 ![Sites list showing storefront, subscription, and B2B invoice channels in one organization](/screenshots/app/sites.png)

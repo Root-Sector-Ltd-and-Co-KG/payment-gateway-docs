@@ -43,6 +43,16 @@ The same tax engine is used for transactions, recurring invoices, API-key draft 
 
 When a draft is issued, the invoice stores the resulting tax snapshot and writes canonical tax records. Depending on the organization tax recognition mode, those records are recognized at invoice issue time (`accrual`) or deferred until settlement (`cash`). Credit notes write separate offsetting tax records; the original invoice tax snapshot remains unchanged.
 
+## Payment Links
+
+Issued invoices can have hosted payment links created manually from the invoice payment section or automatically during issue when **Settings > Invoicing > Auto-create payment link on issue** is enabled.
+
+Manual invoice payment links default to the current outstanding amount, but operators can create a smaller partial-payment link. The backend caps the amount at the outstanding balance, enforces a `0.50` minimum, and rejects empty or fully settled invoices.
+
+Payment-link expiry uses the same invoicing setting as automatic issue-time links. If no value is configured, the default is `336` hours (14 days); explicit expiry values can be between `1` and `3120` hours.
+
+For reverse-charge, export, exempt, zero-rated, and manual VAT outcomes, invoice checkout creation keeps the invoice tax snapshot but avoids sending synthetic tax-rate codes to checkout tax-rate lookup. When a transaction settles a partial link, the invoice settlement logic allocates tax proportionally from the invoice.
+
 ## The Customer Portal
 
 Rather than emailing large PDF attachments that may be blocked by spam filters, the gateway hosts a secure **Customer Portal**.
@@ -131,11 +141,12 @@ Organizations can create custom PDF document templates for invoices, pro forma d
 
 Typical workflow:
 
-1. Open `Settings > Templates > Document Templates`.
+1. Open `Settings > Templates`.
 2. Select the document type: `Invoice`, `Pro Forma`, `Credit Note`, or `Receipt`.
-3. Create a new document template or duplicate a system default.
-4. Adjust branding, layout, footer content, watermark behavior, and supported variables.
-5. Set the template as the default for that document type, or select an invoice/pro forma template when creating or editing a draft invoice.
+3. Create a new document template from a preset, import a template package, or duplicate a system default.
+4. Adjust branding, drag or move section order, page regions, optional section visibility, footer content, watermark behavior, and supported variables in Designer mode.
+5. Generate a PDF proof to verify the actual A4/Letter output.
+6. Publish and set the template as the default for that document type, or select an invoice/pro forma template when creating or editing a draft invoice.
 
 You can also assign a specific PDF template in invoicing settings so newly generated invoices use that template automatically. Sites may override the inherited organization template when a storefront needs different branding.
 
@@ -150,9 +161,17 @@ For issued documents, `standard` and `corrective` invoice business types resolve
 
 The template management screen is the place to preview default layouts, duplicate a template before editing, and assign the resulting template at the organization or site level.
 
+### Template Source Modes
+
+Designer templates do not expose generated HTML as their editable source. Their canonical source is the semantic `builderDefinition`, which contains the document page setup, section outline, visibility rules, layout settings, and channel-specific blocks. The **Source & Export** workspace shows this Designer JSON and the backend-generated render artifact separately so templates can be exported and imported without confusing generated output with editable source.
+
+When full control over HTML or text is required, a user can convert a template to **Advanced Source**. Advanced Source uses authored HTML for documents and email, markdown/text for Slack, and text for SMS. After conversion, Designer controls are disabled for that template because arbitrary source cannot be reliably parsed back into semantic builder settings.
+
+Template export packages use the schema `payment-gateway.template.export.v1`. Imports show a package review step, then create a new draft and never overwrite an existing default or published template. Issued documents continue to use their locked published revision artifacts.
+
 ### Template Variables
 
-Document templates use Go `html/template` syntax. The variable panel groups available fields so the template body can be edited without guessing the data shape:
+Template variables use Go template syntax such as `{{.InvoiceNumber}}`. The variable panel groups available fields so Designer content blocks or Advanced Source bodies can be edited without guessing the data shape:
 
 - **Document**: numbers, issue date, currency, totals, and type-specific fields such as `InvoiceNumber`, `ProFormaNumber`, `ReceiptNumber`, `CreditNoteNumber`, `OriginalInvoiceNumber`, and `Reason`. Due date, validity date, draft state, and payment-link fields are shown only for document types whose render data supports them.
 - **Seller**: seller identity, contact data, address, VAT ID, national tax ID, commercial register, managing director, and website.
@@ -182,4 +201,4 @@ The system defaults for invoice, pro forma, credit note, and receipt templates s
 - Credit note templates show the credit-note number, original invoice number, reason, and negative amount semantics while preserving the original invoice snapshot basis.
 - Receipt templates use receipt-specific labels and receipt confirmation text for payment confirmations.
 
-The stored `layout` object on a document template records page and styling defaults such as A4 portrait orientation, margins, font settings, and colors. Current system defaults still define their own HTML/CSS structure, so practical rendering behavior is governed by the template body plus the PDF renderer margins and footer behavior.
+The document renderer reads the v2 builder `sectionOrder` first. Existing templates without a section outline are normalized into the default order before rendering. PDF proofs and runtime document generation use the same backend render path so the in-app proof reflects the issued document layout more closely than a browser-only HTML preview.
