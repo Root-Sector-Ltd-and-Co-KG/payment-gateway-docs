@@ -480,11 +480,11 @@ Use this for trusted backend automations only. Do not expose it to browser or mo
 | `DELETE` | `/api/v1/tax-rules`                   | `tax_rule:delete`  | Delete **all** tax rules (destructive)         |
 | `PUT`    | `/api/v1/tax-rules/:id`               | `tax_rule:update`  | Update tax rule                                |
 | `DELETE` | `/api/v1/tax-rules/:id`               | `tax_rule:delete`  | Delete one tax rule                            |
-| `POST`   | `/api/v1/tax-rules/populate-defaults` | `tax_rule:create`  | Load default EU/UK/US/CA rules                 |
+| `POST`   | `/api/v1/tax-rules/populate-defaults` | `tax_rule:create`  | Create missing default tax rules; returns an empty `created` array when already up to date |
 | `GET`    | `/api/v1/tax-rates`                   | `tax_rate:read`    | List tax rates                                 |
 | `POST`   | `/api/v1/tax-rates`                   | `tax_rate:create`  | Create tax rate                                |
 | `DELETE` | `/api/v1/tax-rates`                   | `tax_rate:delete`  | Delete **all** tax rates (destructive)         |
-| `POST`   | `/api/v1/tax-rates/replace-defaults`  | `tax_rate:execute` | Replace rates with the current default catalog |
+| `POST`   | `/api/v1/tax-rates/replace-defaults`  | `tax_rate:execute` | Sync managed official default rates without deleting custom rates |
 | `GET`    | `/api/v1/tax-rates/:id`               | `tax_rate:read`    | Get one tax rate                               |
 | `PUT`    | `/api/v1/tax-rates/:id`               | `tax_rate:update`  | Update tax rate                                |
 | `DELETE` | `/api/v1/tax-rates/:id`               | `tax_rate:delete`  | Delete one tax rate                            |
@@ -594,7 +594,7 @@ Returns aggregated metrics: gross volume, net revenue, transaction counts, failu
 | `tax_rate:create`      | Create tax rates                                                                                |
 | `tax_rate:update`      | Update tax rates                                                                                |
 | `tax_rate:delete`      | Delete tax rates                                                                                |
-| `tax_rate:execute`     | Replace default tax rates (`replace-defaults`)                                                  |
+| `tax_rate:execute`     | Sync managed official default tax rates (`replace-defaults`)                                     |
 | `tax_report:read`      | Read tax reports                                                                                |
 | `tax_report:execute`   | Export tax reports (CSV/XML/Elster)                                                             |
 | `tax_record:read`      | Read canonical tax ledger records                                                               |

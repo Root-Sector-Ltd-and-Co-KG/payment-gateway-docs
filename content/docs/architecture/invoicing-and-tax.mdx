@@ -116,6 +116,7 @@ Manual draft invoices, recurring-generated invoices, and transaction tax calcula
 
 - If a draft invoice line omits `taxRate`, the backend auto-calculates the rate from seller configuration, buyer billing country, client tax-country fallback, item type, and the effective tax rate at the invoice tax point.
 - If a draft invoice line includes `taxRate`, that line is treated as an explicit manual override.
+- If a draft invoice line omits `taxRateCode`, the Admin UI keeps the VAT field in automatic mode and shows the previewed backend result separately. Selecting a VAT rate code is an explicit manual override; the `Auto` action clears that override and returns the line to automatic rule resolution.
 - The Admin API exposes `POST /api/v1/invoices/preview-tax` so dashboard flows and API key integrations can resolve the canonical tax result before creating or updating a draft invoice.
 
 This keeps the operator-facing invoice editor consistent with the transaction tax engine instead of relying on a frontend-only rate guess.
