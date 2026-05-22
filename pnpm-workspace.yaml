@@ -1,0 +1,14 @@
+# pnpm v11 settings (Next.js / Fumadocs)
+allowBuilds:
+  esbuild: true
+  sharp: true
+minimumReleaseAgeExclude:
+  - "@typescript-eslint/*"
+  - typescript-eslint
+  - baseline-browser-mapping
+  - electron-to-chromium
+  - enhanced-resolve
+  - es-object-atoms
+  - node-releases
+  - semver
+  - terser

@@ -29,6 +29,8 @@ published environment is the production site at `docs.payment-gateway.app`.
 
 ## Development
 
+Requires Node.js >= 26 and pnpm >= 11 (`packageManager` in `package.json` pins the exact pnpm release). Policy settings live in `pnpm-workspace.yaml`.
+
 Install dependencies:
 
 ```bash

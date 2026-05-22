@@ -1,13 +1,13 @@
-FROM node:24-bookworm-slim AS builder
+FROM node:26-bookworm-slim AS builder
 
 WORKDIR /app
 
 ENV CI=true
 ENV NEXT_TELEMETRY_DISABLED=1
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
+RUN corepack enable && corepack prepare pnpm@11.2.2 --activate
 # Fumadocs runs `fumadocs-mdx` in postinstall; in container builds this can be brittle.
 # We intentionally skip lifecycle scripts and rely on `pnpm build` (Next build) to generate MDX.
 # Cache mount: speeds reinstalls when lockfile unchanged (pairs with buildx GHA cache, mode=max).
@@ -22,7 +22,7 @@ RUN --mount=type=cache,id=payment-gateway-docs-next,target=/app/.next/cache \
     pnpm build
 
 
-FROM gcr.io/distroless/nodejs24-debian13:nonroot AS runner
+FROM gcr.io/distroless/nodejs26-debian13:nonroot AS runner
 
 WORKDIR /app
 

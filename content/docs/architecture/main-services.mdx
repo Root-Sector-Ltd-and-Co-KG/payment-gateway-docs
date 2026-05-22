@@ -43,5 +43,3 @@ The Main Frontend is the customer-facing React application served by a Node/Expr
 - **Provider browser SDKs**: The content security policy allows the configured payment SDK domains used by Stripe, Mollie, PayPal, and other provider forms.
 - **Runtime configuration endpoint**: The server exposes frontend environment values needed by the UI without baking deployment domains into the built assets.
 - **Graceful shutdown**: The server handles `SIGTERM` and `SIGINT`, closes the HTTP server, and exits cleanly for container restarts.
-
-To build the checkout UI for production from source, use **pnpm** with Node 22+: `pnpm run build`, which emits the `dist/` folder consumed by the container image.
