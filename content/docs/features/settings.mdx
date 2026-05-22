@@ -90,7 +90,7 @@ The gateway provides an organization-scoped tax configuration that is reused by 
 
 Checkout-specific display preferences, such as whether buyers see tax breakdowns or whether the VAT ID field uses `none`, `format`, or `vies` validation, live under **Settings > Checkout**. The runtime mode is still gated by **Settings > Tax**, so checkout cannot show VIES-backed treatment when tax settings do not allow it.
 
-For EU-focused merchants, automatic tax calculation should normally be paired with **tax included in price** and OSS registration when the merchant is registered for OSS. The seller country is the authoritative origin country for new calculations. Physical goods and shipping lines use the shipping destination when available, while virtual/service lines use the billing country, so mixed baskets can intentionally choose different VAT rate codes per line.
+For EU-focused merchants, automatic tax calculation should normally be paired with **tax included in price** and OSS registration when the merchant is registered for OSS. The seller country is the authoritative origin country for new calculations. Goods and shipping lines use the shipping destination when available, while digital service, tax, and discount lines use the billing country, so mixed baskets can intentionally choose different VAT rate codes per line.
 
 Tax-rule rate selection depends on the treatment. `standard` and `uk_vat` rules use an explicit configured VAT rate code. `oss` rules resolve the destination VAT rate from the buyer country at calculation time. `reverse_charge`, `exempt`, `export`, and `zero_rated` rules do not require a configured rate code.
 

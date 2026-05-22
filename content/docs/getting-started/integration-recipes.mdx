@@ -28,7 +28,7 @@ curl -X POST https://api.yourcompany.com/api/v1/checkouts/{siteId}/create \
         "description": "Professional Plan",
         "quantity": 1,
         "unitPrice": 4900,
-        "itemType": "virtual"
+        "itemType": "digital_service"
       }
     ]
   }'
@@ -55,7 +55,7 @@ The final transaction still recalculates tax authoritatively when the buyer subm
 
 When you need deterministic tax behavior:
 
-- Set item `itemType` consistently (`virtual`, `physical`, `shipping`, or `discount`).
+- Set item `itemType` consistently (`goods`, `digital_service`, `shipping`, `tax`, or `discount`).
 - Use gross or net pricing consistently with the organization's **Settings > Tax** price mode.
 - Configure tax rules before sending production traffic.
 - Use `externalReference` to correlate gateway records with your order.

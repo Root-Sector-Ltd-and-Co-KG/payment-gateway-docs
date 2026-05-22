@@ -94,10 +94,10 @@ Recommended setup:
 Expected behavior:
 
 - Checkout and transaction tax use the buyer country's VAT rate.
-- In mixed baskets, physical goods and shipping lines use the shipping destination with billing country as fallback, while virtual/service lines use billing country.
-- For a DE seller with DE billing and AT shipping, a physical line should resolve to `AT_STANDARD` and a virtual/service line should resolve to `DE_STANDARD`.
-- For a DE seller with FR billing and CH shipping, a physical line should be treated as an export to `CH`, while a virtual/service line should resolve to `FR_STANDARD` under OSS.
-- For a DE seller with CH billing and AT shipping, a physical line should resolve to `AT_STANDARD` under OSS, while a virtual/service line should be treated as an export to `CH`.
+- In mixed baskets, goods and shipping lines use the shipping destination with billing country as fallback, while digital service, tax, and discount lines use billing country.
+- For a DE seller with DE billing and AT shipping, a goods line should resolve to `AT_STANDARD` and a digital-service line should resolve to `DE_STANDARD`.
+- For a DE seller with FR billing and CH shipping, a goods line should be treated as an export to `CH`, while a digital-service line should resolve to `FR_STANDARD` under OSS.
+- For a DE seller with CH billing and AT shipping, a goods line should resolve to `AT_STANDARD` under OSS, while a digital-service line should be treated as an export to `CH`.
 - The engine stores location evidence such as billing country, shipping country, IP country, payment method country, and phone prefix when available.
 - Strict OSS evidence mode can block checkout when evidence is missing or conflicting.
 - VAT OSS reports aggregate active tax records by quarter, country, rate, and supply type.

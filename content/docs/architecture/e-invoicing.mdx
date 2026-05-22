@@ -33,7 +33,7 @@ Generating a ZUGFeRD document securely without destroying the underlying Chromiu
 Native generation enforces several major EN16931 business rules and fallbacks:
 
 - **BR-CO-25 (Missing Due Dates)**: If an invoice's total due is strictly positive but lacks payment terms or a due date, the system injects the default descriptive tag `"Payable upon receipt"`.
-- **Empty Delivery Nodes**: Extraneous XML elements, such as `ApplicableHeaderTradeDelivery`, are explicitly pruned when a transaction is purely virtual/digital.
+- **Empty Delivery Nodes**: Extraneous XML elements, such as `ApplicableHeaderTradeDelivery`, are explicitly pruned when a transaction is purely digital-service.
 - **BR-FX-EN-04**: Non-down-payment invoices lack structured delivery times. The system safely falls back to recording the delivery event date as the UTC `IssueDate`.
 
 ## Effective Provider Strategy

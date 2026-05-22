@@ -34,7 +34,7 @@ Navigate to **Reports > VAT OSS** for OSS filings:
 1. Select the calendar year, quarter, timezone, and source basis (`transactions`, `invoices`, or `both`).
 2. The report aggregates active tax records where OSS or OSS-reportable cross-border B2C treatment applies.
 3. Refund and fund-impacting chargeback tax records reduce the relevant totals instead of mutating the original sale. Won chargebacks are voided for reporting, and chargeback credit notes are issued only for lost or accepted disputes.
-4. Mixed physical/virtual and EU/non-EU adjustments stay line-based: goods and shipping follow the shipping destination, virtual/service lines follow billing country, and export or untaxed residual lines stay outside VAT OSS.
+4. Mixed goods/digital-service and EU/non-EU adjustments stay line-based: goods and shipping follow the shipping destination, digital service, tax, and discount lines follow billing country, and export or untaxed residual lines stay outside VAT OSS.
 5. Export the data as OSS XML or Elster CSV when the local filing workflow requires it.
 
 See [Invoicing & Tax architecture](../architecture/invoicing-and-tax) for the full tax record lifecycle.

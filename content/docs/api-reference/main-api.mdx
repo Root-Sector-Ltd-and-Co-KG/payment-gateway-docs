@@ -67,7 +67,7 @@ POST /api/v1/checkouts/:id/tax-preview
 
 Returns backend-calculated checkout totals for the current billing details before the buyer submits payment. The response is used by the hosted checkout UI to display net, tax, gross, and tax breakdown values while preserving the final calculation for transaction creation.
 
-The endpoint uses organization tax settings, effective-dated tax rates, tax rules, gross/net price mode, rounding, shipping destination overrides for physical/shipping lines, and VIES-backed buyer type only when the effective checkout VAT validation mode allows VIES.
+The endpoint uses organization tax settings, effective-dated tax rates, tax rules, gross/net price mode, rounding, shipping destination overrides for goods/shipping lines, and VIES-backed buyer type only when the effective checkout VAT validation mode allows VIES.
 
 **Request Body:**
 

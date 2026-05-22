@@ -120,7 +120,7 @@ curl -X POST https://api.yourcompany.com/api/v1/checkouts/{siteId}/create \
         "quantity": 1,
         "unitPrice": 4900,
         "vatRate": 19,
-        "itemType": "virtual"
+        "itemType": "digital_service"
       }
     ]
   }'
@@ -152,7 +152,7 @@ See the same page for **inbound** provider webhooks vs **outbound** IPN to your 
 
 Navigate to **Transactions** in the Admin Panel. Your completed payment appears with full metadata: amount, provider, tax breakdown, customer details, and invoice link.
 
-For tax-enabled organizations, verify the full checkout chain: the checkout/session totals, completed transaction totals, issued invoice totals, and canonical tax record totals should agree. For mixed baskets, goods and shipping lines should use the shipping country with billing fallback, while virtual/service lines should use the billing country. The line-level tax-rate codes on the transaction, invoice, and tax record should reflect those destinations.
+For tax-enabled organizations, verify the full checkout chain: the checkout/session totals, completed transaction totals, issued invoice totals, and canonical tax record totals should agree. For mixed baskets, goods and shipping lines should use the shipping country with billing fallback, while digital service, tax, and discount lines should use the billing country. The line-level tax-rate codes on the transaction, invoice, and tax record should reflect those destinations.
 
 The Transactions list is the first operator checkpoint for payment status, provider reference, tax context, invoice link, and outbound IPN delivery state. Open a transaction for the full detail view.
 
