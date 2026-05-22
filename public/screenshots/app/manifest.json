@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-05-14T19:54:13.139Z",
+  "capturedAt": "2026-05-22T18:46:24.468Z",
   "organizationName": "Marketing Demo Commerce GmbH",
   "screenshots": [
     {
@@ -59,6 +59,13 @@
       "asset": "/screenshots/app/invoice-detail.png"
     },
     {
+      "id": "templates",
+      "route": "/settings/templates",
+      "title": "Templates",
+      "description": "Document template designer with channel selection, layout outline, readiness status, and PDF proof controls.",
+      "asset": "/screenshots/app/templates.png"
+    },
+    {
       "id": "tax-settings",
       "route": "/settings/tax",
       "title": "Tax Settings",
@@ -69,7 +76,7 @@
       "id": "tax-rules",
       "route": "/settings/tax/rules",
       "title": "Tax Rules",
-      "description": "Generated EU VAT OSS destination rules with priorities and active rate codes.",
+      "description": "Generated tax rules with priorities, conditions, status, and active rate codes.",
       "asset": "/screenshots/app/tax-rules.png"
     },
     {

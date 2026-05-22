@@ -7,7 +7,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-RUN corepack enable && corepack prepare pnpm@11.2.2 --activate
+ENV PNPM_HOME="/pnpm"
+ENV PATH="/usr/local/bin:${PNPM_HOME}:${PATH}"
+RUN npm install -g pnpm@11.2.2
 # Fumadocs runs `fumadocs-mdx` in postinstall; in container builds this can be brittle.
 # We intentionally skip lifecycle scripts and rely on `pnpm build` (Next build) to generate MDX.
 # Cache mount: speeds reinstalls when lockfile unchanged (pairs with buildx GHA cache, mode=max).
