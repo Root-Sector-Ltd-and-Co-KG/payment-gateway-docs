@@ -30,7 +30,7 @@ This URL is served by the **Main Frontend** (Payment Portal). When navigating to
 
 1. Load the customized branding (logo, colors) defined on the Site.
 2. Display the line items and calculate required taxes based on the buyer's billing details.
-3. Present the relevant Payment Providers (e.g., Stripe credit card inputs, GoCardless mandate forms, or Wire Transfer instructions).
+3. Present the relevant Payment Providers (for example Stripe Elements, Mollie or PayPal checkout, GoCardless mandate forms, Wise transfer flows, or wire-transfer instructions).
 
 ## Checkout Tax Integration
 
@@ -44,6 +44,8 @@ The preview and final transaction use the same organization tax settings, rates,
 
 > [!CAUTION]
 > The checkout flow is designed for PCI-DSS SAQ A-oriented integrations. Cardholder data is handled by the payment provider UI components (for example, Stripe Elements) rather than being processed directly by your backend integration.
+
+For Stripe, the backend stores the PaymentIntent ID as the provider reference. The `paymentIntentClientSecret` is returned only in the checkout response or the immediate cancel/retry response that needs to initialize Stripe Elements; it is not retained in session or transaction records.
 
 ## Return And Cancel URLs
 

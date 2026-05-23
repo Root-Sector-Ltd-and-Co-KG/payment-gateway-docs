@@ -1,6 +1,6 @@
 ---
 title: Payment Providers
-description: Connect and manage Stripe, GoCardless, Wise, and wire transfer providers.
+description: Connect and manage Stripe, Mollie, GoCardless, Wise, PayPal, and wire transfer providers.
 ---
 
 # Payment Providers
@@ -13,8 +13,10 @@ Navigate to **Providers** in the sidebar to link a new processor.
 
 Currently natively supported integrations include:
 *   **Stripe**: For credit cards, Apple Pay, Google Pay, and localized methods (iDEAL, Bancontact, etc.).
-*   **GoCardless**: Optimized for direct debit (SEPA, Bacs) and recurring wire transfers.
+*   **Mollie**: For hosted checkout and supported local payment methods through Mollie payment links and webhooks.
+*   **GoCardless**: Optimized for one-off and recurring direct debit flows such as SEPA and Bacs.
 *   **Wise Transfers**: For transfer-based payment flows where Wise is your payout/collection rail.
+*   **PayPal**: For PayPal checkout and wallet-style payments where PayPal is the upstream processor.
 *   **Wire Transfer**: A manual payment method for B2B customers who pay via bank wire. The gateway generates a payment request with the bank details and amount, and the operator manually reconciles the incoming wire against the open transaction.
 
 ![Provider management showing enabled Stripe, GoCardless, and wire transfer rails](/screenshots/app/providers.png)
@@ -26,6 +28,8 @@ When adding a provider, you will need to supply the upstream API credentials (e.
 
 > [!IMPORTANT]
 > For card flows, payment instrument entry is handled through provider-hosted or provider-tokenized components. The gateway stores transaction/business metadata and provider references, but does not store raw PAN/CVC values.
+
+For Stripe, stored records keep PaymentIntent IDs and related transaction metadata. PaymentIntent client secrets are delivered only to the checkout runtime when Stripe Elements needs them and are not stored as durable session or transaction data.
 
 ## Assigning Providers to Sites
 

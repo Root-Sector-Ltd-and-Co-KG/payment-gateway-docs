@@ -55,7 +55,7 @@ JWTs expire after a configured interval. Use `POST /api/v1/auth/refresh-token` t
 
 ### Main Backend Public Endpoints
 
-Checkout session retrieval (`GET /api/v1/checkouts/:id`) and portal OTP flows use public endpoints. Webhook endpoints (`POST /hooks/:type/:providerId`) verify request authenticity via provider-specific signature headers (`Stripe-Signature`, `Webhook-Signature` for GoCardless).
+Checkout session retrieval (`GET /api/v1/checkouts/:id`) and portal OTP flows use public endpoints. Webhook endpoints (`POST /hooks/:type/:providerId`) verify request authenticity through provider-specific controls: Stripe and GoCardless signatures, PayPal transmission-header verification, and Mollie payment-ID lookup with tenant/provider ownership validation.
 
 ---
 

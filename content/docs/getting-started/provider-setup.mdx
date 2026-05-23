@@ -1,6 +1,6 @@
 ---
 title: Provider Setup Guides
-description: Step-by-step configuration for Stripe, GoCardless, Wise, and Wire Transfer.
+description: Step-by-step configuration for Stripe, Mollie, GoCardless, Wise, PayPal, and Wire Transfer.
 ---
 
 # Provider Setup Guides
@@ -55,6 +55,36 @@ Stripe must be told where to send payment event notifications. The URL must be o
 ### Test Mode
 
 Use `sk_test_...` / `pk_test_...` keys and Stripe test cards (e.g., `4242 4242 4242 4242`, any future expiry, any CVC). See [Testing Guide](./testing).
+
+---
+
+## Mollie
+
+Mollie supports hosted checkout and local payment methods through Mollie payment links and provider webhooks.
+
+### 1. Get Your Mollie API Keys
+
+1. Log in to [my.mollie.com](https://my.mollie.com).
+2. Open **Developers -> API keys**.
+3. Copy the test or live API key for the profile you want to connect.
+4. If you enable card components, also copy the Mollie **Profile ID**.
+
+### 2. Register the Webhook Endpoint
+
+Use your **Main Backend** host (`MAIN_BACKEND_DOMAIN` - hosted: `webhook.payment-gateway.app`):
+
+```
+https://webhook.yourcompany.com/hooks/mollie/{providerId}
+```
+
+Mollie webhooks are treated as a payment-id hint. The gateway fetches the payment from Mollie and validates provider, organization, and stored payment references before changing transaction state.
+
+### 3. Add Provider in Admin Panel
+
+1. Navigate to **Providers -> Add Provider -> Mollie**.
+2. Fill in the API key for the selected mode.
+3. Optionally enable card components and set the Profile ID.
+4. Save.
 
 ---
 
@@ -139,6 +169,39 @@ Note the `id` of your business profile.
    - **API Token**: your Wise token
    - **Profile ID**: your business profile ID
 3. Save.
+
+---
+
+## PayPal
+
+PayPal supports PayPal checkout and wallet-style payments, with optional advanced card fields where enabled.
+
+### 1. Get Your PayPal App Credentials
+
+1. Log in to [developer.paypal.com](https://developer.paypal.com).
+2. Create or open an app in **Apps & Credentials**.
+3. Copy the **Client ID** and **Client Secret** for sandbox or live mode.
+
+### 2. Register the Webhook Endpoint
+
+Use your **Main Backend** host (`MAIN_BACKEND_DOMAIN` - hosted: `webhook.payment-gateway.app`):
+
+```
+https://webhook.yourcompany.com/hooks/paypal/{providerId}
+```
+
+Copy the PayPal **Webhook ID** and store it on the provider record. The gateway uses it to verify PayPal webhook signatures before processing order or payment events.
+
+### 3. Add Provider in Admin Panel
+
+1. Navigate to **Providers -> Add Provider -> PayPal**.
+2. Fill in:
+   - **Client ID**
+   - **Client Secret**
+   - **Webhook ID**
+   - **Mode**: `sandbox` or `live`
+3. If advanced card fields are enabled, set the supported currency code.
+4. Save.
 
 ---
 

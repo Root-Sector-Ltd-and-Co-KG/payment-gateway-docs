@@ -26,12 +26,12 @@ Full hostname map and self-hosted examples: [Hostnames & DNS conventions](../dep
 
 ## 2. Register provider webhooks on the Main Backend
 
-Stripe, GoCardless, and similar send events to **`MAIN_BACKEND_DOMAIN`**, path **`/hooks/{type}/{providerId}`** (no `/api/v1` prefix).
+Stripe, Mollie, GoCardless, PayPal, and similar send events to **`MAIN_BACKEND_DOMAIN`**, path **`/hooks/{type}/{providerId}`** (no `/api/v1` prefix).
 
 1. Create the provider in the Admin Panel and note the **provider id** (MongoDB ObjectId in the URL).
 2. In the provider dashboard, set the webhook URL to  
-   `https://<MAIN_BACKEND_DOMAIN>/hooks/stripe/<providerId>` (or `gocardless`, etc.).
-3. Save the **webhook signing secret** into the provider record in the Admin Panel.
+   `https://<MAIN_BACKEND_DOMAIN>/hooks/stripe/<providerId>` (or `mollie`, `gocardless`, `paypal`, etc.).
+3. Save the provider **webhook signing secret** or verification identifier into the provider record in the Admin Panel where the provider requires one.
 
 Step-by-step: [Provider setup](./provider-setup). Reference: [Webhooks & IPN](../api-reference/webhooks).
 

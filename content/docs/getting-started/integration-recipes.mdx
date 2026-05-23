@@ -66,15 +66,17 @@ Provider webhooks belong on the **Main Backend** host, not the Admin API host.
 
 ```http
 POST https://webhook.yourcompany.com/hooks/stripe/{providerId}
+POST https://webhook.yourcompany.com/hooks/mollie/{providerId}
 POST https://webhook.yourcompany.com/hooks/gocardless/{providerId}
+POST https://webhook.yourcompany.com/hooks/paypal/{providerId}
 ```
 
 Setup checklist:
 
 1. Create the provider in the Admin Panel.
 2. Copy the provider ID from the provider detail URL or provider record.
-3. Register the webhook URL in Stripe or GoCardless.
-4. Save the provider webhook signing secret on the provider record.
+3. Register the webhook URL in the provider dashboard.
+4. Save the provider webhook signing secret or verification identifier on the provider record where the provider requires one.
 5. Run a provider test event and confirm that the gateway accepts it.
 
 Provider webhooks update gateway transaction state. Your own application should listen to outbound IPN unless you intentionally poll the Admin API.

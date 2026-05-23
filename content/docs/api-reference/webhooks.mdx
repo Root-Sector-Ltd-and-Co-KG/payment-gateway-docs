@@ -7,10 +7,10 @@ description: Inbound provider webhooks and outbound IPN configuration for real-t
 
 The Payment Gateway handles webhooks at two levels:
 
-1. **Inbound webhooks** — from payment providers (Stripe, GoCardless) to the **Main Backend**. These update transaction state automatically.
-2. **Outbound IPN (Instant Payment Notifications)** — from the **Main Backend** to your server when a transaction’s status changes.
+1. **Inbound webhooks** - from payment providers (Stripe, Mollie, GoCardless, PayPal) to the **Main Backend**. These update transaction state automatically.
+2. **Outbound IPN (Instant Payment Notifications)** - from the **Main Backend** to your server when a transaction's status changes.
 
-Provider callbacks and IPN delivery are **not** served by the Admin Backend. Configure provider webhook URLs on your **Main Backend** host (`{$MAIN_BACKEND_DOMAIN}` — documentation uses `webhook.yourcompany.com` as an example; distinct from **`api.*`** / `{$ADMIN_BACKEND_DOMAIN}`). That service exposes `/hooks/...` at the **server root** and checkout runtime under `/api/v1/...`.
+Provider callbacks and IPN delivery are **not** served by the Admin Backend. Configure provider webhook URLs on your **Main Backend** host (`{$MAIN_BACKEND_DOMAIN}` - documentation uses `webhook.yourcompany.com` as an example; distinct from **`api.*`** / `{$ADMIN_BACKEND_DOMAIN}`). That service exposes `/hooks/...` at the **server root** and checkout runtime under `/api/v1/...`.
 
 ---
 
@@ -20,62 +20,90 @@ Provider callbacks and IPN delivery are **not** served by the Admin Backend. Con
 
 On your Main Backend base host (no `/api/v1` prefix):
 
-```
+```http
 POST https://webhook.yourcompany.com/hooks/{type}/{providerId}
 ```
 
-Hosted equivalent: `POST https://webhook.payment-gateway.app/hooks/{type}/{providerId}` — [Hostnames & DNS conventions](../deployment/domains).
+Hosted equivalent: `POST https://webhook.payment-gateway.app/hooks/{type}/{providerId}` - [Hostnames & DNS conventions](../deployment/domains).
 
-| Parameter    | Values                 | Description                               |
-| ------------ | ---------------------- | ----------------------------------------- |
-| `type`       | `stripe`, `gocardless` | Provider type                             |
-| `providerId` | MongoDB ObjectId       | The provider record ID (from Admin Panel) |
+| Parameter    | Values                                      | Description                               |
+| ------------ | ------------------------------------------- | ----------------------------------------- |
+| `type`       | `stripe`, `mollie`, `gocardless`, `paypal` | Provider type                             |
+| `providerId` | MongoDB ObjectId                            | The provider record ID (from Admin Panel) |
 
-Configure this URL in your provider dashboard as the webhook destination. The gateway verifies the request signature using the Webhook Secret stored on the provider record.
+Configure this URL in your provider dashboard as the webhook destination. The gateway verifies provider authenticity with the provider-specific method below and rejects callbacks that do not match the configured provider, organization, or stored payment identifier.
 
 ### Stripe Events Handled
 
 | Stripe Event                    | Effect on Transaction                                  |
 | ------------------------------- | ------------------------------------------------------ |
-| `payment_intent.succeeded`      | → `succeeded`                                          |
-| `payment_intent.payment_failed` | → `failed`                                             |
-| `payment_intent.canceled`       | → `cancelled`                                          |
+| `payment_intent.succeeded`      | -> `succeeded`                                         |
+| `payment_intent.payment_failed` | -> `failed`                                            |
+| `payment_intent.canceled`       | -> `cancelled`                                         |
 | `charge.refunded`               | Records refund, triggers credit note if invoice exists |
 | `charge.dispute.created`        | Opens chargeback record                                |
 | `charge.dispute.closed`         | Closes chargeback with outcome                         |
+
+### Mollie Events Handled
+
+Mollie webhook bodies are treated as hints. The gateway reads the payment ID from the callback, fetches the payment directly from Mollie with the configured API key, and then validates that the provider, organization, and stored transaction payment ID match before applying any state change.
+
+| Mollie Payment State | Effect on Transaction                                  |
+| -------------------- | ------------------------------------------------------ |
+| `paid`               | -> `succeeded`                                         |
+| `failed`             | -> `failed`                                            |
+| `canceled`           | -> `cancelled`                                         |
+| `expired`            | -> `cancelled`                                         |
+| Refund updates       | Records refund, triggers credit note if invoice exists |
+| Chargeback updates   | Opens or updates chargeback records                    |
 
 ### GoCardless Events Handled
 
 | GoCardless Event     | Effect on Transaction      |
 | -------------------- | -------------------------- |
-| `payments.confirmed` | → `succeeded`              |
-| `payments.failed`    | → `failed`                 |
-| `payments.cancelled` | → `cancelled`              |
+| `payments.confirmed` | -> `succeeded`             |
+| `payments.failed`    | -> `failed`                |
+| `payments.cancelled` | -> `cancelled`             |
 | `mandates.cancelled` | Marks mandate as cancelled |
 | `mandates.failed`    | Marks mandate as failed    |
 | `refunds.created`    | Records refund             |
 
-### Signature Verification
+### PayPal Events Handled
+
+PayPal callbacks are verified with the PayPal transmission headers and the configured PayPal Webhook ID before the gateway applies the event to a transaction.
+
+| PayPal Event Family                  | Effect on Transaction                                  |
+| ------------------------------------ | ------------------------------------------------------ |
+| Checkout/order completion events     | -> `succeeded`                                         |
+| Payment capture denied/failed events | -> `failed`                                            |
+| Payment capture refunded events      | Records refund, triggers credit note if invoice exists |
+| Dispute and chargeback events        | Opens or updates chargeback records                    |
+
+### Signature and Authenticity Verification
 
 **Stripe:** The gateway validates the `Stripe-Signature` header using your configured Stripe Webhook Secret (`whsec_...`).
 
+**Mollie:** Mollie does not provide a shared-secret signature for these callbacks. The gateway treats the callback payload as an untrusted payment-ID hint, fetches the canonical payment from Mollie, and validates tenant/provider/payment ownership before updating a transaction.
+
 **GoCardless:** The gateway validates the `Webhook-Signature` header using your GoCardless Webhook Secret.
 
-If signature verification fails or the payload is invalid, the gateway returns `400` and logs the attempt. Do not disable webhook verification in production.
+**PayPal:** The gateway validates PayPal transmission headers against the configured PayPal Webhook ID through PayPal's verification API.
+
+If authenticity verification fails, ownership checks fail, or the payload is invalid, the gateway returns `400` and logs the attempt. Do not disable webhook verification in production.
 
 ---
 
 ## Outbound IPN (to Your Application)
 
-When you create a checkout (Admin **Checkouts → Create** or `POST /api/v1/checkouts/{siteId}/create` on the Admin API host), you can set **`ipnUrl`** to the HTTPS endpoint on your infrastructure that should receive IPN posts for transactions created from that checkout. The URL is stored on the **transaction** (see **Transactions → [transaction] → IPN Information** in the admin UI for delivery attempts and last HTTP status).
+When you create a checkout (Admin **Checkouts -> Create** or `POST /api/v1/checkouts/{siteId}/create` on the Admin API host), you can set **`ipnUrl`** to the HTTPS endpoint on your infrastructure that should receive IPN posts for transactions created from that checkout. The URL is stored on the **transaction** (see **Transactions -> [transaction] -> IPN Information** in the admin UI for delivery attempts and last HTTP status).
 
-Signing uses the **Webhook Signing Secret** from the **Site** that owns the checkout: **Sites → Add New Site** or **Sites → Edit Site** → **Webhook Signing Secret** (often `whsec_…`). Regenerate it with **Regenerate** if it is compromised; then update every integration that verifies IPN signatures.
+Signing uses the **Webhook Signing Secret** from the **Site** that owns the checkout: **Sites -> Add New Site** or **Sites -> Edit Site** -> **Webhook Signing Secret** (often `whsec_...`). Regenerate it with **Regenerate** if it is compromised; then update every integration that verifies IPN signatures.
 
 ### Configuring IPN
 
-1. Copy **Webhook Signing Secret** from **Sites → Edit Site** (or create a site and note the secret).
+1. Copy **Webhook Signing Secret** from **Sites -> Edit Site** (or create a site and note the secret).
 2. When creating each checkout session, set **`ipnUrl`** to your listener URL (`http` is allowed for local development; use **HTTPS** in production).
-3. Verify incoming posts using the headers and algorithm below (examples also appear under **Payment Session API → Webhook / IPN** in the admin UI).
+3. Verify incoming posts using the headers and algorithm below (examples also appear under **Payment Session API -> Webhook / IPN** in the admin UI).
 
 ### IPN payload (JSON body)
 
@@ -95,14 +123,14 @@ Each POST body is a small JSON object:
 | `externalReference` | Optional merchant reference from the checkout (omitted when empty).                  |
 | `status`            | Integer transaction status code (same numeric codes used internally by the gateway). |
 
-Interpret `status` using your server-side mapping or the [Transactions](../features/transactions) documentation — outbound IPN does **not** use string event names like `transaction.succeeded`.
+Interpret `status` using your server-side mapping or the [Transactions](../features/transactions) documentation - outbound IPN does **not** use string event names like `transaction.succeeded`.
 
 ### IPN request headers
 
-| Header                    | Description                                                                                                         |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `X-Signature-Timestamp`   | Unix timestamp (seconds, UTC) when the gateway signed the request.                                                  |
-| `X-Signature-HMAC-SHA256` | Hex-encoded HMAC-SHA256 of the string `{timestamp}.{rawBody}` using your site's Webhook Signing Secret (`whsec_…`). |
+| Header                    | Description                                                                                                      |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `X-Signature-Timestamp`   | Unix timestamp (seconds, UTC) when the gateway signed the request.                                               |
+| `X-Signature-HMAC-SHA256` | Hex-encoded HMAC-SHA256 of the string `{timestamp}.{rawBody}` using your site's Webhook Signing Secret (`whsec_...`). |
 
 `rawBody` must be the **exact** JSON bytes as received (no re-formatting) so the signature matches.
 
@@ -151,7 +179,7 @@ function verifyIPN(rawBody, timestamp, signatureHex, secret) {
 
 ### IPN retry behavior
 
-The sender treats delivery as successful only when your endpoint returns **HTTP 200**. Any other status code, a network error, or a timeout causes a retry with exponential backoff, up to **three** POST attempts in total. Use **Transactions → [transaction] → IPN Information** in the Admin Panel to inspect attempts and the last HTTP status.
+The sender treats delivery as successful only when your endpoint returns **HTTP 200**. Any other status code, a network error, or a timeout causes a retry with exponential backoff, up to **three** POST attempts in total. Use **Transactions -> [transaction] -> IPN Information** in the Admin Panel to inspect attempts and the last HTTP status.
 
 ### Responding to IPN
 
