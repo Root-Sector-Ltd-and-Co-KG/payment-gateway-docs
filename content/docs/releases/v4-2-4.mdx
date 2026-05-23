@@ -12,25 +12,12 @@ description: Stable release notes for Payment Gateway App 4.2.4.
 
 ## [4.2.4] - 2026-04-05
 
-### Changed Components
+## Customer-Facing Changes
 
-- **admin-backend** v4.1.6
+### APIs And Integrations
 
-### Added
-- **admin-backend:** Enhanced batch processing for address source fields in the encryption module.
+- Improved batch processing for address source fields in the encryption module.
 
-## Managed Image Baseline
+## Deployment Notes
 
-| Component | Component Version | Image |
-|---|---|---|
-| admin-backend | 4.1.6 | registry.payment-gateway.app/payment-gateway-admin-backend:4.1.6 |
-| admin-frontend | 4.1.5 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.1.5 |
-| garnet | 1.1.1 | registry.payment-gateway.app/garnet:1.1.1 |
-| gotenberg | 8.27.0 | registry.payment-gateway.app/gotenberg:8.27.0 |
-| main-backend | 4.1.4 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.4 |
-| main-frontend | 4.1.4 | registry.payment-gateway.app/payment-gateway-main-frontend:4.1.4 |
-| main-worker | 4.1.4 | registry.payment-gateway.app/payment-gateway-main-backend:4.1.4 |
-| mgob | 2.0.28 | registry.payment-gateway.app/mgob:2.0.28 |
-| mongo | 8.2.4 | registry.payment-gateway.app/mongo:8.2.4 |
-| mongo-express | latest | registry.payment-gateway.app/mongo-express:latest |
-| reverseproxy | 4.1.4 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.1.4 |
+Use the updater from `payment-gateway-deploy` to install this release. Exact image tags are resolved from release metadata and the deployment tooling instead of being duplicated in these notes.

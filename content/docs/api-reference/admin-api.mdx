@@ -9,7 +9,7 @@ description: Management API — checkouts, transactions, invoices, clients, site
 
 **OpenAPI / Swagger UI:** `https://<your-admin-backend-host>/api/v1/docs/index.html`
 
-**Shorter public path (default reverse proxy):** same host with `/v1/...` — **`payment-gateway-reverseproxy/Caddyfile`** rewrites `/v1/*` → `/api/v1/*` on `{$ADMIN_BACKEND_DOMAIN}` before proxying to the Admin Backend.
+**Shorter public path (default reverse proxy):** same host with `/v1/...`. The default reverse proxy configuration shipped with the deployment package rewrites `/v1/*` to `/api/v1/*` on `{$ADMIN_BACKEND_DOMAIN}` before proxying to the Admin Backend.
 
 The Admin Backend is the primary integration surface for server-side automation. All endpoints require an **API Key** or **JWT** in the `Authorization: Bearer` header.
 

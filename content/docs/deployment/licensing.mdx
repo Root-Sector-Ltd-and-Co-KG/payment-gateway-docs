@@ -36,14 +36,48 @@ Additional organizations beyond the tier allowance can be added for 250 EUR per 
 > [!IMPORTANT]
 > Operations continue normally through `GRACE`, `SOFT_LOCK`, and `READ_ONLY`. These states only affect update eligibility and support access; they do not degrade or restrict your running system. Only `BLOCKED` and `NOT_ACTIVATED` prevent runtime access. `BLOCKED` is never caused by an expired heartbeat alone, but it can be applied manually by the vendor or automatically when the installation reports an out-of-entitlement product version.
 
-## Operator Actions
+## Operator Runbook
 
-If your system enters a non-active state, follow these procedures to recover:
+Use **System > Licensing** as the source of truth for local runtime state, activation, **Sync License Now**, support window, and last synchronization time. Only global administrators can open this page. Organization administrators can still use the non-portal recovery settings pages while runtime access is blocked.
 
-1. **Verify connectivity**: The Admin Backend must be able to make outbound HTTPS requests to the vendor license endpoint configured for your deployment. Check your firewall and NAT configuration.
-2. **NTP drift**: Keep the host clock synchronized using NTP. Severe clock drift will cause signature verification to fail prematurely or appear expired.
-3. **Manual heartbeat**: If the state drops to `GRACE`, `SOFT_LOCK`, or `READ_ONLY`, navigate to the Admin UI and trigger a manual heartbeat to force a synchronization. This restores the license to `ACTIVE` and resumes update/support eligibility when the remote license is valid.
-4. **License enforcement (`BLOCKED`)**: If the state becomes `BLOCKED`, confirm whether the license was revoked or suspended, or whether the installation reported a version newer than the maximum version allowed by that license's support window. Resolve the account or version issue, downgrade if necessary, then trigger a manual heartbeat to restore the system to `ACTIVE`.
-5. **Initial activation (`NOT_ACTIVATED`)**: As a **global administrator**, open the Admin UI at **System > Licensing** (`/system/licensing`), enter the license key, and activate. This page remains accessible to global admins even when the installation is unlicensed so you can recover from `NOT_ACTIVATED` / `BLOCKED` states.
+### First checks
 
-Use **System > Licensing** as the source of truth for local runtime state, activation, heartbeat/sync actions, support window, and last synchronization time.
+1. Confirm the Admin Backend can make outbound HTTPS requests to the Licensing Authority. Official self-hosted deployments use `https://payment-gateway.app`; do not point production hosts at local or arbitrary endpoints.
+2. Keep host time synchronized with NTP. Clock drift can make signed license tokens appear invalid or expired.
+3. Use **System > Licensing > Sync License Now** after any customer portal or operator portal change that should affect the self-hosted host immediately.
+
+### Blocked, suspended, or revoked
+
+`BLOCKED` covers manual blocks, suspended licenses, revoked licenses, and policy blocks such as a product version that is newer than the license support window allows. Protected runtime endpoints return `403 Forbidden`; activation and sync stay reachable for global administrators.
+
+1. In the customer portal or operator workspace, confirm whether the remote status is manual `BLOCKED`, `SUSPENDED`, `REVOKED`, or a version/support policy block.
+2. Clear the remote cause first. Sync cannot override a manual block, suspension, or revocation while it remains set in the Licensing Authority.
+3. If the block is caused by version entitlement, either renew support so the running version is covered or downgrade to a covered release.
+4. On the self-hosted host, run **System > Licensing > Sync License Now**. If sync still reports `BLOCKED`, wait briefly for the portal update to propagate and retry once before escalating with the request IDs shown in the UI.
+
+### Support renewed but the host still shows blocked
+
+Saving a future support end date can auto-clear an automatic policy `BLOCKED` state in the Licensing Authority. The self-hosted installation does not refresh instantly on its own.
+
+1. Verify the support end date is in the future on the license **Instances** view.
+2. Verify the running product version is within that support window.
+3. Run **Sync License Now** on the affected self-hosted admin.
+4. If the host remains blocked, check whether the license also has a manual block, suspension, revocation, or registry access problem.
+
+### Deactivation and re-activation
+
+Use deactivation when the local installation identity is wrong, the host was rebuilt with stale license state, or support asks you to reset the binding.
+
+1. From **System > Licensing**, deactivate/reset the local license state.
+2. Confirm the intended license is usable in the customer portal or operator workspace.
+3. Activate again from the same deployed host and public egress IP that pulled the licensed images.
+4. After activation, run **Sync License Now** if the portal status changed during the reset.
+
+### Registry IP binding issues
+
+Registry access credentials are bound to the public IP used by the first successful registry token request. License activation is expected to come from the same deployment environment.
+
+1. If image pulls fail after a host move, NAT change, or new egress IP, rotate the license access secret in the license workspace before the next deploy or update.
+2. Update the deploy environment with the new `REGISTRY_ACCESS_SECRET`.
+3. Run the deploy or update from the target host so the registry token flow binds the current public IP.
+4. Activate or sync the license from that same host.

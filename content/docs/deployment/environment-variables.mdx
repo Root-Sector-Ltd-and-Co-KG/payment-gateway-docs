@@ -73,14 +73,6 @@ All configuration uses the `MPG_` prefix, loaded by Viper from environment varia
 | `MPG_SYSTEM_ENCRYPTION_KEY`  | string | **Yes**  | —       | Hex-encoded symmetric key for encrypting KMS credentials. **Admin backend requires exactly 32 bytes** (64 hex characters). Main backend accepts 32+ bytes, but use 32 bytes to keep environments consistent. |
 | `MPG_SYSTEM_SEARCH_HASH_KEY` | string | **Yes**  | —       | Hex-encoded HMAC key for deterministic searchable encryption. Exactly 32 bytes (64 hex characters).                                                                                                          |
 
-### Licensing
-
-| Variable               | Type | Required | Default | Description                                                                     |
-| ---------------------- | ---- | -------- | ------- | ------------------------------------------------------------------------------- |
-| `MPG_LICENSING_BYPASS` | bool | No       | `false` | Bypass license check. Only works if `VERSION=dev`. **Never set in production.** |
-
----
-
 ## Admin Backend Variables
 
 ### Server
@@ -96,10 +88,10 @@ All configuration uses the `MPG_` prefix, loaded by Viper from environment varia
 | `MPG_ADMIN_FRONTEND_DOMAIN`    | string | **Yes**  | —       | Admin frontend domain for CORS allow-list (e.g., `admin.yourcompany.com`)                                    |
 | `MPG_MAIN_BACKEND_DOMAIN`      | string | **Yes**  | —       | Main backend public domain                                                                                   |
 | `MPG_MAIN_FRONTEND_DOMAIN`     | string | **Yes**  | —       | Main frontend public domain                                                                                  |
-| `MPG_MAIN_FRONTEND_SERVICE`    | string | **Yes**  | —       | Internal service hostname for the main frontend (admin backend uses this for internal reachability checks)   |
-| `MPG_MAIN_FRONTEND_PORT`       | string | **Yes**  | —       | Internal service port for the main frontend                                                                  |
-| `MPG_MAIN_BACKEND_SERVICE`     | string | **Yes**  | —       | Internal service hostname for the main backend (admin backend uses this for internal reachability checks)    |
-| `MPG_MAIN_BACKEND_PORT`        | string | **Yes**  | —       | Internal service port for the main backend                                                                   |
+| `MPG_MAIN_FRONTEND_SERVICE`    | string | **Yes**  | —       | Deployment-managed service hostname for the main frontend                                                     |
+| `MPG_MAIN_FRONTEND_PORT`       | string | **Yes**  | —       | Deployment-managed service port for the main frontend                                                         |
+| `MPG_MAIN_BACKEND_SERVICE`     | string | **Yes**  | —       | Deployment-managed service hostname for the main backend                                                      |
+| `MPG_MAIN_BACKEND_PORT`        | string | **Yes**  | —       | Deployment-managed service port for the main backend                                                          |
 
 ### Authentication
 
@@ -116,7 +108,7 @@ All configuration uses the `MPG_` prefix, loaded by Viper from environment varia
 | Variable                      | Type   | Required | Default | Description                                                                                                              |
 | ----------------------------- | ------ | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `MPG_MAIN_WORKER_SERVICE_URL` | string | No       | —       | Internal URL of the worker service for PDF proxy requests                                                                |
-| `MPG_LICENSING_AUTHORITY_URL` | string | No       | —       | Vendor license endpoint base URL. Development commonly uses `http://localhost:5173`; staging/production should be HTTPS. |
+| `MPG_LICENSING_AUTHORITY_URL` | string | No       | —       | Trusted vendor licensing endpoint. Leave unset for official deployments unless support instructs otherwise. |
 
 ---
 
@@ -138,7 +130,7 @@ All configuration uses the `MPG_` prefix, loaded by Viper from environment varia
 
 | Variable                           | Type   | Required | Default                    | Description                                                                                                                                                           |
 | ---------------------------------- | ------ | -------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `MPG_MAIN_WORKER_GOTENBERG_URL`    | string | No       | `http://localhost:3000`    | URL of the Gotenberg PDF service                                                                                                                                      |
+| `MPG_MAIN_WORKER_GOTENBERG_URL`    | string | No       | `http://localhost:3000`    | URL of the Gotenberg PDF service; deployment templates set this to the internal Gotenberg service.                                                                    |
 | `MPG_MAIN_WORKER_TEMP_CACHE_DIR`   | string | No       | OS temp dir + `/pdf-cache` | Local directory for temporary PDF caching (defaults to the host OS temp directory). In container deployments this is commonly set explicitly (e.g. `/tmp/pdf-cache`). |
 | `MPG_MAIN_WORKER_SERVICE_URL`      | string | No       | —                          | Internal URL where the worker HTTP server is reachable (used by the main API to proxy PDF requests)                                                                   |
 | `MPG_MAIN_WORKER_HOST`             | string | No       | `0.0.0.0`                  | Worker HTTP server bind address                                                                                                                                       |

@@ -11,27 +11,20 @@ description: Stable release notes for Payment Gateway App 4.0.8.
 
 ## [4.0.8] - 2026-03-17
 
-### Changed Components
+## Customer-Facing Changes
 
-- **admin-backend** v4.0.7
-- **admin-frontend** v4.0.6
-- **main-backend** v4.0.4
+### Admin Panel
 
-### Added
-- **admin-backend:** Streamlined user role assignment and enhanced registration flow.
-- **main-backend:** Introduced licensing endpoint URL configuration and enhanced license service behavior.
+- Improved version checks and license error guidance.
 
-### Changed
-- **admin-frontend:** Improved version check logic and enhanced license error guidance messages.
-- **main-backend:** Updated dependencies including phonenumbers to v1.6.12, bytedance/gopkg to v0.1.4, and latest versions of googleapis.
+### APIs And Integrations
 
-## Product Component Set
+- Streamlined user role assignment and enhanced registration flow.
 
-| Component | Component Version | Image |
-|---|---|---|
-| admin-backend | 4.0.7 | registry.payment-gateway.app/payment-gateway-admin-backend:4.0.7 |
-| admin-frontend | 4.0.6 | registry.payment-gateway.app/payment-gateway-admin-frontend:4.0.6 |
-| main-backend | 4.0.4 | registry.payment-gateway.app/payment-gateway-main-backend:4.0.4 |
-| main-frontend | 4.0.2 | registry.payment-gateway.app/payment-gateway-main-frontend:4.0.2 |
-| main-worker | 4.0.4 | registry.payment-gateway.app/payment-gateway-main-backend:4.0.4 |
-| reverseproxy | 4.0.1 | registry.payment-gateway.app/payment-gateway-reverseproxy:4.0.1 |
+### Deployment And Operations
+
+- Added licensing endpoint configuration and improved license status handling.
+
+## Deployment Notes
+
+Use the updater from `payment-gateway-deploy` to install this release. Exact image tags are resolved from release metadata and the deployment tooling instead of being duplicated in these notes.

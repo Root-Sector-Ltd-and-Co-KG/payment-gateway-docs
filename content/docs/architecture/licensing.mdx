@@ -26,7 +26,7 @@ flowchart TB
     MainBE -->|middleware checks| MainRoutes["Main /api/v1 routes"]
 ```
 
-`/api/v1/system/licensing` is intentionally exempt from license blocking so a global admin can activate, sync, or recover a host. Main Backend provider webhooks are registered outside the `/api/v1` group and are handled by provider-specific verification.
+`/api/v1/system/licensing` is intentionally exempt from license blocking so a global admin can activate, sync, deactivate/reset, or recover a host. Main Backend provider webhooks are registered outside the `/api/v1` group and are handled by provider-specific verification.
 
 ## Runtime States
 
@@ -65,17 +65,10 @@ Additional organisations beyond the tier allowance can be added for 250 EUR per 
 
 ## Operator Actions
 
-1. **When in `GRACE`, `SOFT_LOCK`, or `READ_ONLY`:**
-   - The installation continues to run.
-   - Verify outbound connectivity to the configured licensing endpoint.
-   - Use **System -> Licensing -> Sync License Now** from the self-hosted admin UI to refresh the local claims.
-2. **When in `BLOCKED`:**
-   - Confirm whether the license was manually blocked, suspended, revoked, or blocked by version entitlement.
-   - Resolve the account, support-window, or version-entitlement issue through your support or account contact.
-   - Run **Sync License Now** on the self-hosted installation after the remote state changes.
-3. **When in `NOT_ACTIVATED`:**
-   - Configure the license key from **System -> Licensing** and complete activation.
-   - If activation fails, keep the host clock synchronized and verify the installation can reach the configured licensing endpoint over HTTPS.
-4. **General maintenance:**
-   - Keep host time synchronized via NTP; clock drift can break token validation or heartbeat freshness.
-   - Do not rely on `MPG_LICENSING_BYPASS` outside development builds. The backends only honor bypass when the build version is a development version.
+The deployment runbook is the canonical operator procedure: [Licensing Operations](../deployment/licensing).
+
+At the architecture level, the important boundaries are:
+
+- `GRACE`, `SOFT_LOCK`, and `READ_ONLY` keep runtime access available; operators should fix connectivity and run **System > Licensing > Sync License Now**.
+- `BLOCKED` covers manual block, suspension, revocation, and version/support policy block. The remote cause must be cleared before sync can restore access.
+- `NOT_ACTIVATED` requires global-admin activation from **System > Licensing**.

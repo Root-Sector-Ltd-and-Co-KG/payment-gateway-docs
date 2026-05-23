@@ -15,7 +15,7 @@ The Payment Gateway exposes two HTTP surfaces, but they do not serve the same au
 All endpoints return JSON. All timestamps are ISO 8601 UTC strings.
 
 > [!NOTE]
-> The Admin Backend mounts routes under `/api/v1`. The default **`payment-gateway-reverseproxy/Caddyfile`** rewrites `/v1/*` → `/api/v1/*` on `{$ADMIN_BACKEND_DOMAIN}` — see [Caddy reverse proxy](../deployment/caddy#admin-api-hostname-and-v1-prefix).
+> The Admin Backend mounts routes under `/api/v1`. The default reverse proxy configuration shipped with the deployment package rewrites `/v1/*` to `/api/v1/*` on `{$ADMIN_BACKEND_DOMAIN}`; see [Caddy reverse proxy](../deployment/caddy#admin-api-hostname-and-v1-prefix).
 
 > [!IMPORTANT]
 > For almost all merchant integrations, use the **Admin API** with either an **Organization API key** or, for platform-wide automation, a **System API key**. The Main Backend endpoints exist mainly to support hosted checkout pages, customer portal flows, and payment-provider callbacks.

@@ -45,7 +45,7 @@ before relying on TLS in production.
     ./scripts/generate-secrets.sh --force
     ```
 
-*Note: For local development, you can disable TLS deliberately, but keep it enabled in production.*
+Only disable MongoDB TLS in a controlled non-production environment. Production deployments should keep database TLS enabled.
 
 ## Worker Configuration (PDF Generation)
 
