@@ -109,6 +109,8 @@ Symptoms: update exits before restarting services.
 1. Check that `RELEASE_METADATA_URL` is reachable from the server.
 2. Confirm deployment access credentials are still valid.
 3. Confirm the license support window entitles the target release.
-4. Review the updater log before retrying.
+4. If the log says `Digest validation failed`, keep the host in rollback/current-version state and compare the pulled image digest with the component digest in release metadata before retrying.
+5. If release security artifacts are missing or `policy-result.json` reports a failed policy decision, pause the update and collect the release notes, metadata response, and updater log for support/security review.
+6. Review the updater log before retrying.
 
 The updater intentionally fails fast when release metadata cannot be validated.

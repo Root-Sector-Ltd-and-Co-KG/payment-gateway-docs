@@ -23,9 +23,13 @@ provider-tokenized collection components (for example, Stripe Elements).
 
 This means:
 
-- raw PAN and CVC values are not stored by the gateway application,
+- the intended provider-hosted/tokenized card flows are designed so raw PAN and CVC values are not stored by gateway services,
 - the gateway stores transaction/business metadata and provider references,
 - provider credentials are stored encrypted at rest.
+
+See [Payment Data Boundary](./payment-data-boundary) for provider-specific
+card-entry boundaries, transient token handling, and custom checkout extension
+responsibilities.
 
 ## 2) Data Categories Processed
 
@@ -100,6 +104,7 @@ responsible for:
 
 - [Configuration](./configuration)
 - [Data Processing & Encryption](./data-processing-encryption)
+- [Payment Data Boundary](./payment-data-boundary)
 - [Backup & Recovery (GDPR)](./backup-recovery)
 - [Shared Responsibility Matrix](./shared-responsibility-matrix)
 - [Retention Policy Playbook](./retention-policy-playbook)

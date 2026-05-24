@@ -1,0 +1,111 @@
+---
+title: Release Security Transparency
+description: How to read release SBOM, vulnerability, policy, checksum, and provenance evidence.
+---
+
+# Release Security Transparency
+
+Release security artifacts are audit evidence for what was shipped, scanned, and accepted for a product version. They are not a security certification and do not replace your own operational risk review.
+
+For releases produced by the current release pipeline, the release metadata and release notes point to a versioned artifact bundle:
+
+```text
+https://docs.payment-gateway.app/release-security/v<version>/
+```
+
+Legacy release pages may not have the complete artifact set. Treat a missing file as missing evidence, not as an implicit pass.
+
+Current release bundles include two scan classes: `sourceRepository` scans for
+Payment Gateway application repositories and shared libraries, and
+`runtimeImage` scans for managed runtime images by immutable image digest. The
+runtime image coverage includes the database, cache, backup, PDF, and
+database-admin images shipped in the deployment baseline. Legacy release pages
+may still lack runtime image files; treat those historical gaps as missing
+evidence for that release, not as an implicit clean scan.
+
+## Artifact Contract
+
+| Artifact | Expected path | Purpose |
+| --- | --- | --- |
+| CycloneDX SBOM | `sbom/<component>.cyclonedx.json` | Lists the dependencies and component inventory scanned for the release. |
+| Trivy vulnerability report | `reports/<component>.vuln.json` | Machine-readable vulnerability and misconfiguration findings for the scanned component. |
+| Scan manifest | `reports/scan-manifest.json` | Maps scanned components to the release version, scan type, scanner type, timestamp, source reference, image, and digest. |
+| Vulnerability policy result | `reports/policy-result.json` | Shows whether release-blocking findings were absent, waived, or blocking. |
+| Component image provenance verification | `reports/component-image-provenance.json` | Records the cosign signature and SLSA provenance verification performed before first-party image promotion. |
+| Vulnerability summary | `reports/summary.md` | Human-readable scan summary for operators and auditors. |
+| Checksums | `SHA256SUMS` | File hashes for the published release security artifact bundle. |
+| Checksum signature | `SHA256SUMS.sig` | Sigstore/cosign signature evidence for the checksum file. |
+| Provenance | `provenance.intoto.jsonl` | Release provenance evidence for the published component set. |
+
+## Public Verification Steps
+
+Download the checksum manifest, signature, certificate, and every file named by
+the checksum manifest for the product version you are applying:
+
+```bash
+VERSION="<version>"
+BASE="https://docs.payment-gateway.app/release-security/v${VERSION}"
+mkdir -p "release-security-v${VERSION}"
+cd "release-security-v${VERSION}"
+
+curl -fsSLO "${BASE}/SHA256SUMS"
+curl -fsSLO "${BASE}/SHA256SUMS.sig"
+curl -fsSLO "${BASE}/SHA256SUMS.pem"
+
+awk '{print $2}' SHA256SUMS | while read -r path; do
+  mkdir -p "$(dirname "$path")"
+  curl -fsSLo "$path" "${BASE}/${path}"
+done
+```
+
+Verify the checksum signature before trusting the checksum list, then verify
+the downloaded artifacts against it:
+
+```bash
+cosign verify-blob \
+  --certificate SHA256SUMS.pem \
+  --signature SHA256SUMS.sig \
+  --certificate-identity-regexp "https://github.com/.*/.github/workflows/continue-release.yml@refs/heads/main" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  SHA256SUMS
+
+sha256sum -c SHA256SUMS
+```
+
+Release metadata from `https://payment-gateway.app/api/releases/metadata` is
+signed as an inline JSON envelope. The deployment updater verifies that
+signature with the pinned public key shipped in `payment-gateway-deploy` before
+it selects a release.
+
+## Vulnerability Policy
+
+The release policy blocks unwaived `HIGH` and `CRITICAL` vulnerability findings in the generated reports. A release with blocking findings must either be fixed before publication or carry explicit waiver evidence.
+
+Waivers require a CVE or vulnerability ID, owner, rationale, expiry, and compensating controls. Expired waivers fail the release. A waiver without a clear owner, reason, expiry date, and mitigation is not acceptable release evidence.
+
+Use `policy-result.json` as the machine-readable release decision record. The file records:
+
+- evaluated severities,
+- unwaived blocking findings,
+- accepted waivers,
+- invalid or expired waivers,
+- evaluation date and generated timestamp.
+
+## Operator Review
+
+Before applying a production update:
+
+1. Confirm the updater selected the intended product version from release metadata.
+2. Review the release notes for operator-impacting changes.
+3. Download or archive the release security bundle for your evidence folder.
+4. Check `policy-result.json`; do not treat a failed or missing policy result as approved evidence.
+5. Review `scan-manifest.json` and confirm both `sourceRepository` and expected `runtimeImage` entries are present for the shipped baseline.
+6. Verify component digests in release metadata match the images pulled by the updater.
+7. Review `component-image-provenance.json` for first-party image signature and source-revision verification results.
+8. Verify `SHA256SUMS` with `sha256sum -c SHA256SUMS`, verify
+   `SHA256SUMS.sig` with `cosign verify-blob`, and retain
+   `provenance.intoto.jsonl` with your update evidence.
+
+## Evidence Retention
+
+Keep the release notes URL, release metadata response, component digests, `scan-manifest.json`, `policy-result.json`, `component-image-provenance.json`, SBOMs, vulnerability reports, signed-checksum verification output, and provenance files with the update record. Regulated customers often ask for this evidence during procurement renewal, incident review, and supplier risk assessment.

@@ -24,12 +24,14 @@ Currently natively supported integrations include:
 When adding a provider, you will need to supply the upstream API credentials (e.g., the Stripe Secret Key).
 
 > [!NOTE]
-> All upstream credentials you enter are instantly encrypted using the gateway's KMS (Key Management Service) before being saved to the database. They are never stored in plaintext.
+> Provider credentials are stored through the configured secret-encryption path and masked after save. Before production, verify encryption is enabled, keys are available to all required services, and existing records have been migrated where applicable.
 
 > [!IMPORTANT]
-> For card flows, payment instrument entry is handled through provider-hosted or provider-tokenized components. The gateway stores transaction/business metadata and provider references, but does not store raw PAN/CVC values.
+> For the intended card flows, payment instrument entry is handled through provider-hosted or provider-tokenized components, and gateway services are designed to store transaction metadata and provider references rather than raw PAN/CVC values.
 
 For Stripe, stored records keep PaymentIntent IDs and related transaction metadata. PaymentIntent client secrets are delivered only to the checkout runtime when Stripe Elements needs them and are not stored as durable session or transaction data.
+
+See [Payment Data Boundary](../deployment/payment-data-boundary) for the provider-specific card-entry boundary, transient token handling, and custom checkout extension responsibilities.
 
 ## Assigning Providers to Sites
 

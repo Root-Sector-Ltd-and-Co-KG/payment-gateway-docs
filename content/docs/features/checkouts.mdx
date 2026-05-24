@@ -43,9 +43,11 @@ Checkout totals are calculated in two stages:
 The preview and final transaction use the same organization tax settings, rates, rules, rounding method, gross/net price mode, VAT validation behavior, and OSS evidence rules. If VIES validation is disabled in **Settings > Tax**, a checkout preference of `vies` is downgraded to format-only validation at runtime.
 
 > [!CAUTION]
-> The checkout flow is designed for PCI-DSS SAQ A-oriented integrations. Cardholder data is handled by the payment provider UI components (for example, Stripe Elements) rather than being processed directly by your backend integration.
+> The checkout flow is designed to keep cardholder data entry inside payment-provider UI components (for example, Stripe Elements) rather than being processed directly by your backend integration. Treat this as implementation scope guidance, not as assessment advice for your PCI DSS environment.
 
 For Stripe, the backend stores the PaymentIntent ID as the provider reference. The `paymentIntentClientSecret` is returned only in the checkout response or the immediate cancel/retry response that needs to initialize Stripe Elements; it is not retained in session or transaction records.
+
+See [Payment Data Boundary](../deployment/payment-data-boundary) before adding custom checkout extensions, analytics, session replay, or proxy logic to the payment page.
 
 ## Return And Cancel URLs
 

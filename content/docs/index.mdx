@@ -5,14 +5,14 @@ description: High-level overview of the Payment Gateway application stack and it
 
 # Overview
 
-Welcome to the **Payment Gateway** documentation. The Payment Gateway is a self-hosted, enterprise-grade platform for accepting online payments, managing invoices, and handling configurable tax compliance under your own infrastructure and brand.
+Welcome to the **Payment Gateway** documentation. The Payment Gateway is a self-hosted platform for accepting online payments, managing invoices, and configuring tax-related workflows under your own infrastructure and brand.
 
 One of the main strategic advantages of the platform is continuity. Your payment history, invoice records, and buyer-facing billing data stay in your own system even when payment provider terms, risk decisions, or commercial models change.
 
 ## Core Capabilities
 
 - **Multi-provider payments**: Accept cards, wallets, local payment methods, direct debits, and transfer-based flows through a unified interface, including Stripe, Mollie, GoCardless, Wise, PayPal, and wire transfer.
-- **Payment data boundary**: Card input is handled through provider-hosted or tokenized flows; the gateway does not store raw PAN/CVC values.
+- **Payment data boundary**: In the intended provider-hosted or tokenized card flow, the gateway is designed not to store raw PAN/CVC values.
 - **Persistent history and invoicing**: Keep one payment and invoice history across provider changes, with gapless numbering, PDF invoice customization, and support for ZUGFeRD, Peppol, and XRechnung workflows. Finalized buyer documents are downloaded through the customer portal.
 - **Multi-tenant organizations**: Full role-based access control for teams with a dedicated Admin Panel.
 - **Configurable tax engine**: Effective-dated tax rates, tax rules, VAT ID validation, EU VAT OSS reporting, tax snapshots, and canonical tax records for reporting and auditability.

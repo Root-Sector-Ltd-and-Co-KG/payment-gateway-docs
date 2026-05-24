@@ -1,0 +1,70 @@
+---
+title: Payment Data Boundary
+description: Card-data boundary, provider component use, and self-hosted payment scope responsibilities.
+---
+
+# Payment Data Boundary
+
+This page explains the intended payment-data boundary for self-hosted deployments. It is implementation guidance for operating the gateway safely; it is not assessment advice and does not replace your own PCI DSS, GDPR, tax, or regulated outsourcing review.
+
+The public Trust Center is the customer-facing place to publish payment-data boundary statements only after the relevant asset is marked available and approved. Unapproved memos, work tickets, and review notes must not be treated as customer evidence.
+
+## Default Card Flow Boundary
+
+For card-based flows, payment instrument entry is designed to stay inside payment-provider surfaces:
+
+- Stripe card entry is rendered through Stripe Elements in the browser.
+- Mollie card entry is rendered through Mollie.js components, which create a short-lived card token for the provider request.
+- PayPal card entry, where enabled, is mediated through PayPal SDK card fields.
+- Provider-hosted redirects keep the buyer on the provider-controlled payment surface for card entry.
+
+Gateway services store business and operational records such as checkout IDs, transaction IDs, invoice references, tax snapshots, provider payment IDs, webhook state, and encrypted provider configuration. The gateway is not designed to store raw PAN, CVC, full magnetic stripe data, or equivalent card authentication data.
+
+## Data That Must Stay Transient
+
+Treat the following as sensitive runtime data:
+
+- Stripe PaymentIntent client secrets returned to the checkout runtime for Stripe Elements initialization.
+- Mollie card tokens submitted to the backend for immediate forwarding to Mollie.
+- Provider API keys, webhook signing secrets, OAuth tokens, private keys, and authorization headers.
+- Provider responses or debug traces that may contain secret, token, or payment-instrument fields.
+
+These values must not be persisted in transaction records, support exports, public screenshots, logs, customer-facing reports, or backups beyond what the payment provider and your own controlled secret stores require.
+
+## Non-Card Rails
+
+GoCardless, Wise, and wire-transfer flows do not collect card PAN/CVC through the gateway. They still process financial and personal data such as mandate references, bank-transfer instructions, billing contacts, reconciliation references, and payment status evidence. Apply access control, encryption, retention, audit logging, and export governance to those records.
+
+## Custom Checkout Extensions
+
+Custom checkout extensions must not collect raw PAN, CVC, or equivalent card authentication data outside payment-provider components.
+
+If you replace, wrap, proxy, or extend the provided checkout UI, review the integration before production use. Custom JavaScript, embedded forms, reverse proxies, analytics scripts, browser extensions, tag managers, or server-side middleware can change PCI DSS scope if they can observe, collect, log, or transmit card-entry fields.
+
+Minimum controls for custom checkout work:
+
+1. Keep card-entry fields inside provider SDK iframes, hosted pages, or provider-controlled components.
+2. Do not send raw card data through your backend, edge workers, log collectors, analytics vendors, or support tooling.
+3. Disable recording tools and session replay on checkout pages unless they are explicitly configured to suppress payment fields.
+4. Keep checkout domain TLS, CSP, dependency review, and script provenance under change control.
+5. Document the final data flow and have it reviewed by your PCI DSS assessor or payment-security specialist.
+
+## Operational Evidence To Keep
+
+For procurement and audit review, keep evidence for:
+
+- checkout smoke tests showing card entry inside provider components;
+- database checks showing only provider references, not raw card data, are stored;
+- log-redaction checks for provider secrets, authorization headers, Stripe client secrets, and Mollie card tokens;
+- webhook authenticity and idempotency tests for enabled providers;
+- access reviews for administrators and support users who can view payments or provider configuration;
+- backup and export controls for transaction, invoice, and customer records.
+
+## Related Pages
+
+- [Trust Center](https://payment-gateway.app/trust)
+- [Data Protection Guide](./data-protection)
+- [Shared Responsibility Matrix](./shared-responsibility-matrix)
+- [Checkouts](../features/checkouts)
+- [Payment Providers](../features/providers)
+- [Webhooks & IPN](../api-reference/webhooks)

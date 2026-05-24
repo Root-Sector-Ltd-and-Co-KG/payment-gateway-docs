@@ -46,7 +46,7 @@ Configure this URL in your provider dashboard as the webhook destination. The ga
 
 ### Mollie Events Handled
 
-Mollie webhook bodies are treated as hints. The gateway reads the payment ID from the callback, fetches the payment directly from Mollie with the configured API key, and then validates that the provider, organization, and stored transaction payment ID match before applying any state change.
+Mollie webhook bodies are treated as hints. The gateway reads the payment ID from the callback, fetches the payment directly from Mollie with the configured API key, and then validates that the provider, organization, and stored transaction payment ID match before applying any state change. Duplicate event deliveries are guarded with processed-event claims; callbacks with a Mollie event ID are claimed before provider mutation, while form callbacks without an event ID are claimed from the fetched payment state before local mutation.
 
 | Mollie Payment State | Effect on Transaction                                  |
 | -------------------- | ------------------------------------------------------ |
@@ -70,7 +70,7 @@ Mollie webhook bodies are treated as hints. The gateway reads the payment ID fro
 
 ### PayPal Events Handled
 
-PayPal callbacks are verified with the PayPal transmission headers and the configured PayPal Webhook ID before the gateway applies the event to a transaction.
+PayPal callbacks are verified with the PayPal transmission headers and the configured PayPal Webhook ID before the gateway applies the event to a transaction. Duplicate deliveries are guarded with processed-event claims before capture, refund, dispute, or status side effects.
 
 | PayPal Event Family                  | Effect on Transaction                                  |
 | ------------------------------------ | ------------------------------------------------------ |
@@ -90,6 +90,8 @@ PayPal callbacks are verified with the PayPal transmission headers and the confi
 **PayPal:** The gateway validates PayPal transmission headers against the configured PayPal Webhook ID through PayPal's verification API.
 
 If authenticity verification fails, ownership checks fail, or the payload is invalid, the gateway returns `400` and logs the attempt. Do not disable webhook verification in production.
+
+Webhook authenticity and idempotency are part of the payment-data evidence boundary. See [Payment Data Boundary](../deployment/payment-data-boundary) for the customer-facing evidence status and residual responsibilities.
 
 ---
 

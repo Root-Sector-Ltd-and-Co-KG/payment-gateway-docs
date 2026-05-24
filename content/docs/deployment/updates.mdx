@@ -16,6 +16,13 @@ The important trust boundary is this:
   updater authenticates to that endpoint and receives only the releases
   entitled for that license. If the endpoint is unavailable or invalid, the
   updater stops instead of guessing from registry tags or stale local state.
+- Release metadata is signed by the Licensing Authority. The updater verifies
+  the inline signature and payload hash with the pinned public key in
+  `payment-gateway-deploy` before selecting a release.
+- Each managed component in release metadata must include a valid `sha256:`
+  digest. The updater writes digest-pinned refs such as
+  `image:version@sha256:<digest>` into Docker Compose and Podman configuration,
+  and normalized digest refs are used for no-op comparison.
 - Customer image delivery uses the image source configured for that
   deployment. The updater does not discover the newest version from image
   repository tags.
@@ -24,15 +31,18 @@ Published **release notes** (changelog-style pages per product version) are main
 
 ## Release Security Transparency
 
-Published product releases can include auditable security artifacts tied to the same product version used by release notes and deployment metadata. These artifacts help operators understand what was shipped and what was scanned.
+Published product releases can include auditable security artifacts tied to the same product version used by release notes and deployment metadata. These artifacts help operators understand what was shipped, what was scanned, and whether release-blocking vulnerability policy checks passed.
+
+Use [Release Security Transparency](./release-security-transparency) as the canonical artifact contract for SBOMs, vulnerability reports, policy results, checksums, and provenance evidence.
 
 ### Security Scan Matrix
 
 | Artifact | Purpose |
 | --- | --- |
-| SBOM | Provides a dependency and component inventory for the released version. |
-| Vulnerability report | Summarizes known vulnerability findings reviewed for the released version. |
-| Scan manifest | Ties published security artifacts to the product release version and deployment metadata. |
+| SBOM | Provides a dependency and component inventory for each scanned source repository or runtime image in the released version. |
+| Vulnerability report | Summarizes known vulnerability findings reviewed for each scanned source repository or runtime image. |
+| Scan manifest | Ties published security artifacts to the product release version, scan type, image digest, and deployment metadata. |
+| Component image provenance verification | Records first-party image signature, build identity, digest, and source-revision verification before image promotion. |
 
 ## Security Reporting Policy
 
@@ -88,13 +98,14 @@ The endpoint has two useful modes:
 - authenticated requests return entitlement-filtered metadata for the specific
   license access grant used by the updater
 
-If the metadata endpoint is temporarily unavailable or invalid, the updater
-fails fast so operators do not accidentally roll forward based on stale
-metadata.
+If the metadata endpoint is temporarily unavailable, unsigned, tampered, or
+invalid, the updater fails fast so operators do not accidentally roll forward
+based on stale metadata.
 
 Published release metadata should describe the full managed image baseline for a release, not only first-party application services. In the first-party hosted setup that baseline includes the mirrored runtime images for `mongo`, `garnet`, `mgob`, `gotenberg`, and `mongo-express` alongside the Payment Gateway application images.
 
-The metadata served from `/api/releases/metadata` is intentionally compact. It
+The metadata served from `/api/releases/metadata` is intentionally compact and
+signed. It
 uses `version` at both the release and component level, and it only exposes the
 current channel-head releases rather than a full release history.
 
@@ -126,12 +137,24 @@ You can install weekly systemd timers on Linux to handle background updates for 
 
 ## Component Updates
 
-Sometimes you only need to update a single microservice (e.g. `admin-backend` or `main-worker`) without a full metadata-driven upgrade. Targeted updates use the platform `deploy.sh`:
+Use `./scripts/update.sh` for production updates, including small service
+updates. It resolves the signed, entitled release baseline and deploys
+digest-pinned image refs.
+
+Manual targeted `deploy.sh --update-component` and Podman `--update-components`
+commands bypass signed release metadata and are blocked by default. Use them
+only as emergency break-glass operations with an approval note:
 
 ```bash
 # Run from payment-gateway-deploy/docker-compose OR payment-gateway-deploy/podman
+ALLOW_UNVERIFIED_COMPONENT_UPDATE=true \
+COMPONENT_UPDATE_AUDIT_NOTE="Emergency rollback approved by <owner> under <ticket>" \
 ./deploy.sh --update-component admin-backend --version 3.1.1
 ```
+
+After a break-glass update, run the unified updater again when signed metadata
+for the intended baseline is available so the deployment returns to a
+digest-pinned evidence chain.
 
 **Common Components:**
 `admin-backend`, `admin-frontend`, `main-backend`, `main-frontend`, `main-worker`, `reverseproxy`, `mongo`, `garnet`, `mgob`, `gotenberg`, `mongo-express`

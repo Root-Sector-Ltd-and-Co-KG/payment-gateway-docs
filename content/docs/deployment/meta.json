@@ -7,6 +7,7 @@
     "configuration",
     "data-processing-encryption",
     "data-protection",
+    "payment-data-boundary",
     "docker-compose",
     "environment-variables",
     "evidence-audit-checklist",
@@ -16,6 +17,7 @@
     "monitoring",
     "podman",
     "retention-policy-playbook",
+    "release-security-transparency",
     "shared-responsibility-matrix",
     "troubleshooting",
     "updates"
