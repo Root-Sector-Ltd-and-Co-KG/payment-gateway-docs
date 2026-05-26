@@ -18,7 +18,7 @@ This keeps invoices, credit notes, and transaction detail views consistent insid
 
 When the document is linked to a stored Client record, the Client email in the detail view links directly to that Client profile. This gives operators a quick path from a document to the broader relationship history without changing the legal document itself.
 
-The document still preserves its own party snapshot. If the current Client profile changes later, the already-issued invoice or credit note continues to show the original document data that was valid at issuance time.
+The document still preserves its own party snapshot, including the buyer Peppol routing address when present. If the current Client profile changes later, the already-issued invoice or credit note continues to show the original document data that was valid at issuance time. For issued invoices, update the invoice snapshot through the correction workflow.
 
 ![Invoice detail showing seller and client snapshots, payment state badges, totals, document actions, line items, and billing details](/screenshots/app/invoice-detail.png)
 
@@ -30,6 +30,8 @@ Invoices exist in strict states to maintain accounting integrity:
 2. **`issued`**: Once the "Issue" button is clicked (or a transaction succeeds automatically), the invoice is locked. An official sequential `InvoiceNumber` is permanently assigned. **The line items and total amounts can never be changed again.**
 3. **Payment state (computed)**: Whether an invoice is open, partially settled, settled, credited, refunded, or overpaid is derived from linked settlements and credit notes rather than stored as a separate mutable invoice status.
 4. **Void / refund workflows**: If an issued invoice is critically wrong or must be reversed, the platform creates the appropriate reversal artifact and keeps the original invoice on file as part of the permanent accounting record.
+
+Draft invoices can only download a pro forma PDF. XML e-invoices and hybrid ZUGFeRD / Factur-X PDFs become available after the invoice is issued because the final invoice number is assigned during issue. The eInvoice checks shown on a draft are pre-issue guidance: they identify seller, buyer, payment, tax, and Peppol routing data that users can fix before issuing, but they are not proof that XML can already be downloaded.
 
 ## Draft Invoice Tax Calculation
 
@@ -60,11 +62,11 @@ Rather than emailing large PDF attachments that may be blocked by spam filters, 
 End-users navigate to your custom domain (e.g., `invoices.yourcompany.com`) and authenticate using a one-time secure link, with OTP confirmation available where configured. From there, they can independently:
 
 - Download their invoice as a PDF.
-- Download their invoice as a machine-readable native E-Invoice XML (ZUGFeRD/Factur-X CII, XRechnung, Peppol) if configured.
+- Download issued invoices as machine-readable native eInvoice XML: XRechnung, Peppol BIS 3.0 XML, or ZUGFeRD/Factur-X CII if configured.
 
-E-invoice settings control the formats and routing identifiers available for portal downloads and email workflows.
+E-invoice settings control XRechnung, Peppol, and ZUGFeRD readiness. Seller Peppol routing address is the seller `EndpointID` written into Peppol XML; use the sender address type and value configured by your Peppol service provider. Buyer Peppol routing address is the delivery address supplied by the recipient or their Peppol service provider. Choose the address type separately from the value; for example, select `0088` only for a supplied GS1 GLN or `0204` only when a German public-sector recipient confirms its Leitweg-ID as the Peppol receiver address, then enter only the identifier value without the prefix. Do not assume VAT ID is correct unless the recipient confirms a VAT-based Peppol address type. Germany-only: Leitweg-ID is the buyer/public authority reference for German public-sector invoices and should come from the order or contract.
 
-![E-invoicing settings page showing XRechnung, ZUGFeRD, Peppol, validation, Leitweg-ID, and seller identity fields](/screenshots/app/einvoicing-settings.png)
+![E-invoicing settings page showing format-specific readiness for XRechnung, Peppol BIS 3.0 XML, ZUGFeRD/Factur-X, payment account, Peppol routing address, and seller identity fields](/screenshots/app/einvoicing-settings.png)
 
 ## Credit Notes (Refunds)
 

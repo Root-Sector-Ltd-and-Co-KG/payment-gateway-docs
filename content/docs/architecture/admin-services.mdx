@@ -18,7 +18,7 @@ The Admin Backend is a Go service using Gin, MongoDB, WebAuthn, JWT sessions, AP
 3. **Domain management**: Public `GET /api/v1/domains/verify` is used by Caddy's on-demand TLS `ask` check. Authenticated domain routes manage CNAME verification, ACME HTTP challenges, activation retry, Apple Pay files, and CRUD operations.
 4. **Licensing**: `/api/v1/system/licensing` and its activation, heartbeat, and deactivation endpoints are deliberately exempt from runtime license blocking so global admins can activate or recover an installation.
 5. **Tax Management**: Organizations configure seller context, rate schedules, EU OSS / IOSS flags, small-business exemptions, and rounding. The service materializes canonical tax records for audit and drives by-country, revenue-by-country, and VAT OSS reports.
-6. **Invoicing and documents**: Invoice issue, void, correction, credit note, recurring schedule, payment checkout, PDF regeneration, ZUGFeRD/PDF, XML, and Peppol XML routes are owned by the admin backend. Slow document generation is queued to the worker.
+6. **Invoicing and documents**: Invoice issue, void, correction, credit note, recurring schedule, payment checkout, PDF regeneration, ZUGFeRD/PDF, XML, and Peppol BIS 3.0 XML routes are owned by the admin backend. Slow document generation is queued to the worker.
 7. **System settings**: Global encryption, API-key auth policy, portal settings, user-management policy, notifications, templates, and licensing are separate from organization settings.
 
 ### Observability

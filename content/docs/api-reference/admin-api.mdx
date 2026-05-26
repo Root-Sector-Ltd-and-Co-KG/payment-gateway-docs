@@ -165,12 +165,28 @@ GET /api/v1/transactions?status=succeeded&currency=EUR&from=2026-01-01&to=2026-0
 | `POST`   | `/api/v1/invoices/:id/payment-checkout`            | `invoice:execute` | Create an online payment checkout for the invoice          |
 | `GET`    | `/api/v1/invoices/:id/pdf`                         | `invoice:execute` | Download PDF                                               |
 | `GET`    | `/api/v1/invoices/:id/xml`                         | `invoice:execute` | Download XRechnung XML                                     |
-| `GET`    | `/api/v1/invoices/:id/xml/peppol`                  | `invoice:execute` | Download Peppol XML                                        |
+| `GET`    | `/api/v1/invoices/:id/xml/peppol`                  | `invoice:execute` | Download Peppol BIS 3.0 XML                                |
 | `GET`    | `/api/v1/invoices/:id/pdf/zugferd`                 | `invoice:execute` | Download ZUGFeRD PDF                                       |
 | `POST`   | `/api/v1/invoices/:id/regenerate-pdf`              | `invoice:execute` | Force PDF regeneration                                     |
 | `DELETE` | `/api/v1/invoices/:id`                             | `invoice:delete`  | Delete draft invoice                                       |
 
-The e-invoice download endpoints enforce **Settings > Invoicing > eInvoice Generation** before proxying to the worker. Requests return `403 EINVOICE_DISABLED` when eInvoice generation is disabled and `403 EINVOICE_FORMAT_NOT_ALLOWED` when the requested format is not listed in `settings.invoicing.eInvoice.allowedFormats`.
+The e-invoice download endpoints enforce **Settings > Invoicing > eInvoice Generation** before proxying to the worker. Requests return `403 EINVOICE_DISABLED` when eInvoice generation is disabled, `403 EINVOICE_FORMAT_NOT_ALLOWED` when the requested format is not listed in `settings.invoicing.eInvoice.allowedFormats`, `409 INVOICE_NOT_ISSUED` when a draft invoice requests XML or hybrid eInvoice output, and `422 EINVOICE_READINESS_FAILED` when the issued invoice snapshot or organization settings are missing required readiness data such as IBAN or Peppol routing addresses. Draft invoices only support pro forma PDF download; the final invoice number is assigned during issue.
+
+Issued invoices keep their party snapshot. To copy or correct a buyer Peppol routing address for an already issued invoice, use the normal correction endpoint. The correction updates the invoice snapshot only; it does not silently mutate the linked client record.
+
+```json
+{
+  "reason": "Copied buyer Peppol routing address from linked client for eInvoice generation",
+  "changes": {
+    "client": {
+      "peppolRoutingAddress": {
+        "schemeId": "9930",
+        "value": "DE987654321"
+      }
+    }
+  }
+}
+```
 
 ### Create Invoice Payment Checkout
 
@@ -277,6 +293,24 @@ The due-schedule processor generates invoices for schedules whose `nextRunDate` 
 | `DELETE` | `/api/v1/clients/:id`         | `client:delete`  | Delete client            |
 | `GET`    | `/api/v1/clients/:id/history` | `client:execute` | Get client audit history |
 
+Client tax data may include a buyer Peppol routing address only for customers that receive Peppol BIS 3.0 XML. The value is encrypted like other client compliance fields. Use `peppolRoutingAddress`, not older generic endpoint names.
+
+```json
+{
+  "taxInfo": {
+    "taxId": { "plaintext": "DE987654321" },
+    "taxIdType": "vat",
+    "taxCountry": "DE",
+    "peppolRoutingAddress": {
+      "schemeId": "9930",
+      "value": { "plaintext": "DE987654321" }
+    }
+  }
+}
+```
+
+Do not assume the VAT ID is the Peppol address. Use a VAT-number scheme such as `9930` only when the buyer confirms that exact Peppol address. Use `0088` only for a supplied GS1 GLN. Use `0204` for a German Leitweg-ID only when the German public-sector recipient confirms it as their Peppol receiver address.
+
 ---
 
 ## Sites
@@ -314,6 +348,16 @@ The numbering contract is layout-based. Organizations store one layout for invoi
     "country": "DE"
   },
   "companyEmail": "billing@example.com",
+  "bankIBAN": { "plaintext": "DE89370400440532013000" },
+  "eInvoice": {
+    "enabled": true,
+    "allowedFormats": ["xrechnung", "peppol", "zugferd"],
+    "strictValidation": true,
+    "sellerPeppolRoutingAddress": {
+      "schemeId": "9930",
+      "value": { "plaintext": "DE123456789" }
+    }
+  },
   "invoiceNumberLayout": {
     "prefix": "INV-",
     "periodType": "calendar",

@@ -26,7 +26,7 @@ This lets support and finance staff move between a single document and the broad
 
 ## Demographics & VAT Validation
 
-Client records store billing addresses and tax identifiers that can be reused by invoices, reporting, and operator workflows.
+Client records store billing addresses, tax identifiers, and the buyer Peppol routing address that can be reused by invoices, reporting, and operator workflows. Use this field only for customers who receive invoices through Peppol. Store the Peppol address type and value exactly as the customer or their Peppol service provider gives them to you. Do not type prefixes such as `0088:` or `0204:` into the value field. Do not assume the VAT ID is the correct Peppol address unless the recipient confirms a VAT-based Peppol address type. GLN means GS1 Global Location Number and should use address type `0088` only when the customer has supplied a GLN. Germany-only: Leitweg-ID is a public-sector buyer reference and may use address type `0204` when the German recipient confirms it as their Peppol address.
 
 If a B2B client provides a European VAT ID or a business tax number:
 

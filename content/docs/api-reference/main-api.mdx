@@ -316,7 +316,9 @@ Returns the invoice PDF as `application/pdf`.
 GET /api/v1/portal/documents/:id/einvoice?format=xrechnung
 ```
 
-Returns the requested e-invoice XML when that format is enabled for both organization eInvoice generation and portal downloads. Supported `format` values are `xrechnung`, `peppol`, and `zugferd`; `zugferd` returns standalone Factur-X/ZUGFeRD CII XML. Standard invoice PDFs are downloaded through `/api/v1/portal/documents/:id/pdf`.
+Returns the requested e-invoice XML when that format is enabled for both organization eInvoice generation and portal downloads. Supported `format` values are `xrechnung`, `peppol`, and `zugferd`; `peppol` returns Peppol BIS 3.0 XML generated against Peppol BIS Billing 3.0.20-hotfix, and `zugferd` returns standalone Factur-X/ZUGFeRD CII XML. Readiness failures return `422 EINVOICE_READINESS_FAILED`. Standard invoice PDFs are downloaded through `/api/v1/portal/documents/:id/pdf`.
+
+Peppol portal downloads use the seller and buyer Peppol routing addresses stored on the invoice or credit-note snapshot. XRechnung and ZUGFeRD do not require Peppol routing addresses. If a Peppol snapshot is missing or invalid, fix the organization/client setup for future documents and use the admin invoice correction workflow for already issued documents.
 
 ### List Subscriptions
 

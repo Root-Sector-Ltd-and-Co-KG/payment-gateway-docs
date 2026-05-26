@@ -30,10 +30,12 @@ Under `Settings > Invoicing`, organizations configure two independent document-n
 - Each layout controls prefix, optional middle text, suffix, start number, digit width, year basis, visible date detail, separator, and reset policy.
 - Fiscal-year labels are derived by the backend from the issue date and the configured fiscal-year start month.
 - Sites may override only the invoice and credit-note prefixes. They do not create their own sequence counters or fiscal/calendar rules.
+- **Organization eInvoice readiness** groups required data by format. Seller identity and tax basics are shared by all formats. XRechnung uses buyer reference / German Leitweg-ID guidance and requires an IBAN for credit-transfer payment instructions. Peppol BIS 3.0 XML uses seller and buyer Peppol routing addresses. ZUGFeRD / Factur-X does not use Peppol routing address fields.
+- A Peppol routing address is the party identifier written to XML as `EndpointID`. It is not automatically the VAT ID. Use a VAT-based scheme only when the Peppol service provider or trading partner confirms that exact scheme and value. Use GLN (`0088`) only when the party has supplied a GS1 Global Location Number. Use Leitweg-ID as Peppol scheme `0204` only when a German public-sector recipient confirms it as the Peppol receiver address.
 
 The full API payload shape for these settings is documented in the Admin API reference (see **Organization Settings** on the [Admin API](../api-reference/admin-api) page).
 
-![E-invoicing settings page showing XRechnung, ZUGFeRD, Peppol, validation, Leitweg-ID, and seller identity fields](/screenshots/app/einvoicing-settings.png)
+![E-invoicing settings page showing format-specific readiness for XRechnung, Peppol BIS 3.0 XML, ZUGFeRD/Factur-X, payment account, Peppol routing address, and seller identity fields](/screenshots/app/einvoicing-settings.png)
 
 ## Data Retention & Geolocation
 

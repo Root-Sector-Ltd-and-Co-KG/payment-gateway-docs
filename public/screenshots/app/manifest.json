@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-05-22T18:46:24.468Z",
+  "capturedAt": "2026-05-25T20:25:57.149Z",
   "organizationName": "Marketing Demo Commerce GmbH",
   "screenshots": [
     {
@@ -90,7 +90,7 @@
       "id": "einvoicing-settings",
       "route": "/settings/invoicing",
       "title": "E-Invoicing Settings",
-      "description": "E-invoice settings for XRechnung, ZUGFeRD, Peppol, and PDF document generation.",
+      "description": "Organization eInvoice readiness for XRechnung, Peppol BIS 3.0 XML, ZUGFeRD/Factur-X, payment account, and seller identity data.",
       "asset": "/screenshots/app/einvoicing-settings.png"
     },
     {

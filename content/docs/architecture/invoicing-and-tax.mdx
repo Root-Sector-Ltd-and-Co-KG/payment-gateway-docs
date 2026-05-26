@@ -18,7 +18,7 @@ Invoices enforce a strict immutability rule designed for accounting integrity. T
 
 ### Invoice Corrections
 
-Once an invoice reaches the `issued` state, standard mutations are blocked. However, minor corrections, such as typographical errors in addresses or missing metadata, can be requested through the invoice correction workflow.
+Once an invoice reaches the `issued` state, standard mutations are blocked. However, minor corrections, such as typographical errors in addresses, missing metadata, or a corrected buyer Peppol routing address snapshot, can be requested through the invoice correction workflow.
 
 These corrections require a formal reason string, user ID, and timestamp, permanently appending an audit trail to the invoice metadata. Corrections cannot alter line items or financial amounts; changing amounts requires a credit note or reversal workflow.
 

@@ -1,22 +1,53 @@
 ---
 title: E-Invoice Formats
-description: Technical overview of e-invoice formats, validation rules, and PDF/A-3 generation.
+description: Technical overview of e-invoice formats, readiness rules, validation evidence, and PDF/A-3 generation.
 ---
 
 # E-Invoice Formats
 
-The Payment Gateway implements native e-invoicing pipelines for supported formats such as ZUGFeRD/Factur-X, Peppol BIS Billing, and XRechnung. It generates machine-readable XML structures embedded within PDF/A-3 archives or delivered standalone where the organization has enabled the relevant formats. Legal suitability depends on your jurisdiction, buyer type, seller configuration, and review process.
+The Payment Gateway implements native e-invoicing pipelines for supported formats such as XRechnung, Peppol BIS 3.0 XML, and ZUGFeRD/Factur-X. The Peppol generator targets Peppol BIS Billing 3.0.20-hotfix technically while the Admin UI uses the customer-facing Peppol BIS 3.0 XML label. It generates machine-readable XML structures embedded within PDF/A-3 archives or delivered standalone where the organization has enabled the relevant formats. Legal suitability depends on your jurisdiction, buyer type, seller configuration, and review process.
 
 ## Supported Formats & Validation
 
-The system includes built-in preflight checks, XML well-formedness checks, required-element checks, and automated regression flows for generated e-invoice outputs. Official XSD/Schematron validation is treated as periodic release evidence and should be rerun after generator changes or before a compliance-sensitive release.
+The system includes built-in preflight checks, XML well-formedness checks, required-element checks, and automated regression flows for generated e-invoice outputs. Internal smoke validation records generated fixture checksums and structural XML assertions outside the runtime path; historical main-backend script and tmp fixture helpers are not part of the current implementation. Official XSD/Schematron validation is treated as periodic release evidence and should be rerun after generator changes or before a compliance-sensitive release.
 
-The supported standards currently include:
-1. **ZUGFeRD / Factur-X**: Factur-X CII XML, with hybrid PDF/A-3 output available on the admin ZUGFeRD PDF endpoint.
-2. **Peppol BIS Billing 3.0**: An international standard mapped back to UBL (Universal Business Language).
-3. **XRechnung**: A strict UBL subset essential for German B2G transactions.
+The eInvoice readiness groups are:
+
+1. **XRechnung**: strict UBL output for German public-sector transactions.
+2. **Peppol BIS 3.0 XML**: customer-facing label for Peppol output; the technical target is **Peppol BIS Billing 3.0.20-hotfix**.
+3. **ZUGFeRD / Factur-X**: Factur-X CII XML, with hybrid PDF/A-3 output available on the admin ZUGFeRD PDF endpoint.
 
 External validation can be performed with official KoSIT, Peppol, and Factur-X/ZUGFeRD validators, including Schematron rule sets such as `FACTUR-X_EN16931.xslt`, `PEPPOL-EN16931-UBL.xslt`, and XRechnung UBL rules. These external validators are not embedded in the runtime path.
+
+## Readiness Model
+
+The Admin UI groups **Settings > Invoicing > Organization eInvoice readiness** by format so operators can see why each field matters:
+
+- **Seller/company details** are used by all e-invoice formats.
+- **Payment account / IBAN** is required for XRechnung and for Germany-specific Peppol scenarios where the recipient requires payment instructions.
+- **Seller Peppol routing address** is required only for Peppol BIS 3.0 XML. It is the seller `EndpointID` written into the XML, not proof that the seller can receive Peppol messages.
+- **Buyer reference / German Leitweg-ID** supports BuyerReference data. Germany-only: Leitweg-ID is a German public-sector buyer reference, not the seller's own identifier. It is normally supplied by the recipient in the order or contract and is written to BT-10 BuyerReference.
+- **ZUGFeRD / Factur-X** uses the normal invoice identity, tax, and PDF generation data. It does not use Peppol routing addresses.
+
+Invoice detail readiness is lifecycle-aware. Draft invoices show pre-issue checks so operators can fix seller, buyer, payment, tax, and Peppol routing data before issuing. Drafts do not show the missing final invoice number as user-fixable data because the system assigns the final number during issue. XML and hybrid PDF eInvoice downloads are intentionally blocked until the invoice is issued; draft invoices only support pro forma PDF download.
+
+Peppol routing addresses are the participant identifiers written to UBL as `cbc:EndpointID`. Store the Peppol Electronic Address Scheme (EAS) and the identifier value separately. Enter only the value in the value field; do not include prefixes such as `0088:` or `0204:`.
+
+Do not assume a VAT ID is the recipient's Peppol address. A buyer or seller may use a VAT-based Peppol identifier only if that exact identifier and EAS scheme are registered or confirmed for that participant. Other common schemes include `0088` for GLN. A GLN is a 13-digit GS1 Global Location Number used to identify a company, site, or department. Always use the scheme and value supplied by the trading partner or their Peppol service provider.
+
+Peppol routing address, Peppol access point, and SMP are different concepts. The routing address is invoice data. A Peppol access point is the accredited service provider used to send or receive Peppol messages. SMP is the discovery registry used to find a receiving participant's access point and capabilities. This application generates Peppol BIS XML; actual network delivery requires an access point or service provider outside the generated XML.
+
+The seller Peppol routing address is configured at organization level. The buyer Peppol routing address is stored on the Client under tax and compliance data, then copied onto new invoice and credit-note snapshots. Issued documents keep their snapshot for auditability. Updating the Client later does not change issued invoices; use the invoice correction workflow to update the issued invoice snapshot before Peppol BIS 3.0 XML can be generated for that document. Buyers who receive through Peppol must be discoverable by their registered participant ID and supported document type.
+
+Germany-only: Leitweg-ID is a German public-sector buyer reference. Use it only when the German public-sector recipient provides it, usually in the order, contract, or procurement portal. It may also be used as a Peppol routing identifier with scheme `0204` when the recipient confirms that address.
+
+Fatal readiness issues block generation even when extra strict diagnostics are disabled. This includes missing seller or buyer Peppol routing addresses, invalid Peppol EAS scheme IDs, required German payment instructions where applicable, and empty XML elements.
+
+## Peppol Release Tracking
+
+The runtime target is pinned to **Peppol BIS Billing 3.0.20-hotfix** while the UI keeps the customer-facing label **Peppol BIS 3.0 XML**. The next published Peppol BIS Billing release dated **20 May 2026** is tracked as an upcoming release and becomes mandatory on **17 August 2026**; it is not the runtime target of this implementation.
+
+The Peppol Electronic Address Scheme list is generated from the pinned Peppol EAS source used by both Go backends and the Admin Frontend dropdown. VAT-based shortcuts in the UI are suggestions only; XML generation uses stored routing address values from organization and invoice snapshots.
 
 ## The ZUGFeRD / Factur-X Generation Pipeline
 
@@ -44,3 +75,7 @@ As different regions require varying formats (or restrict them entirely), the AP
 2. **Portal-Level Exposure**: Determines which of those generated formats should be visibly offered to the end-consumer via the customer portal (`settings.portal.allowedDownloadFormats`).
 
 The resulting configuration dictates which standalone XML formats `/api/v1/portal/documents/:id/einvoice?format=...` may return. XRechnung and Peppol return UBL XML; `format=zugferd` returns Factur-X/ZUGFeRD CII XML. Hybrid ZUGFeRD PDF/A-3 output is served by the admin endpoint `/api/v1/invoices/:id/pdf/zugferd`; standard portal PDFs remain on `/api/v1/portal/documents/:id/pdf`.
+
+## Validation Evidence
+
+Release validation records generated XML fixtures, checksums, and a summary JSON from the internal eInvoice validation harness. That smoke tier checks high-value signals such as Peppol customization/profile identifiers, seller and buyer routing address schemes, required payment means, namespaces, and empty-element absence. Optional external Schematron validation must be labelled with the validator artefact release used for that run.
