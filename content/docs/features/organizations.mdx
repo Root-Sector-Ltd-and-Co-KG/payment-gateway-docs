@@ -50,6 +50,21 @@ dashboard and work inside the selected scope.
 
 ![Organization management showing multiple demo tenants in one self-hosted deployment](/screenshots/app/organizations.png)
 
+## Organization Offboarding
+
+Global admins offboard organizations from **Organizations** with a guided workflow instead of a simple destructive delete.
+
+The workflow:
+
+- previews related records across organization-owned collections,
+- offers an optional redacted ZIP export before cleanup,
+- revokes memberships and organization API keys immediately,
+- soft-deletes the organization, sites, providers, domains, templates, and recurring schedules,
+- schedules eligible cleanup after a grace period or runs eligible cleanup immediately,
+- keeps invoices, credit notes, invoice sequences, and tax records protected by default.
+
+For protected statutory records, the admin can choose to retain them, apply legal-safe anonymization, or use a break-glass purge with an additional typed confirmation. The compatibility delete API uses the conservative default: access revocation and soft-delete now, eligible cleanup after the default grace period, and protected records retained.
+
 ## User Management
 
 The **Users** section allows you to invite team members to your Organization and assign them roles.
