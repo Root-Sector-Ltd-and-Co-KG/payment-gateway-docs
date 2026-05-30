@@ -266,7 +266,9 @@ In the example above, the first line is auto-calculated and the second line uses
 
 Recurring schedule payloads and responses use `nextRunDate` for the next scheduled processing date. Use `startDate` when creating a schedule; the backend materializes `nextRunDate` from the start date and interval. Do not use the older `nextRunAt` name in integrations.
 
-The due-schedule processor generates invoices for schedules whose `nextRunDate` is due. Generated invoices remain drafts unless the schedule has `autoFinalizeInvoices` enabled. Automatic email sending only happens when schedule and organization email settings allow it; recurring processing does not automatically capture payment-provider funds.
+Updating `startDate` also moves `nextRunDate` before any invoices have been generated. Once a schedule has generated invoices, `startDate` can only move future billing after the current `nextRunDate`; moving it onto the current cycle or an earlier date returns a validation error.
+
+The due-schedule processor generates invoices for schedules whose `nextRunDate` is due. Generated invoices remain drafts until an operator issues them unless the schedule has `autoFinalizeInvoices` enabled. `autoSendInvoices` is valid only when `autoFinalizeInvoices` is also enabled; recurring auto-send is the schedule-level email trigger after automatic issue. Recurring processing does not automatically capture payment-provider funds.
 
 ---
 

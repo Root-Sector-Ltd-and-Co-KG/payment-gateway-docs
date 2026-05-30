@@ -7,7 +7,7 @@ description: Card-data boundary, provider component use, and self-hosted payment
 
 This page explains the intended payment-data boundary for self-hosted deployments. It is implementation guidance for operating the gateway safely; it is not assessment advice and does not replace your own PCI DSS, GDPR, tax, or regulated outsourcing review.
 
-The public Trust Center is the customer-facing place to publish payment-data boundary statements only after the relevant asset is marked available and approved. Unapproved memos, work tickets, and review notes must not be treated as customer evidence.
+Use the public Trust Center and signed-in dashboard procurement pack for customer-facing payment-data boundary summaries. Internal review notes, draft memos, and work tickets are not customer evidence unless they are explicitly shared as part of an approved procurement or release package.
 
 ## Default Card Flow Boundary
 
@@ -49,6 +49,12 @@ Minimum controls for custom checkout work:
 4. Keep checkout domain TLS, CSP, dependency review, and script provenance under change control.
 5. Document the final data flow and have it reviewed by your PCI DSS assessor or payment-security specialist.
 
+## Payment-Page Scripts And Monitoring
+
+Keep a small inventory of scripts allowed on checkout/payment pages, including provider SDKs, owner, purpose, approval date, and required CSP origins. Do not add analytics, tag managers, session replay, marketing pixels, or custom JavaScript to checkout pages unless the change is reviewed for payment-data impact.
+
+Use CSP and change/tamper monitoring for headers and received page contents where the checkout page can affect card-entry security. Retain monitor evidence with deployment records where applicable.
+
 ## Operational Evidence To Keep
 
 For procurement and audit review, keep evidence for:
@@ -63,6 +69,8 @@ For procurement and audit review, keep evidence for:
 ## Related Pages
 
 - [Trust Center](https://payment-gateway.app/trust)
+- [Evidence & Audit Checklist](./evidence-audit-checklist)
+- [Release Security Transparency](./release-security-transparency)
 - [Data Protection Guide](./data-protection)
 - [Shared Responsibility Matrix](./shared-responsibility-matrix)
 - [Checkouts](../features/checkouts)

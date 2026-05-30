@@ -81,14 +81,14 @@ it selects a release.
 
 The release policy blocks unwaived `HIGH` and `CRITICAL` vulnerability findings in the generated reports. A release with blocking findings must either be fixed before publication or carry explicit waiver evidence.
 
-Waivers require a CVE or vulnerability ID, owner, rationale, expiry, and compensating controls. Expired waivers fail the release. A waiver without a clear owner, reason, expiry date, and mitigation is not acceptable release evidence.
+Where a release includes an accepted exception or waiver, review the published rationale, affected component or finding, expiry or review date, and compensating controls. Treat missing, failed, or expired exception evidence as something to resolve before production rollout.
 
 Use `policy-result.json` as the machine-readable release decision record. The file records:
 
 - evaluated severities,
 - unwaived blocking findings,
 - accepted waivers,
-- invalid or expired waivers,
+- invalid or expired exception evidence where present,
 - evaluation date and generated timestamp.
 
 ## Operator Review

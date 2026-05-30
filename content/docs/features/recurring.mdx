@@ -17,6 +17,11 @@ When creating a schedule, you define:
 * **Frequency**: (e.g., Monthly, Annually, or custom intervals).
 * **Line Items**: The recurring charges.
 * **Start and End Dates**: To cap the subscription duration.
+* **Issue and send behavior**: Whether generated invoices stay as drafts for review or are issued automatically.
+
+By default, a recurring run creates a draft invoice for operator review. Enable **Auto-issue invoices immediately** only when the generated invoice should become an issued invoice without manual review. **Auto-send invoices** is available only with auto-issue; disabling auto-issue also disables auto-send.
+
+Changing `startDate` before any invoice has been generated moves the schedule's `nextRunDate` to the new date. After a schedule has generated invoices, `startDate` can only move future billing to a date after the current `nextRunDate`; rewinding onto the current or an earlier cycle is rejected to avoid duplicate billing.
 
 ## Automated Execution
 
@@ -26,8 +31,10 @@ If a schedule is due, the processor:
 
 1. Generates a new invoice from the schedule template data.
 2. Evaluates the current tax rules for the invoice tax point.
-3. Leaves the invoice as `draft` unless `autoFinalizeInvoices` is enabled for that schedule.
-4. Sends an invoice email only when the schedule and organization email settings explicitly enable automatic sending.
+3. Leaves the invoice as `draft` until an operator issues it, unless `autoFinalizeInvoices` is enabled for that schedule.
+4. Sends the recurring invoice email once after automatic issue only when `autoSendInvoices` is also enabled.
+
+The same processor also honors existing recurring draft invoices whose `scheduledFinalizeAt` timestamp is due. This is separate from generating the next schedule cycle: the existing draft is issued, PDF generation is queued, payment-link creation follows invoicing settings, and schedule-level auto-send runs only when the linked schedule has `autoSendInvoices` enabled. New recurring drafts created with auto-issue disabled stay as drafts unless an explicit scheduled finalization timestamp exists.
 
 Recurring schedules do not automatically capture money from saved cards or bank mandates. Payment collection remains tied to invoice payment links, checkout flows, payment-provider state, and the merchant's operational process.
 
@@ -38,13 +45,13 @@ Recurring-generated invoices use the active invoice document template from the o
 Recurring schedules also power the buyer-facing customer portal. The same underlying schedule can be:
 
 * managed by operators in the Admin API and Admin Panel,
-* displayed to buyers in the customer portal for upcoming charge visibility,
-* cancelled by buyers for future cycles through the customer portal where that portal surface is enabled.
+* displayed to buyers in the [customer portal](./customer-portal) for upcoming charge visibility,
+* cancelled by buyers for future cycles through a confirmation step in the customer portal where that portal surface is enabled.
 
-This separation keeps the billing engine generic: the recurring schedule model is shared, while the UI and permissions differ between admin operations and customer self-service.
+This separation keeps the billing engine generic: the recurring schedule model is shared, while the UI and permissions differ between admin operations and customer self-service. Portal routes are documented in [Main Backend Public Endpoints](../api-reference/main-api).
 
 ## Product Scope
 
-The Recurring module is part of the self-hosted gateway runtime. It creates merchant invoices for the merchant's own clients and customers.
+The Recurring module is part of the self-hosted gateway runtime. It creates merchant invoices for the merchant's own clients and customers, and it does not change the local installation's signed license state, support entitlement, update eligibility, or runtime access decisions.
 
-Product-license purchase, renewal, support, and account status are handled outside the merchant billing runtime. Those account-level processes do not create merchant recurring schedules, and merchant recurring schedule activity does not change product-license or support status.
+payment-gateway.app may also use the same gateway APIs in a vendor-operated workspace to bill its own product-license customers. That operator workflow is separate from license enforcement inside each self-hosted customer installation.

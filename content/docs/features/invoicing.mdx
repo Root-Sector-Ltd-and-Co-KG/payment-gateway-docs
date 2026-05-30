@@ -57,12 +57,14 @@ For reverse-charge, export, exempt, zero-rated, and manual VAT outcomes, invoice
 
 ## The Customer Portal
 
-Rather than emailing large PDF attachments that may be blocked by spam filters, the gateway hosts a secure **Customer Portal**.
+Rather than emailing large PDF attachments that may be blocked by spam filters, the gateway hosts a secure [Customer Portal](./customer-portal).
 
 End-users navigate to your custom domain (e.g., `invoices.yourcompany.com`) and authenticate using a one-time secure link, with OTP confirmation available where configured. From there, they can independently:
 
-- Download their invoice as a PDF.
-- Download issued invoices as machine-readable native eInvoice XML: XRechnung, Peppol BIS 3.0 XML, or ZUGFeRD/Factur-X CII if configured.
+- Download portal-visible invoice and credit-note PDFs when PDF downloads are enabled.
+- Pay eligible open invoices when a payment link is available.
+- See scheduled finalization timing for draft recurring invoices when `scheduledFinalizeAt` is present.
+- Download issued invoice XML: XRechnung, Peppol BIS 3.0 XML, or ZUGFeRD/Factur-X CII if configured.
 
 E-invoice settings control XRechnung, Peppol, and ZUGFeRD readiness. Seller Peppol routing address is the seller `EndpointID` written into Peppol XML; use the sender address type and value configured by your Peppol service provider. Buyer Peppol routing address is the delivery address supplied by the recipient or their Peppol service provider. Choose the address type separately from the value; for example, select `0088` only for a supplied GS1 GLN or `0204` only when a German public-sector recipient confirms its Leitweg-ID as the Peppol receiver address, then enter only the identifier value without the prefix. Do not assume VAT ID is correct unless the recipient confirms a VAT-based Peppol address type. Germany-only: Leitweg-ID is the buyer/public authority reference for German public-sector invoices and should come from the order or contract.
 

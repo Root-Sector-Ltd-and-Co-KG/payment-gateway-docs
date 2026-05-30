@@ -14,6 +14,8 @@ The Payment Gateway exposes two HTTP surfaces, but they do not serve the same au
 
 All endpoints return JSON. All timestamps are ISO 8601 UTC strings.
 
+For the buyer-facing checkout, portal, subscription, and runtime webhook surface, see [Main Backend Public Endpoints](./main-api).
+
 > [!NOTE]
 > The Admin Backend mounts routes under `/api/v1`. The default reverse proxy configuration shipped with the deployment package rewrites `/v1/*` to `/api/v1/*` on `{$ADMIN_BACKEND_DOMAIN}`; see [Caddy reverse proxy](../deployment/caddy#admin-api-hostname-and-v1-prefix).
 
@@ -55,7 +57,7 @@ JWTs expire after a configured interval. Use `POST /api/v1/auth/refresh-token` t
 
 ### Main Backend Public Endpoints
 
-Checkout session retrieval (`GET /api/v1/checkouts/:id`) and portal OTP flows use public endpoints. Webhook endpoints (`POST /hooks/:type/:providerId`) verify request authenticity through provider-specific controls: Stripe and GoCardless signatures, PayPal transmission-header verification, and Mollie payment-ID lookup with tenant/provider ownership validation.
+Checkout session retrieval (`GET /api/v1/checkouts/:id`) and portal auth flows use public endpoints; route-level details live in [Main Backend Public Endpoints](./main-api). Webhook endpoints (`POST /hooks/:type/:providerId`) verify request authenticity through provider-specific controls: Stripe and GoCardless signatures, PayPal transmission-header verification, and Mollie payment-ID lookup with tenant/provider ownership validation.
 
 ---
 

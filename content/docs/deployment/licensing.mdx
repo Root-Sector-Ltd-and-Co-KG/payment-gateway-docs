@@ -5,7 +5,7 @@ description: Understanding runtime license states and recovery actions.
 
 # Licensing Operations
 
-The Payment Gateway operates under a commercial license verification system. The backend licensing engine evaluates signed license claims against your active subscription and heartbeat cadence to derive a runtime state.
+The Payment Gateway operates under a commercial license verification system. The backend licensing engine evaluates signed license claims, the license support window, entitlement policy, and heartbeat cadence to derive a runtime state.
 
 Understanding these states helps system operators keep service uninterrupted.
 
@@ -30,27 +30,27 @@ Additional organizations beyond the tier allowance can be added for 250 EUR per 
 - `GRACE`: Heartbeat not received for 14+ days. Payment processing, data access, and scheduled jobs continue normally, but administrators will see warnings in the Admin Panel. Updates and support are paused until a successful heartbeat restores the license to `ACTIVE`.
 - `SOFT_LOCK`: Heartbeat gap 31+ days. Payment processing, data access, and scheduled jobs still continue. This is an informational state surfaced on the admin dashboard for visibility. Updates and support remain paused.
 - `READ_ONLY`: Heartbeat gap 45+ days, or never heartbeated. Payment processing, data access, and scheduled jobs still continue. This is also an informational state. Updates and support remain paused.
-- `BLOCKED`: The license has been revoked or suspended, or the installation has been blocked for a policy violation such as reporting a product version newer than the highest version entitled by its support window. All protected endpoints return `403 Forbidden`. This is the only state that restricts runtime access.
-- `NOT_ACTIVATED`: No license key is configured for the installation. All protected endpoints return `403 Forbidden` until a license key is activated. This state is shown immediately on a fresh install; it is not treated as `GRACE`.
+- `BLOCKED`: The license has been revoked or suspended, or the installation has been blocked for a policy violation such as reporting a product version newer than the highest version entitled by its support window. Protected endpoints return `403 Forbidden`. Together with `NOT_ACTIVATED`, this state restricts runtime access.
+- `NOT_ACTIVATED`: No license key is configured for the installation. Protected endpoints return `403 Forbidden` until a license key is activated. The Admin Backend shows this state immediately on a fresh install; the Main Backend may report a short startup `GRACE` for up to one hour while a new host is being activated.
 
 > [!IMPORTANT]
 > Operations continue normally through `GRACE`, `SOFT_LOCK`, and `READ_ONLY`. These states only affect update eligibility and support access; they do not degrade or restrict your running system. Only `BLOCKED` and `NOT_ACTIVATED` prevent runtime access. `BLOCKED` is never caused by an expired heartbeat alone, but it can be applied manually by the vendor or automatically when the installation reports an out-of-entitlement product version.
 
 ## Operator Runbook
 
-Use **System > Licensing** as the source of truth for local runtime state, activation, **Sync License Now**, support window, and last synchronization time. Only global administrators can open this page. Organization administrators can still use the non-portal recovery settings pages while runtime access is blocked.
+Use **System > Licensing** as the source of truth for local runtime state, activation, **Sync License Now**, support window, and last synchronization time. Only global administrators can open this page. Organization administrators using the Admin UI can still open Notifications, Geolocation, Invoicing, Checkout, and Tax settings for recovery while runtime access is blocked. Portal, templates, encryption, API-key settings, and API-key-authenticated requests remain license-gated.
 
 ### First checks
 
 1. Confirm the Admin Backend can make outbound HTTPS requests to the Licensing Authority. Official self-hosted deployments use `https://payment-gateway.app`; do not point production hosts at local or arbitrary endpoints.
 2. Keep host time synchronized with NTP. Clock drift can make signed license tokens appear invalid or expired.
-3. Use **System > Licensing > Sync License Now** after any customer portal or operator portal change that should affect the self-hosted host immediately.
+3. Use **System > Licensing > Sync License Now** after any payment-gateway.app account portal or operator workspace change that should affect the self-hosted host immediately.
 
 ### Blocked, suspended, or revoked
 
 `BLOCKED` covers manual blocks, suspended licenses, revoked licenses, and policy blocks such as a product version that is newer than the license support window allows. Protected runtime endpoints return `403 Forbidden`; activation and sync stay reachable for global administrators.
 
-1. In the customer portal or operator workspace, confirm whether the remote status is manual `BLOCKED`, `SUSPENDED`, `REVOKED`, or a version/support policy block.
+1. In the payment-gateway.app account portal or operator workspace, confirm whether the remote status is manual `BLOCKED`, `SUSPENDED`, `REVOKED`, or a version/support policy block.
 2. Clear the remote cause first. Sync cannot override a manual block, suspension, or revocation while it remains set in the Licensing Authority.
 3. If the block is caused by version entitlement, either renew support so the running version is covered or downgrade to a covered release.
 4. On the self-hosted host, run **System > Licensing > Sync License Now**. If sync still reports `BLOCKED`, wait briefly for the portal update to propagate and retry once before escalating with the request IDs shown in the UI.
@@ -69,7 +69,7 @@ Saving a future support end date can auto-clear an automatic policy `BLOCKED` st
 Use deactivation when the local installation identity is wrong, the host was rebuilt with stale license state, or support asks you to reset the binding.
 
 1. From **System > Licensing**, deactivate/reset the local license state.
-2. Confirm the intended license is usable in the customer portal or operator workspace.
+2. Confirm the intended license is usable in the payment-gateway.app account portal or operator workspace.
 3. Activate again from the same deployed host and public egress IP that pulled the licensed images.
 4. After activation, run **Sync License Now** if the portal status changed during the reset.
 

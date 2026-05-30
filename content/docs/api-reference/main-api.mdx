@@ -219,7 +219,7 @@ Returns whether a country code is an EU member state.
 
 ## Customer Portal
 
-The portal API allows buyers to self-serve invoice and subscription management. All portal endpoints (except OTP auth) require a valid portal session token.
+The portal API allows buyers to self-serve invoice and subscription management. All portal endpoints except auth endpoints require a valid portal session token.
 
 ### Request OTP
 
@@ -233,8 +233,7 @@ Sends a one-time password to the customer's email address.
 
 ```json
 {
-  "email": "jane@example.com",
-  "siteId": "site_abc"
+  "email": "jane@example.com"
 }
 ```
 
@@ -251,8 +250,7 @@ Exchanges an OTP for a portal session token.
 ```json
 {
   "email": "jane@example.com",
-  "otp": "123456",
-  "siteId": "site_abc"
+  "code": "123456"
 }
 ```
 
@@ -270,6 +268,38 @@ Upon OTP verification, the backend issues a **signed portal session token** (opa
 ```http
 Authorization: Bearer <portal_session_token>
 ```
+
+### Exchange Magic Link
+
+```http
+POST /api/v1/portal/auth/magic-link
+```
+
+Exchanges a one-time magic-link token for the same portal session response as OTP verification. Magic-link tokens are single-use; replayed, expired, or malformed tokens return an authentication error.
+
+**Request Body:**
+
+```json
+{
+  "token": "portal_magic_link_token"
+}
+```
+
+### Refresh Portal Session
+
+```http
+POST /api/v1/portal/auth/refresh
+```
+
+Rotates the HTTP-only portal refresh cookie and returns a fresh portal session token. The frontend calls this endpoint when a portal API request receives `401 Unauthorized`.
+
+### Logout Portal Session
+
+```http
+POST /api/v1/portal/auth/logout
+```
+
+Clears the portal refresh cookie. The frontend also removes the in-memory portal bearer token.
 
 ### Get Portal Session
 
@@ -300,15 +330,16 @@ Authorization: Bearer portal_session_token
 GET /api/v1/portal/documents
 ```
 
-Returns invoices and credit notes for the authenticated customer.
+Returns portal-visible billing documents for the authenticated customer: standard invoices in `draft` or `issued` state and issued credit notes. Pro forma invoices are excluded from the document list.
 
-### Download Invoice PDF
+### Download Document PDF
 
 ```http
-GET /api/v1/portal/documents/:id/pdf
+GET /api/v1/portal/documents/:id/pdf?type=invoice
+GET /api/v1/portal/documents/:id/pdf?type=credit-note
 ```
 
-Returns the invoice PDF as `application/pdf`.
+Returns the invoice or credit-note PDF as `application/pdf`. If `type` is omitted, the backend treats the document as an invoice.
 
 ### Download E-Invoice (XML)
 
@@ -318,7 +349,7 @@ GET /api/v1/portal/documents/:id/einvoice?format=xrechnung
 
 Returns the requested e-invoice XML when that format is enabled for both organization eInvoice generation and portal downloads. Supported `format` values are `xrechnung`, `peppol`, and `zugferd`; `peppol` returns Peppol BIS 3.0 XML generated against Peppol BIS Billing 3.0.20-hotfix, and `zugferd` returns standalone Factur-X/ZUGFeRD CII XML. Readiness failures return `422 EINVOICE_READINESS_FAILED`. Standard invoice PDFs are downloaded through `/api/v1/portal/documents/:id/pdf`.
 
-Peppol portal downloads use the seller and buyer Peppol routing addresses stored on the invoice or credit-note snapshot. XRechnung and ZUGFeRD do not require Peppol routing addresses. If a Peppol snapshot is missing or invalid, fix the organization/client setup for future documents and use the admin invoice correction workflow for already issued documents.
+Peppol portal downloads use the seller and buyer Peppol routing addresses stored on the invoice snapshot. XRechnung and ZUGFeRD do not require Peppol routing addresses. If a Peppol snapshot is missing or invalid, fix the organization/client setup for future documents and use the admin invoice correction workflow for already issued documents. Credit notes are available through the portal as PDF documents; the portal e-invoice endpoint is invoice-only.
 
 ### List Subscriptions
 
@@ -403,6 +434,16 @@ POST /api/v1/portal/subscriptions/:id/cancel
 ```
 
 Allows a customer to cancel a recurring schedule. The operation is idempotent and uses future-cycle semantics when the schedule still has a next run date.
+
+**Request Body:**
+
+```json
+{
+  "reason": "Switching to annual billing"
+}
+```
+
+`reason` is optional. When provided, the backend trims the value, caps it at 500 characters, and stores it on the recurring schedule for operator records. Repeated cancellation calls keep the existing cancellation state instead of creating a second mutation.
 
 **Response `200`:**
 

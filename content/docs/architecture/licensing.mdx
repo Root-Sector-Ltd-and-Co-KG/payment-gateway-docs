@@ -5,7 +5,7 @@ description: Details on the licensing engine, license states, and operator actio
 
 # Licensing Engine
 
-The Payment Gateway uses a signed-license runtime model. During activation and sync, the installation receives signed entitlement claims from the vendor license service. The self-hosted installation stores the local license identity and enforces the evaluated runtime state in the Admin Backend and Main Backend.
+The Payment Gateway uses a signed-license runtime model. During activation and sync, the installation receives signed entitlement claims from the Licensing Authority (`payment-gateway.app`, implemented by `payment-gateway-app-website`). The self-hosted installation stores the local license identity and enforces the evaluated runtime state in the Admin Backend and Main Backend.
 
 ## Runtime Architecture
 
@@ -15,7 +15,7 @@ flowchart TB
     AdminBE["Admin Backend\nlicense service"]
     MainBE["Main Backend\nlicense service"]
     Mongo[("Local MongoDB\nsettings.license")]
-    License["Vendor license service"]
+    License["Licensing Authority\npayment-gateway.app"]
 
     AdminUI -->|activate, sync, deactivate| AdminBE
     AdminBE -->|activation and sync| License
@@ -47,7 +47,7 @@ Only `BLOCKED` and `NOT_ACTIVATED` restrict runtime behavior. `GRACE`, `SOFT_LOC
 
 Licensing state controls whether the installation may run protected gateway features. It is separate from merchant billing data created inside the gateway.
 
-Recurring schedules in the gateway create invoices for the merchant's customers only. They do not modify installation license state, support status, update eligibility, or license enforcement state.
+Recurring schedules in a self-hosted installation create invoices for that merchant's customers. They do not modify the installation's signed license state, support status, update eligibility, or license enforcement state. payment-gateway.app may use a vendor-operated gateway workspace, configured through the app-website billing bridge, to bill product-license customers. Those commercial recurring schedules are not merchant recurring schedules in the customer installation and do not alter local license enforcement. If a bridge resync changes a renewal schedule after invoices have already generated, it must move the next renewal forward rather than rewind onto a current or earlier cycle.
 
 ## License Tiers
 

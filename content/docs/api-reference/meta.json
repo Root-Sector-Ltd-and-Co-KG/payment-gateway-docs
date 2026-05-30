@@ -1,4 +1,4 @@
 {
   "title": "API Reference",
-  "pages": ["index", "admin-api", "webhooks"]
+  "pages": ["index", "admin-api", "main-api", "webhooks"]
 }
