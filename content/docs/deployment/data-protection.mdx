@@ -66,7 +66,7 @@ Under `Settings > Retention` (organization scope), configure:
 
 Document rationale for each value and align with jurisdiction/accounting rules.
 
-For full tenant offboarding, use the global-admin organization offboarding workflow. It previews impacted collections, offers an optional redacted ZIP export, revokes access immediately, soft-deletes tenant configuration, and either schedules or immediately runs eligible cleanup. Statutory invoice, credit-note, numbering, and tax evidence is retained by default; anonymization and break-glass purge require explicit admin confirmation and legal review.
+For full tenant offboarding, use the global-admin organization offboarding workflow. It previews impacted collections, offers an optional redacted ZIP export, revokes access immediately, soft-deletes tenant configuration, and either schedules or immediately runs eligible cleanup. Offboarded organizations move to a dedicated Offboarding view with cleanup status and restore availability during the grace period. Statutory invoice, credit-note, numbering, and tax evidence is retained by default; anonymization and break-glass purge require explicit admin confirmation and legal review. Normal offboarding supports an optional audit reason; break-glass purge also requires a confirmation checkbox. Restore reactivates the organization/configuration and memberships captured in the run snapshot, but organization API keys remain revoked and must be rotated or recreated.
 
 ## 5) Backup and Recovery Controls
 
@@ -104,6 +104,8 @@ responsible for:
 
 ## Related Pages
 
+- [Trust Center](https://payment-gateway.app/trust)
+- [Dashboard Procurement Pack](https://payment-gateway.app/dashboard/procurement) (signed-in operators only)
 - [Configuration](./configuration)
 - [Data Processing & Encryption](./data-processing-encryption)
 - [Payment Data Boundary](./payment-data-boundary)

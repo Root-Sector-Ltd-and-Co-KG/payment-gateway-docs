@@ -60,10 +60,15 @@ The workflow:
 - offers an optional redacted ZIP export before cleanup,
 - revokes memberships and organization API keys immediately,
 - soft-deletes the organization, sites, providers, domains, templates, and recurring schedules,
+- moves the organization from the active list into the **Offboarding** tab with cleanup status and restore availability,
 - schedules eligible cleanup after a grace period or runs eligible cleanup immediately,
 - keeps invoices, credit notes, invoice sequences, and tax records protected by default.
 
-For protected statutory records, the admin can choose to retain them, apply legal-safe anonymization, or use a break-glass purge with an additional typed confirmation. The compatibility delete API uses the conservative default: access revocation and soft-delete now, eligible cleanup after the default grace period, and protected records retained.
+Normal offboarding confirmation shows the organization name and ID as context instead of requiring retyping. The admin can add an optional audit reason. For protected statutory records, the admin can choose to retain them, apply legal-safe anonymization, or use a break-glass purge with an additional confirmation checkbox. The compatibility delete API uses the conservative default: access revocation and soft-delete now, eligible cleanup after the default grace period, and protected records retained.
+
+During the delayed cleanup grace period, global admins can restore an offboarded organization from the Offboarding tab. Restore clears deletion metadata and restores memberships and configuration records captured in the offboarding run. Organization API keys stay revoked after restore and must be rotated or recreated.
+
+Offboarding does not delete user accounts. It only removes their membership in the offboarded organization, because the same user can belong to other organizations. User deletion remains a separate user-management workflow.
 
 ## User Management
 
