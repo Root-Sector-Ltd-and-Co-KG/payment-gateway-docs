@@ -1,0 +1,65 @@
+---
+title: Release 4.4.0
+description: Stable release notes for Payment Gateway App 4.4.0.
+---
+
+# Release 4.4.0
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-06-05T18:11:17Z
+- Release tag: v4.4.0
+
+## [4.4.0] - 2026-06-01
+
+### Admin Panel
+- **Organization Offboarding Wizard**: Introduced a streamlined wizard for managing organization offboarding, including lifecycle filters, reason-based confirmation, and data deletion workflows.
+- **Enhanced Licensing Management**: Added support for displaying maintenance status and support package details. License status now includes explicit plan and capacity field tracking.
+- **Organization Capacity Controls**: Implemented a lock mechanism to prevent over-provisioning or modifications during specific lifecycle states.
+- **Item Type Taxonomy Update**: Updated item classification terminology from "Physical/Virtual" to "Goods" and "Digital Service" across the interface to better align with international tax standards.
+- **Invoicing Enhancements**: Added legal timezone support for document numbering, searchable country selection for client management, and a new line-item editor for improved responsiveness.
+- **Tax & VAT Reporting**: Introduced detailed VAT OSS reporting with support for corrections, multi-rate VAT total displays, and the ability to sync default EU VAT rates.
+- **Retention Settings**: Added effective policy previews and validation for data retention settings to improve user feedback during configuration.
+
+### APIs And Integrations
+- **Authentication Documentation**: Updated API documentation to reflect the standardized use of the `Bearer` format for API key authentication.
+- **New Endpoints**: Added endpoints for passkey deletion and expanded organization offboarding lifecycle management.
+- **Payment Provider Changes**: Added support for PayPal integration and removed Coinbase Commerce.
+- **GoCardless Integration**: Enforced stricter metadata key constraints and field limits to ensure compatibility.
+- **Stripe Enhancements**: Implemented idempotency key handling for Payment Intent creation and updated webhook guidance to the 2026-04-22 API version.
+- **Reporting API**: Enhanced reporting parameters to include new source and scope filtering options.
+- **E-Invoicing**: Expanded Peppol routing support with new address fields, validation logic, and schema support.
+
+### Checkout And Customer Portal
+- **Security Monitoring**: Implemented a payment page tamper monitor and script inventory to detect unauthorized changes to the checkout environment.
+- **Subscription Management**: Added a localized cancellation dialog within the customer portal to allow users to manage their recurring schedules directly.
+- **Tax Previews**: Enhanced the payment form to display real-time tax previews for checkout sessions linked to existing invoices.
+- **Checkout Handoff**: Improved stability and feedback during the handoff process between the merchant site and the payment gateway.
+
+### Deployment And Operations
+- **Health Checks**: Added internal health check middleware and routes to facilitate better monitoring by load balancers and orchestration tools.
+- **Document Generation**: Enhanced PDF and email attachment handling with improved filename safety and content-disposition utilities.
+- **Image Provenance**: Docker images are now produced with provenance signing and metadata capture for improved auditability in regulated environments.
+- **SMTP Support**: Enhanced the internal mailer to support STARTTLS for improved compatibility with development and production SMTP relays.
+
+### Security
+- **Passkey Management**: Operators can now manage and delete user passkeys via the admin backend to assist with account recovery or credential rotation.
+- **Payment Page Integrity**: New security monitoring features inventory active scripts on the payment page to protect against client-side injection attacks.
+- **Organization Isolation**: Refined session checks to include selected organization context, preventing cross-organization data leakage during administrative sessions.
+
+### Fixes
+- **Transaction Controls**: Resolved an issue where transactions linked to finalized invoices could be incorrectly modified.
+- **Validation Persistence**: Fixed a bug where validation messages for recurring schedules were cleared prematurely.
+- **Checkout Validation**: Corrected a failure in checkout validation logic that affected specific manual transfer scenarios.
+- **Timezone Alignment**: Fixed inconsistencies in invoice number allocation by strictly enforcing the configured legal timezone.
+
+## Security Artifacts
+
+Release security evidence is linked from the [Release Security Transparency](../deployment/release-security-transparency) guide.
+
+- Artifact bundle: https://docs.payment-gateway.app/release-security/v4.4.0/
+- Scan manifest: https://docs.payment-gateway.app/release-security/v4.4.0/reports/scan-manifest.json
+- Vulnerability policy result: https://docs.payment-gateway.app/release-security/v4.4.0/reports/policy-result.json
+- Vulnerability summary: https://docs.payment-gateway.app/release-security/v4.4.0/reports/summary.md
+- Checksum manifest: https://docs.payment-gateway.app/release-security/v4.4.0/SHA256SUMS
+- Checksum signature bundle: https://docs.payment-gateway.app/release-security/v4.4.0/SHA256SUMS.sigstore.json

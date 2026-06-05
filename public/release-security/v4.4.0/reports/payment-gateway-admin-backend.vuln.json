@@ -1,0 +1,2880 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.71.0"
+  },
+  "ReportID": "019e990f-dc9b-7cbd-9e00-6b8dfae66163",
+  "CreatedAt": "2026-06-05T18:33:34.107837524Z",
+  "ArtifactID": "sha256:631249c11e5b948803c7667d8420548c157ae5c9d22de000dcde41e1d6aaedbf",
+  "ArtifactName": "/tmp/tmp.gmXJkX5MTf/payment-gateway-admin-backend",
+  "ArtifactType": "repository",
+  "Metadata": {
+    "RepoURL": "https://github.com/Root-Sector-Ltd-and-Co-KG/payment-gateway-admin-backend.git",
+    "Tags": [
+      "v4.1.12"
+    ],
+    "Commit": "799fe9b7ae386d00cf6a0aa2df4f71a8637abdbc",
+    "CommitMsg": "Merge remote-tracking branch 'origin/develop'",
+    "Author": "github-actions[bot] \u003cgithub-actions[bot]@users.noreply.github.com\u003e",
+    "Committer": "github-actions[bot] \u003cgithub-actions[bot]@users.noreply.github.com\u003e"
+  },
+  "Results": [
+    {
+      "Target": "go.mod",
+      "Class": "lang-pkgs",
+      "Type": "gomod",
+      "Packages": [
+        {
+          "ID": "payment-gateway-admin-backend",
+          "Name": "payment-gateway-admin-backend",
+          "Identifier": {
+            "PURL": "pkg:golang/payment-gateway-admin-backend",
+            "UID": "9de58cdab1fcb819"
+          },
+          "Relationship": "root",
+          "DependsOn": [
+            "github.com/gin-contrib/cors@v1.7.7",
+            "github.com/gin-gonic/gin@v1.12.0",
+            "github.com/go-playground/validator/v10@v10.30.3",
+            "github.com/go-webauthn/webauthn@v0.17.4",
+            "github.com/golang-jwt/jwt/v5@v5.3.1",
+            "github.com/google/go-cmp@v0.7.0",
+            "github.com/google/uuid@v1.6.0",
+            "github.com/gorilla/sessions@v1.4.0",
+            "github.com/miekg/dns@v1.1.72",
+            "github.com/redis/go-redis/v9@v9.20.0",
+            "github.com/root-sector-ltd-and-co-kg/payment-gateway-lib-common@v1.0.52",
+            "github.com/root-sector-ltd-and-co-kg/payment-gateway-lib-crypto@v1.0.31",
+            "github.com/rs/zerolog@v1.35.1",
+            "github.com/spf13/viper@v1.21.0",
+            "github.com/stretchr/testify@v1.11.1",
+            "github.com/stripe/stripe-go/v85@v85.2.0",
+            "github.com/swaggo/files@v1.0.1",
+            "github.com/swaggo/gin-swagger@v1.6.1",
+            "github.com/swaggo/swag@v1.16.6",
+            "github.com/testcontainers/testcontainers-go@v0.42.0",
+            "github.com/xakep666/mongo-migrate@v0.4.1",
+            "go.mongodb.org/mongo-driver/v2@v2.6.0",
+            "go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin@v0.69.0",
+            "go.opentelemetry.io/contrib/instrumentation/runtime@v0.69.0",
+            "go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc@v1.44.0",
+            "go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp@v1.44.0",
+            "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc@v1.44.0",
+            "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.44.0",
+            "go.opentelemetry.io/otel/metric@v1.44.0",
+            "go.opentelemetry.io/otel/sdk/metric@v1.44.0",
+            "go.opentelemetry.io/otel/sdk@v1.44.0",
+            "go.opentelemetry.io/otel/trace@v1.44.0",
+            "go.opentelemetry.io/otel@v1.44.0",
+            "golang.org/x/crypto@v0.52.0",
+            "google.golang.org/grpc@v1.81.1",
+            "pgregory.net/rapid@v1.2.0",
+            "cloud.google.com/go@v0.123.0",
+            "cloud.google.com/go/auth@v0.20.0",
+            "cloud.google.com/go/auth/oauth2adapt@v0.2.8",
+            "cloud.google.com/go/compute/metadata@v0.9.0",
+            "cloud.google.com/go/iam@v1.11.0",
+            "cloud.google.com/go/kms@v1.31.0",
+            "cloud.google.com/go/longrunning@v1.0.0",
+            "dario.cat/mergo@v1.0.2",
+            "github.com/Azure/azure-sdk-for-go/sdk/azcore@v1.21.1",
+            "github.com/Azure/azure-sdk-for-go/sdk/azidentity@v1.13.1",
+            "github.com/Azure/azure-sdk-for-go/sdk/internal@v1.12.0",
+            "github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys@v0.10.0",
+            "github.com/Azure/azure-sdk-for-go/sdk/keyvault/internal@v0.7.1",
+            "github.com/Azure/go-ansiterm@v0.0.0-20250102033503-faa5f7b0171c",
+            "github.com/Azure/go-autorest@v14.2.0+incompatible",
+            "github.com/Azure/go-autorest/autorest@v0.11.30",
+            "github.com/Azure/go-autorest/autorest/adal@v0.9.24",
+            "github.com/Azure/go-autorest/autorest/date@v0.3.1",
+            "github.com/Azure/go-autorest/autorest/to@v0.4.1",
+            "github.com/Azure/go-autorest/logger@v0.2.2",
+            "github.com/Azure/go-autorest/tracing@v0.6.1",
+            "github.com/AzureAD/microsoft-authentication-library-for-go@v1.7.2",
+            "github.com/KyleBanks/depth@v1.2.1",
+            "github.com/Microsoft/go-winio@v0.6.2",
+            "github.com/aws/aws-sdk-go-v2@v1.41.11",
+            "github.com/aws/aws-sdk-go-v2/config@v1.32.22",
+            "github.com/aws/aws-sdk-go-v2/credentials@v1.19.21",
+            "github.com/aws/aws-sdk-go-v2/feature/ec2/imds@v1.18.27",
+            "github.com/aws/aws-sdk-go-v2/internal/configsources@v1.4.27",
+            "github.com/aws/aws-sdk-go-v2/internal/endpoints/v2@v2.7.27",
+            "github.com/aws/aws-sdk-go-v2/internal/v4a@v1.4.28",
+            "github.com/aws/aws-sdk-go-v2/service/iam@v1.54.2",
+            "github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding@v1.13.11",
+            "github.com/aws/aws-sdk-go-v2/service/internal/presigned-url@v1.13.27",
+            "github.com/aws/aws-sdk-go-v2/service/kms@v1.53.2",
+            "github.com/aws/aws-sdk-go-v2/service/signin@v1.1.3",
+            "github.com/aws/aws-sdk-go-v2/service/sso@v1.31.1",
+            "github.com/aws/aws-sdk-go-v2/service/ssooidc@v1.36.4",
+            "github.com/aws/aws-sdk-go-v2/service/sts@v1.43.1",
+            "github.com/aws/smithy-go@v1.27.0",
+            "github.com/bytedance/gopkg@v0.1.4",
+            "github.com/bytedance/sonic@v1.15.1",
+            "github.com/bytedance/sonic/loader@v0.5.1",
+            "github.com/cenkalti/backoff/v4@v4.3.0",
+            "github.com/cenkalti/backoff/v5@v5.0.3",
+            "github.com/cespare/xxhash/v2@v2.3.0",
+            "github.com/cloudwego/base64x@v0.1.7",
+            "github.com/containerd/errdefs@v1.0.0",
+            "github.com/containerd/errdefs/pkg@v0.3.0",
+            "github.com/containerd/log@v0.1.0",
+            "github.com/containerd/platforms@v0.2.1",
+            "github.com/cpuguy83/dockercfg@v0.3.2",
+            "github.com/davecgh/go-spew@v1.1.2-0.20180830191138-d8f796af33cc",
+            "github.com/distribution/reference@v0.6.0",
+            "github.com/docker/go-connections@v0.6.0",
+            "github.com/docker/go-units@v0.5.0",
+            "github.com/ebitengine/purego@v0.10.0",
+            "github.com/fatih/color@v1.19.0",
+            "github.com/felixge/httpsnoop@v1.0.4",
+            "github.com/fsnotify/fsnotify@v1.10.1",
+            "github.com/fxamacker/cbor/v2@v2.9.2",
+            "github.com/gabriel-vasile/mimetype@v1.4.13",
+            "github.com/gin-contrib/sse@v1.1.1",
+            "github.com/go-jose/go-jose/v4@v4.1.4",
+            "github.com/go-logr/logr@v1.4.3",
+            "github.com/go-logr/stdr@v1.2.2",
+            "github.com/go-ole/go-ole@v1.3.0",
+            "github.com/go-openapi/jsonpointer@v0.23.1",
+            "github.com/go-openapi/jsonreference@v0.21.6",
+            "github.com/go-openapi/spec@v0.22.5",
+            "github.com/go-openapi/swag/conv@v0.26.0",
+            "github.com/go-openapi/swag/jsonname@v0.26.0",
+            "github.com/go-openapi/swag/jsonutils@v0.26.0",
+            "github.com/go-openapi/swag/loading@v0.26.0",
+            "github.com/go-openapi/swag/stringutils@v0.26.0",
+            "github.com/go-openapi/swag/typeutils@v0.26.0",
+            "github.com/go-openapi/swag/yamlutils@v0.26.0",
+            "github.com/go-playground/locales@v0.14.1",
+            "github.com/go-playground/universal-translator@v0.18.1",
+            "github.com/go-viper/mapstructure/v2@v2.5.0",
+            "github.com/go-webauthn/x@v0.2.6",
+            "github.com/goccy/go-json@v0.10.6",
+            "github.com/goccy/go-yaml@v1.19.2",
+            "github.com/golang-jwt/jwt/v4@v4.5.2",
+            "github.com/google/go-tpm@v0.9.8",
+            "github.com/google/s2a-go@v0.1.9",
+            "github.com/googleapis/enterprise-certificate-proxy@v0.3.16",
+            "github.com/googleapis/gax-go/v2@v2.22.0",
+            "github.com/gorilla/securecookie@v1.1.2",
+            "github.com/grpc-ecosystem/grpc-gateway/v2@v2.29.0",
+            "github.com/hashicorp/errwrap@v1.1.0",
+            "github.com/hashicorp/go-cleanhttp@v0.5.2",
+            "github.com/hashicorp/go-hclog@v1.6.3",
+            "github.com/hashicorp/go-kms-wrapping/v2@v2.0.23",
+            "github.com/hashicorp/go-kms-wrapping/wrappers/awskms/v4@v4.0.0",
+            "github.com/hashicorp/go-kms-wrapping/wrappers/azurekeyvault/v2@v2.0.14",
+            "github.com/hashicorp/go-kms-wrapping/wrappers/gcpckms/v2@v2.0.13",
+            "github.com/hashicorp/go-kms-wrapping/wrappers/transit/v2@v2.0.13",
+            "github.com/hashicorp/go-multierror@v1.1.1",
+            "github.com/hashicorp/go-retryablehttp@v0.7.8",
+            "github.com/hashicorp/go-rootcerts@v1.0.2",
+            "github.com/hashicorp/go-secure-stdlib/awsutil/v2@v2.1.2",
+            "github.com/hashicorp/go-secure-stdlib/parseutil@v0.2.0",
+            "github.com/hashicorp/go-secure-stdlib/strutil@v0.1.2",
+            "github.com/hashicorp/go-sockaddr@v1.0.7",
+            "github.com/hashicorp/go-uuid@v1.0.3",
+            "github.com/hashicorp/hcl@v1.0.1-vault-7",
+            "github.com/hashicorp/vault/api@v1.23.0",
+            "github.com/json-iterator/go@v1.1.12",
+            "github.com/klauspost/compress@v1.18.6",
+            "github.com/klauspost/cpuid/v2@v2.3.0",
+            "github.com/kylelemons/godebug@v1.1.0",
+            "github.com/leodido/go-urn@v1.4.0",
+            "github.com/lufia/plan9stats@v0.0.0-20260216142805-b3301c5f2a88",
+            "github.com/magiconair/properties@v1.8.10",
+            "github.com/mattn/go-colorable@v0.1.15",
+            "github.com/mattn/go-isatty@v0.0.22",
+            "github.com/mitchellh/go-homedir@v1.1.0",
+            "github.com/mitchellh/mapstructure@v1.5.0",
+            "github.com/moby/docker-image-spec@v1.3.1",
+            "github.com/moby/go-archive@v0.2.0",
+            "github.com/moby/moby/api@v1.54.1",
+            "github.com/moby/moby/client@v0.4.0",
+            "github.com/moby/patternmatcher@v0.6.1",
+            "github.com/moby/sys/sequential@v0.6.0",
+            "github.com/moby/sys/user@v0.4.0",
+            "github.com/moby/sys/userns@v0.1.0",
+            "github.com/moby/term@v0.5.2",
+            "github.com/modern-go/concurrent@v0.0.0-20180306012644-bacd9c7ef1dd",
+            "github.com/modern-go/reflect2@v1.0.2",
+            "github.com/opencontainers/go-digest@v1.0.0",
+            "github.com/opencontainers/image-spec@v1.1.1",
+            "github.com/pelletier/go-toml/v2@v2.3.1",
+            "github.com/philhofer/fwd@v1.2.0",
+            "github.com/pkg/browser@v0.0.0-20240102092130-5ac0b6a4141c",
+            "github.com/pmezard/go-difflib@v1.0.1-0.20181226105442-5d4384ee4fb2",
+            "github.com/power-devops/perfstat@v0.0.0-20240221224432-82ca36839d55",
+            "github.com/quic-go/qpack@v0.6.0",
+            "github.com/quic-go/quic-go@v0.59.1",
+            "github.com/ryanuber/go-glob@v1.0.0",
+            "github.com/sagikazarmark/locafero@v0.12.0",
+            "github.com/shirou/gopsutil/v4@v4.26.3",
+            "github.com/sirupsen/logrus@v1.9.4",
+            "github.com/spf13/afero@v1.15.0",
+            "github.com/spf13/cast@v1.10.0",
+            "github.com/spf13/pflag@v1.0.10",
+            "github.com/stretchr/objx@v0.5.3",
+            "github.com/subosito/gotenv@v1.6.0",
+            "github.com/tinylib/msgp@v1.6.4",
+            "github.com/tklauser/go-sysconf@v0.3.16",
+            "github.com/tklauser/numcpus@v0.11.0",
+            "github.com/twitchyliquid64/golang-asm@v0.15.1",
+            "github.com/ugorji/go/codec@v1.3.1",
+            "github.com/x448/float16@v0.8.4",
+            "github.com/xdg-go/pbkdf2@v1.0.0",
+            "github.com/xdg-go/scram@v1.2.0",
+            "github.com/xdg-go/stringprep@v1.0.4",
+            "github.com/youmark/pkcs8@v0.0.0-20240726163527-a2c0da244d78",
+            "github.com/yusufpapurcu/wmi@v1.2.4",
+            "go.opentelemetry.io/auto/sdk@v1.2.1",
+            "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc@v0.69.0",
+            "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0",
+            "go.opentelemetry.io/otel/exporters/otlp/otlptrace@v1.44.0",
+            "go.opentelemetry.io/proto/otlp@v1.10.0",
+            "go.uber.org/atomic@v1.11.0",
+            "go.yaml.in/yaml/v3@v3.0.4",
+            "golang.org/x/arch@v0.27.0",
+            "golang.org/x/mod@v0.36.0",
+            "golang.org/x/net@v0.55.0",
+            "golang.org/x/oauth2@v0.36.0",
+            "golang.org/x/sync@v0.20.0",
+            "golang.org/x/sys@v0.45.0",
+            "golang.org/x/text@v0.37.0",
+            "golang.org/x/time@v0.15.0",
+            "golang.org/x/tools@v0.45.0",
+            "google.golang.org/api@v0.283.0",
+            "google.golang.org/genproto@v0.0.0-20260526163538-3dc84a4a5aaa",
+            "google.golang.org/genproto/googleapis/api@v0.0.0-20260526163538-3dc84a4a5aaa",
+            "google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa",
+            "google.golang.org/protobuf@v1.36.11",
+            "gopkg.in/yaml.v3@v3.0.1"
+          ],
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/gin-contrib/cors@v1.7.7",
+          "Name": "github.com/gin-contrib/cors",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/gin-contrib/cors@v1.7.7",
+            "UID": "80f6c4e458f6d3e8"
+          },
+          "Version": "v1.7.7",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/gin-gonic/gin@v1.12.0",
+          "Name": "github.com/gin-gonic/gin",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/gin-gonic/gin@v1.12.0",
+            "UID": "c026ac0e4977fee6"
+          },
+          "Version": "v1.12.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-playground/validator/v10@v10.30.3",
+          "Name": "github.com/go-playground/validator/v10",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-playground/validator/v10@v10.30.3",
+            "UID": "574f4b5def4b75a6"
+          },
+          "Version": "v10.30.3",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-webauthn/webauthn@v0.17.4",
+          "Name": "github.com/go-webauthn/webauthn",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-webauthn/webauthn@v0.17.4",
+            "UID": "9eb9f7828b7ec4c5"
+          },
+          "Version": "v0.17.4",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/golang-jwt/jwt/v5@v5.3.1",
+          "Name": "github.com/golang-jwt/jwt/v5",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/golang-jwt/jwt/v5@v5.3.1",
+            "UID": "cd4640d920707e17"
+          },
+          "Version": "v5.3.1",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/google/go-cmp@v0.7.0",
+          "Name": "github.com/google/go-cmp",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/google/go-cmp@v0.7.0",
+            "UID": "23ad2ef248da4d9d"
+          },
+          "Version": "v0.7.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/google/uuid@v1.6.0",
+          "Name": "github.com/google/uuid",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/google/uuid@v1.6.0",
+            "UID": "839878cea9fe00c8"
+          },
+          "Version": "v1.6.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/gorilla/sessions@v1.4.0",
+          "Name": "github.com/gorilla/sessions",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/gorilla/sessions@v1.4.0",
+            "UID": "17f368aa852c6db2"
+          },
+          "Version": "v1.4.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/miekg/dns@v1.1.72",
+          "Name": "github.com/miekg/dns",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/miekg/dns@v1.1.72",
+            "UID": "b28408b79e17ae28"
+          },
+          "Version": "v1.1.72",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/redis/go-redis/v9@v9.20.0",
+          "Name": "github.com/redis/go-redis/v9",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/redis/go-redis/v9@v9.20.0",
+            "UID": "c2ef22c32f5b1638"
+          },
+          "Version": "v9.20.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/root-sector-ltd-and-co-kg/payment-gateway-lib-common@v1.0.52",
+          "Name": "github.com/root-sector-ltd-and-co-kg/payment-gateway-lib-common",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/root-sector-ltd-and-co-kg/payment-gateway-lib-common@v1.0.52",
+            "UID": "3a1a5908a194f591"
+          },
+          "Version": "v1.0.52",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/root-sector-ltd-and-co-kg/payment-gateway-lib-crypto@v1.0.31",
+          "Name": "github.com/root-sector-ltd-and-co-kg/payment-gateway-lib-crypto",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/root-sector-ltd-and-co-kg/payment-gateway-lib-crypto@v1.0.31",
+            "UID": "396c2df9305a0b81"
+          },
+          "Version": "v1.0.31",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/rs/zerolog@v1.35.1",
+          "Name": "github.com/rs/zerolog",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/rs/zerolog@v1.35.1",
+            "UID": "22111c4131eb1420"
+          },
+          "Version": "v1.35.1",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/spf13/viper@v1.21.0",
+          "Name": "github.com/spf13/viper",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/spf13/viper@v1.21.0",
+            "UID": "7a2b78119ee36e78"
+          },
+          "Version": "v1.21.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/stretchr/testify@v1.11.1",
+          "Name": "github.com/stretchr/testify",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/stretchr/testify@v1.11.1",
+            "UID": "9293a3d6017cb903"
+          },
+          "Version": "v1.11.1",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/stripe/stripe-go/v85@v85.2.0",
+          "Name": "github.com/stripe/stripe-go/v85",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/stripe/stripe-go/v85@v85.2.0",
+            "UID": "602ad0c6077afc0e"
+          },
+          "Version": "v85.2.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/swaggo/files@v1.0.1",
+          "Name": "github.com/swaggo/files",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/swaggo/files@v1.0.1",
+            "UID": "95ddfddc40f3874b"
+          },
+          "Version": "v1.0.1",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/swaggo/gin-swagger@v1.6.1",
+          "Name": "github.com/swaggo/gin-swagger",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/swaggo/gin-swagger@v1.6.1",
+            "UID": "a1591ebe16c5351f"
+          },
+          "Version": "v1.6.1",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/swaggo/swag@v1.16.6",
+          "Name": "github.com/swaggo/swag",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/swaggo/swag@v1.16.6",
+            "UID": "f2f9e3fd8a60937e"
+          },
+          "Version": "v1.16.6",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/testcontainers/testcontainers-go@v0.42.0",
+          "Name": "github.com/testcontainers/testcontainers-go",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/testcontainers/testcontainers-go@v0.42.0",
+            "UID": "6069ce89563727aa"
+          },
+          "Version": "v0.42.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/xakep666/mongo-migrate@v0.4.1",
+          "Name": "github.com/xakep666/mongo-migrate",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/xakep666/mongo-migrate@v0.4.1",
+            "UID": "4d31b7dbc8e5a5e1"
+          },
+          "Version": "v0.4.1",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.mongodb.org/mongo-driver/v2@v2.6.0",
+          "Name": "go.mongodb.org/mongo-driver/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/go.mongodb.org/mongo-driver/v2@v2.6.0",
+            "UID": "7b5fd912b76e16f7"
+          },
+          "Version": "v2.6.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin@v0.69.0",
+          "Name": "go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin@v0.69.0",
+            "UID": "aab2afe317ea7127"
+          },
+          "Version": "v0.69.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/contrib/instrumentation/runtime@v0.69.0",
+          "Name": "go.opentelemetry.io/contrib/instrumentation/runtime",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/contrib/instrumentation/runtime@v0.69.0",
+            "UID": "fe29aeb521812c04"
+          },
+          "Version": "v0.69.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/otel@v1.44.0",
+          "Name": "go.opentelemetry.io/otel",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/otel@v1.44.0",
+            "UID": "2e6c8829b0cbdc71"
+          },
+          "Version": "v1.44.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc@v1.44.0",
+          "Name": "go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc@v1.44.0",
+            "UID": "a641cebe61e4409c"
+          },
+          "Version": "v1.44.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp@v1.44.0",
+          "Name": "go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp@v1.44.0",
+            "UID": "1c58790d19984a01"
+          },
+          "Version": "v1.44.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc@v1.44.0",
+          "Name": "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc@v1.44.0",
+            "UID": "44f81dcf5582f1bc"
+          },
+          "Version": "v1.44.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.44.0",
+          "Name": "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.44.0",
+            "UID": "74fe201f38583382"
+          },
+          "Version": "v1.44.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/otel/metric@v1.44.0",
+          "Name": "go.opentelemetry.io/otel/metric",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/otel/metric@v1.44.0",
+            "UID": "11636e87e0308bb1"
+          },
+          "Version": "v1.44.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/otel/sdk@v1.44.0",
+          "Name": "go.opentelemetry.io/otel/sdk",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/otel/sdk@v1.44.0",
+            "UID": "2075dbf22e6eaf24"
+          },
+          "Version": "v1.44.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/otel/sdk/metric@v1.44.0",
+          "Name": "go.opentelemetry.io/otel/sdk/metric",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/otel/sdk/metric@v1.44.0",
+            "UID": "72d4386aff6a77d"
+          },
+          "Version": "v1.44.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/otel/trace@v1.44.0",
+          "Name": "go.opentelemetry.io/otel/trace",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/otel/trace@v1.44.0",
+            "UID": "d00e3141a26cffab"
+          },
+          "Version": "v1.44.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "golang.org/x/crypto@v0.52.0",
+          "Name": "golang.org/x/crypto",
+          "Identifier": {
+            "PURL": "pkg:golang/golang.org/x/crypto@v0.52.0",
+            "UID": "e2eb362854e862da"
+          },
+          "Version": "v0.52.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "google.golang.org/grpc@v1.81.1",
+          "Name": "google.golang.org/grpc",
+          "Identifier": {
+            "PURL": "pkg:golang/google.golang.org/grpc@v1.81.1",
+            "UID": "7aba5748ae09abbc"
+          },
+          "Version": "v1.81.1",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "pgregory.net/rapid@v1.2.0",
+          "Name": "pgregory.net/rapid",
+          "Identifier": {
+            "PURL": "pkg:golang/pgregory.net/rapid@v1.2.0",
+            "UID": "8d1c8e85f8be35b"
+          },
+          "Version": "v1.2.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "cloud.google.com/go@v0.123.0",
+          "Name": "cloud.google.com/go",
+          "Identifier": {
+            "PURL": "pkg:golang/cloud.google.com/go@v0.123.0",
+            "UID": "70a65658d51992e4"
+          },
+          "Version": "v0.123.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "cloud.google.com/go/auth@v0.20.0",
+          "Name": "cloud.google.com/go/auth",
+          "Identifier": {
+            "PURL": "pkg:golang/cloud.google.com/go/auth@v0.20.0",
+            "UID": "2a8a8858acc0683"
+          },
+          "Version": "v0.20.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "cloud.google.com/go/auth/oauth2adapt@v0.2.8",
+          "Name": "cloud.google.com/go/auth/oauth2adapt",
+          "Identifier": {
+            "PURL": "pkg:golang/cloud.google.com/go/auth/oauth2adapt@v0.2.8",
+            "UID": "4f76e31abb0cef75"
+          },
+          "Version": "v0.2.8",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "cloud.google.com/go/compute/metadata@v0.9.0",
+          "Name": "cloud.google.com/go/compute/metadata",
+          "Identifier": {
+            "PURL": "pkg:golang/cloud.google.com/go/compute/metadata@v0.9.0",
+            "UID": "59785298bde5fadc"
+          },
+          "Version": "v0.9.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "cloud.google.com/go/iam@v1.11.0",
+          "Name": "cloud.google.com/go/iam",
+          "Identifier": {
+            "PURL": "pkg:golang/cloud.google.com/go/iam@v1.11.0",
+            "UID": "8b0aaf9cdf352c30"
+          },
+          "Version": "v1.11.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "cloud.google.com/go/kms@v1.31.0",
+          "Name": "cloud.google.com/go/kms",
+          "Identifier": {
+            "PURL": "pkg:golang/cloud.google.com/go/kms@v1.31.0",
+            "UID": "21c91e1cbc603098"
+          },
+          "Version": "v1.31.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "cloud.google.com/go/longrunning@v1.0.0",
+          "Name": "cloud.google.com/go/longrunning",
+          "Identifier": {
+            "PURL": "pkg:golang/cloud.google.com/go/longrunning@v1.0.0",
+            "UID": "6e2eb574d260923a"
+          },
+          "Version": "v1.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "dario.cat/mergo@v1.0.2",
+          "Name": "dario.cat/mergo",
+          "Identifier": {
+            "PURL": "pkg:golang/dario.cat/mergo@v1.0.2",
+            "UID": "67f674a0464eb8c4"
+          },
+          "Version": "v1.0.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/azure-sdk-for-go/sdk/azcore@v1.21.1",
+          "Name": "github.com/Azure/azure-sdk-for-go/sdk/azcore",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/azure-sdk-for-go/sdk/azcore@v1.21.1",
+            "UID": "fe0c78b3c5c2d360"
+          },
+          "Version": "v1.21.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/azure-sdk-for-go/sdk/azidentity@v1.13.1",
+          "Name": "github.com/Azure/azure-sdk-for-go/sdk/azidentity",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/azure-sdk-for-go/sdk/azidentity@v1.13.1",
+            "UID": "f06b0d469a342d84"
+          },
+          "Version": "v1.13.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/azure-sdk-for-go/sdk/internal@v1.12.0",
+          "Name": "github.com/Azure/azure-sdk-for-go/sdk/internal",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/azure-sdk-for-go/sdk/internal@v1.12.0",
+            "UID": "a7cb949d3222e5f"
+          },
+          "Version": "v1.12.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys@v0.10.0",
+          "Name": "github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/azure-sdk-for-go/sdk/keyvault/azkeys@v0.10.0",
+            "UID": "2d8f79ce0098a5c8"
+          },
+          "Version": "v0.10.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/azure-sdk-for-go/sdk/keyvault/internal@v0.7.1",
+          "Name": "github.com/Azure/azure-sdk-for-go/sdk/keyvault/internal",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/azure-sdk-for-go/sdk/keyvault/internal@v0.7.1",
+            "UID": "84819825dd0ad2ad"
+          },
+          "Version": "v0.7.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/go-ansiterm@v0.0.0-20250102033503-faa5f7b0171c",
+          "Name": "github.com/Azure/go-ansiterm",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/go-ansiterm@v0.0.0-20250102033503-faa5f7b0171c",
+            "UID": "cadee8fa693b8588"
+          },
+          "Version": "v0.0.0-20250102033503-faa5f7b0171c",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/go-autorest@v14.2.0+incompatible",
+          "Name": "github.com/Azure/go-autorest",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/go-autorest@v14.2.0%2Bincompatible",
+            "UID": "82340f855e76745f"
+          },
+          "Version": "v14.2.0+incompatible",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/go-autorest/autorest@v0.11.30",
+          "Name": "github.com/Azure/go-autorest/autorest",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/go-autorest/autorest@v0.11.30",
+            "UID": "b0e9ab12436c83d7"
+          },
+          "Version": "v0.11.30",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/go-autorest/autorest/adal@v0.9.24",
+          "Name": "github.com/Azure/go-autorest/autorest/adal",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/go-autorest/autorest/adal@v0.9.24",
+            "UID": "4d224436df85e6cc"
+          },
+          "Version": "v0.9.24",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/go-autorest/autorest/date@v0.3.1",
+          "Name": "github.com/Azure/go-autorest/autorest/date",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/go-autorest/autorest/date@v0.3.1",
+            "UID": "38c2d46dcec96971"
+          },
+          "Version": "v0.3.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/go-autorest/autorest/to@v0.4.1",
+          "Name": "github.com/Azure/go-autorest/autorest/to",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/go-autorest/autorest/to@v0.4.1",
+            "UID": "1fd50df731929250"
+          },
+          "Version": "v0.4.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/go-autorest/logger@v0.2.2",
+          "Name": "github.com/Azure/go-autorest/logger",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/go-autorest/logger@v0.2.2",
+            "UID": "3440f79a3886c6f9"
+          },
+          "Version": "v0.2.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Azure/go-autorest/tracing@v0.6.1",
+          "Name": "github.com/Azure/go-autorest/tracing",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azure/go-autorest/tracing@v0.6.1",
+            "UID": "3a154597135cc986"
+          },
+          "Version": "v0.6.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/AzureAD/microsoft-authentication-library-for-go@v1.7.2",
+          "Name": "github.com/AzureAD/microsoft-authentication-library-for-go",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/azuread/microsoft-authentication-library-for-go@v1.7.2",
+            "UID": "9b1bb03e93d9535"
+          },
+          "Version": "v1.7.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/KyleBanks/depth@v1.2.1",
+          "Name": "github.com/KyleBanks/depth",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/kylebanks/depth@v1.2.1",
+            "UID": "cbd171be62815bcc"
+          },
+          "Version": "v1.2.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/Microsoft/go-winio@v0.6.2",
+          "Name": "github.com/Microsoft/go-winio",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/microsoft/go-winio@v0.6.2",
+            "UID": "f2e7706c691da0b6"
+          },
+          "Version": "v0.6.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2@v1.41.11",
+          "Name": "github.com/aws/aws-sdk-go-v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2@v1.41.11",
+            "UID": "98cf927a9cbc7de1"
+          },
+          "Version": "v1.41.11",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/config@v1.32.22",
+          "Name": "github.com/aws/aws-sdk-go-v2/config",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/config@v1.32.22",
+            "UID": "b1af3b80c836a5a2"
+          },
+          "Version": "v1.32.22",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/credentials@v1.19.21",
+          "Name": "github.com/aws/aws-sdk-go-v2/credentials",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/credentials@v1.19.21",
+            "UID": "63b93e76d3613ed2"
+          },
+          "Version": "v1.19.21",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/feature/ec2/imds@v1.18.27",
+          "Name": "github.com/aws/aws-sdk-go-v2/feature/ec2/imds",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/feature/ec2/imds@v1.18.27",
+            "UID": "1c97847f69efff4b"
+          },
+          "Version": "v1.18.27",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/internal/configsources@v1.4.27",
+          "Name": "github.com/aws/aws-sdk-go-v2/internal/configsources",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/internal/configsources@v1.4.27",
+            "UID": "cadfc6933f5d92d8"
+          },
+          "Version": "v1.4.27",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/internal/endpoints/v2@v2.7.27",
+          "Name": "github.com/aws/aws-sdk-go-v2/internal/endpoints/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/internal/endpoints/v2@v2.7.27",
+            "UID": "b80eef390a2ea5e0"
+          },
+          "Version": "v2.7.27",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/internal/v4a@v1.4.28",
+          "Name": "github.com/aws/aws-sdk-go-v2/internal/v4a",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/internal/v4a@v1.4.28",
+            "UID": "b930da36878673f2"
+          },
+          "Version": "v1.4.28",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/service/iam@v1.54.2",
+          "Name": "github.com/aws/aws-sdk-go-v2/service/iam",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/service/iam@v1.54.2",
+            "UID": "4c0062a718be8f31"
+          },
+          "Version": "v1.54.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding@v1.13.11",
+          "Name": "github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding@v1.13.11",
+            "UID": "5426aff55739ea9f"
+          },
+          "Version": "v1.13.11",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/service/internal/presigned-url@v1.13.27",
+          "Name": "github.com/aws/aws-sdk-go-v2/service/internal/presigned-url",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/service/internal/presigned-url@v1.13.27",
+            "UID": "38358da646f9f227"
+          },
+          "Version": "v1.13.27",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/service/kms@v1.53.2",
+          "Name": "github.com/aws/aws-sdk-go-v2/service/kms",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/service/kms@v1.53.2",
+            "UID": "69bc82635ce9bfa2"
+          },
+          "Version": "v1.53.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/service/signin@v1.1.3",
+          "Name": "github.com/aws/aws-sdk-go-v2/service/signin",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/service/signin@v1.1.3",
+            "UID": "541748f153b784c6"
+          },
+          "Version": "v1.1.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/service/sso@v1.31.1",
+          "Name": "github.com/aws/aws-sdk-go-v2/service/sso",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/service/sso@v1.31.1",
+            "UID": "4fc313ea3b03d5cf"
+          },
+          "Version": "v1.31.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/service/ssooidc@v1.36.4",
+          "Name": "github.com/aws/aws-sdk-go-v2/service/ssooidc",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/service/ssooidc@v1.36.4",
+            "UID": "7dec3ecb82ae028c"
+          },
+          "Version": "v1.36.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/aws-sdk-go-v2/service/sts@v1.43.1",
+          "Name": "github.com/aws/aws-sdk-go-v2/service/sts",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/aws-sdk-go-v2/service/sts@v1.43.1",
+            "UID": "49805192af229f3f"
+          },
+          "Version": "v1.43.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/aws/smithy-go@v1.27.0",
+          "Name": "github.com/aws/smithy-go",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/aws/smithy-go@v1.27.0",
+            "UID": "982ad92c446e720a"
+          },
+          "Version": "v1.27.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/bytedance/gopkg@v0.1.4",
+          "Name": "github.com/bytedance/gopkg",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/bytedance/gopkg@v0.1.4",
+            "UID": "8bfad10749241748"
+          },
+          "Version": "v0.1.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/bytedance/sonic@v1.15.1",
+          "Name": "github.com/bytedance/sonic",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/bytedance/sonic@v1.15.1",
+            "UID": "138366460efd2781"
+          },
+          "Version": "v1.15.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/bytedance/sonic/loader@v0.5.1",
+          "Name": "github.com/bytedance/sonic/loader",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/bytedance/sonic/loader@v0.5.1",
+            "UID": "fc62c9c12d5c2a23"
+          },
+          "Version": "v0.5.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/cenkalti/backoff/v4@v4.3.0",
+          "Name": "github.com/cenkalti/backoff/v4",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/cenkalti/backoff/v4@v4.3.0",
+            "UID": "18fb70bd654a0013"
+          },
+          "Version": "v4.3.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/cenkalti/backoff/v5@v5.0.3",
+          "Name": "github.com/cenkalti/backoff/v5",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/cenkalti/backoff/v5@v5.0.3",
+            "UID": "ea973aa19fa51afe"
+          },
+          "Version": "v5.0.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/cespare/xxhash/v2@v2.3.0",
+          "Name": "github.com/cespare/xxhash/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/cespare/xxhash/v2@v2.3.0",
+            "UID": "add05265e45ca78a"
+          },
+          "Version": "v2.3.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/cloudwego/base64x@v0.1.7",
+          "Name": "github.com/cloudwego/base64x",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/cloudwego/base64x@v0.1.7",
+            "UID": "ad980338165d0504"
+          },
+          "Version": "v0.1.7",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/containerd/errdefs@v1.0.0",
+          "Name": "github.com/containerd/errdefs",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/containerd/errdefs@v1.0.0",
+            "UID": "9323ef9c70e21c3f"
+          },
+          "Version": "v1.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/containerd/errdefs/pkg@v0.3.0",
+          "Name": "github.com/containerd/errdefs/pkg",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/containerd/errdefs/pkg@v0.3.0",
+            "UID": "72f8097ea7ab3b55"
+          },
+          "Version": "v0.3.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/containerd/log@v0.1.0",
+          "Name": "github.com/containerd/log",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/containerd/log@v0.1.0",
+            "UID": "acceb6a1108b8912"
+          },
+          "Version": "v0.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/containerd/platforms@v0.2.1",
+          "Name": "github.com/containerd/platforms",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/containerd/platforms@v0.2.1",
+            "UID": "4e553fd2b40b0525"
+          },
+          "Version": "v0.2.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/cpuguy83/dockercfg@v0.3.2",
+          "Name": "github.com/cpuguy83/dockercfg",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/cpuguy83/dockercfg@v0.3.2",
+            "UID": "ac05eff00f8e16d6"
+          },
+          "Version": "v0.3.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/davecgh/go-spew@v1.1.2-0.20180830191138-d8f796af33cc",
+          "Name": "github.com/davecgh/go-spew",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/davecgh/go-spew@v1.1.2-0.20180830191138-d8f796af33cc",
+            "UID": "bc88ccdad5345b82"
+          },
+          "Version": "v1.1.2-0.20180830191138-d8f796af33cc",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/distribution/reference@v0.6.0",
+          "Name": "github.com/distribution/reference",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/distribution/reference@v0.6.0",
+            "UID": "18542340fcd5d094"
+          },
+          "Version": "v0.6.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/docker/go-connections@v0.6.0",
+          "Name": "github.com/docker/go-connections",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/docker/go-connections@v0.6.0",
+            "UID": "84ceb8cf06b5ff40"
+          },
+          "Version": "v0.6.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/docker/go-units@v0.5.0",
+          "Name": "github.com/docker/go-units",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/docker/go-units@v0.5.0",
+            "UID": "ce02782dcf8f6c84"
+          },
+          "Version": "v0.5.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/ebitengine/purego@v0.10.0",
+          "Name": "github.com/ebitengine/purego",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/ebitengine/purego@v0.10.0",
+            "UID": "c76688c97f1155e9"
+          },
+          "Version": "v0.10.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/fatih/color@v1.19.0",
+          "Name": "github.com/fatih/color",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/fatih/color@v1.19.0",
+            "UID": "b00c6edf8096d953"
+          },
+          "Version": "v1.19.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/felixge/httpsnoop@v1.0.4",
+          "Name": "github.com/felixge/httpsnoop",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/felixge/httpsnoop@v1.0.4",
+            "UID": "d54890e8163c8832"
+          },
+          "Version": "v1.0.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/fsnotify/fsnotify@v1.10.1",
+          "Name": "github.com/fsnotify/fsnotify",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/fsnotify/fsnotify@v1.10.1",
+            "UID": "2cd7b0d0fb898be4"
+          },
+          "Version": "v1.10.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/fxamacker/cbor/v2@v2.9.2",
+          "Name": "github.com/fxamacker/cbor/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/fxamacker/cbor/v2@v2.9.2",
+            "UID": "a8933b60fe9c67f7"
+          },
+          "Version": "v2.9.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/gabriel-vasile/mimetype@v1.4.13",
+          "Name": "github.com/gabriel-vasile/mimetype",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/gabriel-vasile/mimetype@v1.4.13",
+            "UID": "93cf8be3ab8141b0"
+          },
+          "Version": "v1.4.13",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/gin-contrib/sse@v1.1.1",
+          "Name": "github.com/gin-contrib/sse",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/gin-contrib/sse@v1.1.1",
+            "UID": "33226bb417e9904c"
+          },
+          "Version": "v1.1.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-jose/go-jose/v4@v4.1.4",
+          "Name": "github.com/go-jose/go-jose/v4",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-jose/go-jose/v4@v4.1.4",
+            "UID": "4bfa0bb798b1b403"
+          },
+          "Version": "v4.1.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-logr/logr@v1.4.3",
+          "Name": "github.com/go-logr/logr",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-logr/logr@v1.4.3",
+            "UID": "5fcbfb0c39235c1b"
+          },
+          "Version": "v1.4.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-logr/stdr@v1.2.2",
+          "Name": "github.com/go-logr/stdr",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-logr/stdr@v1.2.2",
+            "UID": "f96fdae576bf9ec3"
+          },
+          "Version": "v1.2.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-ole/go-ole@v1.3.0",
+          "Name": "github.com/go-ole/go-ole",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-ole/go-ole@v1.3.0",
+            "UID": "3b70dca306545220"
+          },
+          "Version": "v1.3.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-openapi/jsonpointer@v0.23.1",
+          "Name": "github.com/go-openapi/jsonpointer",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-openapi/jsonpointer@v0.23.1",
+            "UID": "219d7133a02471b8"
+          },
+          "Version": "v0.23.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-openapi/jsonreference@v0.21.6",
+          "Name": "github.com/go-openapi/jsonreference",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-openapi/jsonreference@v0.21.6",
+            "UID": "d7da1a9145369b00"
+          },
+          "Version": "v0.21.6",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-openapi/spec@v0.22.5",
+          "Name": "github.com/go-openapi/spec",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-openapi/spec@v0.22.5",
+            "UID": "382052439047aebe"
+          },
+          "Version": "v0.22.5",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-openapi/swag/conv@v0.26.0",
+          "Name": "github.com/go-openapi/swag/conv",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-openapi/swag/conv@v0.26.0",
+            "UID": "8cf0e93bf55f6629"
+          },
+          "Version": "v0.26.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-openapi/swag/jsonname@v0.26.0",
+          "Name": "github.com/go-openapi/swag/jsonname",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-openapi/swag/jsonname@v0.26.0",
+            "UID": "e04251add9c0177a"
+          },
+          "Version": "v0.26.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-openapi/swag/jsonutils@v0.26.0",
+          "Name": "github.com/go-openapi/swag/jsonutils",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-openapi/swag/jsonutils@v0.26.0",
+            "UID": "446529cdc8d73ce1"
+          },
+          "Version": "v0.26.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-openapi/swag/loading@v0.26.0",
+          "Name": "github.com/go-openapi/swag/loading",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-openapi/swag/loading@v0.26.0",
+            "UID": "9a4e695f2c4b2919"
+          },
+          "Version": "v0.26.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-openapi/swag/stringutils@v0.26.0",
+          "Name": "github.com/go-openapi/swag/stringutils",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-openapi/swag/stringutils@v0.26.0",
+            "UID": "f9c4c60ef5f831c5"
+          },
+          "Version": "v0.26.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-openapi/swag/typeutils@v0.26.0",
+          "Name": "github.com/go-openapi/swag/typeutils",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-openapi/swag/typeutils@v0.26.0",
+            "UID": "a7dc2638742f45d7"
+          },
+          "Version": "v0.26.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-openapi/swag/yamlutils@v0.26.0",
+          "Name": "github.com/go-openapi/swag/yamlutils",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-openapi/swag/yamlutils@v0.26.0",
+            "UID": "ea7574c882678f1e"
+          },
+          "Version": "v0.26.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-playground/locales@v0.14.1",
+          "Name": "github.com/go-playground/locales",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-playground/locales@v0.14.1",
+            "UID": "a474752a18e8a63"
+          },
+          "Version": "v0.14.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-playground/universal-translator@v0.18.1",
+          "Name": "github.com/go-playground/universal-translator",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-playground/universal-translator@v0.18.1",
+            "UID": "81aa281535caad11"
+          },
+          "Version": "v0.18.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-viper/mapstructure/v2@v2.5.0",
+          "Name": "github.com/go-viper/mapstructure/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-viper/mapstructure/v2@v2.5.0",
+            "UID": "f8839da9ce0e7f50"
+          },
+          "Version": "v2.5.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/go-webauthn/x@v0.2.6",
+          "Name": "github.com/go-webauthn/x",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/go-webauthn/x@v0.2.6",
+            "UID": "e570a780ea92091e"
+          },
+          "Version": "v0.2.6",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/goccy/go-json@v0.10.6",
+          "Name": "github.com/goccy/go-json",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/goccy/go-json@v0.10.6",
+            "UID": "c2f3d1cd1624b940"
+          },
+          "Version": "v0.10.6",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/goccy/go-yaml@v1.19.2",
+          "Name": "github.com/goccy/go-yaml",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/goccy/go-yaml@v1.19.2",
+            "UID": "a35fa1e931d613b3"
+          },
+          "Version": "v1.19.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/golang-jwt/jwt/v4@v4.5.2",
+          "Name": "github.com/golang-jwt/jwt/v4",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/golang-jwt/jwt/v4@v4.5.2",
+            "UID": "3c212fa4ba63006a"
+          },
+          "Version": "v4.5.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/google/go-tpm@v0.9.8",
+          "Name": "github.com/google/go-tpm",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/google/go-tpm@v0.9.8",
+            "UID": "629c6bdd5f57c3b2"
+          },
+          "Version": "v0.9.8",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/google/s2a-go@v0.1.9",
+          "Name": "github.com/google/s2a-go",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/google/s2a-go@v0.1.9",
+            "UID": "2d99a88ca370cffc"
+          },
+          "Version": "v0.1.9",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/googleapis/enterprise-certificate-proxy@v0.3.16",
+          "Name": "github.com/googleapis/enterprise-certificate-proxy",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/googleapis/enterprise-certificate-proxy@v0.3.16",
+            "UID": "86e53e3af4296e39"
+          },
+          "Version": "v0.3.16",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/googleapis/gax-go/v2@v2.22.0",
+          "Name": "github.com/googleapis/gax-go/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/googleapis/gax-go/v2@v2.22.0",
+            "UID": "d0f35aa4eeb75ef3"
+          },
+          "Version": "v2.22.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/gorilla/securecookie@v1.1.2",
+          "Name": "github.com/gorilla/securecookie",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/gorilla/securecookie@v1.1.2",
+            "UID": "61b2498538749db5"
+          },
+          "Version": "v1.1.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/grpc-ecosystem/grpc-gateway/v2@v2.29.0",
+          "Name": "github.com/grpc-ecosystem/grpc-gateway/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/grpc-ecosystem/grpc-gateway/v2@v2.29.0",
+            "UID": "7db42c0a5f61db2c"
+          },
+          "Version": "v2.29.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/errwrap@v1.1.0",
+          "Name": "github.com/hashicorp/errwrap",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/errwrap@v1.1.0",
+            "UID": "75e8aca45fb30913"
+          },
+          "Version": "v1.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-cleanhttp@v0.5.2",
+          "Name": "github.com/hashicorp/go-cleanhttp",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-cleanhttp@v0.5.2",
+            "UID": "2076631f25254f2e"
+          },
+          "Version": "v0.5.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-hclog@v1.6.3",
+          "Name": "github.com/hashicorp/go-hclog",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-hclog@v1.6.3",
+            "UID": "3346ebe49d04fd05"
+          },
+          "Version": "v1.6.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-kms-wrapping/v2@v2.0.23",
+          "Name": "github.com/hashicorp/go-kms-wrapping/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-kms-wrapping/v2@v2.0.23",
+            "UID": "ee5c05ea7ddaba30"
+          },
+          "Version": "v2.0.23",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-kms-wrapping/wrappers/awskms/v4@v4.0.0",
+          "Name": "github.com/hashicorp/go-kms-wrapping/wrappers/awskms/v4",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-kms-wrapping/wrappers/awskms/v4@v4.0.0",
+            "UID": "1329007421cb9ffb"
+          },
+          "Version": "v4.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-kms-wrapping/wrappers/azurekeyvault/v2@v2.0.14",
+          "Name": "github.com/hashicorp/go-kms-wrapping/wrappers/azurekeyvault/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-kms-wrapping/wrappers/azurekeyvault/v2@v2.0.14",
+            "UID": "aad6714b0531cc15"
+          },
+          "Version": "v2.0.14",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-kms-wrapping/wrappers/gcpckms/v2@v2.0.13",
+          "Name": "github.com/hashicorp/go-kms-wrapping/wrappers/gcpckms/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-kms-wrapping/wrappers/gcpckms/v2@v2.0.13",
+            "UID": "3218847f0ce3f96a"
+          },
+          "Version": "v2.0.13",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-kms-wrapping/wrappers/transit/v2@v2.0.13",
+          "Name": "github.com/hashicorp/go-kms-wrapping/wrappers/transit/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-kms-wrapping/wrappers/transit/v2@v2.0.13",
+            "UID": "cdb733096f27863d"
+          },
+          "Version": "v2.0.13",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-multierror@v1.1.1",
+          "Name": "github.com/hashicorp/go-multierror",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-multierror@v1.1.1",
+            "UID": "fcf1d5802d57f865"
+          },
+          "Version": "v1.1.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-retryablehttp@v0.7.8",
+          "Name": "github.com/hashicorp/go-retryablehttp",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-retryablehttp@v0.7.8",
+            "UID": "dd381775fe95b89"
+          },
+          "Version": "v0.7.8",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-rootcerts@v1.0.2",
+          "Name": "github.com/hashicorp/go-rootcerts",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-rootcerts@v1.0.2",
+            "UID": "84d720200925de78"
+          },
+          "Version": "v1.0.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-secure-stdlib/awsutil/v2@v2.1.2",
+          "Name": "github.com/hashicorp/go-secure-stdlib/awsutil/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-secure-stdlib/awsutil/v2@v2.1.2",
+            "UID": "2177a9eac7f1fd16"
+          },
+          "Version": "v2.1.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-secure-stdlib/parseutil@v0.2.0",
+          "Name": "github.com/hashicorp/go-secure-stdlib/parseutil",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-secure-stdlib/parseutil@v0.2.0",
+            "UID": "92cf186f2a432df5"
+          },
+          "Version": "v0.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-secure-stdlib/strutil@v0.1.2",
+          "Name": "github.com/hashicorp/go-secure-stdlib/strutil",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-secure-stdlib/strutil@v0.1.2",
+            "UID": "4ba061ac0fe002e3"
+          },
+          "Version": "v0.1.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-sockaddr@v1.0.7",
+          "Name": "github.com/hashicorp/go-sockaddr",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-sockaddr@v1.0.7",
+            "UID": "7886a6975453f5e6"
+          },
+          "Version": "v1.0.7",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/go-uuid@v1.0.3",
+          "Name": "github.com/hashicorp/go-uuid",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/go-uuid@v1.0.3",
+            "UID": "4442454cd58ad91c"
+          },
+          "Version": "v1.0.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/hcl@v1.0.1-vault-7",
+          "Name": "github.com/hashicorp/hcl",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/hcl@v1.0.1-vault-7",
+            "UID": "6efe3fa91331efe6"
+          },
+          "Version": "v1.0.1-vault-7",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/hashicorp/vault/api@v1.23.0",
+          "Name": "github.com/hashicorp/vault/api",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/hashicorp/vault/api@v1.23.0",
+            "UID": "e0bba116cdf96ffa"
+          },
+          "Version": "v1.23.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/json-iterator/go@v1.1.12",
+          "Name": "github.com/json-iterator/go",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/json-iterator/go@v1.1.12",
+            "UID": "ecc519d5c7459cb0"
+          },
+          "Version": "v1.1.12",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/klauspost/compress@v1.18.6",
+          "Name": "github.com/klauspost/compress",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/klauspost/compress@v1.18.6",
+            "UID": "4417a5a53172b72e"
+          },
+          "Version": "v1.18.6",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/klauspost/cpuid/v2@v2.3.0",
+          "Name": "github.com/klauspost/cpuid/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/klauspost/cpuid/v2@v2.3.0",
+            "UID": "89f28afec58bd731"
+          },
+          "Version": "v2.3.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/kylelemons/godebug@v1.1.0",
+          "Name": "github.com/kylelemons/godebug",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/kylelemons/godebug@v1.1.0",
+            "UID": "8135666949edad1f"
+          },
+          "Version": "v1.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/leodido/go-urn@v1.4.0",
+          "Name": "github.com/leodido/go-urn",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/leodido/go-urn@v1.4.0",
+            "UID": "a6a92b057db023dd"
+          },
+          "Version": "v1.4.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/lufia/plan9stats@v0.0.0-20260216142805-b3301c5f2a88",
+          "Name": "github.com/lufia/plan9stats",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/lufia/plan9stats@v0.0.0-20260216142805-b3301c5f2a88",
+            "UID": "5215decce3a90c15"
+          },
+          "Version": "v0.0.0-20260216142805-b3301c5f2a88",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/magiconair/properties@v1.8.10",
+          "Name": "github.com/magiconair/properties",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/magiconair/properties@v1.8.10",
+            "UID": "11446dac618cb053"
+          },
+          "Version": "v1.8.10",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/mattn/go-colorable@v0.1.15",
+          "Name": "github.com/mattn/go-colorable",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/mattn/go-colorable@v0.1.15",
+            "UID": "9f84ff64c136ebf3"
+          },
+          "Version": "v0.1.15",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/mattn/go-isatty@v0.0.22",
+          "Name": "github.com/mattn/go-isatty",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/mattn/go-isatty@v0.0.22",
+            "UID": "22b7751e27c43742"
+          },
+          "Version": "v0.0.22",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/mitchellh/go-homedir@v1.1.0",
+          "Name": "github.com/mitchellh/go-homedir",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/mitchellh/go-homedir@v1.1.0",
+            "UID": "b53d9936eeb0d76e"
+          },
+          "Version": "v1.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/mitchellh/mapstructure@v1.5.0",
+          "Name": "github.com/mitchellh/mapstructure",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/mitchellh/mapstructure@v1.5.0",
+            "UID": "3820949c3242143b"
+          },
+          "Version": "v1.5.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/moby/docker-image-spec@v1.3.1",
+          "Name": "github.com/moby/docker-image-spec",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/moby/docker-image-spec@v1.3.1",
+            "UID": "df19bd81e3bd4729"
+          },
+          "Version": "v1.3.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/moby/go-archive@v0.2.0",
+          "Name": "github.com/moby/go-archive",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/moby/go-archive@v0.2.0",
+            "UID": "3c69da0c9a4f314c"
+          },
+          "Version": "v0.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/moby/moby/api@v1.54.1",
+          "Name": "github.com/moby/moby/api",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/moby/moby/api@v1.54.1",
+            "UID": "c54be47a5f09a506"
+          },
+          "Version": "v1.54.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/moby/moby/client@v0.4.0",
+          "Name": "github.com/moby/moby/client",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/moby/moby/client@v0.4.0",
+            "UID": "397e3d64f77687cd"
+          },
+          "Version": "v0.4.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/moby/patternmatcher@v0.6.1",
+          "Name": "github.com/moby/patternmatcher",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/moby/patternmatcher@v0.6.1",
+            "UID": "c51d33a1ec228dce"
+          },
+          "Version": "v0.6.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/moby/sys/sequential@v0.6.0",
+          "Name": "github.com/moby/sys/sequential",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/moby/sys/sequential@v0.6.0",
+            "UID": "a5d5bdbb79cb5ba8"
+          },
+          "Version": "v0.6.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/moby/sys/user@v0.4.0",
+          "Name": "github.com/moby/sys/user",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/moby/sys/user@v0.4.0",
+            "UID": "c79a797b512dc151"
+          },
+          "Version": "v0.4.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/moby/sys/userns@v0.1.0",
+          "Name": "github.com/moby/sys/userns",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/moby/sys/userns@v0.1.0",
+            "UID": "e6b349a6d253f08c"
+          },
+          "Version": "v0.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/moby/term@v0.5.2",
+          "Name": "github.com/moby/term",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/moby/term@v0.5.2",
+            "UID": "de5dfabc5d2dcdb0"
+          },
+          "Version": "v0.5.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/modern-go/concurrent@v0.0.0-20180306012644-bacd9c7ef1dd",
+          "Name": "github.com/modern-go/concurrent",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/modern-go/concurrent@v0.0.0-20180306012644-bacd9c7ef1dd",
+            "UID": "2a841947aeb765be"
+          },
+          "Version": "v0.0.0-20180306012644-bacd9c7ef1dd",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/modern-go/reflect2@v1.0.2",
+          "Name": "github.com/modern-go/reflect2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/modern-go/reflect2@v1.0.2",
+            "UID": "8a5b7a4c15f5f9b8"
+          },
+          "Version": "v1.0.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/opencontainers/go-digest@v1.0.0",
+          "Name": "github.com/opencontainers/go-digest",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/opencontainers/go-digest@v1.0.0",
+            "UID": "3b20114a4904d5e2"
+          },
+          "Version": "v1.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/opencontainers/image-spec@v1.1.1",
+          "Name": "github.com/opencontainers/image-spec",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/opencontainers/image-spec@v1.1.1",
+            "UID": "18f0691b191b177b"
+          },
+          "Version": "v1.1.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/pelletier/go-toml/v2@v2.3.1",
+          "Name": "github.com/pelletier/go-toml/v2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/pelletier/go-toml/v2@v2.3.1",
+            "UID": "85c342394af44c9e"
+          },
+          "Version": "v2.3.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/philhofer/fwd@v1.2.0",
+          "Name": "github.com/philhofer/fwd",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/philhofer/fwd@v1.2.0",
+            "UID": "642724eea557649"
+          },
+          "Version": "v1.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/pkg/browser@v0.0.0-20240102092130-5ac0b6a4141c",
+          "Name": "github.com/pkg/browser",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/pkg/browser@v0.0.0-20240102092130-5ac0b6a4141c",
+            "UID": "4d810e57a31c9dad"
+          },
+          "Version": "v0.0.0-20240102092130-5ac0b6a4141c",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/pmezard/go-difflib@v1.0.1-0.20181226105442-5d4384ee4fb2",
+          "Name": "github.com/pmezard/go-difflib",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/pmezard/go-difflib@v1.0.1-0.20181226105442-5d4384ee4fb2",
+            "UID": "75386894391a6a55"
+          },
+          "Version": "v1.0.1-0.20181226105442-5d4384ee4fb2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/power-devops/perfstat@v0.0.0-20240221224432-82ca36839d55",
+          "Name": "github.com/power-devops/perfstat",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/power-devops/perfstat@v0.0.0-20240221224432-82ca36839d55",
+            "UID": "9c9e66413f219757"
+          },
+          "Version": "v0.0.0-20240221224432-82ca36839d55",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/quic-go/qpack@v0.6.0",
+          "Name": "github.com/quic-go/qpack",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/quic-go/qpack@v0.6.0",
+            "UID": "64a5574a76b3682b"
+          },
+          "Version": "v0.6.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/quic-go/quic-go@v0.59.1",
+          "Name": "github.com/quic-go/quic-go",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/quic-go/quic-go@v0.59.1",
+            "UID": "4b2f10ec75defba1"
+          },
+          "Version": "v0.59.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/ryanuber/go-glob@v1.0.0",
+          "Name": "github.com/ryanuber/go-glob",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/ryanuber/go-glob@v1.0.0",
+            "UID": "6b4f7c7391a2b2c9"
+          },
+          "Version": "v1.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/sagikazarmark/locafero@v0.12.0",
+          "Name": "github.com/sagikazarmark/locafero",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/sagikazarmark/locafero@v0.12.0",
+            "UID": "7e1056dc83795168"
+          },
+          "Version": "v0.12.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/shirou/gopsutil/v4@v4.26.3",
+          "Name": "github.com/shirou/gopsutil/v4",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/shirou/gopsutil/v4@v4.26.3",
+            "UID": "2e1f8a4b22b253c0"
+          },
+          "Version": "v4.26.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/sirupsen/logrus@v1.9.4",
+          "Name": "github.com/sirupsen/logrus",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/sirupsen/logrus@v1.9.4",
+            "UID": "64ae1e55006cf87b"
+          },
+          "Version": "v1.9.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/spf13/afero@v1.15.0",
+          "Name": "github.com/spf13/afero",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/spf13/afero@v1.15.0",
+            "UID": "bf121c9035b0fd65"
+          },
+          "Version": "v1.15.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/spf13/cast@v1.10.0",
+          "Name": "github.com/spf13/cast",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/spf13/cast@v1.10.0",
+            "UID": "dfe45d01d5f416de"
+          },
+          "Version": "v1.10.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/spf13/pflag@v1.0.10",
+          "Name": "github.com/spf13/pflag",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/spf13/pflag@v1.0.10",
+            "UID": "629d58e21f5198b1"
+          },
+          "Version": "v1.0.10",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/stretchr/objx@v0.5.3",
+          "Name": "github.com/stretchr/objx",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/stretchr/objx@v0.5.3",
+            "UID": "b3a67e44fb31211f"
+          },
+          "Version": "v0.5.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/subosito/gotenv@v1.6.0",
+          "Name": "github.com/subosito/gotenv",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/subosito/gotenv@v1.6.0",
+            "UID": "f6e19033a343b326"
+          },
+          "Version": "v1.6.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/tinylib/msgp@v1.6.4",
+          "Name": "github.com/tinylib/msgp",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/tinylib/msgp@v1.6.4",
+            "UID": "ed72446e0c0364ad"
+          },
+          "Version": "v1.6.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/tklauser/go-sysconf@v0.3.16",
+          "Name": "github.com/tklauser/go-sysconf",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/tklauser/go-sysconf@v0.3.16",
+            "UID": "38460090d73dc7dc"
+          },
+          "Version": "v0.3.16",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/tklauser/numcpus@v0.11.0",
+          "Name": "github.com/tklauser/numcpus",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/tklauser/numcpus@v0.11.0",
+            "UID": "91c9336a6ae2720e"
+          },
+          "Version": "v0.11.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/twitchyliquid64/golang-asm@v0.15.1",
+          "Name": "github.com/twitchyliquid64/golang-asm",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/twitchyliquid64/golang-asm@v0.15.1",
+            "UID": "12d91e50cff275dd"
+          },
+          "Version": "v0.15.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/ugorji/go/codec@v1.3.1",
+          "Name": "github.com/ugorji/go/codec",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/ugorji/go/codec@v1.3.1",
+            "UID": "8d916d6d2ade58"
+          },
+          "Version": "v1.3.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/x448/float16@v0.8.4",
+          "Name": "github.com/x448/float16",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/x448/float16@v0.8.4",
+            "UID": "311d84ee5fc45a0b"
+          },
+          "Version": "v0.8.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/xdg-go/pbkdf2@v1.0.0",
+          "Name": "github.com/xdg-go/pbkdf2",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/xdg-go/pbkdf2@v1.0.0",
+            "UID": "d7061f42ecedf5f6"
+          },
+          "Version": "v1.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/xdg-go/scram@v1.2.0",
+          "Name": "github.com/xdg-go/scram",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/xdg-go/scram@v1.2.0",
+            "UID": "7e9ed536b0ab90b5"
+          },
+          "Version": "v1.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/xdg-go/stringprep@v1.0.4",
+          "Name": "github.com/xdg-go/stringprep",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/xdg-go/stringprep@v1.0.4",
+            "UID": "93e9be7255c65273"
+          },
+          "Version": "v1.0.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/youmark/pkcs8@v0.0.0-20240726163527-a2c0da244d78",
+          "Name": "github.com/youmark/pkcs8",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/youmark/pkcs8@v0.0.0-20240726163527-a2c0da244d78",
+            "UID": "cfdd46e4a7acdfda"
+          },
+          "Version": "v0.0.0-20240726163527-a2c0da244d78",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "github.com/yusufpapurcu/wmi@v1.2.4",
+          "Name": "github.com/yusufpapurcu/wmi",
+          "Identifier": {
+            "PURL": "pkg:golang/github.com/yusufpapurcu/wmi@v1.2.4",
+            "UID": "c4fd856b5b8f9e30"
+          },
+          "Version": "v1.2.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/auto/sdk@v1.2.1",
+          "Name": "go.opentelemetry.io/auto/sdk",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/auto/sdk@v1.2.1",
+            "UID": "cc8969031753d94d"
+          },
+          "Version": "v1.2.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc@v0.69.0",
+          "Name": "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc@v0.69.0",
+            "UID": "5aa54ee59ed975b4"
+          },
+          "Version": "v0.69.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0",
+          "Name": "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0",
+            "UID": "67128a014ce16b00"
+          },
+          "Version": "v0.69.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/otel/exporters/otlp/otlptrace@v1.44.0",
+          "Name": "go.opentelemetry.io/otel/exporters/otlp/otlptrace",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/otel/exporters/otlp/otlptrace@v1.44.0",
+            "UID": "8369a8990e9a9f2e"
+          },
+          "Version": "v1.44.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.opentelemetry.io/proto/otlp@v1.10.0",
+          "Name": "go.opentelemetry.io/proto/otlp",
+          "Identifier": {
+            "PURL": "pkg:golang/go.opentelemetry.io/proto/otlp@v1.10.0",
+            "UID": "7c3654e1c51c8280"
+          },
+          "Version": "v1.10.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.uber.org/atomic@v1.11.0",
+          "Name": "go.uber.org/atomic",
+          "Identifier": {
+            "PURL": "pkg:golang/go.uber.org/atomic@v1.11.0",
+            "UID": "6b5f12371ae4799c"
+          },
+          "Version": "v1.11.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "go.yaml.in/yaml/v3@v3.0.4",
+          "Name": "go.yaml.in/yaml/v3",
+          "Identifier": {
+            "PURL": "pkg:golang/go.yaml.in/yaml/v3@v3.0.4",
+            "UID": "75ca5d40eb72add8"
+          },
+          "Version": "v3.0.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "golang.org/x/arch@v0.27.0",
+          "Name": "golang.org/x/arch",
+          "Identifier": {
+            "PURL": "pkg:golang/golang.org/x/arch@v0.27.0",
+            "UID": "8c8ef63d94b06989"
+          },
+          "Version": "v0.27.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "golang.org/x/mod@v0.36.0",
+          "Name": "golang.org/x/mod",
+          "Identifier": {
+            "PURL": "pkg:golang/golang.org/x/mod@v0.36.0",
+            "UID": "29467c432b0e1938"
+          },
+          "Version": "v0.36.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "golang.org/x/net@v0.55.0",
+          "Name": "golang.org/x/net",
+          "Identifier": {
+            "PURL": "pkg:golang/golang.org/x/net@v0.55.0",
+            "UID": "3e884881de61dea2"
+          },
+          "Version": "v0.55.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "golang.org/x/oauth2@v0.36.0",
+          "Name": "golang.org/x/oauth2",
+          "Identifier": {
+            "PURL": "pkg:golang/golang.org/x/oauth2@v0.36.0",
+            "UID": "e04e16603fa837cf"
+          },
+          "Version": "v0.36.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "golang.org/x/sync@v0.20.0",
+          "Name": "golang.org/x/sync",
+          "Identifier": {
+            "PURL": "pkg:golang/golang.org/x/sync@v0.20.0",
+            "UID": "e460ecd130602596"
+          },
+          "Version": "v0.20.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "golang.org/x/sys@v0.45.0",
+          "Name": "golang.org/x/sys",
+          "Identifier": {
+            "PURL": "pkg:golang/golang.org/x/sys@v0.45.0",
+            "UID": "70e0ea54b566ce6e"
+          },
+          "Version": "v0.45.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "golang.org/x/text@v0.37.0",
+          "Name": "golang.org/x/text",
+          "Identifier": {
+            "PURL": "pkg:golang/golang.org/x/text@v0.37.0",
+            "UID": "5ccbe9cc14e981a5"
+          },
+          "Version": "v0.37.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "golang.org/x/time@v0.15.0",
+          "Name": "golang.org/x/time",
+          "Identifier": {
+            "PURL": "pkg:golang/golang.org/x/time@v0.15.0",
+            "UID": "f20c019970d80f70"
+          },
+          "Version": "v0.15.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "golang.org/x/tools@v0.45.0",
+          "Name": "golang.org/x/tools",
+          "Identifier": {
+            "PURL": "pkg:golang/golang.org/x/tools@v0.45.0",
+            "UID": "600a70a4c031afc2"
+          },
+          "Version": "v0.45.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "google.golang.org/api@v0.283.0",
+          "Name": "google.golang.org/api",
+          "Identifier": {
+            "PURL": "pkg:golang/google.golang.org/api@v0.283.0",
+            "UID": "19ae85840a83ef43"
+          },
+          "Version": "v0.283.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "google.golang.org/genproto@v0.0.0-20260526163538-3dc84a4a5aaa",
+          "Name": "google.golang.org/genproto",
+          "Identifier": {
+            "PURL": "pkg:golang/google.golang.org/genproto@v0.0.0-20260526163538-3dc84a4a5aaa",
+            "UID": "1469daaa10fbc8c9"
+          },
+          "Version": "v0.0.0-20260526163538-3dc84a4a5aaa",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "google.golang.org/genproto/googleapis/api@v0.0.0-20260526163538-3dc84a4a5aaa",
+          "Name": "google.golang.org/genproto/googleapis/api",
+          "Identifier": {
+            "PURL": "pkg:golang/google.golang.org/genproto/googleapis/api@v0.0.0-20260526163538-3dc84a4a5aaa",
+            "UID": "e2e8b4c884939478"
+          },
+          "Version": "v0.0.0-20260526163538-3dc84a4a5aaa",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa",
+          "Name": "google.golang.org/genproto/googleapis/rpc",
+          "Identifier": {
+            "PURL": "pkg:golang/google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa",
+            "UID": "a5b89552df5ad453"
+          },
+          "Version": "v0.0.0-20260526163538-3dc84a4a5aaa",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "google.golang.org/protobuf@v1.36.11",
+          "Name": "google.golang.org/protobuf",
+          "Identifier": {
+            "PURL": "pkg:golang/google.golang.org/protobuf@v1.36.11",
+            "UID": "e46bc804c0d28c65"
+          },
+          "Version": "v1.36.11",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        },
+        {
+          "ID": "gopkg.in/yaml.v3@v3.0.1",
+          "Name": "gopkg.in/yaml.v3",
+          "Identifier": {
+            "PURL": "pkg:golang/gopkg.in/yaml.v3@v3.0.1",
+            "UID": "b2bfb9342d951615"
+          },
+          "Version": "v3.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "gomod"
+        }
+      ]
+    },
+    {
+      "Target": "Dockerfile",
+      "Class": "config",
+      "Type": "dockerfile",
+      "MisconfSummary": {
+        "Successes": 25,
+        "Failures": 2
+      },
+      "Misconfigurations": [
+        {
+          "Type": "Dockerfile Security Check",
+          "ID": "DS-0002",
+          "Title": "Image user should not be 'root'",
+          "Description": "Running containers with 'root' user can lead to a container escape situation. It is a best practice to run containers as non-root users, which can be done by adding a 'USER' statement to the Dockerfile.",
+          "Message": "Specify at least 1 USER command in Dockerfile with non-root user as argument",
+          "Namespace": "builtin.dockerfile.DS002",
+          "Query": "data.builtin.dockerfile.DS002.deny",
+          "Resolution": "Add 'USER \u003cnon root user name\u003e' line to the Dockerfile",
+          "Severity": "HIGH",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/ds-0002",
+          "References": [
+            "https://docs.docker.com/develop/develop-images/dockerfile_best-practices/",
+            "https://avd.aquasec.com/misconfig/ds-0002"
+          ],
+          "Status": "FAIL",
+          "CauseMetadata": {
+            "Provider": "Dockerfile",
+            "Service": "general"
+          }
+        },
+        {
+          "Type": "Dockerfile Security Check",
+          "ID": "DS-0026",
+          "Title": "No HEALTHCHECK defined",
+          "Description": "You should add HEALTHCHECK instruction in your docker container images to perform the health check on running containers.",
+          "Message": "Add HEALTHCHECK instruction in your Dockerfile",
+          "Namespace": "builtin.dockerfile.DS026",
+          "Query": "data.builtin.dockerfile.DS026.deny",
+          "Resolution": "Add HEALTHCHECK instruction in Dockerfile",
+          "Severity": "LOW",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/ds-0026",
+          "References": [
+            "https://blog.aquasec.com/docker-security-best-practices",
+            "https://avd.aquasec.com/misconfig/ds-0026"
+          ],
+          "Status": "FAIL",
+          "CauseMetadata": {
+            "Provider": "Dockerfile",
+            "Service": "general"
+          }
+        }
+      ]
+    }
+  ]
+}

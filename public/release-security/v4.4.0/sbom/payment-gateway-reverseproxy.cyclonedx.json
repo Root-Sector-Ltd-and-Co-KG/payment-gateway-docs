@@ -1,0 +1,42 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.7.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.7",
+  "serialNumber": "urn:uuid:651b35d5-af02-4ccc-aac5-e53b782105bb",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-06-05T18:33:54+00:00",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "manufacturer": {
+            "name": "Aqua Security Software Ltd."
+          },
+          "group": "aquasecurity",
+          "name": "trivy",
+          "version": "0.71.0"
+        }
+      ]
+    },
+    "component": {
+      "bom-ref": "5ee70dc1-4167-4cda-bd5e-180c52c2ea6e",
+      "type": "application",
+      "name": "/tmp/tmp.gmXJkX5MTf/payment-gateway-reverseproxy",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:SchemaVersion",
+          "value": "2"
+        }
+      ]
+    }
+  },
+  "components": [],
+  "dependencies": [
+    {
+      "ref": "5ee70dc1-4167-4cda-bd5e-180c52c2ea6e",
+      "dependsOn": []
+    }
+  ],
+  "vulnerabilities": []
+}
