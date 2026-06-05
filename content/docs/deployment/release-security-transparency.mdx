@@ -34,13 +34,13 @@ evidence for that release, not as an implicit clean scan.
 | Component image provenance verification | `reports/component-image-provenance.json` | Records the cosign signature and SLSA provenance verification performed before first-party image promotion. |
 | Vulnerability summary | `reports/summary.md` | Human-readable scan summary for operators and auditors. |
 | Checksums | `SHA256SUMS` | File hashes for the published release security artifact bundle. |
-| Checksum signature | `SHA256SUMS.sig` | Sigstore/cosign signature evidence for the checksum file. |
+| Checksum signature bundle | `SHA256SUMS.sigstore.json` | Sigstore/cosign signature bundle for the checksum file. |
 | Provenance | `provenance.intoto.jsonl` | Release provenance evidence for the published component set. |
 
 ## Public Verification Steps
 
-Download the checksum manifest, signature, certificate, and every file named by
-the checksum manifest for the product version you are applying:
+Download the checksum manifest, signature bundle, and every file named by the
+checksum manifest for the product version you are applying:
 
 ```bash
 VERSION="<version>"
@@ -49,8 +49,7 @@ mkdir -p "release-security-v${VERSION}"
 cd "release-security-v${VERSION}"
 
 curl -fsSLO "${BASE}/SHA256SUMS"
-curl -fsSLO "${BASE}/SHA256SUMS.sig"
-curl -fsSLO "${BASE}/SHA256SUMS.pem"
+curl -fsSLO "${BASE}/SHA256SUMS.sigstore.json"
 
 awk '{print $2}' SHA256SUMS | while read -r path; do
   mkdir -p "$(dirname "$path")"
@@ -63,8 +62,7 @@ the downloaded artifacts against it:
 
 ```bash
 cosign verify-blob \
-  --certificate SHA256SUMS.pem \
-  --signature SHA256SUMS.sig \
+  --bundle SHA256SUMS.sigstore.json \
   --certificate-identity-regexp "https://github.com/.*/.github/workflows/continue-release.yml@refs/heads/main" \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   SHA256SUMS
@@ -103,7 +101,7 @@ Before applying a production update:
 6. Verify component digests in release metadata match the images pulled by the updater.
 7. Review `component-image-provenance.json` for first-party image signature and source-revision verification results.
 8. Verify `SHA256SUMS` with `sha256sum -c SHA256SUMS`, verify
-   `SHA256SUMS.sig` with `cosign verify-blob`, and retain
+   `SHA256SUMS.sigstore.json` with `cosign verify-blob`, and retain
    `provenance.intoto.jsonl` with your update evidence.
 
 ## Evidence Retention
