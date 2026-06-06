@@ -1,14 +1,65 @@
-.git
-.github
+# Dependencies (reinstalled in container)
+node_modules
+.pnpm-store
+
+# Build outputs (rebuilt in container)
 .next
 .open-next
-.wrangler
-node_modules
 dist
-coverage
-*.log
+
+# Version control & CI
+.git
+.github
+.gitignore
+
+# Cloudflare / local dev state
+.wrangler
+.source
+
+# Environment & secrets
+.env*
+
+# IDE & editor
+.vscode
+.idea
 .DS_Store
+Thumbs.db
+.cursorrules
+
+# Linting & formatting
+.editorconfig
+.prettier*
+
+# Test tooling & files
+coverage
+**/*.test.ts
+**/*.test.tsx
+**/*.test.js
+**/*.test.mjs
+**/*.spec.ts
+**/*.spec.tsx
+**/*.spec.js
+**/*.spec.mjs
+vitest.config.*
+jest.config.*
+eslint.config.*
+
+# Logs
+*.log
 npm-debug.log*
 pnpm-debug.log*
+
+# Docker meta
+Dockerfile
+.dockerignore
+
+# Dev-only (runtime uses Next.js standalone output, not these scripts)
+README.md
+scripts/
+
+# Tool artifacts
+.codex-lint-report.json
 **/*.tsbuildinfo
 package-lock.json
+dockerignore-production-files.test.mjs
+dockerignore-match.mjs
