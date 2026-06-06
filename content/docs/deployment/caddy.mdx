@@ -60,6 +60,7 @@ On **`{$ADMIN_BACKEND_DOMAIN}`**, the default Caddyfile passes **`/api/*`** stra
 		reverse_proxy {
 			to {$ADMIN_BACKEND_SERVICE}:{$ADMIN_BACKEND_SERVICE_PORT}
 			header_up X-Request-ID {http.request.uuid}
+			header_up X-Real-IP {http.request.client_ip}
 		}
 	}
 
@@ -70,11 +71,23 @@ On **`{$ADMIN_BACKEND_DOMAIN}`**, the default Caddyfile passes **`/api/*`** stra
 		reverse_proxy {
 			to {$ADMIN_BACKEND_SERVICE}:{$ADMIN_BACKEND_SERVICE_PORT}
 			header_up X-Request-ID {http.request.uuid}
+			header_up X-Real-IP {http.request.client_ip}
 		}
 	}
 ```
 
 This is the relevant behavior from the shipped reverse proxy configuration; health checks, default headers, and optional custom backend options are managed in the deployment package.
+
+> [!NOTE]
+> The API-bearing `reverse_proxy` blocks set `header_up X-Real-IP {http.request.client_ip}`.
+> Caddy resolves `{http.request.client_ip}` using the global `servers > trusted_proxies`
+> list, then **overwrites** any client-supplied `X-Real-IP` with that authoritative value.
+> The Go backends only honour forwarding headers when the connecting peer is inside
+> `MPG_SECURITY_TRUSTED_PROXIES` (which defaults to the internal container networks), so
+> the real client IP used for rate limiting and session IP binding cannot be spoofed.
+> This works **with or without Cloudflare** in front — if you run an external load
+> balancer instead, add its CIDR(s) to both Caddy's `trusted_proxies` and the backends'
+> `MPG_SECURITY_TRUSTED_PROXIES`. See [Environment Variables](./environment-variables#security--network-trust).
 
 Merchant integrations may call either `https://api.yourcompany.com/v1/...` or `https://api.yourcompany.com/api/v1/...` on **`{$ADMIN_BACKEND_DOMAIN}`** (replace with your real API host).
 

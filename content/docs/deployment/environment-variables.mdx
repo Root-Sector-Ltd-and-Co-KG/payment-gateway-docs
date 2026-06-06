@@ -66,6 +66,20 @@ All configuration uses the `MPG_` prefix, loaded by Viper from environment varia
 | `MPG_RATE_LIMIT_REQUESTS_PER_MIN` | int      | No       | `100`           | Maximum requests per minute                      |
 | `MPG_RATE_LIMIT_WHITELIST`        | string   | No       | `127.0.0.1,::1` | Comma-separated IPs to exempt from rate limiting |
 
+### Security & Network Trust
+
+| Variable                          | Type   | Required | Default                   | Description                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| --------------------------------- | ------ | -------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `MPG_SECURITY_TRUSTED_PROXIES`    | string | No       | internal container ranges | Comma-separated CIDRs/IPs of trusted reverse proxies. Client-IP forwarding headers (`X-Real-IP`, `X-Forwarded-For`) are honoured **only** when the immediate peer matches one of these entries; otherwise the raw connection IP is used for rate limiting and session IP binding. Provider-agnostic — does **not** require Cloudflare. Set to your load balancer's CIDR(s) if you front the stack with an external proxy. Both backends. |
+| `MPG_INTERNAL_HEALTH_TOKEN`       | string | No       | — (source-IP check only)  | Shared secret required, in addition to the private/loopback source check, for the `/internal/health` deep endpoint. Behind a proxy the connection IP is the proxy, so this token is the real access gate. Set in production. Both backends.                                                                                                                                                                                              |
+| `MPG_IPN_ALLOW_PRIVATE_TARGETS`   | bool   | No       | `false`                   | Allow IPN webhook delivery to private/loopback/link-local targets (SSRF guard). Keep `false` in production. **Main backend only.**                                                                                                                                                                                                                                                                                                       |
+| `MPG_SECURITY_ALLOW_PRIVATE_SMTP` | bool   | No       | `false`                   | Allow SMTP test/send to dial private/loopback/link-local hosts (SSRF guard; cloud-metadata endpoints stay blocked regardless). Keep `false` in production. **Admin backend only.**                                                                                                                                                                                                                                                       |
+
+> **Note:** The bundled Caddy reverse proxy forwards an authoritative `X-Real-IP` derived
+> from its own trusted-proxy configuration, so the backends only need to trust the proxy hop
+> (`MPG_SECURITY_TRUSTED_PROXIES` defaults to the internal container networks). Cloudflare is
+> **not** required — any reverse proxy, or no proxy at all, is supported.
+
 ### Encryption
 
 | Variable                     | Type   | Required | Default | Description                                                                                                                                                                                                  |
@@ -88,10 +102,10 @@ All configuration uses the `MPG_` prefix, loaded by Viper from environment varia
 | `MPG_ADMIN_FRONTEND_DOMAIN`    | string | **Yes**  | —       | Admin frontend domain for CORS allow-list (e.g., `admin.yourcompany.com`)                                    |
 | `MPG_MAIN_BACKEND_DOMAIN`      | string | **Yes**  | —       | Main backend public domain                                                                                   |
 | `MPG_MAIN_FRONTEND_DOMAIN`     | string | **Yes**  | —       | Main frontend public domain                                                                                  |
-| `MPG_MAIN_FRONTEND_SERVICE`    | string | **Yes**  | —       | Deployment-managed service hostname for the main frontend                                                     |
-| `MPG_MAIN_FRONTEND_PORT`       | string | **Yes**  | —       | Deployment-managed service port for the main frontend                                                         |
-| `MPG_MAIN_BACKEND_SERVICE`     | string | **Yes**  | —       | Deployment-managed service hostname for the main backend                                                      |
-| `MPG_MAIN_BACKEND_PORT`        | string | **Yes**  | —       | Deployment-managed service port for the main backend                                                          |
+| `MPG_MAIN_FRONTEND_SERVICE`    | string | **Yes**  | —       | Deployment-managed service hostname for the main frontend                                                    |
+| `MPG_MAIN_FRONTEND_PORT`       | string | **Yes**  | —       | Deployment-managed service port for the main frontend                                                        |
+| `MPG_MAIN_BACKEND_SERVICE`     | string | **Yes**  | —       | Deployment-managed service hostname for the main backend                                                     |
+| `MPG_MAIN_BACKEND_PORT`        | string | **Yes**  | —       | Deployment-managed service port for the main backend                                                         |
 
 ### Authentication
 
@@ -105,9 +119,9 @@ All configuration uses the `MPG_` prefix, loaded by Viper from environment varia
 
 ### External Services
 
-| Variable                      | Type   | Required | Default | Description                                                                                                              |
-| ----------------------------- | ------ | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `MPG_MAIN_WORKER_SERVICE_URL` | string | No       | —       | Internal URL of the worker service for PDF proxy requests                                                                |
+| Variable                      | Type   | Required | Default | Description                                                                                                 |
+| ----------------------------- | ------ | -------- | ------- | ----------------------------------------------------------------------------------------------------------- |
+| `MPG_MAIN_WORKER_SERVICE_URL` | string | No       | —       | Internal URL of the worker service for PDF proxy requests                                                   |
 | `MPG_LICENSING_AUTHORITY_URL` | string | No       | —       | Trusted vendor licensing endpoint. Leave unset for official deployments unless support instructs otherwise. |
 
 ---
