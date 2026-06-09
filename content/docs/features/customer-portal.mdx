@@ -40,6 +40,7 @@ If the customer is enrolled in a visible Recurring Schedule, the portal displays
 - They can view the current subscription status (`active`, `paused`, `cancel_requested`, `cancelled`, `completed`).
 - They can review the next billing date, upcoming charge estimates, and optional proforma previews where configured.
 - They can request cancellation for future cycles from an explicit confirmation dialog in the customer portal.
+- Pending future-cycle cancellations are labeled as **Cancellation Scheduled** and show the effective cancellation date instead of implying another invoice will run.
 
 See [Recurring Schedules](./recurring) for operator-side schedule behavior and [Main Backend Public Endpoints](../api-reference/main-api) for the portal API surface.
 
@@ -47,9 +48,9 @@ See [Recurring Schedules](./recurring) for operator-side schedule behavior and [
 
 Customer portal cancellation is designed to be idempotent and state-aware:
 
-- Future-cycle subscriptions move into `cancel_requested` and stop generating further billing after the effective cycle date.
+- Future-cycle subscriptions move into `cancel_requested` and stop generating further billing after the effective cycle date. The recurring processor finalizes the cancellation on or after that date before generating the next cycle.
 - Paused subscriptions, or subscriptions with no remaining future cycle, are cancelled immediately.
-- Customers can optionally provide a cancellation reason. The gateway stores a trimmed reason for operator records and caps it at 500 characters.
+- Customers can optionally provide a cancellation reason. The gateway stores a trimmed reason, caps it at 500 characters, and shows the reason/requested timestamp on both the customer portal subscription detail and the Admin Panel recurring schedule detail.
 - Repeated cancellation requests return the current state instead of creating duplicate mutations.
 - Already issued invoices remain unchanged; customer portal cancellation only affects future recurring runs.
 

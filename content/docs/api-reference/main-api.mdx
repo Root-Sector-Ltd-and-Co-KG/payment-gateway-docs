@@ -389,6 +389,7 @@ GET /api/v1/portal/subscriptions/:id/upcoming?count=6
 ```
 
 Returns the current recurring state, the next scheduled charge if billing is still active, and upcoming charge estimates.
+For scheduled or finalized cancellations, the response also includes the stored cancellation reason and requested timestamp when present.
 
 **Response `200`:**
 
@@ -401,6 +402,8 @@ Returns the current recurring state, the next scheduled charge if billing is sti
   "currency": "EUR",
   "nextChargeDate": "2026-09-01T00:00:00Z",
   "effectiveAt": null,
+  "cancellationReason": null,
+  "cancellationRequestedAt": null,
   "upcoming": [
     {
       "id": "67c8e2f7d6ef0dc8a3fa2011-1",
@@ -453,6 +456,8 @@ Allows a customer to cancel a recurring schedule. The operation is idempotent an
   "status": "cancel_requested",
   "alreadyCancelled": false,
   "effectiveAt": "2026-09-01T00:00:00Z",
+  "cancellationReason": "Switching to annual billing",
+  "cancellationRequestedAt": "2026-06-09T12:00:00Z",
   "message": "Subscription cancellation scheduled for future cycles"
 }
 ```

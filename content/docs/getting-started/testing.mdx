@@ -92,9 +92,13 @@ Include at least these edge cases before moving tax changes to production:
 Recurring schedules use `nextRunDate` as the next due date. To test without waiting for the scheduled job:
 
 1. Create a schedule whose `startDate` materializes a due or past `nextRunDate`.
-2. Run the Admin Panel **Recurring -> Run Scheduler Now** action as a global administrator, or call `POST /api/v1/system/recurring/process`.
+2. Run the Admin Panel **Recurring -> Run Due Schedules** action as a global administrator, or call `POST /api/v1/system/recurring/process`.
 3. Run the processor a second time to verify the schedule does not generate duplicate invoices after `nextRunDate` advances.
-4. Cancel a due schedule and verify terminal schedules no longer expose lifecycle actions.
+4. Schedule a future cancellation with a reason and verify the schedule remains `cancel_requested` when due processing runs before `effectiveFromCycle`.
+5. Verify customer/admin detail pages show **Cancellation Scheduled**, the effective date, requested-at timestamp, and reason.
+6. Move `effectiveFromCycle` into the past in test data, run **Run Due Schedules**, and verify `cancellationsFinalized` increments without generating a new invoice for that cycle.
+
+Engineering validation should also include the recurring smoke flow and the VM-backed recurring regression suite after the branch is committed and deployed.
 
 
 ---
