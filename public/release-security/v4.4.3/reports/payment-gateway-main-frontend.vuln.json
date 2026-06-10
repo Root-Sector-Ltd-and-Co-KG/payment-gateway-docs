@@ -1,0 +1,2027 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.71.0"
+  },
+  "ReportID": "019eae51-0513-7bad-8361-905faa910f7c",
+  "CreatedAt": "2026-06-09T21:36:45.843766408Z",
+  "ArtifactID": "sha256:af8a09007e84a641d2cea6e44e4545c8c75294fcb9bbefb8f5a50e4206184a65",
+  "ArtifactName": "/tmp/tmp.wYsDFmNrxO/payment-gateway-main-frontend",
+  "ArtifactType": "repository",
+  "Metadata": {
+    "RepoURL": "https://github.com/Root-Sector-Ltd-and-Co-KG/payment-gateway-main-frontend.git",
+    "Tags": [
+      "v4.1.10"
+    ],
+    "Commit": "22c8b192f915e5edcbb28ab8b58c8f3de2912d3c",
+    "CommitMsg": "Merge remote-tracking branch 'origin/develop'",
+    "Author": "github-actions[bot] \u003cgithub-actions[bot]@users.noreply.github.com\u003e",
+    "Committer": "github-actions[bot] \u003cgithub-actions[bot]@users.noreply.github.com\u003e"
+  },
+  "Results": [
+    {
+      "Target": "pnpm-lock.yaml",
+      "Class": "lang-pkgs",
+      "Type": "pnpm",
+      "Packages": [
+        {
+          "ID": "@types/node@25.9.1",
+          "Name": "@types/node",
+          "Identifier": {
+            "PURL": "pkg:npm/%40types/node@25.9.1",
+            "UID": "4973f872d7c8e20d"
+          },
+          "Version": "25.9.1",
+          "Relationship": "direct",
+          "DependsOn": [
+            "undici-types@7.24.6"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "axios@1.16.1",
+          "Name": "axios",
+          "Identifier": {
+            "PURL": "pkg:npm/axios@1.16.1",
+            "UID": "969ed0393e484f07"
+          },
+          "Version": "1.16.1",
+          "Relationship": "direct",
+          "DependsOn": [
+            "follow-redirects@1.16.0(debug@4.4.3)",
+            "form-data@4.0.5",
+            "https-proxy-agent@5.0.1",
+            "proxy-from-env@2.1.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "compression@1.8.1",
+          "Name": "compression",
+          "Identifier": {
+            "PURL": "pkg:npm/compression@1.8.1",
+            "UID": "3e2b2a0b7e6a6fba"
+          },
+          "Version": "1.8.1",
+          "Relationship": "direct",
+          "DependsOn": [
+            "compressible@2.0.18",
+            "debug@2.6.9",
+            "negotiator@0.6.4",
+            "on-headers@1.1.0",
+            "safe-buffer@5.2.1",
+            "vary@1.1.2",
+            "bytes@3.1.2"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "dotenv@17.4.2",
+          "Name": "dotenv",
+          "Identifier": {
+            "PURL": "pkg:npm/dotenv@17.4.2",
+            "UID": "5aba83f95dca45b0"
+          },
+          "Version": "17.4.2",
+          "Relationship": "direct",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "express@5.2.1",
+          "Name": "express",
+          "Identifier": {
+            "PURL": "pkg:npm/express@5.2.1",
+            "UID": "3dfc6b938e383b72"
+          },
+          "Version": "5.2.1",
+          "Relationship": "direct",
+          "DependsOn": [
+            "accepts@2.0.0",
+            "content-type@1.0.5",
+            "http-errors@2.0.1",
+            "body-parser@2.2.2",
+            "mime-types@3.0.2",
+            "serve-static@2.2.1",
+            "vary@1.1.2",
+            "content-disposition@1.1.0",
+            "cookie@0.7.2",
+            "encodeurl@2.0.0",
+            "send@1.2.1",
+            "type-is@2.1.0",
+            "cookie-signature@1.2.2",
+            "depd@2.0.0",
+            "etag@1.8.1",
+            "finalhandler@2.1.1",
+            "once@1.4.0",
+            "router@2.2.0",
+            "debug@4.4.3",
+            "parseurl@1.3.3",
+            "fresh@2.0.0",
+            "statuses@2.0.2",
+            "escape-html@1.0.3",
+            "merge-descriptors@2.0.0",
+            "on-finished@2.4.1",
+            "proxy-addr@2.0.7",
+            "qs@6.15.2",
+            "range-parser@1.2.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "express-rate-limit@8.5.2(express@5.2.1)",
+          "Name": "express-rate-limit",
+          "Identifier": {
+            "PURL": "pkg:npm/express-rate-limit@8.5.2",
+            "UID": "51d07cc4766d81af"
+          },
+          "Version": "8.5.2",
+          "Relationship": "direct",
+          "DependsOn": [
+            "ip-address@10.2.0",
+            "express@5.2.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "http-proxy-middleware@3.0.5",
+          "Name": "http-proxy-middleware",
+          "Identifier": {
+            "PURL": "pkg:npm/http-proxy-middleware@3.0.5",
+            "UID": "e8fcbe5bf282cbe9"
+          },
+          "Version": "3.0.5",
+          "Relationship": "direct",
+          "DependsOn": [
+            "debug@4.4.3",
+            "http-proxy@1.18.1(debug@4.4.3)",
+            "is-glob@4.0.3",
+            "is-plain-object@5.0.0",
+            "micromatch@4.0.8",
+            "@types/http-proxy@1.17.17"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "i18next@26.3.0(typescript@6.0.3)",
+          "Name": "i18next",
+          "Identifier": {
+            "PURL": "pkg:npm/i18next@26.3.0",
+            "UID": "f9d596f908e9b5c1"
+          },
+          "Version": "26.3.0",
+          "Relationship": "direct",
+          "DependsOn": [
+            "typescript@6.0.3"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "mime@4.1.0",
+          "Name": "mime",
+          "Identifier": {
+            "PURL": "pkg:npm/mime@4.1.0",
+            "UID": "db433a881d5f8d1b"
+          },
+          "Version": "4.1.0",
+          "Relationship": "direct",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "pino@10.3.1",
+          "Name": "pino",
+          "Identifier": {
+            "PURL": "pkg:npm/pino@10.3.1",
+            "UID": "e3360b17b8eb9e2d"
+          },
+          "Version": "10.3.1",
+          "Relationship": "direct",
+          "DependsOn": [
+            "sonic-boom@4.2.1",
+            "atomic-sleep@1.0.0",
+            "pino-abstract-transport@3.0.0",
+            "process-warning@5.0.0",
+            "quick-format-unescaped@4.0.4",
+            "thread-stream@4.2.0",
+            "on-exit-leak-free@2.1.2",
+            "real-require@0.2.0",
+            "@pinojs/redact@0.4.0",
+            "pino-std-serializers@7.1.0",
+            "safe-stable-stringify@2.5.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "pino-http@11.0.0",
+          "Name": "pino-http",
+          "Identifier": {
+            "PURL": "pkg:npm/pino-http@11.0.0",
+            "UID": "8b48d725a8b2241"
+          },
+          "Version": "11.0.0",
+          "Relationship": "direct",
+          "DependsOn": [
+            "pino@10.3.1",
+            "pino-std-serializers@7.1.0",
+            "process-warning@5.0.0",
+            "get-caller-file@2.0.5"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "qrcode.react@4.2.0(react@19.2.6)",
+          "Name": "qrcode.react",
+          "Identifier": {
+            "PURL": "pkg:npm/qrcode.react@4.2.0",
+            "UID": "1e14bf23ed208032"
+          },
+          "Version": "4.2.0",
+          "Relationship": "direct",
+          "DependsOn": [
+            "react@19.2.6"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "react@19.2.6",
+          "Name": "react",
+          "Identifier": {
+            "PURL": "pkg:npm/react@19.2.6",
+            "UID": "3c19c3f1365f5f49"
+          },
+          "Version": "19.2.6",
+          "Relationship": "direct",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "react-dom@19.2.6(react@19.2.6)",
+          "Name": "react-dom",
+          "Identifier": {
+            "PURL": "pkg:npm/react-dom@19.2.6",
+            "UID": "e425ddb00b1f1b00"
+          },
+          "Version": "19.2.6",
+          "Relationship": "direct",
+          "DependsOn": [
+            "scheduler@0.27.0",
+            "react@19.2.6"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "react-i18next@17.0.8(i18next@26.3.0(typescript@6.0.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@6.0.3)",
+          "Name": "react-i18next",
+          "Identifier": {
+            "PURL": "pkg:npm/react-i18next@17.0.8",
+            "UID": "bef5edfe38556d21"
+          },
+          "Version": "17.0.8",
+          "Relationship": "direct",
+          "DependsOn": [
+            "react-dom@19.2.6(react@19.2.6)",
+            "typescript@6.0.3",
+            "@babel/runtime@7.29.7",
+            "html-parse-stringify@3.0.1",
+            "i18next@26.3.0(typescript@6.0.3)",
+            "react@19.2.6",
+            "use-sync-external-store@1.6.0(react@19.2.6)"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "react-router@7.15.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)",
+          "Name": "react-router",
+          "Identifier": {
+            "PURL": "pkg:npm/react-router@7.15.1",
+            "UID": "3780c615b0633736"
+          },
+          "Version": "7.15.1",
+          "Relationship": "direct",
+          "DependsOn": [
+            "cookie@1.1.1",
+            "react@19.2.6",
+            "set-cookie-parser@2.7.2",
+            "react-dom@19.2.6(react@19.2.6)"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "typescript@6.0.3",
+          "Name": "typescript",
+          "Identifier": {
+            "PURL": "pkg:npm/typescript@6.0.3",
+            "UID": "6a73ddf2e849f415"
+          },
+          "Version": "6.0.3",
+          "Relationship": "direct",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "@babel/runtime@7.29.7",
+          "Name": "@babel/runtime",
+          "Identifier": {
+            "PURL": "pkg:npm/%40babel/runtime@7.29.7",
+            "UID": "909358560332ef0"
+          },
+          "Version": "7.29.7",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "@pinojs/redact@0.4.0",
+          "Name": "@pinojs/redact",
+          "Identifier": {
+            "PURL": "pkg:npm/%40pinojs/redact@0.4.0",
+            "UID": "4612fd2e5b5750b6"
+          },
+          "Version": "0.4.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "@types/http-proxy@1.17.17",
+          "Name": "@types/http-proxy",
+          "Identifier": {
+            "PURL": "pkg:npm/%40types/http-proxy@1.17.17",
+            "UID": "ee95d1a58fb5dc87"
+          },
+          "Version": "1.17.17",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "@types/node@25.9.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "accepts@2.0.0",
+          "Name": "accepts",
+          "Identifier": {
+            "PURL": "pkg:npm/accepts@2.0.0",
+            "UID": "a44698063ec0905b"
+          },
+          "Version": "2.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "negotiator@1.0.0",
+            "mime-types@3.0.2"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "agent-base@6.0.2",
+          "Name": "agent-base",
+          "Identifier": {
+            "PURL": "pkg:npm/agent-base@6.0.2",
+            "UID": "9dfd5a46437218b2"
+          },
+          "Version": "6.0.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "debug@4.4.3"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "asynckit@0.4.0",
+          "Name": "asynckit",
+          "Identifier": {
+            "PURL": "pkg:npm/asynckit@0.4.0",
+            "UID": "763ae6c09342fb4c"
+          },
+          "Version": "0.4.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "atomic-sleep@1.0.0",
+          "Name": "atomic-sleep",
+          "Identifier": {
+            "PURL": "pkg:npm/atomic-sleep@1.0.0",
+            "UID": "35ccaaa0710c9307"
+          },
+          "Version": "1.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "body-parser@2.2.2",
+          "Name": "body-parser",
+          "Identifier": {
+            "PURL": "pkg:npm/body-parser@2.2.2",
+            "UID": "2223faed559a0017"
+          },
+          "Version": "2.2.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "bytes@3.1.2",
+            "content-type@1.0.5",
+            "debug@4.4.3",
+            "http-errors@2.0.1",
+            "raw-body@3.0.2",
+            "type-is@2.1.0",
+            "on-finished@2.4.1",
+            "iconv-lite@0.7.2",
+            "qs@6.15.2"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "braces@3.0.3",
+          "Name": "braces",
+          "Identifier": {
+            "PURL": "pkg:npm/braces@3.0.3",
+            "UID": "a8b04f2a89de9da5"
+          },
+          "Version": "3.0.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "fill-range@7.1.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "bytes@3.1.2",
+          "Name": "bytes",
+          "Identifier": {
+            "PURL": "pkg:npm/bytes@3.1.2",
+            "UID": "e1447f887733e83a"
+          },
+          "Version": "3.1.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "call-bind-apply-helpers@1.0.2",
+          "Name": "call-bind-apply-helpers",
+          "Identifier": {
+            "PURL": "pkg:npm/call-bind-apply-helpers@1.0.2",
+            "UID": "93cb72b15c9fa489"
+          },
+          "Version": "1.0.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "function-bind@1.1.2",
+            "es-errors@1.3.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "call-bound@1.0.4",
+          "Name": "call-bound",
+          "Identifier": {
+            "PURL": "pkg:npm/call-bound@1.0.4",
+            "UID": "d5f719cbcbbe1802"
+          },
+          "Version": "1.0.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "call-bind-apply-helpers@1.0.2",
+            "get-intrinsic@1.3.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "combined-stream@1.0.8",
+          "Name": "combined-stream",
+          "Identifier": {
+            "PURL": "pkg:npm/combined-stream@1.0.8",
+            "UID": "aeac8c0a8a5afcf4"
+          },
+          "Version": "1.0.8",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "delayed-stream@1.0.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "compressible@2.0.18",
+          "Name": "compressible",
+          "Identifier": {
+            "PURL": "pkg:npm/compressible@2.0.18",
+            "UID": "9787e0de5b2e4227"
+          },
+          "Version": "2.0.18",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "mime-db@1.54.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "content-disposition@1.1.0",
+          "Name": "content-disposition",
+          "Identifier": {
+            "PURL": "pkg:npm/content-disposition@1.1.0",
+            "UID": "5afb95b6ebfac97a"
+          },
+          "Version": "1.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "content-type@1.0.5",
+          "Name": "content-type",
+          "Identifier": {
+            "PURL": "pkg:npm/content-type@1.0.5",
+            "UID": "43629cda4c019cae"
+          },
+          "Version": "1.0.5",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "content-type@2.0.0",
+          "Name": "content-type",
+          "Identifier": {
+            "PURL": "pkg:npm/content-type@2.0.0",
+            "UID": "80c1b7c2e15e6479"
+          },
+          "Version": "2.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "cookie@0.7.2",
+          "Name": "cookie",
+          "Identifier": {
+            "PURL": "pkg:npm/cookie@0.7.2",
+            "UID": "1e404a80cb630018"
+          },
+          "Version": "0.7.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "cookie@1.1.1",
+          "Name": "cookie",
+          "Identifier": {
+            "PURL": "pkg:npm/cookie@1.1.1",
+            "UID": "5240c93d56fe9cbb"
+          },
+          "Version": "1.1.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "cookie-signature@1.2.2",
+          "Name": "cookie-signature",
+          "Identifier": {
+            "PURL": "pkg:npm/cookie-signature@1.2.2",
+            "UID": "b1b75762bf9834fd"
+          },
+          "Version": "1.2.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "debug@2.6.9",
+          "Name": "debug",
+          "Identifier": {
+            "PURL": "pkg:npm/debug@2.6.9",
+            "UID": "d83624552c34506d"
+          },
+          "Version": "2.6.9",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "ms@2.0.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "debug@4.4.3",
+          "Name": "debug",
+          "Identifier": {
+            "PURL": "pkg:npm/debug@4.4.3",
+            "UID": "c799ce6b30cccc05"
+          },
+          "Version": "4.4.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "ms@2.1.3"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "delayed-stream@1.0.0",
+          "Name": "delayed-stream",
+          "Identifier": {
+            "PURL": "pkg:npm/delayed-stream@1.0.0",
+            "UID": "a5f8a54a0df68c03"
+          },
+          "Version": "1.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "depd@2.0.0",
+          "Name": "depd",
+          "Identifier": {
+            "PURL": "pkg:npm/depd@2.0.0",
+            "UID": "6f0ef31f8c9da704"
+          },
+          "Version": "2.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "dunder-proto@1.0.1",
+          "Name": "dunder-proto",
+          "Identifier": {
+            "PURL": "pkg:npm/dunder-proto@1.0.1",
+            "UID": "d4c9d37363e97904"
+          },
+          "Version": "1.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "call-bind-apply-helpers@1.0.2",
+            "es-errors@1.3.0",
+            "gopd@1.2.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "ee-first@1.1.1",
+          "Name": "ee-first",
+          "Identifier": {
+            "PURL": "pkg:npm/ee-first@1.1.1",
+            "UID": "f71b364cab97c02"
+          },
+          "Version": "1.1.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "encodeurl@2.0.0",
+          "Name": "encodeurl",
+          "Identifier": {
+            "PURL": "pkg:npm/encodeurl@2.0.0",
+            "UID": "76f0e740b4a76c88"
+          },
+          "Version": "2.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "es-define-property@1.0.1",
+          "Name": "es-define-property",
+          "Identifier": {
+            "PURL": "pkg:npm/es-define-property@1.0.1",
+            "UID": "bdb59af61294e4c"
+          },
+          "Version": "1.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "es-errors@1.3.0",
+          "Name": "es-errors",
+          "Identifier": {
+            "PURL": "pkg:npm/es-errors@1.3.0",
+            "UID": "86a8b569ed19356e"
+          },
+          "Version": "1.3.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "es-object-atoms@1.1.2",
+          "Name": "es-object-atoms",
+          "Identifier": {
+            "PURL": "pkg:npm/es-object-atoms@1.1.2",
+            "UID": "2812f4bf8c9223e6"
+          },
+          "Version": "1.1.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "es-errors@1.3.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "es-set-tostringtag@2.1.0",
+          "Name": "es-set-tostringtag",
+          "Identifier": {
+            "PURL": "pkg:npm/es-set-tostringtag@2.1.0",
+            "UID": "29fabe207ba1d879"
+          },
+          "Version": "2.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "es-errors@1.3.0",
+            "get-intrinsic@1.3.0",
+            "has-tostringtag@1.0.2",
+            "hasown@2.0.3"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "escape-html@1.0.3",
+          "Name": "escape-html",
+          "Identifier": {
+            "PURL": "pkg:npm/escape-html@1.0.3",
+            "UID": "d6f5e6c903cd09df"
+          },
+          "Version": "1.0.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "etag@1.8.1",
+          "Name": "etag",
+          "Identifier": {
+            "PURL": "pkg:npm/etag@1.8.1",
+            "UID": "a9ed5c4f109ff68b"
+          },
+          "Version": "1.8.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "eventemitter3@4.0.7",
+          "Name": "eventemitter3",
+          "Identifier": {
+            "PURL": "pkg:npm/eventemitter3@4.0.7",
+            "UID": "35576c4e07361e0a"
+          },
+          "Version": "4.0.7",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "fill-range@7.1.1",
+          "Name": "fill-range",
+          "Identifier": {
+            "PURL": "pkg:npm/fill-range@7.1.1",
+            "UID": "4265730fd0612e0d"
+          },
+          "Version": "7.1.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "to-regex-range@5.0.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "finalhandler@2.1.1",
+          "Name": "finalhandler",
+          "Identifier": {
+            "PURL": "pkg:npm/finalhandler@2.1.1",
+            "UID": "82a5f98571acd34e"
+          },
+          "Version": "2.1.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "parseurl@1.3.3",
+            "statuses@2.0.2",
+            "debug@4.4.3",
+            "encodeurl@2.0.0",
+            "escape-html@1.0.3",
+            "on-finished@2.4.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "follow-redirects@1.16.0(debug@4.4.3)",
+          "Name": "follow-redirects",
+          "Identifier": {
+            "PURL": "pkg:npm/follow-redirects@1.16.0",
+            "UID": "d1ab5a9de6d388c8"
+          },
+          "Version": "1.16.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "debug@4.4.3"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "form-data@4.0.5",
+          "Name": "form-data",
+          "Identifier": {
+            "PURL": "pkg:npm/form-data@4.0.5",
+            "UID": "9562d8a343a9260d"
+          },
+          "Version": "4.0.5",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "es-set-tostringtag@2.1.0",
+            "hasown@2.0.3",
+            "mime-types@2.1.35",
+            "asynckit@0.4.0",
+            "combined-stream@1.0.8"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "forwarded@0.2.0",
+          "Name": "forwarded",
+          "Identifier": {
+            "PURL": "pkg:npm/forwarded@0.2.0",
+            "UID": "e20f905fc0c9bdc9"
+          },
+          "Version": "0.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "fresh@2.0.0",
+          "Name": "fresh",
+          "Identifier": {
+            "PURL": "pkg:npm/fresh@2.0.0",
+            "UID": "92facae792a7e782"
+          },
+          "Version": "2.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "function-bind@1.1.2",
+          "Name": "function-bind",
+          "Identifier": {
+            "PURL": "pkg:npm/function-bind@1.1.2",
+            "UID": "7f6b78e8c42a03f0"
+          },
+          "Version": "1.1.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "get-caller-file@2.0.5",
+          "Name": "get-caller-file",
+          "Identifier": {
+            "PURL": "pkg:npm/get-caller-file@2.0.5",
+            "UID": "984a9d0b304b795e"
+          },
+          "Version": "2.0.5",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "get-intrinsic@1.3.0",
+          "Name": "get-intrinsic",
+          "Identifier": {
+            "PURL": "pkg:npm/get-intrinsic@1.3.0",
+            "UID": "427ad4a42a0b001c"
+          },
+          "Version": "1.3.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "gopd@1.2.0",
+            "has-symbols@1.1.0",
+            "call-bind-apply-helpers@1.0.2",
+            "es-errors@1.3.0",
+            "es-object-atoms@1.1.2",
+            "function-bind@1.1.2",
+            "hasown@2.0.3",
+            "get-proto@1.0.1",
+            "math-intrinsics@1.1.0",
+            "es-define-property@1.0.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "get-proto@1.0.1",
+          "Name": "get-proto",
+          "Identifier": {
+            "PURL": "pkg:npm/get-proto@1.0.1",
+            "UID": "445f732ac7e17da3"
+          },
+          "Version": "1.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "es-object-atoms@1.1.2",
+            "dunder-proto@1.0.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "gopd@1.2.0",
+          "Name": "gopd",
+          "Identifier": {
+            "PURL": "pkg:npm/gopd@1.2.0",
+            "UID": "90200f01e7819880"
+          },
+          "Version": "1.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "has-symbols@1.1.0",
+          "Name": "has-symbols",
+          "Identifier": {
+            "PURL": "pkg:npm/has-symbols@1.1.0",
+            "UID": "4b47891fa63ea2e2"
+          },
+          "Version": "1.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "has-tostringtag@1.0.2",
+          "Name": "has-tostringtag",
+          "Identifier": {
+            "PURL": "pkg:npm/has-tostringtag@1.0.2",
+            "UID": "be37425606f0d4bd"
+          },
+          "Version": "1.0.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "has-symbols@1.1.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "hasown@2.0.3",
+          "Name": "hasown",
+          "Identifier": {
+            "PURL": "pkg:npm/hasown@2.0.3",
+            "UID": "8421b38cd16851bb"
+          },
+          "Version": "2.0.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "function-bind@1.1.2"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "html-parse-stringify@3.0.1",
+          "Name": "html-parse-stringify",
+          "Identifier": {
+            "PURL": "pkg:npm/html-parse-stringify@3.0.1",
+            "UID": "404b785426e048a"
+          },
+          "Version": "3.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "void-elements@3.1.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "http-errors@2.0.1",
+          "Name": "http-errors",
+          "Identifier": {
+            "PURL": "pkg:npm/http-errors@2.0.1",
+            "UID": "fd4fb60cc48e575d"
+          },
+          "Version": "2.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "depd@2.0.0",
+            "inherits@2.0.4",
+            "setprototypeof@1.2.0",
+            "statuses@2.0.2",
+            "toidentifier@1.0.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "http-proxy@1.18.1(debug@4.4.3)",
+          "Name": "http-proxy",
+          "Identifier": {
+            "PURL": "pkg:npm/http-proxy@1.18.1",
+            "UID": "8076e236de2eace0"
+          },
+          "Version": "1.18.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "requires-port@1.0.0",
+            "eventemitter3@4.0.7",
+            "follow-redirects@1.16.0(debug@4.4.3)"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "https-proxy-agent@5.0.1",
+          "Name": "https-proxy-agent",
+          "Identifier": {
+            "PURL": "pkg:npm/https-proxy-agent@5.0.1",
+            "UID": "10ddd4f6e2d3abba"
+          },
+          "Version": "5.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "agent-base@6.0.2",
+            "debug@4.4.3"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "iconv-lite@0.7.2",
+          "Name": "iconv-lite",
+          "Identifier": {
+            "PURL": "pkg:npm/iconv-lite@0.7.2",
+            "UID": "189f32f48d0b8343"
+          },
+          "Version": "0.7.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "safer-buffer@2.1.2"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "inherits@2.0.4",
+          "Name": "inherits",
+          "Identifier": {
+            "PURL": "pkg:npm/inherits@2.0.4",
+            "UID": "d53f4c8fcfb22ce6"
+          },
+          "Version": "2.0.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "ip-address@10.2.0",
+          "Name": "ip-address",
+          "Identifier": {
+            "PURL": "pkg:npm/ip-address@10.2.0",
+            "UID": "b85dfda3dcef6852"
+          },
+          "Version": "10.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "ipaddr.js@1.9.1",
+          "Name": "ipaddr.js",
+          "Identifier": {
+            "PURL": "pkg:npm/ipaddr.js@1.9.1",
+            "UID": "3ca3a21347911933"
+          },
+          "Version": "1.9.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "is-extglob@2.1.1",
+          "Name": "is-extglob",
+          "Identifier": {
+            "PURL": "pkg:npm/is-extglob@2.1.1",
+            "UID": "aaf17948493192a1"
+          },
+          "Version": "2.1.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "is-glob@4.0.3",
+          "Name": "is-glob",
+          "Identifier": {
+            "PURL": "pkg:npm/is-glob@4.0.3",
+            "UID": "43826084ac2421a6"
+          },
+          "Version": "4.0.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "is-extglob@2.1.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "is-number@7.0.0",
+          "Name": "is-number",
+          "Identifier": {
+            "PURL": "pkg:npm/is-number@7.0.0",
+            "UID": "6488875f1efff98a"
+          },
+          "Version": "7.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "is-plain-object@5.0.0",
+          "Name": "is-plain-object",
+          "Identifier": {
+            "PURL": "pkg:npm/is-plain-object@5.0.0",
+            "UID": "42c6eb92cb6db833"
+          },
+          "Version": "5.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "is-promise@4.0.0",
+          "Name": "is-promise",
+          "Identifier": {
+            "PURL": "pkg:npm/is-promise@4.0.0",
+            "UID": "db83ffbd7d54ee0b"
+          },
+          "Version": "4.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "math-intrinsics@1.1.0",
+          "Name": "math-intrinsics",
+          "Identifier": {
+            "PURL": "pkg:npm/math-intrinsics@1.1.0",
+            "UID": "c061aec17108bdc9"
+          },
+          "Version": "1.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "media-typer@1.1.0",
+          "Name": "media-typer",
+          "Identifier": {
+            "PURL": "pkg:npm/media-typer@1.1.0",
+            "UID": "3508458fddbd3a91"
+          },
+          "Version": "1.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "merge-descriptors@2.0.0",
+          "Name": "merge-descriptors",
+          "Identifier": {
+            "PURL": "pkg:npm/merge-descriptors@2.0.0",
+            "UID": "3964865b6e432b77"
+          },
+          "Version": "2.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "micromatch@4.0.8",
+          "Name": "micromatch",
+          "Identifier": {
+            "PURL": "pkg:npm/micromatch@4.0.8",
+            "UID": "823f15a5545d4e6f"
+          },
+          "Version": "4.0.8",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "picomatch@2.3.2",
+            "braces@3.0.3"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "mime-db@1.52.0",
+          "Name": "mime-db",
+          "Identifier": {
+            "PURL": "pkg:npm/mime-db@1.52.0",
+            "UID": "bf9e3dc982f43fef"
+          },
+          "Version": "1.52.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "mime-db@1.54.0",
+          "Name": "mime-db",
+          "Identifier": {
+            "PURL": "pkg:npm/mime-db@1.54.0",
+            "UID": "70c0745ace852ef7"
+          },
+          "Version": "1.54.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "mime-types@2.1.35",
+          "Name": "mime-types",
+          "Identifier": {
+            "PURL": "pkg:npm/mime-types@2.1.35",
+            "UID": "580a695422dfc672"
+          },
+          "Version": "2.1.35",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "mime-db@1.52.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "mime-types@3.0.2",
+          "Name": "mime-types",
+          "Identifier": {
+            "PURL": "pkg:npm/mime-types@3.0.2",
+            "UID": "f589b987e4f1a8c9"
+          },
+          "Version": "3.0.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "mime-db@1.54.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "ms@2.0.0",
+          "Name": "ms",
+          "Identifier": {
+            "PURL": "pkg:npm/ms@2.0.0",
+            "UID": "b6f1c838d3eec4dc"
+          },
+          "Version": "2.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "ms@2.1.3",
+          "Name": "ms",
+          "Identifier": {
+            "PURL": "pkg:npm/ms@2.1.3",
+            "UID": "8633655ddfe0e952"
+          },
+          "Version": "2.1.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "negotiator@0.6.4",
+          "Name": "negotiator",
+          "Identifier": {
+            "PURL": "pkg:npm/negotiator@0.6.4",
+            "UID": "f61eb8bc02f342e3"
+          },
+          "Version": "0.6.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "negotiator@1.0.0",
+          "Name": "negotiator",
+          "Identifier": {
+            "PURL": "pkg:npm/negotiator@1.0.0",
+            "UID": "ec4485d060ddfad4"
+          },
+          "Version": "1.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "object-inspect@1.13.4",
+          "Name": "object-inspect",
+          "Identifier": {
+            "PURL": "pkg:npm/object-inspect@1.13.4",
+            "UID": "5c207c7869d56fa"
+          },
+          "Version": "1.13.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "on-exit-leak-free@2.1.2",
+          "Name": "on-exit-leak-free",
+          "Identifier": {
+            "PURL": "pkg:npm/on-exit-leak-free@2.1.2",
+            "UID": "b45850aa83b8738f"
+          },
+          "Version": "2.1.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "on-finished@2.4.1",
+          "Name": "on-finished",
+          "Identifier": {
+            "PURL": "pkg:npm/on-finished@2.4.1",
+            "UID": "b659e6f0d8e47ff4"
+          },
+          "Version": "2.4.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "ee-first@1.1.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "on-headers@1.1.0",
+          "Name": "on-headers",
+          "Identifier": {
+            "PURL": "pkg:npm/on-headers@1.1.0",
+            "UID": "f4cc390d44d37ea0"
+          },
+          "Version": "1.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "once@1.4.0",
+          "Name": "once",
+          "Identifier": {
+            "PURL": "pkg:npm/once@1.4.0",
+            "UID": "9465344ca428ea7"
+          },
+          "Version": "1.4.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "wrappy@1.0.2"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "parseurl@1.3.3",
+          "Name": "parseurl",
+          "Identifier": {
+            "PURL": "pkg:npm/parseurl@1.3.3",
+            "UID": "2f30bbadbc1d2bca"
+          },
+          "Version": "1.3.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "path-to-regexp@8.4.2",
+          "Name": "path-to-regexp",
+          "Identifier": {
+            "PURL": "pkg:npm/path-to-regexp@8.4.2",
+            "UID": "1c440e42ac61501b"
+          },
+          "Version": "8.4.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "picomatch@2.3.2",
+          "Name": "picomatch",
+          "Identifier": {
+            "PURL": "pkg:npm/picomatch@2.3.2",
+            "UID": "82b1def31335cd88"
+          },
+          "Version": "2.3.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "pino-abstract-transport@3.0.0",
+          "Name": "pino-abstract-transport",
+          "Identifier": {
+            "PURL": "pkg:npm/pino-abstract-transport@3.0.0",
+            "UID": "396028a26aa6ee1f"
+          },
+          "Version": "3.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "split2@4.2.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "pino-std-serializers@7.1.0",
+          "Name": "pino-std-serializers",
+          "Identifier": {
+            "PURL": "pkg:npm/pino-std-serializers@7.1.0",
+            "UID": "d6688f6f78a6a2b7"
+          },
+          "Version": "7.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "process-warning@5.0.0",
+          "Name": "process-warning",
+          "Identifier": {
+            "PURL": "pkg:npm/process-warning@5.0.0",
+            "UID": "31416e7451ec057f"
+          },
+          "Version": "5.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "proxy-addr@2.0.7",
+          "Name": "proxy-addr",
+          "Identifier": {
+            "PURL": "pkg:npm/proxy-addr@2.0.7",
+            "UID": "73ee55bfffeab93"
+          },
+          "Version": "2.0.7",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "forwarded@0.2.0",
+            "ipaddr.js@1.9.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "proxy-from-env@2.1.0",
+          "Name": "proxy-from-env",
+          "Identifier": {
+            "PURL": "pkg:npm/proxy-from-env@2.1.0",
+            "UID": "c9ca634cf5081aeb"
+          },
+          "Version": "2.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "qs@6.15.2",
+          "Name": "qs",
+          "Identifier": {
+            "PURL": "pkg:npm/qs@6.15.2",
+            "UID": "d6b0708aac0c67b6"
+          },
+          "Version": "6.15.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "side-channel@1.1.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "quick-format-unescaped@4.0.4",
+          "Name": "quick-format-unescaped",
+          "Identifier": {
+            "PURL": "pkg:npm/quick-format-unescaped@4.0.4",
+            "UID": "35a078b244bcf4e8"
+          },
+          "Version": "4.0.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "range-parser@1.2.1",
+          "Name": "range-parser",
+          "Identifier": {
+            "PURL": "pkg:npm/range-parser@1.2.1",
+            "UID": "6b0d7917c2a6441b"
+          },
+          "Version": "1.2.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "raw-body@3.0.2",
+          "Name": "raw-body",
+          "Identifier": {
+            "PURL": "pkg:npm/raw-body@3.0.2",
+            "UID": "ae75ed28b8007405"
+          },
+          "Version": "3.0.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "http-errors@2.0.1",
+            "iconv-lite@0.7.2",
+            "unpipe@1.0.0",
+            "bytes@3.1.2"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "real-require@0.2.0",
+          "Name": "real-require",
+          "Identifier": {
+            "PURL": "pkg:npm/real-require@0.2.0",
+            "UID": "2ba3a4d43b167664"
+          },
+          "Version": "0.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "real-require@1.0.0",
+          "Name": "real-require",
+          "Identifier": {
+            "PURL": "pkg:npm/real-require@1.0.0",
+            "UID": "f57a8c02b4e75ab5"
+          },
+          "Version": "1.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "requires-port@1.0.0",
+          "Name": "requires-port",
+          "Identifier": {
+            "PURL": "pkg:npm/requires-port@1.0.0",
+            "UID": "6c46cc0cdd158981"
+          },
+          "Version": "1.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "router@2.2.0",
+          "Name": "router",
+          "Identifier": {
+            "PURL": "pkg:npm/router@2.2.0",
+            "UID": "9ce9d3787e300c96"
+          },
+          "Version": "2.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "is-promise@4.0.0",
+            "parseurl@1.3.3",
+            "path-to-regexp@8.4.2",
+            "debug@4.4.3",
+            "depd@2.0.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "safe-buffer@5.2.1",
+          "Name": "safe-buffer",
+          "Identifier": {
+            "PURL": "pkg:npm/safe-buffer@5.2.1",
+            "UID": "54bd884f7956ebb8"
+          },
+          "Version": "5.2.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "safe-stable-stringify@2.5.0",
+          "Name": "safe-stable-stringify",
+          "Identifier": {
+            "PURL": "pkg:npm/safe-stable-stringify@2.5.0",
+            "UID": "4f6f576522463b28"
+          },
+          "Version": "2.5.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "safer-buffer@2.1.2",
+          "Name": "safer-buffer",
+          "Identifier": {
+            "PURL": "pkg:npm/safer-buffer@2.1.2",
+            "UID": "2f06e2fead3f46bc"
+          },
+          "Version": "2.1.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "scheduler@0.27.0",
+          "Name": "scheduler",
+          "Identifier": {
+            "PURL": "pkg:npm/scheduler@0.27.0",
+            "UID": "a76b5b14a7b9588d"
+          },
+          "Version": "0.27.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "send@1.2.1",
+          "Name": "send",
+          "Identifier": {
+            "PURL": "pkg:npm/send@1.2.1",
+            "UID": "2af7de09b2ab840f"
+          },
+          "Version": "1.2.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "etag@1.8.1",
+            "ms@2.1.3",
+            "statuses@2.0.2",
+            "debug@4.4.3",
+            "fresh@2.0.0",
+            "mime-types@3.0.2",
+            "http-errors@2.0.1",
+            "on-finished@2.4.1",
+            "range-parser@1.2.1",
+            "encodeurl@2.0.0",
+            "escape-html@1.0.3"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "serve-static@2.2.1",
+          "Name": "serve-static",
+          "Identifier": {
+            "PURL": "pkg:npm/serve-static@2.2.1",
+            "UID": "13380bb9ef53946b"
+          },
+          "Version": "2.2.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "encodeurl@2.0.0",
+            "escape-html@1.0.3",
+            "parseurl@1.3.3",
+            "send@1.2.1"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "set-cookie-parser@2.7.2",
+          "Name": "set-cookie-parser",
+          "Identifier": {
+            "PURL": "pkg:npm/set-cookie-parser@2.7.2",
+            "UID": "e1c0d4d2790f41cf"
+          },
+          "Version": "2.7.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "setprototypeof@1.2.0",
+          "Name": "setprototypeof",
+          "Identifier": {
+            "PURL": "pkg:npm/setprototypeof@1.2.0",
+            "UID": "e9204e878ce02729"
+          },
+          "Version": "1.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "side-channel@1.1.0",
+          "Name": "side-channel",
+          "Identifier": {
+            "PURL": "pkg:npm/side-channel@1.1.0",
+            "UID": "1faf0baeb6bad863"
+          },
+          "Version": "1.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "side-channel-list@1.0.1",
+            "side-channel-map@1.0.1",
+            "side-channel-weakmap@1.0.2",
+            "es-errors@1.3.0",
+            "object-inspect@1.13.4"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "side-channel-list@1.0.1",
+          "Name": "side-channel-list",
+          "Identifier": {
+            "PURL": "pkg:npm/side-channel-list@1.0.1",
+            "UID": "6cdc3d56a807384c"
+          },
+          "Version": "1.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "es-errors@1.3.0",
+            "object-inspect@1.13.4"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "side-channel-map@1.0.1",
+          "Name": "side-channel-map",
+          "Identifier": {
+            "PURL": "pkg:npm/side-channel-map@1.0.1",
+            "UID": "bfa5d5b3d175d834"
+          },
+          "Version": "1.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "object-inspect@1.13.4",
+            "call-bound@1.0.4",
+            "es-errors@1.3.0",
+            "get-intrinsic@1.3.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "side-channel-weakmap@1.0.2",
+          "Name": "side-channel-weakmap",
+          "Identifier": {
+            "PURL": "pkg:npm/side-channel-weakmap@1.0.2",
+            "UID": "4942ed569406f2fc"
+          },
+          "Version": "1.0.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "object-inspect@1.13.4",
+            "side-channel-map@1.0.1",
+            "call-bound@1.0.4",
+            "es-errors@1.3.0",
+            "get-intrinsic@1.3.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "sonic-boom@4.2.1",
+          "Name": "sonic-boom",
+          "Identifier": {
+            "PURL": "pkg:npm/sonic-boom@4.2.1",
+            "UID": "61d18a349028a21d"
+          },
+          "Version": "4.2.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "atomic-sleep@1.0.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "split2@4.2.0",
+          "Name": "split2",
+          "Identifier": {
+            "PURL": "pkg:npm/split2@4.2.0",
+            "UID": "7194d9d409334e9c"
+          },
+          "Version": "4.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "statuses@2.0.2",
+          "Name": "statuses",
+          "Identifier": {
+            "PURL": "pkg:npm/statuses@2.0.2",
+            "UID": "b8ec5c01bfcbde1"
+          },
+          "Version": "2.0.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "thread-stream@4.2.0",
+          "Name": "thread-stream",
+          "Identifier": {
+            "PURL": "pkg:npm/thread-stream@4.2.0",
+            "UID": "69dfaaaf5730df07"
+          },
+          "Version": "4.2.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "real-require@1.0.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "to-regex-range@5.0.1",
+          "Name": "to-regex-range",
+          "Identifier": {
+            "PURL": "pkg:npm/to-regex-range@5.0.1",
+            "UID": "b42c3b55e4cf4da0"
+          },
+          "Version": "5.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "is-number@7.0.0"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "toidentifier@1.0.1",
+          "Name": "toidentifier",
+          "Identifier": {
+            "PURL": "pkg:npm/toidentifier@1.0.1",
+            "UID": "4701154bc4ec7124"
+          },
+          "Version": "1.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "type-is@2.1.0",
+          "Name": "type-is",
+          "Identifier": {
+            "PURL": "pkg:npm/type-is@2.1.0",
+            "UID": "7f9014bd2569a17"
+          },
+          "Version": "2.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "content-type@2.0.0",
+            "media-typer@1.1.0",
+            "mime-types@3.0.2"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "undici-types@7.24.6",
+          "Name": "undici-types",
+          "Identifier": {
+            "PURL": "pkg:npm/undici-types@7.24.6",
+            "UID": "ce5f1b4566aff1be"
+          },
+          "Version": "7.24.6",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "unpipe@1.0.0",
+          "Name": "unpipe",
+          "Identifier": {
+            "PURL": "pkg:npm/unpipe@1.0.0",
+            "UID": "d492775f5ffdce97"
+          },
+          "Version": "1.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "use-sync-external-store@1.6.0(react@19.2.6)",
+          "Name": "use-sync-external-store",
+          "Identifier": {
+            "PURL": "pkg:npm/use-sync-external-store@1.6.0",
+            "UID": "94262cb5d997c619"
+          },
+          "Version": "1.6.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "react@19.2.6"
+          ],
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "vary@1.1.2",
+          "Name": "vary",
+          "Identifier": {
+            "PURL": "pkg:npm/vary@1.1.2",
+            "UID": "27aa200b3e30c7b"
+          },
+          "Version": "1.1.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "void-elements@3.1.0",
+          "Name": "void-elements",
+          "Identifier": {
+            "PURL": "pkg:npm/void-elements@3.1.0",
+            "UID": "19650b24930c175c"
+          },
+          "Version": "3.1.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        },
+        {
+          "ID": "wrappy@1.0.2",
+          "Name": "wrappy",
+          "Identifier": {
+            "PURL": "pkg:npm/wrappy@1.0.2",
+            "UID": "6b5cbe22917449b8"
+          },
+          "Version": "1.0.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "pnpm"
+        }
+      ]
+    },
+    {
+      "Target": "Dockerfile",
+      "Class": "config",
+      "Type": "dockerfile",
+      "MisconfSummary": {
+        "Successes": 25,
+        "Failures": 2
+      },
+      "Misconfigurations": [
+        {
+          "Type": "Dockerfile Security Check",
+          "ID": "DS-0002",
+          "Title": "Image user should not be 'root'",
+          "Description": "Running containers with 'root' user can lead to a container escape situation. It is a best practice to run containers as non-root users, which can be done by adding a 'USER' statement to the Dockerfile.",
+          "Message": "Specify at least 1 USER command in Dockerfile with non-root user as argument",
+          "Namespace": "builtin.dockerfile.DS002",
+          "Query": "data.builtin.dockerfile.DS002.deny",
+          "Resolution": "Add 'USER \u003cnon root user name\u003e' line to the Dockerfile",
+          "Severity": "HIGH",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/ds-0002",
+          "References": [
+            "https://docs.docker.com/develop/develop-images/dockerfile_best-practices/",
+            "https://avd.aquasec.com/misconfig/ds-0002"
+          ],
+          "Status": "FAIL",
+          "CauseMetadata": {
+            "Provider": "Dockerfile",
+            "Service": "general"
+          }
+        },
+        {
+          "Type": "Dockerfile Security Check",
+          "ID": "DS-0026",
+          "Title": "No HEALTHCHECK defined",
+          "Description": "You should add HEALTHCHECK instruction in your docker container images to perform the health check on running containers.",
+          "Message": "Add HEALTHCHECK instruction in your Dockerfile",
+          "Namespace": "builtin.dockerfile.DS026",
+          "Query": "data.builtin.dockerfile.DS026.deny",
+          "Resolution": "Add HEALTHCHECK instruction in Dockerfile",
+          "Severity": "LOW",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/ds-0026",
+          "References": [
+            "https://blog.aquasec.com/docker-security-best-practices",
+            "https://avd.aquasec.com/misconfig/ds-0026"
+          ],
+          "Status": "FAIL",
+          "CauseMetadata": {
+            "Provider": "Dockerfile",
+            "Service": "general"
+          }
+        }
+      ]
+    }
+  ]
+}

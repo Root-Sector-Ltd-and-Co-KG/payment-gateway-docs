@@ -1,0 +1,3025 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.71.0"
+  },
+  "ReportID": "019eae52-fd88-7797-bf6d-d60216a60854",
+  "CreatedAt": "2026-06-09T21:38:54.984500027Z",
+  "ArtifactID": "sha256:7950c1735f6cd2584b91a2515aa09baf87d2d8352fbaa863536d9c97e20fc02b",
+  "ArtifactName": "staging-registry.payment-gateway.app/payment-gateway-admin-backend:4.1.15@sha256:e037f975c8f51451e76b537e4999384647040a5f6e8892de02c7b8602458338e",
+  "ArtifactType": "container_image",
+  "Metadata": {
+    "Size": 45144576,
+    "OS": {
+      "Family": "debian",
+      "Name": "13.5"
+    },
+    "ImageID": "sha256:157d4cee5222ccd015d591c89db50e1d4b68346868778aac70b185add027d9f7",
+    "DiffIDs": [
+      "sha256:92cb9c37b7d3957ac56645a979418f65e6c5bdba00eb99622affae5fc124ac07",
+      "sha256:621c35e751a51a9a9dc3e80aa0b7fe8be2a93402ea6ccd307d30852cd7776cda",
+      "sha256:c8b007d0206e4b10ed4d3b3d99dfeab47c2648e82011989fd78a5731baf33fc3",
+      "sha256:bec7e6bb35e05d1284f28b10d2150c259717d91c658c4c10c08424bb9466caba",
+      "sha256:275a30dd8ce958b21daa9ad962c6fbc09f98306ee2f486b65c9075dc257b1412",
+      "sha256:4d049f83d9cf21d1f5cc0e11deaf36df02790d0e60c1a3829538fb4b61685368",
+      "sha256:af5aa97ebe6ce1604747ec1e21af7136ded391bcabe4acef882e718a87c86bcc",
+      "sha256:6f1cdceb6a3146f0ccb986521156bef8a422cdbb0863396f7f751f575ba308f4",
+      "sha256:bd3cdfae1d3fdd83a2231d608969b38b82349777c2fff9a7c12d54f8ac5c9b38",
+      "sha256:4cde6b0bb6f50a5f255eef7b2a42162c661cf776b803225dcac9a659e396bb6b",
+      "sha256:ad51d0769d16ba578106a177987dfe3d2e02c1668c852b795b2f6b024068242a",
+      "sha256:187cfc6d1e3e8a40a5e64653bcd3239c140807dcf1c09e48021178705a5a6139",
+      "sha256:5fd2536c39c0700be8b7b4344e375196da2f126842fd8ede66996a18860a3890",
+      "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e",
+      "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0",
+      "sha256:c0e409312adc366898967307565f692bb33d43a439d3de48e27d14b742389725",
+      "sha256:e4ba966d7f0527dfe0fcb559e4e18d4da42c4e6beae924719255e0dedb554ed0",
+      "sha256:3db719fec36653a601f33788bf79c7408678e6d999f5e6fdd9a845a9a71e678c"
+    ],
+    "RepoDigests": [
+      "staging-registry.payment-gateway.app/payment-gateway-admin-backend@sha256:e037f975c8f51451e76b537e4999384647040a5f6e8892de02c7b8602458338e"
+    ],
+    "Reference": "staging-registry.payment-gateway.app/payment-gateway-admin-backend@sha256:e037f975c8f51451e76b537e4999384647040a5f6e8892de02c7b8602458338e",
+    "ImageConfig": {
+      "architecture": "amd64",
+      "created": "2026-06-09T21:18:53.764516732Z",
+      "history": [
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build @trixie//base-files/amd64:data_statusd"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build @trixie//netbase/amd64:data_statusd"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build @trixie//tzdata/amd64:data_statusd"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build @trixie//tzdata-legacy/amd64:data_statusd"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build @trixie//media-types/amd64:data_statusd"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build //common:rootfs"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build //common:passwd"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build //common:home"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build //common:group"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build //common:tmp"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build //static:nsswitch"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build //common:os_release_debian13"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build //common:cacerts_debian13_amd64"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build @trixie//libc6/amd64:data_statusd"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build @trixie//libssl3t64/amd64:data_statusd"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build @trixie//libzstd1/amd64:data_statusd"
+        },
+        {
+          "created": "1970-01-01T00:00:00Z",
+          "created_by": "bazel build @trixie//zlib1g/amd64:data_statusd"
+        },
+        {
+          "created": "2026-06-09T21:18:53.764516732Z",
+          "created_by": "ENV GIN_MODE=release",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2026-06-09T21:18:53.764516732Z",
+          "created_by": "LABEL org.opencontainers.image.title=payment-gateway-admin-backend org.opencontainers.image.description=Backend Component of Payment Gateway App org.opencontainers.image.documentation=https://payment-gateway.app org.opencontainers.image.authors=support@payment-gateway.app org.opencontainers.image.vendor=Root Sector Ltd. \u0026 Co. KG",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2026-06-09T21:18:53.764516732Z",
+          "created_by": "COPY /app /app # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2026-06-09T21:18:53.764516732Z",
+          "created_by": "CMD [\"/app\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        }
+      ],
+      "os": "linux",
+      "rootfs": {
+        "type": "layers",
+        "diff_ids": [
+          "sha256:92cb9c37b7d3957ac56645a979418f65e6c5bdba00eb99622affae5fc124ac07",
+          "sha256:621c35e751a51a9a9dc3e80aa0b7fe8be2a93402ea6ccd307d30852cd7776cda",
+          "sha256:c8b007d0206e4b10ed4d3b3d99dfeab47c2648e82011989fd78a5731baf33fc3",
+          "sha256:bec7e6bb35e05d1284f28b10d2150c259717d91c658c4c10c08424bb9466caba",
+          "sha256:275a30dd8ce958b21daa9ad962c6fbc09f98306ee2f486b65c9075dc257b1412",
+          "sha256:4d049f83d9cf21d1f5cc0e11deaf36df02790d0e60c1a3829538fb4b61685368",
+          "sha256:af5aa97ebe6ce1604747ec1e21af7136ded391bcabe4acef882e718a87c86bcc",
+          "sha256:6f1cdceb6a3146f0ccb986521156bef8a422cdbb0863396f7f751f575ba308f4",
+          "sha256:bd3cdfae1d3fdd83a2231d608969b38b82349777c2fff9a7c12d54f8ac5c9b38",
+          "sha256:4cde6b0bb6f50a5f255eef7b2a42162c661cf776b803225dcac9a659e396bb6b",
+          "sha256:ad51d0769d16ba578106a177987dfe3d2e02c1668c852b795b2f6b024068242a",
+          "sha256:187cfc6d1e3e8a40a5e64653bcd3239c140807dcf1c09e48021178705a5a6139",
+          "sha256:5fd2536c39c0700be8b7b4344e375196da2f126842fd8ede66996a18860a3890",
+          "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e",
+          "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0",
+          "sha256:c0e409312adc366898967307565f692bb33d43a439d3de48e27d14b742389725",
+          "sha256:e4ba966d7f0527dfe0fcb559e4e18d4da42c4e6beae924719255e0dedb554ed0",
+          "sha256:3db719fec36653a601f33788bf79c7408678e6d999f5e6fdd9a845a9a71e678c"
+        ]
+      },
+      "config": {
+        "Cmd": [
+          "/app"
+        ],
+        "Env": [
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt",
+          "GIN_MODE=release"
+        ],
+        "Labels": {
+          "org.opencontainers.image.authors": "support@payment-gateway.app",
+          "org.opencontainers.image.created": "2026-06-09T21:10:28Z",
+          "org.opencontainers.image.description": "Administration API (Go)",
+          "org.opencontainers.image.documentation": "https://payment-gateway.app",
+          "org.opencontainers.image.licenses": "",
+          "org.opencontainers.image.revision": "34b9973224f66e765e9d29c19f0ba0c24bf16894",
+          "org.opencontainers.image.source": "https://github.com/Root-Sector-Ltd-and-Co-KG/payment-gateway-admin-backend",
+          "org.opencontainers.image.title": "payment-gateway-admin-backend",
+          "org.opencontainers.image.url": "https://github.com/Root-Sector-Ltd-and-Co-KG/payment-gateway-admin-backend",
+          "org.opencontainers.image.vendor": "Root Sector Ltd. \u0026 Co. KG",
+          "org.opencontainers.image.version": "4.1.15"
+        },
+        "User": "65532",
+        "WorkingDir": "/home/nonroot",
+        "ArgsEscaped": true
+      }
+    },
+    "Layers": [
+      {
+        "Size": 337920,
+        "Digest": "sha256:47de5dd0b812c573630914955e26abda537e09b5286a824c96e22e3854d4dd53",
+        "DiffID": "sha256:92cb9c37b7d3957ac56645a979418f65e6c5bdba00eb99622affae5fc124ac07"
+      },
+      {
+        "Size": 40960,
+        "Digest": "sha256:c172f21841dff4c8cf45cde46589c1c2616cefe7e819965e92e6d3475c428aa0",
+        "DiffID": "sha256:621c35e751a51a9a9dc3e80aa0b7fe8be2a93402ea6ccd307d30852cd7776cda"
+      },
+      {
+        "Size": 1167360,
+        "Digest": "sha256:99515e7b4d35e0652d3b0fde571b6ec269222ecacc506f026e1758d6261e9109",
+        "DiffID": "sha256:c8b007d0206e4b10ed4d3b3d99dfeab47c2648e82011989fd78a5731baf33fc3"
+      },
+      {
+        "Size": 1331200,
+        "Digest": "sha256:99ba982a9142213c751a1709dcf088e63d8601f03b3f211bae037be698fef270",
+        "DiffID": "sha256:bec7e6bb35e05d1284f28b10d2150c259717d91c658c4c10c08424bb9466caba"
+      },
+      {
+        "Size": 102400,
+        "Digest": "sha256:d6b1b89eccacc15c2420b2776d72c1dae334a00805ed9af54bf2f71e4d536f28",
+        "DiffID": "sha256:275a30dd8ce958b21daa9ad962c6fbc09f98306ee2f486b65c9075dc257b1412"
+      },
+      {
+        "Size": 1536,
+        "Digest": "sha256:2780920e5dbfbe103d03a583ed75345306e572ec5a48cb10361f046767d9f29a",
+        "DiffID": "sha256:4d049f83d9cf21d1f5cc0e11deaf36df02790d0e60c1a3829538fb4b61685368"
+      },
+      {
+        "Size": 2560,
+        "Digest": "sha256:7c12895b777bcaa8ccae0605b4de635b68fc32d60fa08f421dc3818bf55ee212",
+        "DiffID": "sha256:af5aa97ebe6ce1604747ec1e21af7136ded391bcabe4acef882e718a87c86bcc"
+      },
+      {
+        "Size": 2560,
+        "Digest": "sha256:3214acf345c0cc6bbdb56b698a41ccdefc624a09d6beb0d38b5de0b2303ecaf4",
+        "DiffID": "sha256:6f1cdceb6a3146f0ccb986521156bef8a422cdbb0863396f7f751f575ba308f4"
+      },
+      {
+        "Size": 2560,
+        "Digest": "sha256:52630fc75a18675c530ed9eba5f55eca09b03e91bd5bc15307918bbc1a7e7296",
+        "DiffID": "sha256:bd3cdfae1d3fdd83a2231d608969b38b82349777c2fff9a7c12d54f8ac5c9b38"
+      },
+      {
+        "Size": 1536,
+        "Digest": "sha256:dd64bf2dd177757451a98fcdc999a339c35dee5d9872d8f4dc69c8f3c4dd0112",
+        "DiffID": "sha256:4cde6b0bb6f50a5f255eef7b2a42162c661cf776b803225dcac9a659e396bb6b"
+      },
+      {
+        "Size": 2048,
+        "Digest": "sha256:b839dfae01f66e15c6a8b63520557ed315bdfe036342fa7a0c537259f10d7a9a",
+        "DiffID": "sha256:ad51d0769d16ba578106a177987dfe3d2e02c1668c852b795b2f6b024068242a"
+      },
+      {
+        "Size": 3072,
+        "Digest": "sha256:ebddc55facdc6b1f7e0f30816a5fc7cc62f38abdf76c0a8b0a0ce52085754795",
+        "DiffID": "sha256:187cfc6d1e3e8a40a5e64653bcd3239c140807dcf1c09e48021178705a5a6139"
+      },
+      {
+        "Size": 249344,
+        "Digest": "sha256:bdfd7f7e5bf6fc27e70b59101db21c3d8284d283884419dd5fe7020583bb79ca",
+        "DiffID": "sha256:5fd2536c39c0700be8b7b4344e375196da2f126842fd8ede66996a18860a3890"
+      },
+      {
+        "Size": 13291520,
+        "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+        "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+      },
+      {
+        "Size": 8017920,
+        "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+        "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+      },
+      {
+        "Size": 870400,
+        "Digest": "sha256:bd8962e292918c50c90edebd9684c053bc386b9c5503acd8fec75d0c6f93a0b7",
+        "DiffID": "sha256:c0e409312adc366898967307565f692bb33d43a439d3de48e27d14b742389725"
+      },
+      {
+        "Size": 174080,
+        "Digest": "sha256:cac2ae0193cb073e7492050b05fc342a888651b4bbc966908c8793f889c299ba",
+        "DiffID": "sha256:e4ba966d7f0527dfe0fcb559e4e18d4da42c4e6beae924719255e0dedb554ed0"
+      },
+      {
+        "Size": 19545600,
+        "Digest": "sha256:a57e4556509907525c9ca1ae9ee7c056bcb2ac4ade247ae1cbd1f4893f5502ba",
+        "DiffID": "sha256:3db719fec36653a601f33788bf79c7408678e6d999f5e6fdd9a845a9a71e678c"
+      }
+    ]
+  },
+  "Results": [
+    {
+      "Target": "staging-registry.payment-gateway.app/payment-gateway-admin-backend:4.1.15@sha256:e037f975c8f51451e76b537e4999384647040a5f6e8892de02c7b8602458338e (debian 13.5)",
+      "Class": "os-pkgs",
+      "Type": "debian",
+      "Packages": [
+        {
+          "ID": "base-files@13.8+deb13u5",
+          "Name": "base-files",
+          "Identifier": {
+            "PURL": "pkg:deb/debian/base-files@13.8%2Bdeb13u5?arch=amd64\u0026distro=debian-13.5",
+            "UID": "5b85c5e78cb41b89"
+          },
+          "Version": "13.8+deb13u5",
+          "Arch": "amd64",
+          "SrcName": "base-files",
+          "SrcVersion": "13.8+deb13u5",
+          "Licenses": [
+            "GPL-2.0-or-later",
+            "verbatim"
+          ],
+          "Maintainer": "Santiago Vila \u003csanvila@debian.org\u003e",
+          "Repository": {
+            "Class": "official"
+          },
+          "Layer": {
+            "Digest": "sha256:47de5dd0b812c573630914955e26abda537e09b5286a824c96e22e3854d4dd53",
+            "DiffID": "sha256:92cb9c37b7d3957ac56645a979418f65e6c5bdba00eb99622affae5fc124ac07"
+          },
+          "InstalledFiles": [
+            "/usr/lib/os-release",
+            "/usr/share/base-files/dot.bashrc",
+            "/usr/share/base-files/dot.profile",
+            "/usr/share/base-files/dot.profile.md5sums",
+            "/usr/share/base-files/info.dir",
+            "/usr/share/base-files/motd",
+            "/usr/share/base-files/profile",
+            "/usr/share/base-files/profile.md5sums",
+            "/usr/share/base-files/staff-group-for-usr-local",
+            "/usr/share/common-licenses/Apache-2.0",
+            "/usr/share/common-licenses/Artistic",
+            "/usr/share/common-licenses/BSD",
+            "/usr/share/common-licenses/CC0-1.0",
+            "/usr/share/common-licenses/GFDL-1.2",
+            "/usr/share/common-licenses/GFDL-1.3",
+            "/usr/share/common-licenses/GPL-1",
+            "/usr/share/common-licenses/GPL-2",
+            "/usr/share/common-licenses/GPL-3",
+            "/usr/share/common-licenses/LGPL-2",
+            "/usr/share/common-licenses/LGPL-2.1",
+            "/usr/share/common-licenses/LGPL-3",
+            "/usr/share/common-licenses/MPL-1.1",
+            "/usr/share/common-licenses/MPL-2.0",
+            "/usr/share/doc/base-files/NEWS.Debian.gz",
+            "/usr/share/doc/base-files/README",
+            "/usr/share/doc/base-files/README.FHS",
+            "/usr/share/doc/base-files/changelog.gz",
+            "/usr/share/doc/base-files/copyright",
+            "/usr/share/lintian/overrides/base-files"
+          ],
+          "AnalyzedBy": "dpkg"
+        },
+        {
+          "ID": "libc6@2.41-12+deb13u3",
+          "Name": "libc6",
+          "Identifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "Version": "2.41",
+          "Release": "12+deb13u3",
+          "Arch": "amd64",
+          "SrcName": "glibc",
+          "SrcVersion": "2.41",
+          "SrcRelease": "12+deb13u3",
+          "Licenses": [
+            "LGPL-2.1-or-later",
+            "LGPL-2.0-or-later",
+            "LGPL-2.1+-with-link-exception",
+            "LGPL-3.0-or-later",
+            "GPL-2.0-or-later",
+            "GPL-2+-with-link-exception",
+            "GPL-2.0-only",
+            "GPL-3.0-or-later",
+            "FSFAP",
+            "Carnegie",
+            "Inner-Net",
+            "MIT-like-Lord",
+            "BSD-like-Spencer",
+            "PCRE",
+            "BSD-3-clause-Carnegie",
+            "Unicode-DFS-2016",
+            "BSL-1.0",
+            "SunPro",
+            "CORE-MATH",
+            "BSD-3-clause-Berkeley",
+            "BSD-3-clause-WIDE",
+            "BSD-2-Clause",
+            "BSD-3-clause-Oracle",
+            "DEC",
+            "IBM",
+            "ISC",
+            "Univ-Coimbra",
+            "public-domain",
+            "GPL-3.0-only",
+            "LGPL-2.0-only",
+            "LGPL-2.1-only",
+            "LGPL-3.0-only"
+          ],
+          "Maintainer": "GNU Libc Maintainers \u003cdebian-glibc@lists.debian.org\u003e",
+          "Repository": {
+            "Class": "official"
+          },
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "InstalledFiles": [
+            "/usr/lib/x86_64-linux-gnu/gconv/ANSI_X3.110.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ARMSCII-8.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ASMO_449.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/BIG5.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/BIG5HKSCS.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/BRF.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP10007.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP1125.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP1250.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP1251.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP1252.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP1253.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP1254.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP1255.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP1256.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP1257.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP1258.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP737.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP770.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP771.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP772.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP773.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP774.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP775.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CP932.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CSN_369103.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/CWI.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/DEC-MCS.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-AT-DE-A.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-AT-DE.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-CA-FR.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-DK-NO-A.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-DK-NO.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-ES-A.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-ES-S.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-ES.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-FI-SE-A.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-FI-SE.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-FR.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-IS-FRISS.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-IT.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-PT.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-UK.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EBCDIC-US.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ECMA-CYRILLIC.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EUC-CN.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EUC-JISX0213.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EUC-JP-MS.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EUC-JP.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EUC-KR.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/EUC-TW.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/GB18030.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/GBBIG5.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/GBGBK.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/GBK.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/GEORGIAN-ACADEMY.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/GEORGIAN-PS.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/GOST_19768-74.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/GREEK-CCITT.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/GREEK7-OLD.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/GREEK7.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/HP-GREEK8.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/HP-ROMAN8.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/HP-ROMAN9.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/HP-THAI8.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/HP-TURKISH8.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM037.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM038.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1004.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1008.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1008_420.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1025.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1026.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1046.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1047.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1097.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1112.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1122.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1123.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1124.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1129.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1130.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1132.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1133.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1137.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1140.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1141.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1142.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1143.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1144.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1145.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1146.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1147.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1148.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1149.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1153.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1154.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1155.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1156.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1157.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1158.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1160.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1161.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1162.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1163.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1164.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1166.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1167.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM12712.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1364.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1371.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1388.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1390.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM1399.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM16804.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM256.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM273.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM274.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM275.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM277.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM278.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM280.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM281.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM284.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM285.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM290.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM297.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM420.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM423.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM424.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM437.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM4517.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM4899.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM4909.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM4971.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM500.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM5347.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM803.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM850.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM851.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM852.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM855.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM856.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM857.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM858.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM860.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM861.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM862.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM863.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM864.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM865.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM866.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM866NAV.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM868.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM869.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM870.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM871.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM874.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM875.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM880.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM891.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM901.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM902.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM903.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM9030.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM904.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM905.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM9066.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM918.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM921.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM922.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM930.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM932.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM933.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM935.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM937.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM939.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM943.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IBM9448.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/IEC_P27-1.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/INIS-8.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/INIS-CYRILLIC.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/INIS.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISIRI-3342.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO-2022-CN-EXT.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO-2022-CN.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO-2022-JP-3.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO-2022-JP.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO-2022-KR.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO-IR-197.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO-IR-209.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO646.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-1.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-10.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-11.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-13.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-14.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-15.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-16.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-2.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-3.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-4.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-5.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-6.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-7.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-8.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-9.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO8859-9E.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO_10367-BOX.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO_11548-1.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO_2033.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO_5427-EXT.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO_5427.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO_5428.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO_6937-2.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/ISO_6937.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/JOHAB.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/KOI-8.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/KOI8-R.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/KOI8-RU.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/KOI8-T.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/KOI8-U.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/LATIN-GREEK-1.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/LATIN-GREEK.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/MAC-CENTRALEUROPE.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/MAC-IS.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/MAC-SAMI.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/MAC-UK.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/MACINTOSH.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/MIK.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/NATS-DANO.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/NATS-SEFI.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/PT154.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/RK1048.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/SAMI-WS2.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/SHIFT_JISX0213.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/SJIS.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/T.61.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/TCVN5712-1.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/TIS-620.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/TSCII.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/UHC.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/UNICODE.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/UTF-16.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/UTF-32.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/UTF-7.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/VISCII.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules",
+            "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache",
+            "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules.d/gconv-modules-extra.conf",
+            "/usr/lib/x86_64-linux-gnu/gconv/libCNS.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/libGB.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/libISOIR165.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/libJIS.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/libJISX0213.so",
+            "/usr/lib/x86_64-linux-gnu/gconv/libKSC.so",
+            "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+            "/usr/lib/x86_64-linux-gnu/libBrokenLocale.so.1",
+            "/usr/lib/x86_64-linux-gnu/libanl.so.1",
+            "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "/usr/lib/x86_64-linux-gnu/libc_malloc_debug.so.0",
+            "/usr/lib/x86_64-linux-gnu/libdl.so.2",
+            "/usr/lib/x86_64-linux-gnu/libm.so.6",
+            "/usr/lib/x86_64-linux-gnu/libmemusage.so",
+            "/usr/lib/x86_64-linux-gnu/libmvec.so.1",
+            "/usr/lib/x86_64-linux-gnu/libnsl.so.1",
+            "/usr/lib/x86_64-linux-gnu/libnss_compat.so.2",
+            "/usr/lib/x86_64-linux-gnu/libnss_dns.so.2",
+            "/usr/lib/x86_64-linux-gnu/libnss_files.so.2",
+            "/usr/lib/x86_64-linux-gnu/libnss_hesiod.so.2",
+            "/usr/lib/x86_64-linux-gnu/libpcprofile.so",
+            "/usr/lib/x86_64-linux-gnu/libpthread.so.0",
+            "/usr/lib/x86_64-linux-gnu/libresolv.so.2",
+            "/usr/lib/x86_64-linux-gnu/librt.so.1",
+            "/usr/lib/x86_64-linux-gnu/libthread_db.so.1",
+            "/usr/lib/x86_64-linux-gnu/libutil.so.1",
+            "/usr/share/doc/libc6/NEWS.Debian.gz",
+            "/usr/share/doc/libc6/NEWS.gz",
+            "/usr/share/doc/libc6/README.Debian.gz",
+            "/usr/share/doc/libc6/README.hesiod.gz",
+            "/usr/share/doc/libc6/changelog.Debian.gz",
+            "/usr/share/doc/libc6/changelog.gz",
+            "/usr/share/doc/libc6/copyright",
+            "/usr/share/lintian/overrides/libc6"
+          ],
+          "AnalyzedBy": "dpkg"
+        },
+        {
+          "ID": "libssl3t64@3.5.6-1~deb13u1",
+          "Name": "libssl3t64",
+          "Identifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "Version": "3.5.6",
+          "Release": "1~deb13u1",
+          "Arch": "amd64",
+          "SrcName": "openssl",
+          "SrcVersion": "3.5.6",
+          "SrcRelease": "1~deb13u1",
+          "Licenses": [
+            "Apache-2.0",
+            "Artistic-2.0",
+            "GPL-1.0-or-later",
+            "GPL-1.0-only"
+          ],
+          "Maintainer": "Debian OpenSSL Team \u003cpkg-openssl-devel@alioth-lists.debian.net\u003e",
+          "Repository": {
+            "Class": "official"
+          },
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "InstalledFiles": [
+            "/usr/lib/x86_64-linux-gnu/engines-3/afalg.so",
+            "/usr/lib/x86_64-linux-gnu/engines-3/loader_attic.so",
+            "/usr/lib/x86_64-linux-gnu/engines-3/padlock.so",
+            "/usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+            "/usr/lib/x86_64-linux-gnu/libssl.so.3",
+            "/usr/share/doc/libssl3t64/NEWS.Debian.gz",
+            "/usr/share/doc/libssl3t64/changelog.Debian.gz",
+            "/usr/share/doc/libssl3t64/changelog.gz",
+            "/usr/share/doc/libssl3t64/copyright",
+            "/usr/share/lintian/overrides/libssl3t64"
+          ],
+          "AnalyzedBy": "dpkg"
+        },
+        {
+          "ID": "libzstd1@1.5.7+dfsg-1",
+          "Name": "libzstd1",
+          "Identifier": {
+            "PURL": "pkg:deb/debian/libzstd1@1.5.7%2Bdfsg-1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "cea539729c307399"
+          },
+          "Version": "1.5.7+dfsg",
+          "Release": "1",
+          "Arch": "amd64",
+          "SrcName": "libzstd",
+          "SrcVersion": "1.5.7+dfsg",
+          "SrcRelease": "1",
+          "Licenses": [
+            "BSD-3-Clause",
+            "GPL-2.0-only",
+            "Zlib",
+            "MIT"
+          ],
+          "Maintainer": "RPM packaging team \u003cteam+pkg-rpm@tracker.debian.org\u003e",
+          "Repository": {
+            "Class": "official"
+          },
+          "Layer": {
+            "Digest": "sha256:bd8962e292918c50c90edebd9684c053bc386b9c5503acd8fec75d0c6f93a0b7",
+            "DiffID": "sha256:c0e409312adc366898967307565f692bb33d43a439d3de48e27d14b742389725"
+          },
+          "InstalledFiles": [
+            "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.7",
+            "/usr/share/doc/libzstd1/changelog.Debian.gz",
+            "/usr/share/doc/libzstd1/changelog.gz",
+            "/usr/share/doc/libzstd1/copyright"
+          ],
+          "AnalyzedBy": "dpkg"
+        },
+        {
+          "ID": "media-types@13.0.0",
+          "Name": "media-types",
+          "Identifier": {
+            "PURL": "pkg:deb/debian/media-types@13.0.0?arch=all\u0026distro=debian-13.5",
+            "UID": "228e3dc215dfe5fa"
+          },
+          "Version": "13.0.0",
+          "Arch": "all",
+          "SrcName": "media-types",
+          "SrcVersion": "13.0.0",
+          "Licenses": [
+            "ad-hoc"
+          ],
+          "Maintainer": "Mime-Support Packagers \u003cteam+debian-mimesupport-packagers@tracker.debian.org\u003e",
+          "Repository": {
+            "Class": "official"
+          },
+          "Layer": {
+            "Digest": "sha256:d6b1b89eccacc15c2420b2776d72c1dae334a00805ed9af54bf2f71e4d536f28",
+            "DiffID": "sha256:275a30dd8ce958b21daa9ad962c6fbc09f98306ee2f486b65c9075dc257b1412"
+          },
+          "InstalledFiles": [
+            "/usr/share/bug/media-types/presubj",
+            "/usr/share/doc/media-types/changelog.gz",
+            "/usr/share/doc/media-types/copyright"
+          ],
+          "AnalyzedBy": "dpkg"
+        },
+        {
+          "ID": "netbase@6.5",
+          "Name": "netbase",
+          "Identifier": {
+            "PURL": "pkg:deb/debian/netbase@6.5?arch=all\u0026distro=debian-13.5",
+            "UID": "e2b4fdea75f64595"
+          },
+          "Version": "6.5",
+          "Arch": "all",
+          "SrcName": "netbase",
+          "SrcVersion": "6.5",
+          "Licenses": [
+            "GPL-2.0-only"
+          ],
+          "Maintainer": "Marco d'Itri \u003cmd@linux.it\u003e",
+          "Repository": {
+            "Class": "official"
+          },
+          "Layer": {
+            "Digest": "sha256:c172f21841dff4c8cf45cde46589c1c2616cefe7e819965e92e6d3475c428aa0",
+            "DiffID": "sha256:621c35e751a51a9a9dc3e80aa0b7fe8be2a93402ea6ccd307d30852cd7776cda"
+          },
+          "InstalledFiles": [
+            "/usr/share/doc/netbase/changelog.gz",
+            "/usr/share/doc/netbase/copyright"
+          ],
+          "AnalyzedBy": "dpkg"
+        },
+        {
+          "ID": "tzdata@2026b-0+deb13u1",
+          "Name": "tzdata",
+          "Identifier": {
+            "PURL": "pkg:deb/debian/tzdata@2026b-0%2Bdeb13u1?arch=all\u0026distro=debian-13.5",
+            "UID": "37f7f56cbd52278f"
+          },
+          "Version": "2026b",
+          "Release": "0+deb13u1",
+          "Arch": "all",
+          "SrcName": "tzdata",
+          "SrcVersion": "2026b",
+          "SrcRelease": "0+deb13u1",
+          "Licenses": [
+            "public-domain"
+          ],
+          "Maintainer": "GNU Libc Maintainers \u003cdebian-glibc@lists.debian.org\u003e",
+          "Repository": {
+            "Class": "official"
+          },
+          "Layer": {
+            "Digest": "sha256:99515e7b4d35e0652d3b0fde571b6ec269222ecacc506f026e1758d6261e9109",
+            "DiffID": "sha256:c8b007d0206e4b10ed4d3b3d99dfeab47c2648e82011989fd78a5731baf33fc3"
+          },
+          "InstalledFiles": [
+            "/usr/share/doc/tzdata/NEWS.Debian.gz",
+            "/usr/share/doc/tzdata/README.Debian",
+            "/usr/share/doc/tzdata/changelog.Debian.gz",
+            "/usr/share/doc/tzdata/changelog.gz",
+            "/usr/share/doc/tzdata/copyright",
+            "/usr/share/lintian/overrides/tzdata",
+            "/usr/share/zoneinfo/Africa/Abidjan",
+            "/usr/share/zoneinfo/Africa/Accra",
+            "/usr/share/zoneinfo/Africa/Addis_Ababa",
+            "/usr/share/zoneinfo/Africa/Algiers",
+            "/usr/share/zoneinfo/Africa/Asmara",
+            "/usr/share/zoneinfo/Africa/Bamako",
+            "/usr/share/zoneinfo/Africa/Bangui",
+            "/usr/share/zoneinfo/Africa/Banjul",
+            "/usr/share/zoneinfo/Africa/Bissau",
+            "/usr/share/zoneinfo/Africa/Blantyre",
+            "/usr/share/zoneinfo/Africa/Brazzaville",
+            "/usr/share/zoneinfo/Africa/Bujumbura",
+            "/usr/share/zoneinfo/Africa/Cairo",
+            "/usr/share/zoneinfo/Africa/Casablanca",
+            "/usr/share/zoneinfo/Africa/Ceuta",
+            "/usr/share/zoneinfo/Africa/Conakry",
+            "/usr/share/zoneinfo/Africa/Dakar",
+            "/usr/share/zoneinfo/Africa/Dar_es_Salaam",
+            "/usr/share/zoneinfo/Africa/Djibouti",
+            "/usr/share/zoneinfo/Africa/Douala",
+            "/usr/share/zoneinfo/Africa/El_Aaiun",
+            "/usr/share/zoneinfo/Africa/Freetown",
+            "/usr/share/zoneinfo/Africa/Gaborone",
+            "/usr/share/zoneinfo/Africa/Harare",
+            "/usr/share/zoneinfo/Africa/Johannesburg",
+            "/usr/share/zoneinfo/Africa/Juba",
+            "/usr/share/zoneinfo/Africa/Kampala",
+            "/usr/share/zoneinfo/Africa/Khartoum",
+            "/usr/share/zoneinfo/Africa/Kigali",
+            "/usr/share/zoneinfo/Africa/Kinshasa",
+            "/usr/share/zoneinfo/Africa/Lagos",
+            "/usr/share/zoneinfo/Africa/Libreville",
+            "/usr/share/zoneinfo/Africa/Lome",
+            "/usr/share/zoneinfo/Africa/Luanda",
+            "/usr/share/zoneinfo/Africa/Lubumbashi",
+            "/usr/share/zoneinfo/Africa/Lusaka",
+            "/usr/share/zoneinfo/Africa/Malabo",
+            "/usr/share/zoneinfo/Africa/Maputo",
+            "/usr/share/zoneinfo/Africa/Maseru",
+            "/usr/share/zoneinfo/Africa/Mbabane",
+            "/usr/share/zoneinfo/Africa/Mogadishu",
+            "/usr/share/zoneinfo/Africa/Monrovia",
+            "/usr/share/zoneinfo/Africa/Nairobi",
+            "/usr/share/zoneinfo/Africa/Ndjamena",
+            "/usr/share/zoneinfo/Africa/Niamey",
+            "/usr/share/zoneinfo/Africa/Nouakchott",
+            "/usr/share/zoneinfo/Africa/Ouagadougou",
+            "/usr/share/zoneinfo/Africa/Porto-Novo",
+            "/usr/share/zoneinfo/Africa/Sao_Tome",
+            "/usr/share/zoneinfo/Africa/Tripoli",
+            "/usr/share/zoneinfo/Africa/Tunis",
+            "/usr/share/zoneinfo/Africa/Windhoek",
+            "/usr/share/zoneinfo/America/Adak",
+            "/usr/share/zoneinfo/America/Anchorage",
+            "/usr/share/zoneinfo/America/Anguilla",
+            "/usr/share/zoneinfo/America/Antigua",
+            "/usr/share/zoneinfo/America/Araguaina",
+            "/usr/share/zoneinfo/America/Argentina/Buenos_Aires",
+            "/usr/share/zoneinfo/America/Argentina/Catamarca",
+            "/usr/share/zoneinfo/America/Argentina/Cordoba",
+            "/usr/share/zoneinfo/America/Argentina/Jujuy",
+            "/usr/share/zoneinfo/America/Argentina/La_Rioja",
+            "/usr/share/zoneinfo/America/Argentina/Mendoza",
+            "/usr/share/zoneinfo/America/Argentina/Rio_Gallegos",
+            "/usr/share/zoneinfo/America/Argentina/Salta",
+            "/usr/share/zoneinfo/America/Argentina/San_Juan",
+            "/usr/share/zoneinfo/America/Argentina/San_Luis",
+            "/usr/share/zoneinfo/America/Argentina/Tucuman",
+            "/usr/share/zoneinfo/America/Argentina/Ushuaia",
+            "/usr/share/zoneinfo/America/Aruba",
+            "/usr/share/zoneinfo/America/Asuncion",
+            "/usr/share/zoneinfo/America/Atikokan",
+            "/usr/share/zoneinfo/America/Bahia",
+            "/usr/share/zoneinfo/America/Bahia_Banderas",
+            "/usr/share/zoneinfo/America/Barbados",
+            "/usr/share/zoneinfo/America/Belem",
+            "/usr/share/zoneinfo/America/Belize",
+            "/usr/share/zoneinfo/America/Blanc-Sablon",
+            "/usr/share/zoneinfo/America/Boa_Vista",
+            "/usr/share/zoneinfo/America/Bogota",
+            "/usr/share/zoneinfo/America/Boise",
+            "/usr/share/zoneinfo/America/Cambridge_Bay",
+            "/usr/share/zoneinfo/America/Campo_Grande",
+            "/usr/share/zoneinfo/America/Cancun",
+            "/usr/share/zoneinfo/America/Caracas",
+            "/usr/share/zoneinfo/America/Cayenne",
+            "/usr/share/zoneinfo/America/Cayman",
+            "/usr/share/zoneinfo/America/Chicago",
+            "/usr/share/zoneinfo/America/Chihuahua",
+            "/usr/share/zoneinfo/America/Ciudad_Juarez",
+            "/usr/share/zoneinfo/America/Costa_Rica",
+            "/usr/share/zoneinfo/America/Coyhaique",
+            "/usr/share/zoneinfo/America/Creston",
+            "/usr/share/zoneinfo/America/Cuiaba",
+            "/usr/share/zoneinfo/America/Curacao",
+            "/usr/share/zoneinfo/America/Danmarkshavn",
+            "/usr/share/zoneinfo/America/Dawson",
+            "/usr/share/zoneinfo/America/Dawson_Creek",
+            "/usr/share/zoneinfo/America/Denver",
+            "/usr/share/zoneinfo/America/Detroit",
+            "/usr/share/zoneinfo/America/Dominica",
+            "/usr/share/zoneinfo/America/Edmonton",
+            "/usr/share/zoneinfo/America/Eirunepe",
+            "/usr/share/zoneinfo/America/El_Salvador",
+            "/usr/share/zoneinfo/America/Fort_Nelson",
+            "/usr/share/zoneinfo/America/Fortaleza",
+            "/usr/share/zoneinfo/America/Glace_Bay",
+            "/usr/share/zoneinfo/America/Goose_Bay",
+            "/usr/share/zoneinfo/America/Grand_Turk",
+            "/usr/share/zoneinfo/America/Grenada",
+            "/usr/share/zoneinfo/America/Guadeloupe",
+            "/usr/share/zoneinfo/America/Guatemala",
+            "/usr/share/zoneinfo/America/Guayaquil",
+            "/usr/share/zoneinfo/America/Guyana",
+            "/usr/share/zoneinfo/America/Halifax",
+            "/usr/share/zoneinfo/America/Havana",
+            "/usr/share/zoneinfo/America/Hermosillo",
+            "/usr/share/zoneinfo/America/Indiana/Indianapolis",
+            "/usr/share/zoneinfo/America/Indiana/Knox",
+            "/usr/share/zoneinfo/America/Indiana/Marengo",
+            "/usr/share/zoneinfo/America/Indiana/Petersburg",
+            "/usr/share/zoneinfo/America/Indiana/Tell_City",
+            "/usr/share/zoneinfo/America/Indiana/Vevay",
+            "/usr/share/zoneinfo/America/Indiana/Vincennes",
+            "/usr/share/zoneinfo/America/Indiana/Winamac",
+            "/usr/share/zoneinfo/America/Inuvik",
+            "/usr/share/zoneinfo/America/Iqaluit",
+            "/usr/share/zoneinfo/America/Jamaica",
+            "/usr/share/zoneinfo/America/Juneau",
+            "/usr/share/zoneinfo/America/Kentucky/Louisville",
+            "/usr/share/zoneinfo/America/Kentucky/Monticello",
+            "/usr/share/zoneinfo/America/La_Paz",
+            "/usr/share/zoneinfo/America/Lima",
+            "/usr/share/zoneinfo/America/Los_Angeles",
+            "/usr/share/zoneinfo/America/Maceio",
+            "/usr/share/zoneinfo/America/Managua",
+            "/usr/share/zoneinfo/America/Manaus",
+            "/usr/share/zoneinfo/America/Martinique",
+            "/usr/share/zoneinfo/America/Matamoros",
+            "/usr/share/zoneinfo/America/Mazatlan",
+            "/usr/share/zoneinfo/America/Menominee",
+            "/usr/share/zoneinfo/America/Merida",
+            "/usr/share/zoneinfo/America/Metlakatla",
+            "/usr/share/zoneinfo/America/Mexico_City",
+            "/usr/share/zoneinfo/America/Miquelon",
+            "/usr/share/zoneinfo/America/Moncton",
+            "/usr/share/zoneinfo/America/Monterrey",
+            "/usr/share/zoneinfo/America/Montevideo",
+            "/usr/share/zoneinfo/America/Montserrat",
+            "/usr/share/zoneinfo/America/Nassau",
+            "/usr/share/zoneinfo/America/New_York",
+            "/usr/share/zoneinfo/America/Nome",
+            "/usr/share/zoneinfo/America/Noronha",
+            "/usr/share/zoneinfo/America/North_Dakota/Beulah",
+            "/usr/share/zoneinfo/America/North_Dakota/Center",
+            "/usr/share/zoneinfo/America/North_Dakota/New_Salem",
+            "/usr/share/zoneinfo/America/Nuuk",
+            "/usr/share/zoneinfo/America/Ojinaga",
+            "/usr/share/zoneinfo/America/Panama",
+            "/usr/share/zoneinfo/America/Paramaribo",
+            "/usr/share/zoneinfo/America/Phoenix",
+            "/usr/share/zoneinfo/America/Port-au-Prince",
+            "/usr/share/zoneinfo/America/Port_of_Spain",
+            "/usr/share/zoneinfo/America/Porto_Velho",
+            "/usr/share/zoneinfo/America/Puerto_Rico",
+            "/usr/share/zoneinfo/America/Punta_Arenas",
+            "/usr/share/zoneinfo/America/Rankin_Inlet",
+            "/usr/share/zoneinfo/America/Recife",
+            "/usr/share/zoneinfo/America/Regina",
+            "/usr/share/zoneinfo/America/Resolute",
+            "/usr/share/zoneinfo/America/Rio_Branco",
+            "/usr/share/zoneinfo/America/Santarem",
+            "/usr/share/zoneinfo/America/Santiago",
+            "/usr/share/zoneinfo/America/Santo_Domingo",
+            "/usr/share/zoneinfo/America/Sao_Paulo",
+            "/usr/share/zoneinfo/America/Scoresbysund",
+            "/usr/share/zoneinfo/America/Sitka",
+            "/usr/share/zoneinfo/America/St_Johns",
+            "/usr/share/zoneinfo/America/St_Kitts",
+            "/usr/share/zoneinfo/America/St_Lucia",
+            "/usr/share/zoneinfo/America/St_Thomas",
+            "/usr/share/zoneinfo/America/St_Vincent",
+            "/usr/share/zoneinfo/America/Swift_Current",
+            "/usr/share/zoneinfo/America/Tegucigalpa",
+            "/usr/share/zoneinfo/America/Thule",
+            "/usr/share/zoneinfo/America/Tijuana",
+            "/usr/share/zoneinfo/America/Toronto",
+            "/usr/share/zoneinfo/America/Tortola",
+            "/usr/share/zoneinfo/America/Vancouver",
+            "/usr/share/zoneinfo/America/Whitehorse",
+            "/usr/share/zoneinfo/America/Winnipeg",
+            "/usr/share/zoneinfo/America/Yakutat",
+            "/usr/share/zoneinfo/Antarctica/Casey",
+            "/usr/share/zoneinfo/Antarctica/Davis",
+            "/usr/share/zoneinfo/Antarctica/DumontDUrville",
+            "/usr/share/zoneinfo/Antarctica/Macquarie",
+            "/usr/share/zoneinfo/Antarctica/Mawson",
+            "/usr/share/zoneinfo/Antarctica/McMurdo",
+            "/usr/share/zoneinfo/Antarctica/Palmer",
+            "/usr/share/zoneinfo/Antarctica/Rothera",
+            "/usr/share/zoneinfo/Antarctica/Syowa",
+            "/usr/share/zoneinfo/Antarctica/Troll",
+            "/usr/share/zoneinfo/Antarctica/Vostok",
+            "/usr/share/zoneinfo/Asia/Aden",
+            "/usr/share/zoneinfo/Asia/Almaty",
+            "/usr/share/zoneinfo/Asia/Amman",
+            "/usr/share/zoneinfo/Asia/Anadyr",
+            "/usr/share/zoneinfo/Asia/Aqtau",
+            "/usr/share/zoneinfo/Asia/Aqtobe",
+            "/usr/share/zoneinfo/Asia/Ashgabat",
+            "/usr/share/zoneinfo/Asia/Atyrau",
+            "/usr/share/zoneinfo/Asia/Baghdad",
+            "/usr/share/zoneinfo/Asia/Bahrain",
+            "/usr/share/zoneinfo/Asia/Baku",
+            "/usr/share/zoneinfo/Asia/Bangkok",
+            "/usr/share/zoneinfo/Asia/Barnaul",
+            "/usr/share/zoneinfo/Asia/Beirut",
+            "/usr/share/zoneinfo/Asia/Bishkek",
+            "/usr/share/zoneinfo/Asia/Brunei",
+            "/usr/share/zoneinfo/Asia/Chita",
+            "/usr/share/zoneinfo/Asia/Colombo",
+            "/usr/share/zoneinfo/Asia/Damascus",
+            "/usr/share/zoneinfo/Asia/Dhaka",
+            "/usr/share/zoneinfo/Asia/Dili",
+            "/usr/share/zoneinfo/Asia/Dubai",
+            "/usr/share/zoneinfo/Asia/Dushanbe",
+            "/usr/share/zoneinfo/Asia/Famagusta",
+            "/usr/share/zoneinfo/Asia/Gaza",
+            "/usr/share/zoneinfo/Asia/Hebron",
+            "/usr/share/zoneinfo/Asia/Ho_Chi_Minh",
+            "/usr/share/zoneinfo/Asia/Hong_Kong",
+            "/usr/share/zoneinfo/Asia/Hovd",
+            "/usr/share/zoneinfo/Asia/Irkutsk",
+            "/usr/share/zoneinfo/Asia/Jakarta",
+            "/usr/share/zoneinfo/Asia/Jayapura",
+            "/usr/share/zoneinfo/Asia/Jerusalem",
+            "/usr/share/zoneinfo/Asia/Kabul",
+            "/usr/share/zoneinfo/Asia/Kamchatka",
+            "/usr/share/zoneinfo/Asia/Karachi",
+            "/usr/share/zoneinfo/Asia/Kathmandu",
+            "/usr/share/zoneinfo/Asia/Khandyga",
+            "/usr/share/zoneinfo/Asia/Kolkata",
+            "/usr/share/zoneinfo/Asia/Krasnoyarsk",
+            "/usr/share/zoneinfo/Asia/Kuala_Lumpur",
+            "/usr/share/zoneinfo/Asia/Kuching",
+            "/usr/share/zoneinfo/Asia/Kuwait",
+            "/usr/share/zoneinfo/Asia/Macau",
+            "/usr/share/zoneinfo/Asia/Magadan",
+            "/usr/share/zoneinfo/Asia/Makassar",
+            "/usr/share/zoneinfo/Asia/Manila",
+            "/usr/share/zoneinfo/Asia/Muscat",
+            "/usr/share/zoneinfo/Asia/Nicosia",
+            "/usr/share/zoneinfo/Asia/Novokuznetsk",
+            "/usr/share/zoneinfo/Asia/Novosibirsk",
+            "/usr/share/zoneinfo/Asia/Omsk",
+            "/usr/share/zoneinfo/Asia/Oral",
+            "/usr/share/zoneinfo/Asia/Phnom_Penh",
+            "/usr/share/zoneinfo/Asia/Pontianak",
+            "/usr/share/zoneinfo/Asia/Pyongyang",
+            "/usr/share/zoneinfo/Asia/Qatar",
+            "/usr/share/zoneinfo/Asia/Qostanay",
+            "/usr/share/zoneinfo/Asia/Qyzylorda",
+            "/usr/share/zoneinfo/Asia/Riyadh",
+            "/usr/share/zoneinfo/Asia/Sakhalin",
+            "/usr/share/zoneinfo/Asia/Samarkand",
+            "/usr/share/zoneinfo/Asia/Seoul",
+            "/usr/share/zoneinfo/Asia/Shanghai",
+            "/usr/share/zoneinfo/Asia/Singapore",
+            "/usr/share/zoneinfo/Asia/Srednekolymsk",
+            "/usr/share/zoneinfo/Asia/Taipei",
+            "/usr/share/zoneinfo/Asia/Tashkent",
+            "/usr/share/zoneinfo/Asia/Tbilisi",
+            "/usr/share/zoneinfo/Asia/Tehran",
+            "/usr/share/zoneinfo/Asia/Thimphu",
+            "/usr/share/zoneinfo/Asia/Tokyo",
+            "/usr/share/zoneinfo/Asia/Tomsk",
+            "/usr/share/zoneinfo/Asia/Ulaanbaatar",
+            "/usr/share/zoneinfo/Asia/Urumqi",
+            "/usr/share/zoneinfo/Asia/Ust-Nera",
+            "/usr/share/zoneinfo/Asia/Vientiane",
+            "/usr/share/zoneinfo/Asia/Vladivostok",
+            "/usr/share/zoneinfo/Asia/Yakutsk",
+            "/usr/share/zoneinfo/Asia/Yangon",
+            "/usr/share/zoneinfo/Asia/Yekaterinburg",
+            "/usr/share/zoneinfo/Asia/Yerevan",
+            "/usr/share/zoneinfo/Atlantic/Azores",
+            "/usr/share/zoneinfo/Atlantic/Bermuda",
+            "/usr/share/zoneinfo/Atlantic/Canary",
+            "/usr/share/zoneinfo/Atlantic/Cape_Verde",
+            "/usr/share/zoneinfo/Atlantic/Faroe",
+            "/usr/share/zoneinfo/Atlantic/Madeira",
+            "/usr/share/zoneinfo/Atlantic/Reykjavik",
+            "/usr/share/zoneinfo/Atlantic/South_Georgia",
+            "/usr/share/zoneinfo/Atlantic/St_Helena",
+            "/usr/share/zoneinfo/Atlantic/Stanley",
+            "/usr/share/zoneinfo/Australia/Adelaide",
+            "/usr/share/zoneinfo/Australia/Brisbane",
+            "/usr/share/zoneinfo/Australia/Broken_Hill",
+            "/usr/share/zoneinfo/Australia/Darwin",
+            "/usr/share/zoneinfo/Australia/Eucla",
+            "/usr/share/zoneinfo/Australia/Hobart",
+            "/usr/share/zoneinfo/Australia/Lindeman",
+            "/usr/share/zoneinfo/Australia/Lord_Howe",
+            "/usr/share/zoneinfo/Australia/Melbourne",
+            "/usr/share/zoneinfo/Australia/Perth",
+            "/usr/share/zoneinfo/Australia/Sydney",
+            "/usr/share/zoneinfo/Etc/GMT",
+            "/usr/share/zoneinfo/Etc/GMT+1",
+            "/usr/share/zoneinfo/Etc/GMT+10",
+            "/usr/share/zoneinfo/Etc/GMT+11",
+            "/usr/share/zoneinfo/Etc/GMT+12",
+            "/usr/share/zoneinfo/Etc/GMT+2",
+            "/usr/share/zoneinfo/Etc/GMT+3",
+            "/usr/share/zoneinfo/Etc/GMT+4",
+            "/usr/share/zoneinfo/Etc/GMT+5",
+            "/usr/share/zoneinfo/Etc/GMT+6",
+            "/usr/share/zoneinfo/Etc/GMT+7",
+            "/usr/share/zoneinfo/Etc/GMT+8",
+            "/usr/share/zoneinfo/Etc/GMT+9",
+            "/usr/share/zoneinfo/Etc/GMT-1",
+            "/usr/share/zoneinfo/Etc/GMT-10",
+            "/usr/share/zoneinfo/Etc/GMT-11",
+            "/usr/share/zoneinfo/Etc/GMT-12",
+            "/usr/share/zoneinfo/Etc/GMT-13",
+            "/usr/share/zoneinfo/Etc/GMT-14",
+            "/usr/share/zoneinfo/Etc/GMT-2",
+            "/usr/share/zoneinfo/Etc/GMT-3",
+            "/usr/share/zoneinfo/Etc/GMT-4",
+            "/usr/share/zoneinfo/Etc/GMT-5",
+            "/usr/share/zoneinfo/Etc/GMT-6",
+            "/usr/share/zoneinfo/Etc/GMT-7",
+            "/usr/share/zoneinfo/Etc/GMT-8",
+            "/usr/share/zoneinfo/Etc/GMT-9",
+            "/usr/share/zoneinfo/Etc/UTC",
+            "/usr/share/zoneinfo/Europe/Amsterdam",
+            "/usr/share/zoneinfo/Europe/Andorra",
+            "/usr/share/zoneinfo/Europe/Astrakhan",
+            "/usr/share/zoneinfo/Europe/Athens",
+            "/usr/share/zoneinfo/Europe/Belgrade",
+            "/usr/share/zoneinfo/Europe/Berlin",
+            "/usr/share/zoneinfo/Europe/Brussels",
+            "/usr/share/zoneinfo/Europe/Bucharest",
+            "/usr/share/zoneinfo/Europe/Budapest",
+            "/usr/share/zoneinfo/Europe/Chisinau",
+            "/usr/share/zoneinfo/Europe/Copenhagen",
+            "/usr/share/zoneinfo/Europe/Dublin",
+            "/usr/share/zoneinfo/Europe/Gibraltar",
+            "/usr/share/zoneinfo/Europe/Guernsey",
+            "/usr/share/zoneinfo/Europe/Helsinki",
+            "/usr/share/zoneinfo/Europe/Isle_of_Man",
+            "/usr/share/zoneinfo/Europe/Istanbul",
+            "/usr/share/zoneinfo/Europe/Jersey",
+            "/usr/share/zoneinfo/Europe/Kaliningrad",
+            "/usr/share/zoneinfo/Europe/Kirov",
+            "/usr/share/zoneinfo/Europe/Kyiv",
+            "/usr/share/zoneinfo/Europe/Lisbon",
+            "/usr/share/zoneinfo/Europe/Ljubljana",
+            "/usr/share/zoneinfo/Europe/London",
+            "/usr/share/zoneinfo/Europe/Luxembourg",
+            "/usr/share/zoneinfo/Europe/Madrid",
+            "/usr/share/zoneinfo/Europe/Malta",
+            "/usr/share/zoneinfo/Europe/Minsk",
+            "/usr/share/zoneinfo/Europe/Monaco",
+            "/usr/share/zoneinfo/Europe/Moscow",
+            "/usr/share/zoneinfo/Europe/Oslo",
+            "/usr/share/zoneinfo/Europe/Paris",
+            "/usr/share/zoneinfo/Europe/Prague",
+            "/usr/share/zoneinfo/Europe/Riga",
+            "/usr/share/zoneinfo/Europe/Rome",
+            "/usr/share/zoneinfo/Europe/Samara",
+            "/usr/share/zoneinfo/Europe/Sarajevo",
+            "/usr/share/zoneinfo/Europe/Saratov",
+            "/usr/share/zoneinfo/Europe/Simferopol",
+            "/usr/share/zoneinfo/Europe/Skopje",
+            "/usr/share/zoneinfo/Europe/Sofia",
+            "/usr/share/zoneinfo/Europe/Stockholm",
+            "/usr/share/zoneinfo/Europe/Tallinn",
+            "/usr/share/zoneinfo/Europe/Tirane",
+            "/usr/share/zoneinfo/Europe/Ulyanovsk",
+            "/usr/share/zoneinfo/Europe/Vaduz",
+            "/usr/share/zoneinfo/Europe/Vienna",
+            "/usr/share/zoneinfo/Europe/Vilnius",
+            "/usr/share/zoneinfo/Europe/Volgograd",
+            "/usr/share/zoneinfo/Europe/Warsaw",
+            "/usr/share/zoneinfo/Europe/Zagreb",
+            "/usr/share/zoneinfo/Europe/Zurich",
+            "/usr/share/zoneinfo/Factory",
+            "/usr/share/zoneinfo/Indian/Antananarivo",
+            "/usr/share/zoneinfo/Indian/Chagos",
+            "/usr/share/zoneinfo/Indian/Christmas",
+            "/usr/share/zoneinfo/Indian/Cocos",
+            "/usr/share/zoneinfo/Indian/Comoro",
+            "/usr/share/zoneinfo/Indian/Kerguelen",
+            "/usr/share/zoneinfo/Indian/Mahe",
+            "/usr/share/zoneinfo/Indian/Maldives",
+            "/usr/share/zoneinfo/Indian/Mauritius",
+            "/usr/share/zoneinfo/Indian/Mayotte",
+            "/usr/share/zoneinfo/Indian/Reunion",
+            "/usr/share/zoneinfo/Pacific/Apia",
+            "/usr/share/zoneinfo/Pacific/Auckland",
+            "/usr/share/zoneinfo/Pacific/Bougainville",
+            "/usr/share/zoneinfo/Pacific/Chatham",
+            "/usr/share/zoneinfo/Pacific/Chuuk",
+            "/usr/share/zoneinfo/Pacific/Easter",
+            "/usr/share/zoneinfo/Pacific/Efate",
+            "/usr/share/zoneinfo/Pacific/Fakaofo",
+            "/usr/share/zoneinfo/Pacific/Fiji",
+            "/usr/share/zoneinfo/Pacific/Funafuti",
+            "/usr/share/zoneinfo/Pacific/Galapagos",
+            "/usr/share/zoneinfo/Pacific/Gambier",
+            "/usr/share/zoneinfo/Pacific/Guadalcanal",
+            "/usr/share/zoneinfo/Pacific/Guam",
+            "/usr/share/zoneinfo/Pacific/Honolulu",
+            "/usr/share/zoneinfo/Pacific/Kanton",
+            "/usr/share/zoneinfo/Pacific/Kiritimati",
+            "/usr/share/zoneinfo/Pacific/Kosrae",
+            "/usr/share/zoneinfo/Pacific/Kwajalein",
+            "/usr/share/zoneinfo/Pacific/Majuro",
+            "/usr/share/zoneinfo/Pacific/Marquesas",
+            "/usr/share/zoneinfo/Pacific/Midway",
+            "/usr/share/zoneinfo/Pacific/Nauru",
+            "/usr/share/zoneinfo/Pacific/Niue",
+            "/usr/share/zoneinfo/Pacific/Norfolk",
+            "/usr/share/zoneinfo/Pacific/Noumea",
+            "/usr/share/zoneinfo/Pacific/Pago_Pago",
+            "/usr/share/zoneinfo/Pacific/Palau",
+            "/usr/share/zoneinfo/Pacific/Pitcairn",
+            "/usr/share/zoneinfo/Pacific/Pohnpei",
+            "/usr/share/zoneinfo/Pacific/Port_Moresby",
+            "/usr/share/zoneinfo/Pacific/Rarotonga",
+            "/usr/share/zoneinfo/Pacific/Saipan",
+            "/usr/share/zoneinfo/Pacific/Tahiti",
+            "/usr/share/zoneinfo/Pacific/Tarawa",
+            "/usr/share/zoneinfo/Pacific/Tongatapu",
+            "/usr/share/zoneinfo/Pacific/Wake",
+            "/usr/share/zoneinfo/Pacific/Wallis",
+            "/usr/share/zoneinfo/iso3166.tab",
+            "/usr/share/zoneinfo/leap-seconds.list",
+            "/usr/share/zoneinfo/leapseconds",
+            "/usr/share/zoneinfo/tzdata.zi",
+            "/usr/share/zoneinfo/zone.tab",
+            "/usr/share/zoneinfo/zone1970.tab",
+            "/usr/share/zoneinfo/zonenow.tab"
+          ],
+          "AnalyzedBy": "dpkg"
+        },
+        {
+          "ID": "tzdata-legacy@2026b-0+deb13u1",
+          "Name": "tzdata-legacy",
+          "Identifier": {
+            "PURL": "pkg:deb/debian/tzdata-legacy@2026b-0%2Bdeb13u1?arch=all\u0026distro=debian-13.5",
+            "UID": "812b6e7b092c9ccc"
+          },
+          "Version": "2026b",
+          "Release": "0+deb13u1",
+          "Arch": "all",
+          "SrcName": "tzdata",
+          "SrcVersion": "2026b",
+          "SrcRelease": "0+deb13u1",
+          "Licenses": [
+            "public-domain"
+          ],
+          "Maintainer": "GNU Libc Maintainers \u003cdebian-glibc@lists.debian.org\u003e",
+          "Repository": {
+            "Class": "official"
+          },
+          "Layer": {
+            "Digest": "sha256:99ba982a9142213c751a1709dcf088e63d8601f03b3f211bae037be698fef270",
+            "DiffID": "sha256:bec7e6bb35e05d1284f28b10d2150c259717d91c658c4c10c08424bb9466caba"
+          },
+          "InstalledFiles": [
+            "/usr/share/doc/tzdata-legacy/NEWS.Debian.gz",
+            "/usr/share/doc/tzdata-legacy/changelog.Debian.gz",
+            "/usr/share/doc/tzdata-legacy/changelog.gz",
+            "/usr/share/doc/tzdata-legacy/copyright",
+            "/usr/share/zoneinfo/right/Africa/Abidjan",
+            "/usr/share/zoneinfo/right/Africa/Accra",
+            "/usr/share/zoneinfo/right/Africa/Addis_Ababa",
+            "/usr/share/zoneinfo/right/Africa/Algiers",
+            "/usr/share/zoneinfo/right/Africa/Asmara",
+            "/usr/share/zoneinfo/right/Africa/Bamako",
+            "/usr/share/zoneinfo/right/Africa/Bangui",
+            "/usr/share/zoneinfo/right/Africa/Banjul",
+            "/usr/share/zoneinfo/right/Africa/Bissau",
+            "/usr/share/zoneinfo/right/Africa/Blantyre",
+            "/usr/share/zoneinfo/right/Africa/Brazzaville",
+            "/usr/share/zoneinfo/right/Africa/Bujumbura",
+            "/usr/share/zoneinfo/right/Africa/Cairo",
+            "/usr/share/zoneinfo/right/Africa/Casablanca",
+            "/usr/share/zoneinfo/right/Africa/Ceuta",
+            "/usr/share/zoneinfo/right/Africa/Conakry",
+            "/usr/share/zoneinfo/right/Africa/Dakar",
+            "/usr/share/zoneinfo/right/Africa/Dar_es_Salaam",
+            "/usr/share/zoneinfo/right/Africa/Djibouti",
+            "/usr/share/zoneinfo/right/Africa/Douala",
+            "/usr/share/zoneinfo/right/Africa/El_Aaiun",
+            "/usr/share/zoneinfo/right/Africa/Freetown",
+            "/usr/share/zoneinfo/right/Africa/Gaborone",
+            "/usr/share/zoneinfo/right/Africa/Harare",
+            "/usr/share/zoneinfo/right/Africa/Johannesburg",
+            "/usr/share/zoneinfo/right/Africa/Juba",
+            "/usr/share/zoneinfo/right/Africa/Kampala",
+            "/usr/share/zoneinfo/right/Africa/Khartoum",
+            "/usr/share/zoneinfo/right/Africa/Kigali",
+            "/usr/share/zoneinfo/right/Africa/Kinshasa",
+            "/usr/share/zoneinfo/right/Africa/Lagos",
+            "/usr/share/zoneinfo/right/Africa/Libreville",
+            "/usr/share/zoneinfo/right/Africa/Lome",
+            "/usr/share/zoneinfo/right/Africa/Luanda",
+            "/usr/share/zoneinfo/right/Africa/Lubumbashi",
+            "/usr/share/zoneinfo/right/Africa/Lusaka",
+            "/usr/share/zoneinfo/right/Africa/Malabo",
+            "/usr/share/zoneinfo/right/Africa/Maputo",
+            "/usr/share/zoneinfo/right/Africa/Maseru",
+            "/usr/share/zoneinfo/right/Africa/Mbabane",
+            "/usr/share/zoneinfo/right/Africa/Mogadishu",
+            "/usr/share/zoneinfo/right/Africa/Monrovia",
+            "/usr/share/zoneinfo/right/Africa/Nairobi",
+            "/usr/share/zoneinfo/right/Africa/Ndjamena",
+            "/usr/share/zoneinfo/right/Africa/Niamey",
+            "/usr/share/zoneinfo/right/Africa/Nouakchott",
+            "/usr/share/zoneinfo/right/Africa/Ouagadougou",
+            "/usr/share/zoneinfo/right/Africa/Porto-Novo",
+            "/usr/share/zoneinfo/right/Africa/Sao_Tome",
+            "/usr/share/zoneinfo/right/Africa/Tripoli",
+            "/usr/share/zoneinfo/right/Africa/Tunis",
+            "/usr/share/zoneinfo/right/Africa/Windhoek",
+            "/usr/share/zoneinfo/right/America/Adak",
+            "/usr/share/zoneinfo/right/America/Anchorage",
+            "/usr/share/zoneinfo/right/America/Anguilla",
+            "/usr/share/zoneinfo/right/America/Antigua",
+            "/usr/share/zoneinfo/right/America/Araguaina",
+            "/usr/share/zoneinfo/right/America/Argentina/Buenos_Aires",
+            "/usr/share/zoneinfo/right/America/Argentina/Catamarca",
+            "/usr/share/zoneinfo/right/America/Argentina/Cordoba",
+            "/usr/share/zoneinfo/right/America/Argentina/Jujuy",
+            "/usr/share/zoneinfo/right/America/Argentina/La_Rioja",
+            "/usr/share/zoneinfo/right/America/Argentina/Mendoza",
+            "/usr/share/zoneinfo/right/America/Argentina/Rio_Gallegos",
+            "/usr/share/zoneinfo/right/America/Argentina/Salta",
+            "/usr/share/zoneinfo/right/America/Argentina/San_Juan",
+            "/usr/share/zoneinfo/right/America/Argentina/San_Luis",
+            "/usr/share/zoneinfo/right/America/Argentina/Tucuman",
+            "/usr/share/zoneinfo/right/America/Argentina/Ushuaia",
+            "/usr/share/zoneinfo/right/America/Aruba",
+            "/usr/share/zoneinfo/right/America/Asuncion",
+            "/usr/share/zoneinfo/right/America/Atikokan",
+            "/usr/share/zoneinfo/right/America/Bahia",
+            "/usr/share/zoneinfo/right/America/Bahia_Banderas",
+            "/usr/share/zoneinfo/right/America/Barbados",
+            "/usr/share/zoneinfo/right/America/Belem",
+            "/usr/share/zoneinfo/right/America/Belize",
+            "/usr/share/zoneinfo/right/America/Blanc-Sablon",
+            "/usr/share/zoneinfo/right/America/Boa_Vista",
+            "/usr/share/zoneinfo/right/America/Bogota",
+            "/usr/share/zoneinfo/right/America/Boise",
+            "/usr/share/zoneinfo/right/America/Cambridge_Bay",
+            "/usr/share/zoneinfo/right/America/Campo_Grande",
+            "/usr/share/zoneinfo/right/America/Cancun",
+            "/usr/share/zoneinfo/right/America/Caracas",
+            "/usr/share/zoneinfo/right/America/Cayenne",
+            "/usr/share/zoneinfo/right/America/Cayman",
+            "/usr/share/zoneinfo/right/America/Chicago",
+            "/usr/share/zoneinfo/right/America/Chihuahua",
+            "/usr/share/zoneinfo/right/America/Ciudad_Juarez",
+            "/usr/share/zoneinfo/right/America/Costa_Rica",
+            "/usr/share/zoneinfo/right/America/Coyhaique",
+            "/usr/share/zoneinfo/right/America/Creston",
+            "/usr/share/zoneinfo/right/America/Cuiaba",
+            "/usr/share/zoneinfo/right/America/Curacao",
+            "/usr/share/zoneinfo/right/America/Danmarkshavn",
+            "/usr/share/zoneinfo/right/America/Dawson",
+            "/usr/share/zoneinfo/right/America/Dawson_Creek",
+            "/usr/share/zoneinfo/right/America/Denver",
+            "/usr/share/zoneinfo/right/America/Detroit",
+            "/usr/share/zoneinfo/right/America/Dominica",
+            "/usr/share/zoneinfo/right/America/Edmonton",
+            "/usr/share/zoneinfo/right/America/Eirunepe",
+            "/usr/share/zoneinfo/right/America/El_Salvador",
+            "/usr/share/zoneinfo/right/America/Fort_Nelson",
+            "/usr/share/zoneinfo/right/America/Fortaleza",
+            "/usr/share/zoneinfo/right/America/Glace_Bay",
+            "/usr/share/zoneinfo/right/America/Goose_Bay",
+            "/usr/share/zoneinfo/right/America/Grand_Turk",
+            "/usr/share/zoneinfo/right/America/Grenada",
+            "/usr/share/zoneinfo/right/America/Guadeloupe",
+            "/usr/share/zoneinfo/right/America/Guatemala",
+            "/usr/share/zoneinfo/right/America/Guayaquil",
+            "/usr/share/zoneinfo/right/America/Guyana",
+            "/usr/share/zoneinfo/right/America/Halifax",
+            "/usr/share/zoneinfo/right/America/Havana",
+            "/usr/share/zoneinfo/right/America/Hermosillo",
+            "/usr/share/zoneinfo/right/America/Indiana/Indianapolis",
+            "/usr/share/zoneinfo/right/America/Indiana/Knox",
+            "/usr/share/zoneinfo/right/America/Indiana/Marengo",
+            "/usr/share/zoneinfo/right/America/Indiana/Petersburg",
+            "/usr/share/zoneinfo/right/America/Indiana/Tell_City",
+            "/usr/share/zoneinfo/right/America/Indiana/Vevay",
+            "/usr/share/zoneinfo/right/America/Indiana/Vincennes",
+            "/usr/share/zoneinfo/right/America/Indiana/Winamac",
+            "/usr/share/zoneinfo/right/America/Inuvik",
+            "/usr/share/zoneinfo/right/America/Iqaluit",
+            "/usr/share/zoneinfo/right/America/Jamaica",
+            "/usr/share/zoneinfo/right/America/Juneau",
+            "/usr/share/zoneinfo/right/America/Kentucky/Louisville",
+            "/usr/share/zoneinfo/right/America/Kentucky/Monticello",
+            "/usr/share/zoneinfo/right/America/La_Paz",
+            "/usr/share/zoneinfo/right/America/Lima",
+            "/usr/share/zoneinfo/right/America/Los_Angeles",
+            "/usr/share/zoneinfo/right/America/Maceio",
+            "/usr/share/zoneinfo/right/America/Managua",
+            "/usr/share/zoneinfo/right/America/Manaus",
+            "/usr/share/zoneinfo/right/America/Martinique",
+            "/usr/share/zoneinfo/right/America/Matamoros",
+            "/usr/share/zoneinfo/right/America/Mazatlan",
+            "/usr/share/zoneinfo/right/America/Menominee",
+            "/usr/share/zoneinfo/right/America/Merida",
+            "/usr/share/zoneinfo/right/America/Metlakatla",
+            "/usr/share/zoneinfo/right/America/Mexico_City",
+            "/usr/share/zoneinfo/right/America/Miquelon",
+            "/usr/share/zoneinfo/right/America/Moncton",
+            "/usr/share/zoneinfo/right/America/Monterrey",
+            "/usr/share/zoneinfo/right/America/Montevideo",
+            "/usr/share/zoneinfo/right/America/Montserrat",
+            "/usr/share/zoneinfo/right/America/Nassau",
+            "/usr/share/zoneinfo/right/America/New_York",
+            "/usr/share/zoneinfo/right/America/Nome",
+            "/usr/share/zoneinfo/right/America/Noronha",
+            "/usr/share/zoneinfo/right/America/North_Dakota/Beulah",
+            "/usr/share/zoneinfo/right/America/North_Dakota/Center",
+            "/usr/share/zoneinfo/right/America/North_Dakota/New_Salem",
+            "/usr/share/zoneinfo/right/America/Nuuk",
+            "/usr/share/zoneinfo/right/America/Ojinaga",
+            "/usr/share/zoneinfo/right/America/Panama",
+            "/usr/share/zoneinfo/right/America/Paramaribo",
+            "/usr/share/zoneinfo/right/America/Phoenix",
+            "/usr/share/zoneinfo/right/America/Port-au-Prince",
+            "/usr/share/zoneinfo/right/America/Port_of_Spain",
+            "/usr/share/zoneinfo/right/America/Porto_Velho",
+            "/usr/share/zoneinfo/right/America/Puerto_Rico",
+            "/usr/share/zoneinfo/right/America/Punta_Arenas",
+            "/usr/share/zoneinfo/right/America/Rankin_Inlet",
+            "/usr/share/zoneinfo/right/America/Recife",
+            "/usr/share/zoneinfo/right/America/Regina",
+            "/usr/share/zoneinfo/right/America/Resolute",
+            "/usr/share/zoneinfo/right/America/Rio_Branco",
+            "/usr/share/zoneinfo/right/America/Santarem",
+            "/usr/share/zoneinfo/right/America/Santiago",
+            "/usr/share/zoneinfo/right/America/Santo_Domingo",
+            "/usr/share/zoneinfo/right/America/Sao_Paulo",
+            "/usr/share/zoneinfo/right/America/Scoresbysund",
+            "/usr/share/zoneinfo/right/America/Sitka",
+            "/usr/share/zoneinfo/right/America/St_Johns",
+            "/usr/share/zoneinfo/right/America/St_Kitts",
+            "/usr/share/zoneinfo/right/America/St_Lucia",
+            "/usr/share/zoneinfo/right/America/St_Thomas",
+            "/usr/share/zoneinfo/right/America/St_Vincent",
+            "/usr/share/zoneinfo/right/America/Swift_Current",
+            "/usr/share/zoneinfo/right/America/Tegucigalpa",
+            "/usr/share/zoneinfo/right/America/Thule",
+            "/usr/share/zoneinfo/right/America/Tijuana",
+            "/usr/share/zoneinfo/right/America/Toronto",
+            "/usr/share/zoneinfo/right/America/Tortola",
+            "/usr/share/zoneinfo/right/America/Vancouver",
+            "/usr/share/zoneinfo/right/America/Whitehorse",
+            "/usr/share/zoneinfo/right/America/Winnipeg",
+            "/usr/share/zoneinfo/right/America/Yakutat",
+            "/usr/share/zoneinfo/right/Antarctica/Casey",
+            "/usr/share/zoneinfo/right/Antarctica/Davis",
+            "/usr/share/zoneinfo/right/Antarctica/DumontDUrville",
+            "/usr/share/zoneinfo/right/Antarctica/Macquarie",
+            "/usr/share/zoneinfo/right/Antarctica/Mawson",
+            "/usr/share/zoneinfo/right/Antarctica/McMurdo",
+            "/usr/share/zoneinfo/right/Antarctica/Palmer",
+            "/usr/share/zoneinfo/right/Antarctica/Rothera",
+            "/usr/share/zoneinfo/right/Antarctica/Syowa",
+            "/usr/share/zoneinfo/right/Antarctica/Troll",
+            "/usr/share/zoneinfo/right/Antarctica/Vostok",
+            "/usr/share/zoneinfo/right/Asia/Aden",
+            "/usr/share/zoneinfo/right/Asia/Almaty",
+            "/usr/share/zoneinfo/right/Asia/Amman",
+            "/usr/share/zoneinfo/right/Asia/Anadyr",
+            "/usr/share/zoneinfo/right/Asia/Aqtau",
+            "/usr/share/zoneinfo/right/Asia/Aqtobe",
+            "/usr/share/zoneinfo/right/Asia/Ashgabat",
+            "/usr/share/zoneinfo/right/Asia/Atyrau",
+            "/usr/share/zoneinfo/right/Asia/Baghdad",
+            "/usr/share/zoneinfo/right/Asia/Bahrain",
+            "/usr/share/zoneinfo/right/Asia/Baku",
+            "/usr/share/zoneinfo/right/Asia/Bangkok",
+            "/usr/share/zoneinfo/right/Asia/Barnaul",
+            "/usr/share/zoneinfo/right/Asia/Beirut",
+            "/usr/share/zoneinfo/right/Asia/Bishkek",
+            "/usr/share/zoneinfo/right/Asia/Brunei",
+            "/usr/share/zoneinfo/right/Asia/Chita",
+            "/usr/share/zoneinfo/right/Asia/Colombo",
+            "/usr/share/zoneinfo/right/Asia/Damascus",
+            "/usr/share/zoneinfo/right/Asia/Dhaka",
+            "/usr/share/zoneinfo/right/Asia/Dili",
+            "/usr/share/zoneinfo/right/Asia/Dubai",
+            "/usr/share/zoneinfo/right/Asia/Dushanbe",
+            "/usr/share/zoneinfo/right/Asia/Famagusta",
+            "/usr/share/zoneinfo/right/Asia/Gaza",
+            "/usr/share/zoneinfo/right/Asia/Hebron",
+            "/usr/share/zoneinfo/right/Asia/Ho_Chi_Minh",
+            "/usr/share/zoneinfo/right/Asia/Hong_Kong",
+            "/usr/share/zoneinfo/right/Asia/Hovd",
+            "/usr/share/zoneinfo/right/Asia/Irkutsk",
+            "/usr/share/zoneinfo/right/Asia/Jakarta",
+            "/usr/share/zoneinfo/right/Asia/Jayapura",
+            "/usr/share/zoneinfo/right/Asia/Jerusalem",
+            "/usr/share/zoneinfo/right/Asia/Kabul",
+            "/usr/share/zoneinfo/right/Asia/Kamchatka",
+            "/usr/share/zoneinfo/right/Asia/Karachi",
+            "/usr/share/zoneinfo/right/Asia/Kathmandu",
+            "/usr/share/zoneinfo/right/Asia/Khandyga",
+            "/usr/share/zoneinfo/right/Asia/Kolkata",
+            "/usr/share/zoneinfo/right/Asia/Krasnoyarsk",
+            "/usr/share/zoneinfo/right/Asia/Kuala_Lumpur",
+            "/usr/share/zoneinfo/right/Asia/Kuching",
+            "/usr/share/zoneinfo/right/Asia/Kuwait",
+            "/usr/share/zoneinfo/right/Asia/Macau",
+            "/usr/share/zoneinfo/right/Asia/Magadan",
+            "/usr/share/zoneinfo/right/Asia/Makassar",
+            "/usr/share/zoneinfo/right/Asia/Manila",
+            "/usr/share/zoneinfo/right/Asia/Muscat",
+            "/usr/share/zoneinfo/right/Asia/Nicosia",
+            "/usr/share/zoneinfo/right/Asia/Novokuznetsk",
+            "/usr/share/zoneinfo/right/Asia/Novosibirsk",
+            "/usr/share/zoneinfo/right/Asia/Omsk",
+            "/usr/share/zoneinfo/right/Asia/Oral",
+            "/usr/share/zoneinfo/right/Asia/Phnom_Penh",
+            "/usr/share/zoneinfo/right/Asia/Pontianak",
+            "/usr/share/zoneinfo/right/Asia/Pyongyang",
+            "/usr/share/zoneinfo/right/Asia/Qatar",
+            "/usr/share/zoneinfo/right/Asia/Qostanay",
+            "/usr/share/zoneinfo/right/Asia/Qyzylorda",
+            "/usr/share/zoneinfo/right/Asia/Riyadh",
+            "/usr/share/zoneinfo/right/Asia/Sakhalin",
+            "/usr/share/zoneinfo/right/Asia/Samarkand",
+            "/usr/share/zoneinfo/right/Asia/Seoul",
+            "/usr/share/zoneinfo/right/Asia/Shanghai",
+            "/usr/share/zoneinfo/right/Asia/Singapore",
+            "/usr/share/zoneinfo/right/Asia/Srednekolymsk",
+            "/usr/share/zoneinfo/right/Asia/Taipei",
+            "/usr/share/zoneinfo/right/Asia/Tashkent",
+            "/usr/share/zoneinfo/right/Asia/Tbilisi",
+            "/usr/share/zoneinfo/right/Asia/Tehran",
+            "/usr/share/zoneinfo/right/Asia/Thimphu",
+            "/usr/share/zoneinfo/right/Asia/Tokyo",
+            "/usr/share/zoneinfo/right/Asia/Tomsk",
+            "/usr/share/zoneinfo/right/Asia/Ulaanbaatar",
+            "/usr/share/zoneinfo/right/Asia/Urumqi",
+            "/usr/share/zoneinfo/right/Asia/Ust-Nera",
+            "/usr/share/zoneinfo/right/Asia/Vientiane",
+            "/usr/share/zoneinfo/right/Asia/Vladivostok",
+            "/usr/share/zoneinfo/right/Asia/Yakutsk",
+            "/usr/share/zoneinfo/right/Asia/Yangon",
+            "/usr/share/zoneinfo/right/Asia/Yekaterinburg",
+            "/usr/share/zoneinfo/right/Asia/Yerevan",
+            "/usr/share/zoneinfo/right/Atlantic/Azores",
+            "/usr/share/zoneinfo/right/Atlantic/Bermuda",
+            "/usr/share/zoneinfo/right/Atlantic/Canary",
+            "/usr/share/zoneinfo/right/Atlantic/Cape_Verde",
+            "/usr/share/zoneinfo/right/Atlantic/Faroe",
+            "/usr/share/zoneinfo/right/Atlantic/Madeira",
+            "/usr/share/zoneinfo/right/Atlantic/Reykjavik",
+            "/usr/share/zoneinfo/right/Atlantic/South_Georgia",
+            "/usr/share/zoneinfo/right/Atlantic/St_Helena",
+            "/usr/share/zoneinfo/right/Atlantic/Stanley",
+            "/usr/share/zoneinfo/right/Australia/Adelaide",
+            "/usr/share/zoneinfo/right/Australia/Brisbane",
+            "/usr/share/zoneinfo/right/Australia/Broken_Hill",
+            "/usr/share/zoneinfo/right/Australia/Darwin",
+            "/usr/share/zoneinfo/right/Australia/Eucla",
+            "/usr/share/zoneinfo/right/Australia/Hobart",
+            "/usr/share/zoneinfo/right/Australia/Lindeman",
+            "/usr/share/zoneinfo/right/Australia/Lord_Howe",
+            "/usr/share/zoneinfo/right/Australia/Melbourne",
+            "/usr/share/zoneinfo/right/Australia/Perth",
+            "/usr/share/zoneinfo/right/Australia/Sydney",
+            "/usr/share/zoneinfo/right/Etc/GMT",
+            "/usr/share/zoneinfo/right/Etc/GMT+1",
+            "/usr/share/zoneinfo/right/Etc/GMT+10",
+            "/usr/share/zoneinfo/right/Etc/GMT+11",
+            "/usr/share/zoneinfo/right/Etc/GMT+12",
+            "/usr/share/zoneinfo/right/Etc/GMT+2",
+            "/usr/share/zoneinfo/right/Etc/GMT+3",
+            "/usr/share/zoneinfo/right/Etc/GMT+4",
+            "/usr/share/zoneinfo/right/Etc/GMT+5",
+            "/usr/share/zoneinfo/right/Etc/GMT+6",
+            "/usr/share/zoneinfo/right/Etc/GMT+7",
+            "/usr/share/zoneinfo/right/Etc/GMT+8",
+            "/usr/share/zoneinfo/right/Etc/GMT+9",
+            "/usr/share/zoneinfo/right/Etc/GMT-1",
+            "/usr/share/zoneinfo/right/Etc/GMT-10",
+            "/usr/share/zoneinfo/right/Etc/GMT-11",
+            "/usr/share/zoneinfo/right/Etc/GMT-12",
+            "/usr/share/zoneinfo/right/Etc/GMT-13",
+            "/usr/share/zoneinfo/right/Etc/GMT-14",
+            "/usr/share/zoneinfo/right/Etc/GMT-2",
+            "/usr/share/zoneinfo/right/Etc/GMT-3",
+            "/usr/share/zoneinfo/right/Etc/GMT-4",
+            "/usr/share/zoneinfo/right/Etc/GMT-5",
+            "/usr/share/zoneinfo/right/Etc/GMT-6",
+            "/usr/share/zoneinfo/right/Etc/GMT-7",
+            "/usr/share/zoneinfo/right/Etc/GMT-8",
+            "/usr/share/zoneinfo/right/Etc/GMT-9",
+            "/usr/share/zoneinfo/right/Etc/UTC",
+            "/usr/share/zoneinfo/right/Europe/Amsterdam",
+            "/usr/share/zoneinfo/right/Europe/Andorra",
+            "/usr/share/zoneinfo/right/Europe/Astrakhan",
+            "/usr/share/zoneinfo/right/Europe/Athens",
+            "/usr/share/zoneinfo/right/Europe/Belgrade",
+            "/usr/share/zoneinfo/right/Europe/Berlin",
+            "/usr/share/zoneinfo/right/Europe/Brussels",
+            "/usr/share/zoneinfo/right/Europe/Bucharest",
+            "/usr/share/zoneinfo/right/Europe/Budapest",
+            "/usr/share/zoneinfo/right/Europe/Chisinau",
+            "/usr/share/zoneinfo/right/Europe/Copenhagen",
+            "/usr/share/zoneinfo/right/Europe/Dublin",
+            "/usr/share/zoneinfo/right/Europe/Gibraltar",
+            "/usr/share/zoneinfo/right/Europe/Guernsey",
+            "/usr/share/zoneinfo/right/Europe/Helsinki",
+            "/usr/share/zoneinfo/right/Europe/Isle_of_Man",
+            "/usr/share/zoneinfo/right/Europe/Istanbul",
+            "/usr/share/zoneinfo/right/Europe/Jersey",
+            "/usr/share/zoneinfo/right/Europe/Kaliningrad",
+            "/usr/share/zoneinfo/right/Europe/Kirov",
+            "/usr/share/zoneinfo/right/Europe/Kyiv",
+            "/usr/share/zoneinfo/right/Europe/Lisbon",
+            "/usr/share/zoneinfo/right/Europe/Ljubljana",
+            "/usr/share/zoneinfo/right/Europe/London",
+            "/usr/share/zoneinfo/right/Europe/Luxembourg",
+            "/usr/share/zoneinfo/right/Europe/Madrid",
+            "/usr/share/zoneinfo/right/Europe/Malta",
+            "/usr/share/zoneinfo/right/Europe/Minsk",
+            "/usr/share/zoneinfo/right/Europe/Monaco",
+            "/usr/share/zoneinfo/right/Europe/Moscow",
+            "/usr/share/zoneinfo/right/Europe/Oslo",
+            "/usr/share/zoneinfo/right/Europe/Paris",
+            "/usr/share/zoneinfo/right/Europe/Prague",
+            "/usr/share/zoneinfo/right/Europe/Riga",
+            "/usr/share/zoneinfo/right/Europe/Rome",
+            "/usr/share/zoneinfo/right/Europe/Samara",
+            "/usr/share/zoneinfo/right/Europe/Sarajevo",
+            "/usr/share/zoneinfo/right/Europe/Saratov",
+            "/usr/share/zoneinfo/right/Europe/Simferopol",
+            "/usr/share/zoneinfo/right/Europe/Skopje",
+            "/usr/share/zoneinfo/right/Europe/Sofia",
+            "/usr/share/zoneinfo/right/Europe/Stockholm",
+            "/usr/share/zoneinfo/right/Europe/Tallinn",
+            "/usr/share/zoneinfo/right/Europe/Tirane",
+            "/usr/share/zoneinfo/right/Europe/Ulyanovsk",
+            "/usr/share/zoneinfo/right/Europe/Vaduz",
+            "/usr/share/zoneinfo/right/Europe/Vienna",
+            "/usr/share/zoneinfo/right/Europe/Vilnius",
+            "/usr/share/zoneinfo/right/Europe/Volgograd",
+            "/usr/share/zoneinfo/right/Europe/Warsaw",
+            "/usr/share/zoneinfo/right/Europe/Zagreb",
+            "/usr/share/zoneinfo/right/Europe/Zurich",
+            "/usr/share/zoneinfo/right/Factory",
+            "/usr/share/zoneinfo/right/Indian/Antananarivo",
+            "/usr/share/zoneinfo/right/Indian/Chagos",
+            "/usr/share/zoneinfo/right/Indian/Christmas",
+            "/usr/share/zoneinfo/right/Indian/Cocos",
+            "/usr/share/zoneinfo/right/Indian/Comoro",
+            "/usr/share/zoneinfo/right/Indian/Kerguelen",
+            "/usr/share/zoneinfo/right/Indian/Mahe",
+            "/usr/share/zoneinfo/right/Indian/Maldives",
+            "/usr/share/zoneinfo/right/Indian/Mauritius",
+            "/usr/share/zoneinfo/right/Indian/Mayotte",
+            "/usr/share/zoneinfo/right/Indian/Reunion",
+            "/usr/share/zoneinfo/right/Pacific/Apia",
+            "/usr/share/zoneinfo/right/Pacific/Auckland",
+            "/usr/share/zoneinfo/right/Pacific/Bougainville",
+            "/usr/share/zoneinfo/right/Pacific/Chatham",
+            "/usr/share/zoneinfo/right/Pacific/Chuuk",
+            "/usr/share/zoneinfo/right/Pacific/Easter",
+            "/usr/share/zoneinfo/right/Pacific/Efate",
+            "/usr/share/zoneinfo/right/Pacific/Fakaofo",
+            "/usr/share/zoneinfo/right/Pacific/Fiji",
+            "/usr/share/zoneinfo/right/Pacific/Funafuti",
+            "/usr/share/zoneinfo/right/Pacific/Galapagos",
+            "/usr/share/zoneinfo/right/Pacific/Gambier",
+            "/usr/share/zoneinfo/right/Pacific/Guadalcanal",
+            "/usr/share/zoneinfo/right/Pacific/Guam",
+            "/usr/share/zoneinfo/right/Pacific/Honolulu",
+            "/usr/share/zoneinfo/right/Pacific/Kanton",
+            "/usr/share/zoneinfo/right/Pacific/Kiritimati",
+            "/usr/share/zoneinfo/right/Pacific/Kosrae",
+            "/usr/share/zoneinfo/right/Pacific/Kwajalein",
+            "/usr/share/zoneinfo/right/Pacific/Majuro",
+            "/usr/share/zoneinfo/right/Pacific/Marquesas",
+            "/usr/share/zoneinfo/right/Pacific/Midway",
+            "/usr/share/zoneinfo/right/Pacific/Nauru",
+            "/usr/share/zoneinfo/right/Pacific/Niue",
+            "/usr/share/zoneinfo/right/Pacific/Norfolk",
+            "/usr/share/zoneinfo/right/Pacific/Noumea",
+            "/usr/share/zoneinfo/right/Pacific/Pago_Pago",
+            "/usr/share/zoneinfo/right/Pacific/Palau",
+            "/usr/share/zoneinfo/right/Pacific/Pitcairn",
+            "/usr/share/zoneinfo/right/Pacific/Pohnpei",
+            "/usr/share/zoneinfo/right/Pacific/Port_Moresby",
+            "/usr/share/zoneinfo/right/Pacific/Rarotonga",
+            "/usr/share/zoneinfo/right/Pacific/Saipan",
+            "/usr/share/zoneinfo/right/Pacific/Tahiti",
+            "/usr/share/zoneinfo/right/Pacific/Tarawa",
+            "/usr/share/zoneinfo/right/Pacific/Tongatapu",
+            "/usr/share/zoneinfo/right/Pacific/Wake",
+            "/usr/share/zoneinfo/right/Pacific/Wallis"
+          ],
+          "AnalyzedBy": "dpkg"
+        },
+        {
+          "ID": "zlib1g@1:1.3.dfsg+really1.3.1-1+b1",
+          "Name": "zlib1g",
+          "Identifier": {
+            "PURL": "pkg:deb/debian/zlib1g@1.3.dfsg%2Breally1.3.1-1%2Bb1?arch=amd64\u0026distro=debian-13.5\u0026epoch=1",
+            "UID": "ee958543a42dbedd"
+          },
+          "Version": "1.3.dfsg+really1.3.1",
+          "Release": "1+b1",
+          "Epoch": 1,
+          "Arch": "amd64",
+          "SrcName": "zlib",
+          "SrcVersion": "1.3.dfsg+really1.3.1",
+          "SrcRelease": "1",
+          "SrcEpoch": 1,
+          "Licenses": [
+            "Zlib"
+          ],
+          "Maintainer": "Mark Brown \u003cbroonie@debian.org\u003e",
+          "Repository": {
+            "Class": "official"
+          },
+          "Layer": {
+            "Digest": "sha256:cac2ae0193cb073e7492050b05fc342a888651b4bbc966908c8793f889c299ba",
+            "DiffID": "sha256:e4ba966d7f0527dfe0fcb559e4e18d4da42c4e6beae924719255e0dedb554ed0"
+          },
+          "InstalledFiles": [
+            "/usr/lib/x86_64-linux-gnu/libz.so.1.3.1",
+            "/usr/share/doc/zlib1g/changelog.Debian.amd64.gz",
+            "/usr/share/doc/zlib1g/changelog.Debian.gz",
+            "/usr/share/doc/zlib1g/changelog.gz",
+            "/usr/share/doc/zlib1g/copyright"
+          ],
+          "AnalyzedBy": "dpkg"
+        }
+      ],
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2026-5435",
+          "PkgID": "libc6@2.41-12+deb13u3",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "InstalledVersion": "2.41-12+deb13u3",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-5435",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:7a1e359a4473dcad597a6c40b4bdf45bd30c9644f7cfab5b8d74e5b894089386",
+          "Title": "glibc: glibc: Out-of-bounds write via TSIG record processing",
+          "Description": "The deprecated functions ns_printrrf, ns_printrr and fp_nquery in the GNU C Library version 2.2 and newer fail to enforce the caller-supplied buffer length, and can result in an out-of-bounds write when printing TSIG records.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-787"
+          ],
+          "VendorSeverity": {
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:H",
+              "V3Score": 5.9
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-5435",
+            "https://inbox.sourceware.org/libc-alpha/cover.1777546194.git.fweimer@redhat.com/",
+            "https://inbox.sourceware.org/libc-announce/7a655d55-276f-41fe-b550-feb3ebb2ce91@redhat.com/T/#u",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-5435",
+            "https://sourceware.org/bugzilla/show_bug.cgi?id=34033",
+            "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0011",
+            "https://www.cve.org/CVERecord?id=CVE-2026-5435"
+          ],
+          "PublishedDate": "2026-04-28T13:19:22.29Z",
+          "LastModifiedDate": "2026-05-05T17:38:37.03Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-5450",
+          "PkgID": "libc6@2.41-12+deb13u3",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "InstalledVersion": "2.41-12+deb13u3",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-5450",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:509d583704d9df632147b7cb741399c4a32d9bd6c0b772ebe76c43a69dec5ad3",
+          "Title": "glibc: glibc: Heap Buffer Overflow in `scanf` with `%mc` format specifier and large width",
+          "Description": "Calling the scanf family of functions with a %mc (malloc'd character match) in the GNU C Library version 2.7 to version 2.43 with a format width specifier with an explicit width greater than 1024 could result in a one byte heap buffer overflow.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-122",
+            "CWE-787"
+          ],
+          "VendorSeverity": {
+            "photon": 4,
+            "redhat": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:L/A:H",
+              "V3Score": 5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-5450",
+            "https://inbox.sourceware.org/libc-announce/b11f0003-6ec1-4bd6-b9de-9e38a4efeca3@redhat.com/T/#u",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-5450",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-5450#range-21286997",
+            "https://sourceware.org/bugzilla/show_bug.cgi?id=CVE-2026-5450",
+            "https://www.cve.org/CVERecord?id=CVE-2026-5450"
+          ],
+          "PublishedDate": "2026-04-20T21:16:36.85Z",
+          "LastModifiedDate": "2026-04-23T15:33:34.277Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-5928",
+          "PkgID": "libc6@2.41-12+deb13u3",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "InstalledVersion": "2.41-12+deb13u3",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-5928",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:bc3a10b95d2a71ce217072b6db2bff344e280f9da1921373f64745fab4839445",
+          "Title": "glibc: glibc: Information disclosure or denial of service via ungetwc function with specific wide character encodings",
+          "Description": "Calling the ungetwc function on a FILE stream with wide characters encoded in a character set that has overlaps between its single byte and multi-byte character encodings, in the GNU C Library version 2.43 or earlier, may result in an attempt to read bytes before an allocated buffer, potentially resulting in unintentional disclosure of neighboring data in the heap, or a program crash.\n\nA bug in the wide character pushback implementation (_IO_wdefault_pbackfail in libio/wgenops.c) causes ungetwc() to operate on the regular character buffer (fp-\u003e_IO_read_ptr) instead of the actual wide-stream read pointer (fp-\u003e_wide_data-\u003e_IO_read_ptr). The program crash may happen in cases where fp-\u003e_IO_read_ptr is not initialized and hence points to NULL. The buffer under-read requires a special situation where the input character encoding is such that there are overlaps between single byte representations and multibyte representations in that encoding, resulting in spurious matches. The spurious match case is not possible in the standard Unicode character sets.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-127"
+          ],
+          "VendorSeverity": {
+            "photon": 3,
+            "redhat": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:L/I:N/A:H",
+              "V3Score": 5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-5928",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-5928",
+            "https://sourceware.org/bugzilla/show_bug.cgi?id=33998",
+            "https://www.cve.org/CVERecord?id=CVE-2026-5928"
+          ],
+          "PublishedDate": "2026-04-20T21:16:36.963Z",
+          "LastModifiedDate": "2026-04-23T15:33:43.69Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-6238",
+          "PkgID": "libc6@2.41-12+deb13u3",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "InstalledVersion": "2.41-12+deb13u3",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-6238",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:14143c3017fb089258e3d5ba141427fab1dc2815144e256d1259e6dd25e47968",
+          "Title": "glibc: glibc: Application crash or uninitialized memory read via crafted DNS response",
+          "Description": "The deprecated functions ns_printrrf, ns_printrr and fp_nquery in the GNU C Library version 2.2 and newer fail to validate the RDATA content against the RDATA length in a DNS response when processing LOC, CERT, TKEY or TSIG records, which may allow an attacker to craft a DNS response, causing a target application to crash or read uninitialized memory.\n\nThese functions are for application debugging only and hence not in the path of code executed by the DNS resolver.  Further, they have been deprecated since version 2.34 and should not be used by any new applications.  Applications should consider porting away from these interfaces since they may be removed in future versions.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-126"
+          ],
+          "VendorSeverity": {
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:H",
+              "V3Score": 6.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-6238",
+            "https://inbox.sourceware.org/libc-alpha/cover.1777546194.git.fweimer@redhat.com/",
+            "https://inbox.sourceware.org/libc-announce/7a655d55-276f-41fe-b550-feb3ebb2ce91@redhat.com/T/#u",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-6238",
+            "https://sourceware.org/bugzilla/show_bug.cgi?id=34069",
+            "https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=advisories/GLIBC-SA-2026-0012",
+            "https://www.cve.org/CVERecord?id=CVE-2026-6238"
+          ],
+          "PublishedDate": "2026-04-28T19:37:47.523Z",
+          "LastModifiedDate": "2026-05-04T17:57:24.007Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2010-4756",
+          "PkgID": "libc6@2.41-12+deb13u3",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "InstalledVersion": "2.41-12+deb13u3",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "SeveritySource": "debian",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2010-4756",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:1fa1b4130a3497e1f92e538b5f74a35c0da7cd5e303756fa710b39f63d4c8d6b",
+          "Title": "glibc: glob implementation can cause excessive CPU and memory consumption due to crafted glob expressions",
+          "Description": "The glob implementation in the GNU C Library (aka glibc or libc6) allows remote authenticated users to cause a denial of service (CPU and memory consumption) via crafted glob expressions that do not match any pathnames, as demonstrated by glob expressions in STAT commands to an FTP daemon, a different vulnerability than CVE-2010-2632.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-399"
+          ],
+          "VendorSeverity": {
+            "debian": 1,
+            "nvd": 2,
+            "redhat": 1
+          },
+          "CVSS": {
+            "nvd": {
+              "V2Vector": "AV:N/AC:L/Au:S/C:N/I:N/A:P",
+              "V2Score": 4
+            },
+            "redhat": {
+              "V2Vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P",
+              "V2Score": 5
+            }
+          },
+          "References": [
+            "http://cxib.net/stuff/glob-0day.c",
+            "http://securityreason.com/achievement_securityalert/89",
+            "http://securityreason.com/exploitalert/9223",
+            "https://access.redhat.com/security/cve/CVE-2010-4756",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=681681",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2010-4756",
+            "https://nvd.nist.gov/vuln/detail/CVE-2010-4756",
+            "https://security.netapp.com/advisory/ntap-20241108-0002/",
+            "https://www.cve.org/CVERecord?id=CVE-2010-4756"
+          ],
+          "PublishedDate": "2011-03-02T20:00:01.037Z",
+          "LastModifiedDate": "2026-04-29T01:13:23.04Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2018-20796",
+          "PkgID": "libc6@2.41-12+deb13u3",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "InstalledVersion": "2.41-12+deb13u3",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "SeveritySource": "debian",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2018-20796",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:029820b08e399b00a3a75b85f1908413078435ababd1950b8fb5acc68583a6ea",
+          "Title": "glibc: uncontrolled recursion in function check_dst_limits_calc_pos_1 in posix/regexec.c",
+          "Description": "In the GNU C Library (aka glibc or libc6) through 2.29, check_dst_limits_calc_pos_1 in posix/regexec.c has Uncontrolled Recursion, as demonstrated by '(\\227|)(\\\\1\\\\1|t1|\\\\\\2537)+' in grep.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-674"
+          ],
+          "VendorSeverity": {
+            "cbl-mariner": 3,
+            "debian": 1,
+            "nvd": 3,
+            "redhat": 2
+          },
+          "CVSS": {
+            "nvd": {
+              "V2Vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P",
+              "V3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V2Score": 5,
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+              "V3Score": 5.3
+            }
+          },
+          "References": [
+            "http://www.securityfocus.com/bid/107160",
+            "https://access.redhat.com/security/cve/CVE-2018-20796",
+            "https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34141",
+            "https://lists.gnu.org/archive/html/bug-gnulib/2019-01/msg00108.html",
+            "https://nvd.nist.gov/vuln/detail/CVE-2018-20796",
+            "https://security.netapp.com/advisory/ntap-20190315-0002/",
+            "https://support.f5.com/csp/article/K26346590?utm_source=f5support\u0026amp%3Butm_medium=RSS",
+            "https://www.cve.org/CVERecord?id=CVE-2018-20796"
+          ],
+          "PublishedDate": "2019-02-26T02:29:00.45Z",
+          "LastModifiedDate": "2024-11-21T04:02:11.827Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2019-1010022",
+          "PkgID": "libc6@2.41-12+deb13u3",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "InstalledVersion": "2.41-12+deb13u3",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "SeveritySource": "debian",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2019-1010022",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:cd927a7dd351b801e57db22284b6248b400ca93eb8736c9239e5ca6e5da31124",
+          "Title": "glibc: stack guard protection bypass",
+          "Description": "GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass stack guard protection. The component is: nptl. The attack vector is: Exploit stack buffer overflow vulnerability and use this bypass vulnerability to bypass stack guard. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-119"
+          ],
+          "VendorSeverity": {
+            "debian": 1,
+            "nvd": 4
+          },
+          "CVSS": {
+            "nvd": {
+              "V2Vector": "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+              "V3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "V2Score": 7.5,
+              "V3Score": 9.8
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2019-1010022",
+            "https://nvd.nist.gov/vuln/detail/CVE-2019-1010022",
+            "https://security-tracker.debian.org/tracker/CVE-2019-1010022",
+            "https://sourceware.org/bugzilla/show_bug.cgi?id=22850",
+            "https://sourceware.org/bugzilla/show_bug.cgi?id=22850#c3",
+            "https://ubuntu.com/security/CVE-2019-1010022",
+            "https://www.cve.org/CVERecord?id=CVE-2019-1010022"
+          ],
+          "PublishedDate": "2019-07-15T04:15:13.317Z",
+          "LastModifiedDate": "2024-11-21T04:17:55.5Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2019-1010023",
+          "PkgID": "libc6@2.41-12+deb13u3",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "InstalledVersion": "2.41-12+deb13u3",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "SeveritySource": "debian",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2019-1010023",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:38137f6271b20db6bb4e1f732168c4b4cacf34cc4b69767463fdfa89517f31fb",
+          "Title": "glibc: running ldd on malicious ELF leads to code execution because of wrong size computation",
+          "Description": "GNU Libc current is affected by: Re-mapping current loaded library with malicious ELF file. The impact is: In worst case attacker may evaluate privileges. The component is: libld. The attack vector is: Attacker sends 2 ELF files to victim and asks to run ldd on it. ldd execute code. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat.",
+          "Severity": "LOW",
+          "VendorSeverity": {
+            "debian": 1,
+            "nvd": 3,
+            "redhat": 1
+          },
+          "CVSS": {
+            "nvd": {
+              "V2Vector": "AV:N/AC:M/Au:N/C:P/I:P/A:P",
+              "V3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+              "V2Score": 6.8,
+              "V3Score": 8.8
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+              "V3Score": 7.8
+            }
+          },
+          "References": [
+            "http://www.securityfocus.com/bid/109167",
+            "https://access.redhat.com/security/cve/CVE-2019-1010023",
+            "https://nvd.nist.gov/vuln/detail/CVE-2019-1010023",
+            "https://security-tracker.debian.org/tracker/CVE-2019-1010023",
+            "https://sourceware.org/bugzilla/show_bug.cgi?id=22851",
+            "https://support.f5.com/csp/article/K11932200?utm_source=f5support\u0026amp%3Butm_medium=RSS",
+            "https://ubuntu.com/security/CVE-2019-1010023",
+            "https://www.cve.org/CVERecord?id=CVE-2019-1010023"
+          ],
+          "PublishedDate": "2019-07-15T04:15:13.397Z",
+          "LastModifiedDate": "2024-11-21T04:17:55.643Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2019-1010024",
+          "PkgID": "libc6@2.41-12+deb13u3",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "InstalledVersion": "2.41-12+deb13u3",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "SeveritySource": "debian",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2019-1010024",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:101d14bb8a86218ff7d018bc7636a93132b44b0de1312a43a403746599ddee98",
+          "Title": "glibc: ASLR bypass using cache of thread stack and heap",
+          "Description": "GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass ASLR using cache of thread stack and heap. The component is: glibc. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-200"
+          ],
+          "VendorSeverity": {
+            "debian": 1,
+            "nvd": 2,
+            "redhat": 2
+          },
+          "CVSS": {
+            "nvd": {
+              "V2Vector": "AV:N/AC:L/Au:N/C:P/I:N/A:N",
+              "V3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+              "V2Score": 5,
+              "V3Score": 5.3
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+              "V3Score": 5.3
+            }
+          },
+          "References": [
+            "http://www.securityfocus.com/bid/109162",
+            "https://access.redhat.com/security/cve/CVE-2019-1010024",
+            "https://nvd.nist.gov/vuln/detail/CVE-2019-1010024",
+            "https://security-tracker.debian.org/tracker/CVE-2019-1010024",
+            "https://sourceware.org/bugzilla/show_bug.cgi?id=22852",
+            "https://support.f5.com/csp/article/K06046097",
+            "https://support.f5.com/csp/article/K06046097?utm_source=f5support\u0026amp%3Butm_medium=RSS",
+            "https://ubuntu.com/security/CVE-2019-1010024",
+            "https://www.cve.org/CVERecord?id=CVE-2019-1010024"
+          ],
+          "PublishedDate": "2019-07-15T04:15:13.473Z",
+          "LastModifiedDate": "2024-11-21T04:17:55.843Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2019-1010025",
+          "PkgID": "libc6@2.41-12+deb13u3",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "InstalledVersion": "2.41-12+deb13u3",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "SeveritySource": "debian",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2019-1010025",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:1446926eee0fc268523ab9bc3d88511c54d36c5394232f71dcfd65c3b27a2bdb",
+          "Title": "glibc: information disclosure of heap addresses of pthread_created thread",
+          "Description": "GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-330"
+          ],
+          "VendorSeverity": {
+            "debian": 1,
+            "nvd": 2,
+            "redhat": 1
+          },
+          "CVSS": {
+            "nvd": {
+              "V2Vector": "AV:N/AC:L/Au:N/C:P/I:N/A:N",
+              "V3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+              "V2Score": 5,
+              "V3Score": 5.3
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.0/AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+              "V3Score": 2.9
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2019-1010025",
+            "https://nvd.nist.gov/vuln/detail/CVE-2019-1010025",
+            "https://security-tracker.debian.org/tracker/CVE-2019-1010025",
+            "https://sourceware.org/bugzilla/show_bug.cgi?id=22853",
+            "https://support.f5.com/csp/article/K06046097",
+            "https://support.f5.com/csp/article/K06046097?utm_source=f5support\u0026amp%3Butm_medium=RSS",
+            "https://ubuntu.com/security/CVE-2019-1010025",
+            "https://www.cve.org/CVERecord?id=CVE-2019-1010025"
+          ],
+          "PublishedDate": "2019-07-15T04:15:13.537Z",
+          "LastModifiedDate": "2024-11-21T04:17:55.96Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2019-9192",
+          "PkgID": "libc6@2.41-12+deb13u3",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.41-12%2Bdeb13u3?arch=amd64\u0026distro=debian-13.5",
+            "UID": "b2e18d225507f497"
+          },
+          "InstalledVersion": "2.41-12+deb13u3",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:2d4d7adf627254a81515173c3ba0fee593d821176ce30ea7d5eb2d956bdf8379",
+            "DiffID": "sha256:3a7299f559d987305122c7669fc3643095eb0955f8ff4a38c9430d54d0b4452e"
+          },
+          "SeveritySource": "debian",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2019-9192",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:0d6638c33d61b29f3ebc37692065230ea3ddf5df419e8148621e4b1e943a6d96",
+          "Title": "glibc: uncontrolled recursion in function check_dst_limits_calc_pos_1 in posix/regexec.c",
+          "Description": "In the GNU C Library (aka glibc or libc6) through 2.29, check_dst_limits_calc_pos_1 in posix/regexec.c has Uncontrolled Recursion, as demonstrated by '(|)(\\\\1\\\\1)*' in grep, a different issue than CVE-2018-20796. NOTE: the software maintainer disputes that this is a vulnerability because the behavior occurs only with a crafted pattern",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-674"
+          ],
+          "VendorSeverity": {
+            "cbl-mariner": 3,
+            "debian": 1,
+            "nvd": 3,
+            "redhat": 1
+          },
+          "CVSS": {
+            "nvd": {
+              "V2Vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P",
+              "V3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V2Score": 5,
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.0/AV:L/AC:L/PR:L/UI:R/S:U/C:N/I:N/A:L",
+              "V3Score": 2.8
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2019-9192",
+            "https://nvd.nist.gov/vuln/detail/CVE-2019-9192",
+            "https://sourceware.org/bugzilla/show_bug.cgi?id=24269",
+            "https://support.f5.com/csp/article/K26346590?utm_source=f5support\u0026amp%3Butm_medium=RSS",
+            "https://www.cve.org/CVERecord?id=CVE-2019-9192"
+          ],
+          "PublishedDate": "2019-02-26T18:29:00.34Z",
+          "LastModifiedDate": "2024-11-21T04:51:10.53Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-34180",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-34180",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:3459e895cd3cf4a62f2c51de00c3dd26ae26da0073c312fa7db9b8a6b779492d",
+          "Title": "[Heap Buffer Over-read in ASN.1 Content Parsing]",
+          "Description": "Issue summary: Parsing a crafted DER-encoded ASN.1 structure with a primitive\nelement whose content exceeds 2 gigabytes in length may cause a heap buffer\nover-read on 64-bit Unix and Unix-like platforms.\n\nImpact summary: The heap buffer over-read may crash the application (Denial of\nService) or to load into the decoded ASN.1 object contents of memory beyond the\nend of the input buffer.  More typically such ASN.1 elements would instead be\ntruncated.\n\nAn integer truncation in OpenSSL's ASN.1 decoder causes the content length of\nan ASN.1 primitive element to be mishandled when it exceeds 2 gigabytes. In the\nworst case the truncated length is treated as a request to scan the binary\ncontent for a terminating zero byte, possibly causing OpenSSL to read either\nless than or beyond the end of the allocated buffer.\n\nApplications that pass attacker-supplied data to d2i_X509(), d2i_PKCS7(), or\nany other d2i_* decoding function are affected. OpenSSL's own command-line\ntools are not vulnerable, as data read through the BIO layer is checked before\nit reaches the affected code. The issue only affects 64-bit Unix and Unix-like\nplatforms; 32-bit platforms and 64-bit Windows are not affected.\n\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4 and 3.0 are not affected by this issue,\nas the affected code is outside the OpenSSL FIPS module boundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-125"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/1c6908e4fa5fa568752221d8eaf561a809751e5d",
+            "https://github.com/openssl/security/commit/cbe418ae978539cf14a398a207dba834c0e93e83",
+            "https://github.com/openssl/security/commit/d93853c42110d6319e3df07842b488cb9f7ac5ff",
+            "https://github.com/openssl/security/commit/da5d62af75f69d6fbf7803743d7c56ac75461e43",
+            "https://github.com/openssl/security/commit/f696c73c3e61b8c502d040af62e690c060908a16",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:04.6Z",
+          "LastModifiedDate": "2026-06-09T17:17:04.6Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-34181",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-34181",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:8fc97e991104daae1f75234ddec13a7d2f69ebfaed43590de21e1052224098b7",
+          "Title": "[PKCS#12 Files with PBMAC1 Are Accepted with Short HMAC Keys]",
+          "Description": "Issue Summary: The PKCS#12 file processing fails to perform sufficient input\nvalidation for files that use Password-Based Message Authentication Code 1\n(PBMAC1) integrity mechanism allowing a certificate and private key forgery.\n\nImpact Summary: An attacker impersonating a user can cause a service reading\nPKCS#12 files to accept forged certificates and private keys with a 1 in 256\nprobability.\n\nIf a service accepting PKCS#12 files is using passwords for authenticating\nthe received files, the attacker can create unencrypted PKCS#12 files that\nuse PBMAC1 authentication that specifies an HMAC key of only one byte, allowing\nthem to craft a file that will be accepted with a 1 in 256 probability.\nThat would then cause the service to accept a certificate and private key\ncontrolled by the attacker.\n\nThe FIPS modules are not affected by this issue, as the affected code is\noutside the OpenSSL FIPS module boundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-354"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/0300eb9ddce7a0895bf301a4b0c03a9da2313a0f",
+            "https://github.com/openssl/security/commit/79eb76a937e474bb7610a0a3dc57131dc8dc6610",
+            "https://github.com/openssl/security/commit/85dcbb3abaa4878af5c8fbbe11bce708fcf984a7",
+            "https://github.com/openssl/security/commit/ec36f2417c4ddd8cabce4b4a60a3d7a7365f2d81",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:04.74Z",
+          "LastModifiedDate": "2026-06-09T17:17:04.74Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-34182",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-34182",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:a699bb2502fd3d1f3022542d98e7ab1d9adbeb9f7ab26ee417fedda5aaf32c3c",
+          "Title": "[CMS AuthEnvelopedData Processing May Accept Forged Messages]",
+          "Description": "Issue Summary: Cryptographic Message Services (CMS) processing fails to perform\nsufficient input validation on the cipher and tag length fields of\nAuthEnvelopedData containers, leading to various potential compromises.\n\nImpact Summary: Attackers making use of these vulnerabilities may achieve\nkey-equivalent functionality for a given CMS recipient and/or bypass integrity\nvalidation for a given message.\n\nIn one use case, an attacker may send a CMS message containing\nAuthEnvelopedData with the cipher specified as a non-AEAD cipher.  OpenSSL\nerroneously allows this selection, and attempts to decrypt and validate the\nmessage.\n\nAn on-path attacker who captures one legitimate AES-GCM AuthEnvelopedData\naddressed to the victim can re-emit it with the recipientInfos set left\nbyte-for-byte intact, so the victim's private key still unwraps the genuine CEK\n(the content-encryption key), but with the inner OID rewritten to AES-256-OFB\n(Output Feedback Mode, an unauthenticated keystream mode) and with an\nattacker-chosen IV and ciphertext. The victim initializes AES-256-OFB under the\nreal CEK, never consults the MAC field, and CMS_decrypt() returns success.\n\nIf the application under attack responds to the attacker with any indicator\nshowing success or failure of the decryption effort, it is possible for the\nattacker to use this as an oracle to obtain key equivalent functionality for the\nCEK used for the chosen recipient of the message.\n\nIn another use case, an attacker can reduce the tag length of the chosen AEAD\ncipher for a given AuthEnvelopedData container to be a single byte long,\nallowing an attacker to brute force CMS decryption, producing an integrity\nbypass for applications that trust CMS_decrypt() to reject modified content.\n\nThe FIPS modules are not affected by this issue.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-354"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/03c1f4d45fb963aee7d5833390c507cd290182bc",
+            "https://github.com/openssl/security/commit/439ed7d2c0962ce964482727264668bf277c333f",
+            "https://github.com/openssl/security/commit/7947e6a81eb8776802f159fb6762cb7fcf7e34c7",
+            "https://github.com/openssl/security/commit/9fd97f8cfdc2c0be214998de3b2b55c8edf6c7ac",
+            "https://github.com/openssl/security/commit/d2ca86bcd43e4f17d899f347101766b6107676e0",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:04.857Z",
+          "LastModifiedDate": "2026-06-09T17:17:04.857Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-34183",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-34183",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:3ebd7e6404bb1d348781e7097610f74e3555f46048b9e59550a9b1748e908773",
+          "Title": "[Unbounded Memory Growth in the QUIC PATH_CHALLENGE Handler]",
+          "Description": "Issue summary: Remote peer may exhaust heap memory of the QUIC\nserver or client by flooding it with packets containing PATH_CHALLENGE\nframes.\n\nImpact summary: A malicious remote peer can cause an unbounded\nmemory allocation which can lead to an abnormal termination of the\napplication acting as a QUIC client or server and a Denial of Service.\n\nA remote peer may exhaust heap memory by flooding the local\nQUIC stack with PATH_CHALLENGE frames. The local QUIC stack\nallocates a PATH_RESPONSE frame for every PATH_CHALLENGE it receives.\nThe allocated PATH_RESPONSE frame gets freed only when the remote\npeer acknowledges reception of the PATH_RESPONSE frame which will\nnot be done by a malicious peer.\n\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4, and 3.0 are not affected by\nthis issue. The QUIC stack is outside of OpenSSL FIPS module\nboundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-1325"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/5b306efb0b3779dfdd0803b4afc9d08c91f11517",
+            "https://github.com/openssl/security/commit/7d06955ebe0ecf8adfd4c1e92018586da47ef9ac",
+            "https://github.com/openssl/security/commit/d2e9efbe4900a373227deb136e8665401404ffac",
+            "https://github.com/openssl/security/commit/fbaa83859c01ad64f497b757aaf51be7d05ed9eb",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:05Z",
+          "LastModifiedDate": "2026-06-09T17:17:05Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-42764",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-42764",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:25761efdca4a3530753de82c5448fb6760c231bab3478dea4d4001d1af6c37f3",
+          "Title": "[NULL Pointer Dereference in QUIC Server Initial Packet Handling]",
+          "Description": "Issue summary: Receiving a QUIC initial packet with an invalid token may\ntrigger a NULL pointer dereference in the OpenSSL QUIC server with\naddress validation disabled.\n\nImpact summary: NULL pointer dereference typically causes abnormal termination\nof the affected QUIC server process and a Denial of Service.\n\nIf the address validation is disabled in the OpenSSL QUIC server\nimplementation, an attacker can crash the server by sending an initial\npacket with an invalid or expired token.\n\nBy default, the client address validation is enabled in the OpenSSL QUIC server\nimplementation, which makes the default configuration not vulnerable\nto this issue. However if the SSL_LISTENER_FLAG_NO_VALIDATE is used with\nthe SSL_new_listener() call, the address validation is disabled making the\nvulnerable code reachable.\n\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4, and 3.0 are not affected by this\nissue, as the affected code is outside the OpenSSL FIPS module boundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-476"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/5e3ed291b8af0b03d5d3b9e56a1da69a187e9729",
+            "https://github.com/openssl/security/commit/a45a0aba8095682c88ff4fc4a784892b8c6f0677",
+            "https://github.com/openssl/security/commit/bf29a458c1a231eca87e384c62b9c2553fa57a91",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:07.693Z",
+          "LastModifiedDate": "2026-06-09T17:17:07.693Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-42766",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-42766",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:164f9ff79bb3da4f590be942f70c455415903d1ca846d4764e001e8dddf227f7",
+          "Title": "[Possible NULL Dereference in Password-Based CMS Decryption]",
+          "Description": "Issue summary: A specially crafted password-encrypted CMS message\ncan trigger a NULL pointer dereference during CMS decryption.\n\nImpact summary: This NULL pointer dereference leads to an application crash\nand a Denial of Service.\n\nThe CMS PasswordRecipientInfo.keyDerivationAlgorithm field is defined as\nOPTIONAL in the ASN.1 specification and may therefore be absent in specially\ncrafted inputs. During the password-based CMS decryption the OpenSSL\nCMS implementation dereferences this field without first checking whether it\nwas present.\n\nAn attacker who supplies such a CMS message to an application performing\npassword-based CMS decryption can trigger an application crash, leading to\na Denial of Service.\n\nApplications that process password-encrypted CMS messages may be affected.\n\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4, and 3.0 are not affected by this\nissue, as the affected code is outside the OpenSSL FIPS module boundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-476"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/056d06c1918fafbb98c1c85a02e4c47cc4e199ce",
+            "https://github.com/openssl/security/commit/12bc26ffb3a2be728c9b86e1cae277de5b33dfa4",
+            "https://github.com/openssl/security/commit/3ff64913615d648cfbb6a6f1cf5529ae7ea829d7",
+            "https://github.com/openssl/security/commit/ab52d88cb5374876d59aee3c91f9e4ccce2b7ce4",
+            "https://github.com/openssl/security/commit/da26f368732b83e40e9d356fe61c3d3aaab6d2e8",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:07.97Z",
+          "LastModifiedDate": "2026-06-09T17:17:07.97Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-42767",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-42767",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:291da1f940a63546bea48da8a83ee23bbcf693e348f3e94d72130dcd112c130a",
+          "Title": "[NULL Pointer Dereference in CRMF EncryptedValue Decryption]",
+          "Description": "Issue summary: An attacker-controlled CMP (Certificate Management Protocol)\nserver could trigger a NULL pointer dereference in a CMP client application.\n\nImpact summary: A NULL pointer dereference causes a crash of the\napplication and a Denial of Service.\n\nAn attacker controlling a CMP server (or acting as a man-in-the-middle) could\ncraft a CMP response containing a CRMF (Certificate Request Message Format)\nCertRepMessage with an EncryptedValue structure where the symmAlg field\nhas an algorithm OID but no parameters field. When the OpenSSL CMP client\nprocesses this response, the NULL dereference occurs, causing a crash of\nthe CMP client.\n\nApplications that process untrusted CMP/CRMF messages may be affected.\n\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4, and 3.0 are not affected by this\nissue, as the affected code is outside the OpenSSL FIPS module boundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-476"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/61a86a8cd73546c9fea916f3d304c1293e05c046",
+            "https://github.com/openssl/security/commit/665d5254083affde9982efca7c41dd01cacc8774",
+            "https://github.com/openssl/security/commit/810b722f772652ad48042bcc7ab07e3414b11d0f",
+            "https://github.com/openssl/security/commit/b90ff3b1bd33b1c18e6a09936d097c2eddef8873",
+            "https://github.com/openssl/security/commit/e6f912907fc2ec82a0fd07aae55172c5e5e3d90d",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:08.093Z",
+          "LastModifiedDate": "2026-06-09T17:17:08.093Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-42768",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-42768",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:87aad81bb5b4f38ed0f61dcd875d9eba9d7ceb8136052eef5108177ac8a56511",
+          "Title": "[Multi-RecipientInfo Bleichenbacher Oracle in CMS_decrypt() and PKCS7_decrypt()]",
+          "Description": "Issue summary: The CMS_decrypt and PKCS7_decrypt functions are vulnerable to\nBleichenbacher-style attack when an attacker is able to provide the CMS or\nS/MIME messages and observe the error code and/or decryption output.\n\nImpact summary: The Bleichenbacher-style attack allows an attacker to use the\nvictim's vulnerable application as a way to decrypt or sign messages with the\nvictim's private RSA key.\n\nThe attack is possible in 2 variants.\n\n1. The decryption API (CMS_decrypt(), PKCS7_decrypt()) is used without\nproviding the recipient certificate. In this case OpenSSL iterates over every\nKeyTransRecipientInfo (KTRI) without stopping at the first success.\n\nAn attacker who authors a message with two KTRI entries — the first one\nwrapping a real CEK under the victim's public key, the second with an\narbitrary probe ciphertext — obtains opportunity to iterate the 2nd KTRI to\nget a valid PKCS#1 v1.5 padding if the error code of the application is\navailable.\n\nThat is a Bleichenbacher oracle (Bleichenbacher, CRYPTO '98): an\nadaptive-chosen-ciphertext side channel from which the attacker decrypts any\nRSA ciphertext to the victim's key or forges any PKCS#1 v1.5 signature under\nit.\n\n2. When the decryption API (CMS_decrypt(), PKCS7_decrypt()) is provided with\nthe recipient certificate, and the recipient is not found, a random\nkey is substituted.\n\nAn attacker who authors a message and is able to compare both error code and\nthe result of the decryption, can mount a Bleichenbacher oracle.\n\nWe are not aware of any applications that provide a remote attacker\nan opportunity to mount an attack described in these scenarios. We consider\nthe existence of such application very unlikely, and for this reason this\nCVE has been evaluated as Low severity.\n\nTo avoid these attacks, when RSA PKCS#1 v1.5 Key Transport is in use, the\ninvoked EVP_PKEY_decrypt() will use the implicit rejection mechanism described\nin draft-irtf-cfrg-rsa-guidance. In previous OpenSSL releases the implicit\nrejection was explicitly disabled.\n\nThe implicit rejection mechanism always returns a plaintext value,\nthe symmetric key. This result is deterministic for the ciphertext and the\nprivate key.  The length of the decryption result can happen to match the\nlength of the key of the symmetric cipher that was used for the content\nencryption. When a certificate is not provided, the last RecipientInfo\nproducing a key that looks valid will be used. It may cause getting garbage\ncontent on decryption. As a proper way to deal with this a recipient\ncertificate has to be provided to identify the particular RecipientInfo for\ndecryption.\n\nThe FIPS modules in 4.0, 3.6, 3.5, and 3.4 are not affected by this issue, as\nCMS and S/MIME processing happens outside the OpenSSL FIPS module boundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-514"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/a2ca7b2d73e0ffc1eae183fe6e1741dac767cb4f",
+            "https://github.com/openssl/security/commit/bbb151a83041705d9d001ed2f9c12f5523e1b54d",
+            "https://github.com/openssl/security/commit/dd68364107a58841c0a2546812518b65d3a23abd",
+            "https://github.com/openssl/security/commit/f04b377be3d821741c86d1f4bf84dee09f3d5c3e",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:08.223Z",
+          "LastModifiedDate": "2026-06-09T17:17:08.223Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-42769",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-42769",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:9e935b11f154796528f5be96af30ae947c1c6df4ef0b820efe6b23f11460715c",
+          "Title": "[Trust-Anchor Substitution via cert/issuer Typo in CMP rootCaKeyUpdate]",
+          "Description": "Issue Summary: An error in the callback used to verify the certificate\nprovided in a Root CA key update Certificate Management Protocol (CMP)\nmessage response rendered the certificate validation ineffectual, which\ncould lead to escalation of credentials from the Registration Authority (RA)\nlevel to the root Certification Authority (root CA) level.\n\nImpact Summary: The Registration Autority could replace the root CA\ncertificate for the CMP clients with an arbitrary root CA certificate.\n\nOne of the parts of the Certificate Management Protocol (CMP), specified in\nRFC 9810, is Root Certification Authority (root CA) key Rollover,\nwhich is sent by the server in a message with type 'id-it-rootCaKeyUpdate'.\nAs part of these messages, 'newWithOld' certificate, the new root CA\ncertificate signed with the old root CA key, is provided, and verifying its\nsignature is crucial for transferring the trust from the old CA key to the\nnew one.\n\nThe 'id-it-rootCaKeyUpdate' messages are expected to be processed with\nOSSL_CMP_get1_rootCaKeyUpdate(), that is expected to verify the 'newWithOld'\ncertificate.  A typo in the certificate chain building code led to adding\nan incorrect certificate ('newWithOld' instead of 'oldRoot') to the\ncertificate chain, rendering the certificate verification process ineffectual\n(only the issuer name and the algorithm OIDs were verified by other parts\nof the verification code).\n\nAn attacker who already has credentials that satisfy the CMP message\nprotection checks can generate a new key pair and use a crafted self-signed\ncertificate in its 'id-it-rootCaKeyUpdate' CMP messages which affected CMP\nclients would accept as a new trust anchor.\n\nSignificant preconditions for the attack (having valid RA-level credentials)\nare the reason the issue was assigned Low severity.\n\nThe FIPS modules are not affected by this issue, as the affected code is\noutside the OpenSSL FIPS module boundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-295"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/54d0989997e5fc26057009a9782c3441ce3842fb",
+            "https://github.com/openssl/security/commit/777b363b16fcf2153bb3ded39dc3838713667c44",
+            "https://github.com/openssl/security/commit/d35cd473a271bf3ce7bf3d32af53217fb83ae92c",
+            "https://github.com/openssl/security/commit/d531f21c0fe99067a66fc0ff1161ef127f9cd70b",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:08.377Z",
+          "LastModifiedDate": "2026-06-09T17:17:08.377Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-42770",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-42770",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:8369a8313897bedcfd315f75d71b3f683947ffa04d9ec8261703e6c48aaaea56",
+          "Title": "[FFC-DH Peer Validation Uses Attacker-Supplied q]",
+          "Description": "Issue summary: When EVP_PKEY_derive_set_peer() is called with a DHX (X9.42)\npeer key, the peer key is not properly checked for the subgroup membership.\n\nImpact summary: A malicious peer which presents an X9.42 key carrying the\nvictim's p and g parameters, a forged q = r (a small prime factor of the\ncofactor (p−1)/q_local), and a public value Y of order r can recover the\nvictim's private key after a small number of key exchange attempts.\n\nWhen EVP_PKEY_derive_set_peer() is called with a DHX (X9.42) peer key, the\nsubgroup membership check Y^q ≡ 1 (mod p) is performed using the peer's\nown q parameter, not the local key's q. The peer's domain parameters are\nthen matched against the domain parameters of the private key, but the value\nof q is not compared.\n\nA malicious peer who presents an X9.42 key carrying the victim's p, g,\na forged q = r (a small prime factor of the cofactor), and a public\nvalue Y of order r passes all checks. The shared secret then takes only\nr distinct values, leaking priv mod r. Repeating for each small-prime\nfactor of the cofactor and combining via CRT recovers the full private\nkey (Lim–Lee / small-subgroup-confinement attack).\n\nThe realistic attack surface is narrow: principally CMP deployments with\nlong-lived RA/CA DHX keys and bespoke enterprise or government applications\nusing X9.42 DHX static keys with interactive protocols and therefore this\nissue was assigned Low severity.\n\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4, and 3.0 are affected by this\nissue.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-325"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/3da5a516cd2635a320ff748503db2cef7c4b0f02",
+            "https://github.com/openssl/security/commit/3ddbb7ab50bd93dfc59cbe08e269a67605aeebdb",
+            "https://github.com/openssl/security/commit/5f452bba2c681423d8fcffd120a19b757ee42e3c",
+            "https://github.com/openssl/security/commit/7fbfde7677ed8808828bf00ff01c937ca04bdda2",
+            "https://github.com/openssl/security/commit/ca2237ab5615641b662183b077f62c08d75e8070",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:08.523Z",
+          "LastModifiedDate": "2026-06-09T17:17:08.523Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-45445",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-45445",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:ec517e8aad412947a38ab26ac64b0d75073cefb0784a0bc09ec7a4aad88e4f9d",
+          "Title": "[AES-OCB IV Ignored on EVP_Cipher() Path]",
+          "Description": "Issue summary: When an application drives an AES-OCB context through the\npublic EVP_Cipher() one-shot interface, the application-supplied\ninitialisation vector (IV) is silently discarded.\n\nImpact summary: Every message encrypted under the same key uses the\nsame effective nonce regardless of the IV supplied by the caller,\nresulting in (key, nonce) reuse and loss of confidentiality.  If the\nsame code path is used to compute the authentication tag, the tag\ndepends only on the (key, IV) pair and not on the plaintext or\nciphertext, allowing universal forgery of arbitrary ciphertext from a\nsingle captured message.\n\nOpenSSL provides two ways to drive a cipher: the documented streaming\ninterface (EVP_CipherUpdate / EVP_CipherFinal_ex) and a lower-level\none-shot, EVP_Cipher(), whose documentation explicitly recommends\nagainst use by applications in favour of EVP_CipherUpdate() and\nEVP_CipherFinal_ex().  The OCB provider's streaming handler flushes\nthe application-supplied IV into the OCB context before processing\ndata; the one-shot handler did not.  Every call to EVP_Cipher() on an\nAES-OCB context therefore ran with the all-zero key-derived offset\nstate left by cipher initialisation, regardless of the caller's IV.\n\nIf EVP_EncryptFinal_ex() is subsequently used to obtain the\nauthentication tag, the deferred IV setup runs at that point and\nclears the running checksum that should have been accumulated over the\nplaintext.  The resulting tag is a function of (key, IV) only and\nverifies against any ciphertext produced under the same (key, IV)\npair.\n\nThe OpenSSL SSL/TLS implementation is not affected: AES-OCB is not a\nTLS cipher suite, and libssl does not call EVP_Cipher() in any case.\nApplications that drive AES-OCB through the documented streaming AEAD\nAPI (EVP_CipherUpdate / EVP_CipherFinal_ex) are not affected.  Only\napplications that combine the AES-OCB cipher with the EVP_Cipher()\none-shot API are vulnerable.\n\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4 and 3.0 are not affected by\nthis issue, as AES-OCB is outside the OpenSSL FIPS module boundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-325"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/323f0b6e7d530a4cb4336d50c88cb70f3ac2a451",
+            "https://github.com/openssl/security/commit/787a6dfba81b7b09c1e05ab31396c0cd7c36b3f7",
+            "https://github.com/openssl/security/commit/7ac4715234ee72d9f3c93426a2c08554b5b771af",
+            "https://github.com/openssl/security/commit/843c9b94ca9c2ed248bb30127bb4f3d7af0d607c",
+            "https://github.com/openssl/security/commit/983d54b5cce8d16147548ed1a37892d1720bbab6",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:18.993Z",
+          "LastModifiedDate": "2026-06-09T17:17:18.993Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-45446",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-45446",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:d36430dcfebadbf78ac3964c0f615511dac6e793189dc192ace42a2361e50413",
+          "Title": "[Incorrect Tag Processing for Empty Messages in AES-GCM-SIV and AES-SIV modes]",
+          "Description": "Issue summary: The implementations of AES-SIV (RFC 5297) and AES-GCM-SIV\n(RFC 8452) mishandle the authentication of AAD (Additional Authenticated\nData) with an empty ciphertext allowing a forgery of such messages.\n\nImpact summary: An attacker can forge empty messages with arbitrary AAD\nto the victim's application using these ciphers.\n\nAES-SIV (RFC 5297) and AES-GCM-SIV (RFC 8452) are nonce-misuse-resistant AEAD\nmodes: they accept a key, nonce, optional AAD (bytes that are authenticated\nbut not encrypted), and plaintext, and produces ciphertext plus a 16-byte\ntag. On decrypt, `EVP_DecryptFinal_ex()` is documented to return success only\nif the tag is verified succesfully.\n\nIn OpenSSL's provider implementation of these ciphers, the expected tag is\ncomputed only when decryption function is invoked with non-empty data.\nIf the caller supplies AAD and then calls `EVP_DecryptFinal_ex()` without\ninvocation of the ciphertext update, which can happen when the received\nciphertext length is zero, the tag is never recalculated and still holds its\nall-zeros value.\n\nWhen AES-GCM-SIV is used, an attacker who sends arbitrary AAD, empty\nciphertext, and all-zeros tag passes authentication under any key they do not\nknow, single-shot. When AES-SIV is used, for mounting the attack it's\nnecessary for the application to reuse the decryption context without\nresetting the key.\n\nAES-SIV is implemented since OpenSSL 3.0. AES-GCM-SIV is implemented since\nOpenSSL 3.2.\n\nNo protocols implemented in OpenSSL itself (TLS/CMS/PKCS7/HPKE/QUIC) support\neither AES-GCM-SIV or AES-SIV. To mount an attack, the applications must\nimplement their own protocol and use the EVP interface. Also they must skip the\nciphertext update when a message with an empty ciphertext arrives.\n\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4, and 3.0 are not affected by this\nissue, as these algorithms are not FIPS approved and the affected code is\noutside the OpenSSL FIPS module boundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-325"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/25b32cd9d41d2bc01b6abc425bb4baf2c2236fdc",
+            "https://github.com/openssl/security/commit/71e2a5d263518cf5866043bd60ee4994d59e53a3",
+            "https://github.com/openssl/security/commit/7fe3f33a3b3a4c487aa4dcdbc87057f66ffd2b85",
+            "https://github.com/openssl/security/commit/daca0f48e4a69a2892a62262bad59e62a8a76598",
+            "https://github.com/openssl/security/commit/eec5e9bf0d867333b8495e456f5235d225798a68",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:19.137Z",
+          "LastModifiedDate": "2026-06-09T17:17:19.137Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-45447",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-45447",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:112969626139655e80ecb3219780433ea16a59daa3b36fdc64bbe5d1e1b327d1",
+          "Title": "[Heap Use-After-Free in the PKCS7_verify() Function]",
+          "Description": "Issue summary: A specially crafted PKCS#7 or S/MIME signed message could\ntrigger a use-after-free during PKCS#7 signature verification.\n\nImpact summary: A use-after-free may result in process crashes, heap\ncorruption, or potentially remote code execution.\n\nWhen processing a PKCS#7 or S/MIME signed message, if the SignedData\ndigestAlgorithms field is present as an empty ASN.1 SET, OpenSSL may\nincorrectly free a caller-owned BIO during PKCS7_verify(). A subsequent\nuse of the BIO by the calling application results in a use-after-free\ncondition.\n\nIn the common case this occurs when the application later calls\nBIO_free() on the BIO originally passed to PKCS7_verify(). Depending\non allocator behavior and application-specific BIO usage patterns, this\nmay result in a crash or other memory corruption. In some application\ncontexts this may potentially be exploitable for remote code execution.\n\nApplications that process PKCS#7 or S/MIME signed messages using OpenSSL\nPKCS#7 APIs may be affected. Applications using the CMS APIs for this\nprocessing are not affected.\n\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4, and 3.0 are not affected by this\nissue, as the affected code is outside the OpenSSL FIPS module boundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-416"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/3aad5eb7af4de4ee0633c30a8541a54d9bbde63c",
+            "https://github.com/openssl/security/commit/7d4a980c62258c5910cc883936e0c8dbab4d75a8",
+            "https://github.com/openssl/security/commit/9dfd688ad2290fc5075cacbc9bf0c9a93eefed54",
+            "https://github.com/openssl/security/commit/a541ae8bfe849a30cc885e8780715c0f488e496c",
+            "https://github.com/openssl/security/commit/c505d7559da5d5f9f2c3913c6883a5562ce7273e",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:19.277Z",
+          "LastModifiedDate": "2026-06-09T17:17:19.277Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-7383",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-7383",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:efdb747b8cc81367e9e475e74f069059dbe64cf7e0bcd853a1f405e82977c0dc",
+          "Title": "[Possible Heap Buffer Overflow in ASN.1 Multibyte String Conversion]",
+          "Description": "Issue summary: A signed integer overflow when sizing the destination\nbuffer for Unicode output in ASN1_mbstring_ncopy() can lead to a heap\nbuffer overflow.\n\nImpact summary: A heap buffer overflow may lead to a crash or possibly\nattacker controlled code execution or other undefined behaviour.\n\nIn ASN1_mbstring_copy() and ASN1_mbstring_ncopy() the destination\nsize for Unicode output is computed in a signed int: by left shift\nof the input character count for BMPSTRING (UTF-16) and\nUNIVERSALSTRING (UTF-32), and by summing per-character byte counts\nfor UTF8STRING. The calculation overflows when the input reaches\naround 2^30 characters. In the worst case (UNIVERSALSTRING at 2^30\ncharacters) the size wraps to zero, OPENSSL_malloc(1) is called, and\nthe subsequent character copy writes several gigabytes past the\none-byte allocation.\n\nX.509 certificate processing routes through ASN1_STRING_set_by_NID(),\nwhose DIRSTRING_TYPE mask excludes UNIVERSALSTRING and whose per-NID\nsize limits cap the input length; no network protocol or\ncertificate-handling path in OpenSSL exercises the overflow.\nTriggering the bug requires an application that calls\nASN1_mbstring_copy() or ASN1_mbstring_ncopy() directly, or registers\na custom string type via ASN1_STRING_TABLE_add(), with\nattacker-controlled input on the order of half a gigabyte or more.\nFor these reasons this issue was assigned Low severity.\n\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4 and 3.0 are not affected by\nthis issue, as the affected code is outside the OpenSSL FIPS module\nboundary.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-787"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/4f8d2bddaa2c8e06f9c33390ee1717059a6e4be6",
+            "https://github.com/openssl/security/commit/80c15faaf78042bbb8654a0e234c50c381732f74",
+            "https://github.com/openssl/security/commit/bd17511070fb39a67bfa19682affb765e706a974",
+            "https://github.com/openssl/security/commit/c332adaced43bcbb85f97410597e951c11ec3083",
+            "https://github.com/openssl/security/commit/d32350ae8ef7426718f5aa9e383d4b51398ee255",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:50.337Z",
+          "LastModifiedDate": "2026-06-09T17:17:50.337Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-9076",
+          "PkgID": "libssl3t64@3.5.6-1~deb13u1",
+          "PkgName": "libssl3t64",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libssl3t64@3.5.6-1~deb13u1?arch=amd64\u0026distro=debian-13.5",
+            "UID": "3eea55d4228693bd"
+          },
+          "InstalledVersion": "3.5.6-1~deb13u1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:40008157d8d2587c24778f6b3bfa45bbb427667b576b929331a7e60ea298bcc4",
+            "DiffID": "sha256:f7480f886f20e8ffccbb5196da285d5842f19cc8c264dfed5b3d8121103f04a0"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-9076",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:7b56c6c3b4bb66c3a567aa8365183e2603c33bb4ba4408e567e1632b1bde6bb9",
+          "Title": "[Out-of-Bounds Read in CMS Password-Based Decryption]",
+          "Description": "Issue summary: When CMS password-based decryption (RFC 3211 / PWRI key unwrap)\nprocesses attacker-supplied CMS data, an attacker-chosen stream-mode KEK\ncipher can trigger a heap out-of-bounds read in kek_unwrap_key().\n\nImpact summary: A heap buffer over-read may trigger a crash which leads to\nDenial of Service for an application if the input buffer ends at a memory\npage boundary and the following page is unmapped. There is no information\ndisclosure as the over-read bytes are not revealed to the attacker.\n\nThe key unwrapping function performs a check-byte test as specified in the\nRFC that reads 7 bytes from a heap allocation that is based on the wrapped\nkey length from the message. There is a minimum length check based on the\nblock length of the wrapping cipher. However the cipher is selected from\nan OID carried in the attacker's PWRI keyEncryptionAlgorithm with no\nrequirement that the cipher be a block cipher. When an attacker selects\na stream-mode cipher the guard will be ineffective and the allocated buffer\ncontaining the unwrapped key can be too small to fit the check-bytes\nspecified in the RFC and a buffer over-read can happen.\n\nApplications calling CMS_decrypt() or CMS_decrypt_set1_password()\n(equivalently openssl cms -decrypt -pwri_password ...) on untrusted CMS\ndata are vulnerable to this issue. No password knowledge is required: the\nover-read happens during the unwrap attempt before any authentication\nsucceeds.\n\nThe over-read is limited to a few bytes and is not written to output, so\nthere is no information disclosure. Triggering a crash requires the\nallocation to border unmapped memory, which is unlikely with the normal\nallocator.\n\nThe FIPS modules are not affected by this issue.",
+          "Severity": "UNKNOWN",
+          "CweIDs": [
+            "CWE-125"
+          ],
+          "References": [
+            "https://github.com/openssl/security/commit/05b066366842f930fadd9a6e94df98030af431bb",
+            "https://github.com/openssl/security/commit/3d8d5bc1056b2f62da9fede23fedbf47e85187b0",
+            "https://github.com/openssl/security/commit/715349a1d7c6db970e6815dafb90915f07307f98",
+            "https://github.com/openssl/security/commit/77bf00ab13f6ff5e516535432f0328ed70ec0c26",
+            "https://github.com/openssl/security/commit/eecbe330977e8d023aae1ca2d9bdbe983ef3fdc6",
+            "https://openssl-library.org/news/secadv/20260609.txt"
+          ],
+          "PublishedDate": "2026-06-09T17:17:50.997Z",
+          "LastModifiedDate": "2026-06-09T17:17:50.997Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-27171",
+          "PkgID": "zlib1g@1:1.3.dfsg+really1.3.1-1+b1",
+          "PkgName": "zlib1g",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/zlib1g@1.3.dfsg%2Breally1.3.1-1%2Bb1?arch=amd64\u0026distro=debian-13.5\u0026epoch=1",
+            "UID": "ee958543a42dbedd"
+          },
+          "InstalledVersion": "1:1.3.dfsg+really1.3.1-1+b1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:cac2ae0193cb073e7492050b05fc342a888651b4bbc966908c8793f889c299ba",
+            "DiffID": "sha256:e4ba966d7f0527dfe0fcb559e4e18d4da42c4e6beae924719255e0dedb554ed0"
+          },
+          "SeveritySource": "nvd",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-27171",
+          "DataSource": {
+            "ID": "debian",
+            "Name": "Debian Security Tracker",
+            "URL": "https://salsa.debian.org/security-tracker-team/security-tracker"
+          },
+          "Fingerprint": "sha256:120a0b171da3a235c1d115ae0355dc84fd74038f6074024357a8277012ccf3b3",
+          "Title": "zlib: zlib: Denial of Service via infinite loop in CRC32 combine functions",
+          "Description": "zlib before 1.3.2 allows CPU consumption via crc32_combine64 and crc32_combine_gen64 because x2nmodp can do right shifts within a loop that has no termination condition.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-1284"
+          ],
+          "VendorSeverity": {
+            "amazon": 1,
+            "azure": 1,
+            "cbl-mariner": 1,
+            "julia": 1,
+            "nvd": 2,
+            "redhat": 1,
+            "ubuntu": 1
+          },
+          "CVSS": {
+            "julia": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+              "V3Score": 2.9
+            },
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 5.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
+              "V3Score": 3.3
+            }
+          },
+          "References": [
+            "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit",
+            "https://7asecurity.com/blog/2026/02/zlib-7asecurity-audit/",
+            "https://7asecurity.com/reports/pentest-report-zlib-RC1.1.pdf",
+            "https://access.redhat.com/security/cve/CVE-2026-27171",
+            "https://github.com/advisories/GHSA-h858-mf2m-8jf4",
+            "https://github.com/madler/zlib/issues/904",
+            "https://github.com/madler/zlib/releases/tag/v1.3.2",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-27171",
+            "https://ostif.org/zlib-audit-complete",
+            "https://ostif.org/zlib-audit-complete/",
+            "https://www.cve.org/CVERecord?id=CVE-2026-27171"
+          ],
+          "PublishedDate": "2026-02-18T04:16:01.263Z",
+          "LastModifiedDate": "2026-03-25T21:27:04.603Z"
+        }
+      ]
+    }
+  ]
+}
