@@ -41,8 +41,10 @@ ENV HOSTNAME=0.0.0.0
 # Next.js standalone output:
 # - .next/standalone contains server.js + traced node_modules
 # - .next/static must be copied alongside for static assets
+# - public contains release evidence bundles and static documentation assets
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
 EXPOSE 3000
 
