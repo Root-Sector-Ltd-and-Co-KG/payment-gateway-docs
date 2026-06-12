@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T19:44:54.084Z",
+  "status": "verified",
+  "verificationTool": {
+    "name": "cosign",
+    "oidcIssuer": "https://token.actions.githubusercontent.com"
+  },
+  "components": [
+    {
+      "name": "admin-backend",
+      "image": "ghcr.io/root-sector-ltd-and-co-kg/payment-gateway-admin-backend",
+      "digest": "sha256:bbd918f2d41c97feb294f2d60ee6211faf22df69e1ccd20f595d33f41f2e4cc7",
+      "sourceRevision": "aa6637487a64ef9fff017279542b2c736786f1e5",
+      "expectedIdentity": "https://github.com/root-sector-ltd-and-co-kg/payment-gateway-admin-backend/.github/workflows/build-and-publish-backend-docker-image.yml@refs/tags/v4.1.16",
+      "expectedIdentityMatcher": "^https://github\\.com/[rR][oO][oO][tT]-[sS][eE][cC][tT][oO][rR]-[lL][tT][dD]-[aA][nN][dD]-[cC][oO]-[kK][gG]/[pP][aA][yY][mM][eE][nN][tT]-[gG][aA][tT][eE][wW][aA][yY]-[aA][dD][mM][iI][nN]-[bB][aA][cC][kK][eE][nN][dD]/\\.github/workflows/build-and-publish-backend-docker-image\\.yml@refs/tags/v4\\.1\\.16$",
+      "expectedIdentityMatcherMode": "github-repo-case-insensitive-regexp",
+      "sourceRevisionVerifiedBy": "certificate-github-workflow-sha",
+      "oidcIssuer": "https://token.actions.githubusercontent.com",
+      "status": "verified",
+      "signatureVerified": true,
+      "provenanceVerified": true
+    },
+    {
+      "name": "admin-frontend",
+      "image": "ghcr.io/root-sector-ltd-and-co-kg/payment-gateway-admin-frontend",
+      "digest": "sha256:a03057debf7345e24fa5f2c7f0f64b7709dae5f6ec10459d859179a00f2c9d9c",
+      "sourceRevision": "fa35598020d49fd1f12a308d17c586d6e0d99de3",
+      "expectedIdentity": "https://github.com/root-sector-ltd-and-co-kg/payment-gateway-admin-frontend/.github/workflows/build-and-publish-frontend-docker-image.yml@refs/tags/v4.1.15",
+      "expectedIdentityMatcher": "^https://github\\.com/[rR][oO][oO][tT]-[sS][eE][cC][tT][oO][rR]-[lL][tT][dD]-[aA][nN][dD]-[cC][oO]-[kK][gG]/[pP][aA][yY][mM][eE][nN][tT]-[gG][aA][tT][eE][wW][aA][yY]-[aA][dD][mM][iI][nN]-[fF][rR][oO][nN][tT][eE][nN][dD]/\\.github/workflows/build-and-publish-frontend-docker-image\\.yml@refs/tags/v4\\.1\\.15$",
+      "expectedIdentityMatcherMode": "github-repo-case-insensitive-regexp",
+      "sourceRevisionVerifiedBy": "certificate-github-workflow-sha",
+      "oidcIssuer": "https://token.actions.githubusercontent.com",
+      "status": "verified",
+      "signatureVerified": true,
+      "provenanceVerified": true
+    },
+    {
+      "name": "main-backend",
+      "image": "ghcr.io/root-sector-ltd-and-co-kg/payment-gateway-main-backend",
+      "digest": "sha256:6188b528b01ad5636387f74308912877b3cfd260a85750f53cb0208cb7e0d19e",
+      "sourceRevision": "0f6c7e6bbed9ee51af1f79e2bc60513ddcff0434",
+      "expectedIdentity": "https://github.com/root-sector-ltd-and-co-kg/payment-gateway-main-backend/.github/workflows/build-and-publish-backend-docker-image.yml@refs/tags/v4.1.14",
+      "expectedIdentityMatcher": "^https://github\\.com/[rR][oO][oO][tT]-[sS][eE][cC][tT][oO][rR]-[lL][tT][dD]-[aA][nN][dD]-[cC][oO]-[kK][gG]/[pP][aA][yY][mM][eE][nN][tT]-[gG][aA][tT][eE][wW][aA][yY]-[mM][aA][iI][nN]-[bB][aA][cC][kK][eE][nN][dD]/\\.github/workflows/build-and-publish-backend-docker-image\\.yml@refs/tags/v4\\.1\\.14$",
+      "expectedIdentityMatcherMode": "github-repo-case-insensitive-regexp",
+      "sourceRevisionVerifiedBy": "certificate-github-workflow-sha",
+      "oidcIssuer": "https://token.actions.githubusercontent.com",
+      "status": "verified",
+      "signatureVerified": true,
+      "provenanceVerified": true
+    }
+  ]
+}

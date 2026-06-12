@@ -1,0 +1,33 @@
+---
+title: Release 4.4.4
+description: Stable release notes for Payment Gateway App 4.4.4.
+---
+
+# Release 4.4.4
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-06-12T17:24:00Z
+- Release tag: v4.4.4
+
+## [4.4.4] - 2026-06-10
+
+### Admin Panel
+- Introduced standardized canonical item types across the management interface to ensure more consistent product categorization and data integrity.
+
+### APIs And Integrations
+- Improved API item type handling so custom and unknown item categories are preserved consistently in invoice, tax, and integration payloads.
+
+### Fixes
+- Resolved an issue where unknown and custom item types were incorrectly mapped during backend processing, ensuring accurate data handling for non-standard inventory.
+
+## Security Artifacts
+
+Release security evidence is linked from the [Release Security Transparency](../deployment/release-security-transparency) guide.
+
+- Artifact bundle: https://docs.payment-gateway.app/release-security/v4.4.4/
+- Scan manifest: https://docs.payment-gateway.app/release-security/v4.4.4/reports/scan-manifest.json
+- Vulnerability policy result: https://docs.payment-gateway.app/release-security/v4.4.4/reports/policy-result.json
+- Vulnerability summary: https://docs.payment-gateway.app/release-security/v4.4.4/reports/summary.md
+- Checksum manifest: https://docs.payment-gateway.app/release-security/v4.4.4/SHA256SUMS
+- Checksum signature bundle: https://docs.payment-gateway.app/release-security/v4.4.4/SHA256SUMS.sigstore.json
