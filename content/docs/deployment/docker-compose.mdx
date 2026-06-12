@@ -48,4 +48,4 @@ After deployment, manage your containers using standard Docker Compose commands 
 - Restart services: `docker compose restart`
 - Stop the stack: `docker compose down`
 
-**Note:** For production updates, use the unified updater (`./scripts/update.sh --engine docker-compose`) rather than `docker compose up -d`. Manual `deploy.sh --update-component` is an emergency break-glass path only because it bypasses signed release metadata and digest-pinned release evidence.
+**Note:** For production updates, use the unified updater (`./scripts/update.sh --engine docker-compose`) rather than `docker compose up -d`. Engine component flags are internal automation mechanics and do not publish or verify signed release metadata by themselves.

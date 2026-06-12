@@ -141,20 +141,13 @@ Use `./scripts/update.sh` for production updates, including small service
 updates. It resolves the signed, entitled release baseline and deploys
 digest-pinned image refs.
 
-Manual targeted `deploy.sh --update-component` and Podman `--update-components`
-commands bypass signed release metadata and are blocked by default. Use them
-only as emergency break-glass operations with an approval note:
+The engine `deploy.sh --update-component` and Podman `--update-components`
+flags are internal automation mechanics for callers that have already resolved
+exact component versions or image refs. They do not publish or verify signed
+release metadata by themselves.
 
-```bash
-# Run from payment-gateway-deploy/docker-compose OR payment-gateway-deploy/podman
-ALLOW_UNVERIFIED_COMPONENT_UPDATE=true \
-COMPONENT_UPDATE_AUDIT_NOTE="Emergency rollback approved by <owner> under <ticket>" \
-./deploy.sh --update-component admin-backend --version 3.1.1
-```
-
-After a break-glass update, run the unified updater again when signed metadata
-for the intended baseline is available so the deployment returns to a
-digest-pinned evidence chain.
+Customer and operator app rollouts should use the unified updater so signed
+release metadata and digest-pinned refs remain the deployment authority.
 
 **Common Components:**
 `admin-backend`, `admin-frontend`, `main-backend`, `main-frontend`, `main-worker`, `reverseproxy`, `mongo`, `garnet`, `mgob`, `gotenberg`, `mongo-express`
