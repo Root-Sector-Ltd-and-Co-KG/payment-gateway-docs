@@ -7,10 +7,10 @@ description: How to read release SBOM, vulnerability, policy, checksum, and prov
 
 Release security artifacts are audit evidence for what was shipped, scanned, and accepted for a product version. They are not a security certification and do not replace your own operational risk review.
 
-For releases produced by the current release pipeline, the release metadata and release notes point to a versioned artifact bundle:
+For releases produced by the current release pipeline, the release metadata and release notes point to a versioned artifact index:
 
 ```text
-https://docs.payment-gateway.app/release-security/v<version>/
+https://docs.payment-gateway.app/release-security/v<version>/artifact-index.json
 ```
 
 Legacy release pages may not have the complete artifact set. Treat a missing file as missing evidence, not as an implicit pass.
@@ -27,13 +27,14 @@ evidence for that release, not as an implicit clean scan.
 
 | Artifact | Expected path | Purpose |
 | --- | --- | --- |
+| Artifact index | `artifact-index.json` | Stable machine-readable entry point for the release security files and their public URLs. |
 | CycloneDX SBOM | `sbom/<component>.cyclonedx.json` | Lists the dependencies and component inventory scanned for the release. |
 | Trivy vulnerability report | `reports/<component>.vuln.json` | Machine-readable vulnerability and misconfiguration findings for the scanned component. |
 | Scan manifest | `reports/scan-manifest.json` | Maps scanned components to the release version, scan type, scanner type, timestamp, source reference, image, and digest. |
 | Vulnerability policy result | `reports/policy-result.json` | Shows whether release-blocking findings were absent, waived, or blocking. |
 | Component image provenance verification | `reports/component-image-provenance.json` | Records the cosign signature and SLSA provenance verification performed before first-party image promotion. |
 | Vulnerability summary | `reports/summary.md` | Human-readable scan summary for operators and auditors. |
-| Checksums | `SHA256SUMS` | File hashes for the published release security artifact bundle. |
+| Checksums | `SHA256SUMS` | Signed evidence manifest containing file hashes for the published release security artifacts. |
 | Checksum signature bundle | `SHA256SUMS.sigstore.json` | Sigstore/cosign signature bundle for the checksum file. |
 | Provenance | `provenance.intoto.jsonl` | Release provenance evidence for the published component set. |
 

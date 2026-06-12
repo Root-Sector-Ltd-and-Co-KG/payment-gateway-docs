@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "product": "payment-gateway-app",
+  "version": "4.4.4",
+  "channel": "stable",
+  "deploymentTarget": "production",
+  "publishedAt": "2026-06-12T17:24:00Z",
+  "releaseNotesUrl": "https://docs.payment-gateway.app/releases/v4-4-4",
+  "artifactIndexUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/artifact-index.json",
+  "verificationGuideUrl": "https://docs.payment-gateway.app/deployment/release-security-transparency",
+  "baseUrl": "https://docs.payment-gateway.app/release-security/v4.4.4",
+  "artifacts": {
+    "scanManifestUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/scan-manifest.json",
+    "policyResultUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/policy-result.json",
+    "vulnerabilitySummaryUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/summary.md",
+    "imageProvenanceVerificationUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/component-image-provenance.json",
+    "releaseProvenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance.intoto.jsonl",
+    "checksumUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/SHA256SUMS",
+    "checksumBundleUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/SHA256SUMS.sigstore.json",
+    "checksumSignatureUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/SHA256SUMS.sigstore.json"
+  },
+  "components": [
+    {
+      "name": "admin-backend",
+      "version": "4.1.16",
+      "digest": "sha256:bbd918f2d41c97feb294f2d60ee6211faf22df69e1ccd20f595d33f41f2e4cc7",
+      "artifactSlug": "payment-gateway-admin-backend",
+      "sbomUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/sbom/payment-gateway-admin-backend.cyclonedx.json",
+      "vulnerabilityReportUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/payment-gateway-admin-backend.vuln.json",
+      "provenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance/admin-backend.intoto.jsonl"
+    },
+    {
+      "name": "admin-frontend",
+      "version": "4.1.15",
+      "digest": "sha256:a03057debf7345e24fa5f2c7f0f64b7709dae5f6ec10459d859179a00f2c9d9c",
+      "artifactSlug": "payment-gateway-admin-frontend",
+      "sbomUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/sbom/payment-gateway-admin-frontend.cyclonedx.json",
+      "vulnerabilityReportUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/payment-gateway-admin-frontend.vuln.json",
+      "provenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance/admin-frontend.intoto.jsonl"
+    },
+    {
+      "name": "garnet",
+      "version": "1.1.10",
+      "digest": "sha256:abe94a5ce0809884a582923ac1de0c58e07e22bb8367e120f931d1382936c784",
+      "artifactSlug": "garnet",
+      "sbomUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/sbom/garnet.cyclonedx.json",
+      "vulnerabilityReportUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/garnet.vuln.json",
+      "provenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance/garnet.intoto.jsonl"
+    },
+    {
+      "name": "gotenberg",
+      "version": "8.33.0",
+      "digest": "sha256:bddd8ea9d076e2d08b6ddaa6efae6403185202c6dab65a6488ed0a6923d6d8e8",
+      "artifactSlug": "gotenberg",
+      "sbomUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/sbom/gotenberg.cyclonedx.json",
+      "vulnerabilityReportUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/gotenberg.vuln.json",
+      "provenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance/gotenberg.intoto.jsonl"
+    },
+    {
+      "name": "main-backend",
+      "version": "4.1.14",
+      "digest": "sha256:6188b528b01ad5636387f74308912877b3cfd260a85750f53cb0208cb7e0d19e",
+      "artifactSlug": "payment-gateway-main-backend",
+      "sbomUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/sbom/payment-gateway-main-backend.cyclonedx.json",
+      "vulnerabilityReportUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/payment-gateway-main-backend.vuln.json",
+      "provenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance/main-backend.intoto.jsonl"
+    },
+    {
+      "name": "main-frontend",
+      "version": "4.1.10",
+      "digest": "sha256:083b4ddd2c7827f60ac2d2d71602b6d239b4615ac4064d54a3017ceb8690d81e",
+      "artifactSlug": "payment-gateway-main-frontend",
+      "sbomUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/sbom/payment-gateway-main-frontend.cyclonedx.json",
+      "vulnerabilityReportUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/payment-gateway-main-frontend.vuln.json",
+      "provenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance/main-frontend.intoto.jsonl"
+    },
+    {
+      "name": "main-worker",
+      "version": "4.1.14",
+      "digest": "sha256:6188b528b01ad5636387f74308912877b3cfd260a85750f53cb0208cb7e0d19e",
+      "artifactSlug": "payment-gateway-main-backend",
+      "sbomUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/sbom/payment-gateway-main-backend.cyclonedx.json",
+      "vulnerabilityReportUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/payment-gateway-main-backend.vuln.json",
+      "provenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance/main-worker.intoto.jsonl"
+    },
+    {
+      "name": "mgob",
+      "version": "2.0.28",
+      "digest": "sha256:ad347cfd1b453541d855ef0af88aaaecfee4cf18332bfbecd50520e3c4718f27",
+      "artifactSlug": "mgob",
+      "sbomUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/sbom/mgob.cyclonedx.json",
+      "vulnerabilityReportUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/mgob.vuln.json",
+      "provenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance/mgob.intoto.jsonl"
+    },
+    {
+      "name": "mongo",
+      "version": "8.3.2",
+      "digest": "sha256:8dbb3db48a72084457272d33d398ae0ef7db8e7c9e12815a295c3417c8df6d38",
+      "artifactSlug": "mongo",
+      "sbomUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/sbom/mongo.cyclonedx.json",
+      "vulnerabilityReportUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/mongo.vuln.json",
+      "provenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance/mongo.intoto.jsonl"
+    },
+    {
+      "name": "mongo-express",
+      "version": "latest",
+      "digest": "sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64",
+      "artifactSlug": "mongo-express",
+      "sbomUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/sbom/mongo-express.cyclonedx.json",
+      "vulnerabilityReportUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/mongo-express.vuln.json",
+      "provenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance/mongo-express.intoto.jsonl"
+    },
+    {
+      "name": "reverseproxy",
+      "version": "4.1.10",
+      "digest": "sha256:e411bdf37a51329e415a48607ceddd12889b302a6e693022c1b6d471e5920239",
+      "artifactSlug": "payment-gateway-reverseproxy",
+      "sbomUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/sbom/payment-gateway-reverseproxy.cyclonedx.json",
+      "vulnerabilityReportUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/reports/payment-gateway-reverseproxy.vuln.json",
+      "provenanceUrl": "https://docs.payment-gateway.app/release-security/v4.4.4/provenance/reverseproxy.intoto.jsonl"
+    }
+  ]
+}
