@@ -1,0 +1,38 @@
+---
+title: Release 4.4.5
+description: Stable release notes for Payment Gateway App 4.4.5.
+---
+
+# Release 4.4.5
+
+- Channel: stable
+- Deployment target: production
+- Published: 2026-06-13T15:56:17Z
+- Release tag: v4.4.5
+
+### Admin Panel
+- Added support for authenticated access to release metadata using secure IDs and secrets, allowing for controlled retrieval of system versioning information.
+- Implemented a backfill process to standardize and canonicalize legacy item types, ensuring data consistency across administrative records.
+
+### Checkout And Customer Portal
+- Introduced client-side rate limiting to enhance platform stability and protect the interface from high-frequency request bursts.
+
+### Deployment And Operations
+- Configured the reverse proxy to include the `X-Forwarded-For` header, enabling operators to accurately track and log original client IP addresses.
+
+### Security
+- Enhanced request security by implementing frontend rate limiting to mitigate automated abuse.
+- Improved audit logging accuracy by ensuring the preservation of client IP addresses through network proxy layers.
+
+## Security Artifacts
+
+Release security evidence is linked from the [Release Security Transparency](../deployment/release-security-transparency) guide.
+
+- Artifact index: https://docs.payment-gateway.app/release-security/v4.4.5/artifact-index.json
+- Scan manifest: https://docs.payment-gateway.app/release-security/v4.4.5/reports/scan-manifest.json
+- Vulnerability policy result: https://docs.payment-gateway.app/release-security/v4.4.5/reports/policy-result.json
+- Vulnerability summary: https://docs.payment-gateway.app/release-security/v4.4.5/reports/summary.md
+- Component image provenance: https://docs.payment-gateway.app/release-security/v4.4.5/reports/component-image-provenance.json
+- Release provenance statement: https://docs.payment-gateway.app/release-security/v4.4.5/provenance.intoto.jsonl
+- Checksum manifest: https://docs.payment-gateway.app/release-security/v4.4.5/SHA256SUMS
+- Checksum signature bundle: https://docs.payment-gateway.app/release-security/v4.4.5/SHA256SUMS.sigstore.json
